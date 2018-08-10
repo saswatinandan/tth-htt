@@ -474,15 +474,12 @@ int main(int argc, char* argv[])
   int cat3_cat1 = 0 ;
   int cat3_cat2_cat1 = 0;
 
-  std::cout << "before enereted event loop " << std::endl;
   while(inputTree -> hasNextEvent() && (! run_lumi_eventSelector || (run_lumi_eventSelector && ! run_lumi_eventSelector -> areWeDone())))
   {
     //if (countFatTop > 50) continue;
     if ( isDEBUG ) {
       std::cout << "processing run = " << eventInfo.run << ", ls = " << eventInfo.lumi << ", event = " << eventInfo.event << std::endl;
     }
-
-    std::cout << "enereted event loop " << std::endl;
 
     if(inputTree -> canReport(reportEvery))
     {
@@ -493,6 +490,7 @@ int main(int argc, char* argv[])
                 << ") file (" << selectedEntries << " Entries selected)\n";
     }
     ++analyzedEntries;
+    //if ( analyzedEntries < 112520 ) continue;
     histogram_analyzedEntries->Fill(0.);
 
     if (run_lumi_eventSelector && !(*run_lumi_eventSelector)(eventInfo))
@@ -626,13 +624,13 @@ int main(int argc, char* argv[])
     std::vector<GenParticle> genWJets = genWJetReader->read();
     std::vector<GenParticle> genQuarkFromTop = genQuarkFromTopReader->read();
 
-    std::cout << "Size of genjet collections "
-      <<genQuarkFromTop.size()<< " "<< genWJets.size() << " " << genWBosons.size() << std::endl;
+    //std::cout << "Size of genjet collections "
+    //  <<genQuarkFromTop.size()<< " "<< genWJets.size() << " " << genWBosons.size() << std::endl;
     if (genQuarkFromTop.size() < 2) continue;
 
-		std::cout << "\nTreeEntry "<<analyzedEntries << " passed selection conditions "<< genWJets.size() << std::endl;
-    std::cout << "Size of jet collections "
-      <<jet_ptrsHTTv2.size()<< " "<< jet_ptrsAK8.size() << " "<< jet_ptrsAK12.size() << " " << cleanedJets.size() << " " << selJets.size() << std::endl;
+		//std::cout << "\nTreeEntry "<<analyzedEntries << " passed selection conditions "<< genWJets.size() << std::endl;
+    //std::cout << "Size of jet collections "
+    //  <<jet_ptrsHTTv2.size()<< " "<< jet_ptrsAK8.size() << " "<< jet_ptrsAK12.size() << " " << cleanedJets.size() << " " << selJets.size() << std::endl;
 
     Particle::LorentzVector unfittedHadTopP4, selBJet, selWJet1, selWJet2 ;
     bool isGenMatched = false;
@@ -684,38 +682,43 @@ int main(int argc, char* argv[])
       //&& genVar[kGenTopWj1].pt() > 0 && genVar[kGenTopWj2] > 0
       double diff_Top = (genVar[kGenTopWj1]+genVar[kGenTopWj2]+genVar[kGenTopB]).mass() - genVar[kGenTop].mass();
       double diff_AntiTop = (genVarAnti[kGenTopWj1]+genVarAnti[kGenTopWj2]+genVarAnti[kGenTopB]).mass() - genVarAnti[kGenTop].mass();
-      if( diff_Top < diff_AntiTop && genVar[kGenTopWj1].px() > 0) {
+      if( diff_Top < diff_AntiTop && abs(genVar[kGenTopWj1].px())> 0) {
         genTopMassFromW = (genVar[kGenTopW]+genVar[kGenTopB]).mass();
         genTopMassFromWj = (genVar[kGenTopWj1]+genVar[kGenTopWj2]+genVar[kGenTopB]).mass();
         genWMassFromWj = (genVar[kGenTopWj1]+genVar[kGenTopWj2]).mass();
         genWMass = genVar[kGenTopW].mass();
-        std::cout<<" mass W/T  "<< genVar[kGenTop].mass() << " "<< (genVar[kGenTopW]+genVar[kGenTopB]).mass() << " (" << genVar[kGenTopW].mass() <<") " << " (" << genWMassFromWj <<") " <<std::endl;
+        //std::cout<<" mass W/T  "<< genVar[kGenTop].mass() << " "<< (genVar[kGenTopW]+genVar[kGenTopB]).mass() << " (" << genVar[kGenTopW].mass() <<") " << " (" << genWMassFromWj <<") " <<std::endl;
+        // Xanda: check why this verification does not flight
+        if (genTopMassFromWj > 0 && (genWMassFromWj > 130.)) throw cms::Exception("analyze_hadTopTagger")
+          <<"            mass W/T  "<< genVar[kGenTop].mass() << "                "<< (genVar[kGenTopW]+genVar[kGenTopB]).mass() << " " << genTopMassFromWj << "      (" << genVar[kGenTopW].mass() << ") " << " (" << genWMassFromWj << ") "<< genVar[kGenTopW].mass() << " ("  <<genWMassFromWj << ") " << genVar[kGenTopWj1].px() << " " << genQuarkFromTop.size() << " !!\n";
       } else if (genVarAnti[kGenTopWj1].px() > 0){
         genAntiTopMassFromW = (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass();
         genAntiTopMassFromWj = (genVarAnti[kGenTopWj1]+genVarAnti[kGenTopWj2]+genVarAnti[kGenTopB]).mass();
         genAntiWMassFromWj = (genVarAnti[kGenTopWj1]+genVarAnti[kGenTopWj2]).mass();
         genAntiWMass = genVarAnti[kGenTopW].mass();
-        std::cout<<" mass anti W/T  "<< genVarAnti[kGenTop].mass() << " "<< (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass() << " (" << genVarAnti[kGenTopW].mass() <<") " << " (" << genAntiWMassFromWj <<") "  <<std::endl;
+        //std::cout<<" mass anti W/T  "<< genVarAnti[kGenTop].mass() << " "<< (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass() << " (" << genVarAnti[kGenTopW].mass() <<") " << " (" << genAntiWMassFromWj <<") "  <<std::endl;
+        // Xanda: check why this verification does not flight
+        if (genAntiTopMassFromWj > 0 && (genAntiWMassFromWj > 130.)) throw cms::Exception("analyze_hadTopTagger")
+          <<"            mass anti W/T (anti) "<< genVarAnti[kGenTop].mass() << "                "<< (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass() << " " << genAntiTopMassFromWj << "      (" << genVarAnti[kGenTopW].mass() << ") " << " (" << genAntiWMassFromWj << ") "<< genVarAnti[kGenTopW].mass() << " ("  <<genAntiWMassFromWj << ") " << genVarAnti[kGenTopWj1].px() << " " << genQuarkFromTop.size() << " !!\n";
       }
     } else if (genQuarkFromTop.size() == 4) {
 
-      if ( genVar[kGenTopWj1].px() > 0 ) {
+      if (abs(genVar[kGenTopWj1].px()) > 0 ) {
         genTopMassFromW = (genVar[kGenTopW]+genVar[kGenTopB]).mass();
         genTopMassFromWj = (genVar[kGenTopWj1]+genVar[kGenTopWj2]+genVar[kGenTopB]).mass();
         genWMassFromWj = (genVar[kGenTopWj1]+genVar[kGenTopWj2]).mass();
-        std::cout<<" mass W/T  "<< genVar[kGenTop].mass() << " "<< (genVar[kGenTopW]+genVar[kGenTopB]).mass() << " (" << genVar[kGenTopW].mass() << ") " << " (" << genWMassFromWj << ") "  <<std::endl;
+        //std::cout<<" mass W/T  "<< genVar[kGenTop].mass() << " "<< (genVar[kGenTopW]+genVar[kGenTopB]).mass() << " (" << genVar[kGenTopW].mass() << ") " << " (" << genWMassFromWj << ") "  <<std::endl;
       }
 
       if ( genVarAnti[kGenTopWj1].px() > 0 ) {
         genAntiTopMassFromW = (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass();
         genAntiTopMassFromWj = (genVarAnti[kGenTopWj1]+genVarAnti[kGenTopWj2]+genVarAnti[kGenTopB]).mass();
         genAntiWMassFromWj = (genVarAnti[kGenTopWj1]+genVarAnti[kGenTopWj2]).mass();
-      std::cout<<" mass anti W/T  "<< genVarAnti[kGenTop].mass() << " "<< (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass() << " (" << genVarAnti[kGenTopW].mass() << ") " << " (" << genAntiWMassFromWj << ") "<<std::endl;
+      //std::cout<<" mass anti W/T  "<< genVarAnti[kGenTop].mass() << " "<< (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass() << " (" << genVarAnti[kGenTopW].mass() << ") " << " (" << genAntiWMassFromWj << ") "<<std::endl;
       }
 
     } else std::cout<<" unusual genQuarkFromTop.size()  "<< genQuarkFromTop.size() <<std::endl;
-    if (genAntiTopMassFromWj > 0 && (genAntiWMassFromWj > 125.)) throw cms::Exception("analyze_hadTopTagger")
-      <<"            mass anti W/T  "<< genVarAnti[kGenTop].mass() << "                "<< (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass() << " " << genAntiTopMassFromWj << "      (" << genVarAnti[kGenTopW].mass() << ") " << " (" << genAntiWMassFromWj << ") " << genQuarkFromTop.size() << " !!\n";
+
       //  mass anti W/T  171.5                171.697 137.421      (78.25)  (78.2831) 4 !!
 
 
@@ -746,7 +749,7 @@ int main(int argc, char* argv[])
           double btag_discType1 = -1;
 
           // loop on bjetCandidate version 1 :
-          bool foundtruth = false;
+          //bool foundtruth = false;
           //for (int bb = 0; bb < 3; bb++) {
           //  if (foundtruth) continue;
           //  for (int wj1 = 0; wj1 < 3; wj1++) {
@@ -789,9 +792,9 @@ int main(int argc, char* argv[])
             selWJet2 = recSubJet[btag_order[2]]->p4();
             btag_orderType1 = 1;
             btag_discType1 = recSubJet[btag_order[0]]->BtagCSV();
-            std::cout<<"btag discr  ";
-            for (auto i: btag_disc) std::cout << i << " ";
-            std::cout<<" position of highest  "<< btag_order[0] << " (" << btag_discType1 <<") "<< foundtruth <<std::endl;
+            //std::cout<<"btag discr  ";
+            //for (auto i: btag_disc) std::cout << i << " ";
+            //std::cout<<" position of highest  "<< btag_order[0] << " (" << btag_discType1 <<") "<< foundtruth <<std::endl;
 
             std::map<int, bool> genMatchingTop = isGenMatchedJetTriplet(
               selBJet, selWJet1, selWJet2,
@@ -811,8 +814,8 @@ int main(int argc, char* argv[])
             b_isGenMatched = (genMatchingTop[kGenMatchedBJet] || genMatchingAntiTop[kGenMatchedBJet]);
             wj1_isGenMatched = (genMatchingTop[kGenMatchedWJet1] || genMatchingAntiTop[kGenMatchedWJet1]);
             wj2_isGenMatched = (genMatchingTop[kGenMatchedWJet2] || genMatchingAntiTop[kGenMatchedWJet2]);
-            if (b_isGenMatched) foundtruth = true; // if loop on subjets
-            if (isGenMatched) {hadtruth1++; cat1 = true; foundtruth = true;}
+            //if (b_isGenMatched) foundtruth = true; // if loop on subjets
+            if (isGenMatched) {hadtruth1++; cat1 = true;}//  foundtruth = true;}
           //}}} // end loop on subjets version 1
           //} // end loop on subjets version 2
           // debug gen-matching
@@ -950,7 +953,7 @@ int main(int argc, char* argv[])
     // classify between 2 and 3
     if (inAK12) { // typeTop == 2 and
       if (jet_ptrsAK12.size() > 0 && cleanedJets.size() > 0) {countFatAK12++; typeTop = 2;}
-      std::cout<<" typeTop = "<<typeTop<<std::endl;
+      //std::cout<<" typeTop = "<<typeTop<<std::endl;
       for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12.begin();
         jetIter != jet_ptrsAK12.end(); ++jetIter ) {
           for ( unsigned int bjetCandidate = 0; bjetCandidate < bToLoop; bjetCandidate++ ) { // cleanedJets.size()
@@ -1260,7 +1263,7 @@ int main(int argc, char* argv[])
           std::vector<double> btag_disc = getBdiscr(selJets);
           auto btag_order_selJets = calRank(btag_disc);
           typeTop = 3;
-          std::cout<<" typeTop = "<<typeTop<<std::endl;
+          //std::cout<<" typeTop = "<<typeTop<<std::endl;
           countResolved++;
           for ( unsigned int bjetCandidate = 0; bjetCandidate < selJets.size(); bjetCandidate++ )  {
             for ( std::vector<const RecoJet*>::const_iterator selWJet1Candidate = selJets.begin();

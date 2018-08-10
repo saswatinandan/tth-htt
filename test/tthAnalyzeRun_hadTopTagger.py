@@ -22,7 +22,7 @@ auto_exec          = args.auto_exec
 check_output_files = not args.not_check_input_files
 debug              = args.debug
 sample_filter      = args.filter
-num_parallel_jobs  = args.num_parallel_jobs
+num_parallel_jobs  = 10 #args.num_parallel_jobs
 running_method     = args.running_method
 
 # Additional arguments
@@ -34,7 +34,8 @@ use_home      = args.use_home
 hadTau_selection = "Tight|%s" % tau_id_wp
 
 if era == "2017":
-  from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017_sync import samples_2017 as samples
+  #from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017_sync import samples_2017 as samples
+  from  tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017_BDT import samples_2017 as samples
   from tthAnalysis.HiggsToTauTau.analysisSettings import lumi_2017 as lumi
 else:
   raise ValueError("Invalid era: %s" % era)
@@ -54,6 +55,7 @@ if __name__ == '__main__':
     outputDir          = os.path.join("/hdfs/local", getpass.getuser(), "ttHAnalysis", era, version),
     executable_analyze = "analyze_hadTopTagger",
     cfgFile_analyze    = "analyze_hadTopTagger_cfg.py",
+    channel            = "hadTopTagger",
     samples            = samples,
     hadTau_selection   = hadTau_selection,
     max_files_per_job  = files_per_job,
@@ -63,6 +65,8 @@ if __name__ == '__main__':
     check_output_files = check_output_files,
     running_method     = running_method,
     num_parallel_jobs  = num_parallel_jobs,
+    histograms_to_fit  = [],
+    triggers           = [],
     dry_run            = dry_run,
     isDebug            = debug,
     use_home           = use_home,
