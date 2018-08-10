@@ -79,6 +79,7 @@ class analyzeConfig(object):
           outputDir,
           executable_analyze,
           channel,
+          subcategories,
           samples,
           central_or_shifts,
           max_files_per_job,
@@ -108,6 +109,8 @@ class analyzeConfig(object):
         self.outputDir = outputDir
         self.executable_analyze = executable_analyze
         self.channel = channel
+        if len(subcategories) > 0 : self.subcategories = subcategories
+        else : self.subcategories = [channel]
 
         # sum the event counts for samples which cover the same phase space only if
         # there are multiple such samples
@@ -660,10 +663,11 @@ class analyzeConfig(object):
         lines.append("process.fwliteInput.fileNames = cms.vstring('%s')" % jobOptions['inputFile'])
         lines.append("process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['outputFile']))
         lines.append("process.addBackgroundLeptonFakes.categories = cms.VPSet(")
-        lines.append("    cms.PSet(")
-        lines.append("        signal = cms.string('%s')," % jobOptions['category_signal'])
-        lines.append("        sideband = cms.string('%s')" % jobOptions['category_sideband'])
-        lines.append("    )")
+        for cc, cat in enumerate(jobOptions['category_signal']) :
+            lines.append("    cms.PSet(")
+            lines.append("        signal = cms.string('%s')," % cat)
+            lines.append("        sideband = cms.string('%s')" % jobOptions['category_sideband'][cc])
+            lines.append("    ),")
         lines.append(")")
         processesToSubtract = []
         processesToSubtract.extend(self.nonfake_backgrounds)
@@ -678,22 +682,27 @@ class analyzeConfig(object):
            Args:
              histogramToFit: name of the histogram used for signal extraction
         """
-        category_output = self.channel
-        if jobOptions['label']:
-            category_output += "_%s" % jobOptions['label']
+        #category_output = self.channel
+        #if jobOptions['label']:
+        #    category_output += "_%s" % jobOptions['label']
         histogramToFit = jobOptions['histogramToFit']
         lines = []
         lines.append("process.fwliteInput.fileNames = cms.vstring('%s')" % jobOptions['inputFile'])
         lines.append("process.fwliteOutput.fileName = cms.string('%s')" % jobOptions['datacardFile'])
         lines.append("process.prepareDatacards.processesToCopy = cms.vstring(%s)" % self.prep_dcard_processesToCopy)
         lines.append("process.prepareDatacards.signals = cms.vstring(%s)" % self.prep_dcard_signals)
-        lines.append("process.prepareDatacards.makeSubDir = cms.bool(False)")
+        #lines.append("process.prepareDatacards.makeSubDir = cms.bool(False)")
         lines.append("process.prepareDatacards.categories = cms.VPSet(")
-        lines.append("    cms.PSet(")
-        lines.append("        input = cms.string('%s/sel/evt')," % jobOptions['histogramDir'])
-        lines.append("        output = cms.string('ttH_%s')" % category_output)
-        lines.append("    )")
+        for cc, cat in enumerate(jobOptions['category']) :
+            lines.append("    cms.PSet(")
+            lines.append("        input = cms.string('%s/sel/evt')," % jobOptions['histogramDir'][cc])
+            if jobOptions['label']:
+                lines.append("        output = cms.string('ttH_%s_%s')" % (cat, jobOptions['label']))
+            else : lines.append("        output = cms.string('ttH_%s')" % (cat))
+            lines.append("    ),")
         lines.append(")")
+
+        lines.append("process.prepareDatacards.makeSubDir = cms.bool(%s)" % str(jobOptions['makeSubDir']))
         lines.append("process.prepareDatacards.histogramToFit = cms.string('%s')" % histogramToFit)
         lines.append("process.prepareDatacards.sysShifts = cms.vstring(%s)" % self.central_or_shifts)
 
@@ -788,8 +797,8 @@ class analyzeConfig(object):
                 lines.append("            histogramName = cms.string('%s')," % jobOptions['histogramName_nominal_%s' % lepton_and_hadTau_type])
                 lines.append("        ),")
                 lines.append("        mcClosure = cms.PSet(")
-                lines.append("            inputFileName = cms.string('%s')," % jobOptions['inputFile_mcClosure_%s' % lepton_and_hadTau_type])
-                lines.append("            histogramName = cms.string('%s')," % jobOptions['histogramName_mcClosure_%s' % lepton_and_hadTau_type])
+                lines.append("            inputFileName = cms.vstring('%s')," % jobOptions['inputFile_mcClosure_%s' % lepton_and_hadTau_type])
+                lines.append("            histogramName = cms.vstring('%s')," % jobOptions['histogramName_mcClosure_%s' % lepton_and_hadTau_type])
                 lines.append("        ),")
                 lines.append("    ),")
         lines.append(")")
@@ -811,10 +820,11 @@ class analyzeConfig(object):
         lines.append("process.makePlots.processesBackground = cms.vstring(%s)" % jobOptions['make_plots_backgrounds'])
         lines.append("process.makePlots.processSignal = cms.string('%s')" % self.make_plots_signal)
         lines.append("process.makePlots.categories = cms.VPSet(")
-        lines.append("  cms.PSet(")
-        lines.append("    name = cms.string('%s')," % jobOptions['histogramDir'])
-        lines.append("    label = cms.string('%s')" % category_label)
-        lines.append("  )")
+        for cc, cat in enumerate(jobOptions['histogramDir']) :
+            lines.append("  cms.PSet(")
+            lines.append("    name = cms.string('%s')," % cat)
+            lines.append("    label = cms.string('%s')" % category_label)
+            lines.append("  )")
         lines.append(")")
         lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % self.lumi)
         create_cfg(self.cfgFile_make_plots, jobOptions['cfgFile_modified'], lines)

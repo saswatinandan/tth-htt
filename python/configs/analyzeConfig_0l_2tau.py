@@ -14,18 +14,21 @@ def get_hadTau_selection_and_frWeight(hadTau_selection, hadTau_frWeight):
   hadTau_selection_and_frWeight = hadTau_selection_and_frWeight.replace("|", "_")
   return hadTau_selection_and_frWeight
 
-def getHistogramDir(hadTau_selection, hadTau_frWeight, hadTau_charge_selection):
+def getHistogramDirList(hadTau_selection, hadTau_frWeight, hadTau_charge_selection, subcategories):
+  histogramDirListL = []
   hadTau_selection_part1 = hadTau_selection
   for separator in [ "|" ]:
     if hadTau_selection_part1.find(separator) != -1:
       hadTau_selection_part1 = hadTau_selection_part1[:hadTau_selection_part1.find(separator)]
-  histogramDir = "0l_2tau_%s_%s" % (hadTau_charge_selection, hadTau_selection_part1)
-  if hadTau_selection_part1.find("Fakeable") != -1:
-    if hadTau_frWeight == "enabled":
-      histogramDir += "_wFakeRateWeights"
-    elif hadTau_frWeight == "disabled":
-      histogramDir += "_woFakeRateWeights"
-  return histogramDir
+  for cc, cat in enumerate(subcategories) :
+      histogramDir = "%s_%s_%s" % (cat, hadTau_charge_selection, hadTau_selection_part1)
+      if hadTau_selection_part1.find("Fakeable") != -1:
+        if hadTau_frWeight == "enabled":
+          histogramDir += "_wFakeRateWeights"
+        elif hadTau_frWeight == "disabled":
+          histogramDir += "_woFakeRateWeights"
+      histogramDirListL+=[histogramDir]
+  return histogramDirListL
 
 class analyzeConfig_0l_2tau(analyzeConfig):
   """Configuration metadata needed to run analysis in a single go.
@@ -76,6 +79,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
       outputDir          = outputDir,
       executable_analyze = executable_analyze,
       channel            = "0l_2tau",
+      subcategories      = [],
       samples            = samples,
       lep_mva_wp         = lep_mva_wp,
       central_or_shifts  = central_or_shifts,
@@ -133,8 +137,15 @@ class analyzeConfig_0l_2tau(analyzeConfig):
     self.make_plots_backgrounds = [ "TT", "TTW", "TTZ", "TTWW", "EWK", "Rares", "fakes_data" ]
 
     self.cfgFile_analyze = os.path.join(self.template_dir, cfgFile_analyze)
-    self.histogramDir_prep_dcard = "0l_2tau_OS_Tight"
-    self.histogramDir_prep_dcard_SS = "0l_2tau_SS_Tight"
+    histogramDir_prep_dcard_local = []
+    histogramDir_prep_dcard_SS_local = []
+    for cc, cat in enumerate(self.subcategories) :
+        histogramDir_prep_dcard_local+=[self.subcategories[cc]+"_OS_Tight"]
+        histogramDir_prep_dcard_SS_local+=[self.subcategories[cc]+"_SS_Tight"]
+    self.histogramDir_prep_dcard = histogramDir_prep_dcard_local #"1l_2tau_OS_Tight"
+    self.histogramDir_prep_dcard_SS = histogramDir_prep_dcard_SS_local #"1l_2tau_SS_Tight"
+    #self.histogramDir_prep_dcard = "0l_2tau_OS_Tight"
+    #self.histogramDir_prep_dcard_SS = "0l_2tau_SS_Tight"
     self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_0l_2tau_cfg.py")
     self.cfgFile_make_plots_mcClosure = os.path.join(self.template_dir, "makePlots_mcClosure_0l_2tau_cfg.py")
 
@@ -163,9 +174,9 @@ class analyzeConfig_0l_2tau(analyzeConfig):
       central_or_shift: either 'central' or one of the systematic uncertainties defined in $CMSSW_BASE/src/tthAnalysis/HiggsToTauTau/bin/analyze_0l_2tau.cc
     """
     hadTau_frWeight = "disabled" if jobOptions['applyFakeRateWeights'] == "disabled" else "enabled"
-    jobOptions['histogramDir'] = getHistogramDir(
-      hadTau_selection, hadTau_frWeight, jobOptions['hadTauChargeSelection']
-    )
+    jobOptions['histogramDir'] = getHistogramDirList(
+      hadTau_selection, hadTau_frWeight, jobOptions['hadTauChargeSelection'], [self.channel]
+    )[0]
     if 'mcClosure' in hadTau_selection:
       self.mcClosure_dir['%s_%s' % (hadTau_selection, jobOptions['hadTauChargeSelection'])] = jobOptions['histogramDir']
 
@@ -208,11 +219,12 @@ class analyzeConfig_0l_2tau(analyzeConfig):
     lines.append("process.makePlots.processesBackground = cms.vstring(%s)" % self.make_plots_backgrounds)
     lines.append("process.makePlots.processSignal = cms.string('%s')" % self.make_plots_signal)
     lines.append("process.makePlots.categories = cms.VPSet(")
-    lines.append("  cms.PSet(")
-    lines.append("    signal = cms.string('%s')," % self.histogramDir_prep_dcard)
-    lines.append("    sideband = cms.string('%s')," % self.histogramDir_prep_dcard.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights"))
-    lines.append("    label = cms.string('%s')" % self.channel)
-    lines.append("  )")
+    for cc, cat_folder in enumerate(self.histogramDir_prep_dcard) :
+        lines.append("  cms.PSet(")
+        lines.append("    signal = cms.string('%s')," % cat_folder)
+        lines.append("    sideband = cms.string('%s')," % cat_folder.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights"))
+        lines.append("    label = cms.string('%s')" % self.subcategories[cc]) #self.channel)
+        lines.append("  )")
     lines.append(")")
     create_cfg(self.cfgFile_make_plots_mcClosure, jobOptions['cfgFile_modified'], lines)
 
@@ -433,7 +445,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
                       (self.channel, process_name, sample_category, hadTau_selection_and_frWeight, hadTau_charge_selection)),
                     'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgrounds_%s_%s_%s_%s_%s.log" % \
                       (self.channel, process_name, sample_category, hadTau_selection_and_frWeight, hadTau_charge_selection)),
-                    'categories' : [ getHistogramDir(hadTau_selection, hadTau_frWeight, hadTau_charge_selection) ],
+                    'categories' : getHistogramDirList(hadTau_selection, hadTau_frWeight, hadTau_charge_selection, self.subcategories) ,
                     'processes_input' : processes_input,
                     'process_output' : sample_category
                   }
@@ -473,7 +485,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
                       (self.channel, process_name, sample_category, hadTau_selection_and_frWeight, hadTau_charge_selection)),
                     'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgrounds_%s_fakes_%s_%s_%s_%s.log" % \
                       (self.channel, process_name, sample_category, hadTau_selection_and_frWeight, hadTau_charge_selection)),
-                    'categories' : [ getHistogramDir(hadTau_selection, hadTau_frWeight, hadTau_charge_selection) ],
+                    'categories' : getHistogramDirList(hadTau_selection, hadTau_frWeight, hadTau_charge_selection, self.subcategories) ,
                     'processes_input' : processes_input,
                     'process_output' : "%s_fake" % sample_category
                   }
@@ -520,7 +532,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
               (self.channel, hadTau_selection_and_frWeight, hadTau_charge_selection)),
             'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgrounds_%s_fakes_mc_%s_%s.log" % \
               (self.channel, hadTau_selection_and_frWeight, hadTau_charge_selection)),
-            'categories' : [ getHistogramDir(hadTau_selection, hadTau_frWeight, hadTau_charge_selection) ],
+            'categories' : getHistogramDirList(hadTau_selection, hadTau_frWeight, hadTau_charge_selection, self.subcategories) ,
             'processes_input' : processes_input,
             'process_output' : "fakes_mc"
           }
@@ -587,6 +599,10 @@ class analyzeConfig_0l_2tau(analyzeConfig):
       self.inputFiles_hadd_stage2[key_hadd_stage2].append(self.jobOptions_addFakes[key_addFakes_job]['outputFile'])
 
     logging.info("Creating configuration files to run 'prepareDatacards'")
+    makeSubDir = False
+    if len(self.subcategories) > 1 :
+        makeSubDir = True
+        labels = self.subcategories
     for histogramToFit in self.histograms_to_fit:
       key_prep_dcard_job = getKey(histogramToFit, "OS")
       key_hadd_stage2 = getKey(get_hadTau_selection_and_frWeight("Tight", "disabled"), "OS")
@@ -596,6 +612,8 @@ class analyzeConfig_0l_2tau(analyzeConfig):
         'datacardFile' : os.path.join(self.dirs[DKEY_DCRD], "prepareDatacards_%s_%s.root" % (self.channel, histogramToFit)),
         'histogramDir' : self.histogramDir_prep_dcard,
         'histogramToFit' : histogramToFit,
+        'category' : self.subcategories,
+        'makeSubDir' : makeSubDir,
         'label' : None
       }
       self.createCfg_prep_dcard(self.jobOptions_prep_dcard[key_prep_dcard_job])
@@ -609,6 +627,8 @@ class analyzeConfig_0l_2tau(analyzeConfig):
           'datacardFile' : os.path.join(self.dirs[DKEY_DCRD], "prepareDatacards_%s_SS_%s.root" % (self.channel, histogramToFit)),
           'histogramDir' : self.histogramDir_prep_dcard_SS,
           'histogramToFit' : histogramToFit,
+          'category' : self.subcategories,
+          'makeSubDir' : makeSubDir,
           'label' : 'SS'
         }
         self.createCfg_prep_dcard(self.jobOptions_prep_dcard[key_prep_dcard_job])
@@ -624,15 +644,22 @@ class analyzeConfig_0l_2tau(analyzeConfig):
           'inputFile' : self.jobOptions_prep_dcard[key_prep_dcard_job]['datacardFile'],
           'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "addSystFakeRates_%s_%s_%s_cfg.py" % (self.channel, hadTau_charge_selection, histogramToFit)),
           'outputFile' : os.path.join(self.dirs[DKEY_DCRD], "addSystFakeRates_%s_%s_%s.root" % (self.channel, hadTau_charge_selection, histogramToFit)),
-          'category' : self.channel,
+          'category' : self.subcategories,
           'histogramToFit' : histogramToFit,
           'plots_outputFileName' : os.path.join(self.dirs[DKEY_PLOT], "addSystFakeRates.png")
         }
-        histogramDir_nominal = None
-        if hadTau_charge_selection == "OS":
-          histogramDir_nominal = self.histogramDir_prep_dcard
-        elif hadTau_charge_selection == "SS":
-          histogramDir_nominal = self.histogramDir_prep_dcard_SS
+        ### Xanda: test if this works!!!!
+        histogramDir_nominal = []
+        histogramDir_mcClosure = []
+        if hadTau_charge_selection == "OS" :
+            for cat in self.histogramDir_prep_dcard :
+                histogramDir_nominal+=[ "%s/sel/evt/fakes_mc/%s" % (cat, histogramToFit)]
+                histogramDir_mcClosure+=[ "%s/sel/evt/fakes_mc/%s" % (cat.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights"), histogramToFit)]
+                # cat_folder.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights")
+        elif hadTau_charge_selection == "SS" :
+            for cat in self.histogramDir_prep_dcard_SS :
+                histogramDir_nominal+=[ "%s/sel/evt/fakes_mc/%s" % (cat, histogramToFit)]
+                histogramDir_mcClosure+=[ "%s/sel/evt/fakes_mc/%s" % (cat.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights"), histogramToFit)]
         else:
           raise ValueError("Invalid parameter 'hadTau_charge_selection' = %s !!" % hadTau_charge_selection)
         for hadTau_type in [ 't', ]:
@@ -641,13 +668,13 @@ class analyzeConfig_0l_2tau(analyzeConfig):
             continue
           hadTau_selection_and_frWeight = get_hadTau_selection_and_frWeight(hadTau_mcClosure, "enabled")
           key_addBackgrounds_job_fakes = getKey(hadTau_selection_and_frWeight, hadTau_charge_selection)
-          histogramDir_mcClosure = self.mcClosure_dir['%s_%s' % (hadTau_mcClosure, hadTau_charge_selection)]
+          #histogramDir_mcClosure = self.mcClosure_dir['%s_%s' % (hadTau_mcClosure, hadTau_charge_selection)]
           self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job].update({
             'add_Clos_%s' % hadTau_type : ("Fakeable_mcClosure_%s" % hadTau_type) in self.hadTau_selections,
             'inputFile_nominal_%s' % hadTau_type : self.outputFile_hadd_stage2[key_hadd_stage2],
-            'histogramName_nominal_%s' % hadTau_type : "%s/sel/evt/fakes_mc/%s" % (histogramDir_nominal, histogramToFit),
+            'histogramName_nominal_%s' % hadTau_type : histogramDir_nominal, ## Xanda stoped here
             'inputFile_mcClosure_%s' % hadTau_type : self.jobOptions_addBackgrounds_sum[key_addBackgrounds_job_fakes]['outputFile'],
-            'histogramName_mcClosure_%s' % hadTau_type : "%s/sel/evt/fakes_mc/%s" % (histogramDir_mcClosure, histogramToFit)
+            'histogramName_mcClosure_%s' % hadTau_type : histogramDir_mcClosure
           })
         self.createCfg_add_syst_fakerate(self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job])
 

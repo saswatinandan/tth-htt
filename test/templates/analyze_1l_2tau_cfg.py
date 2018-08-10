@@ -16,12 +16,38 @@ process.fwliteOutput = cms.PSet(
     fileName = cms.string('analyze_1l_2tau.root')
 )
 
+#histogramDir = cms.vstring("1l_2tau_0J", "1l_2tau_1Jp"),
+## "1e_2tau_btight_0J_OS_Tight", "1e_2tau_bloose_0J_OS_Tight", "1mu_2tau_btight_0J_OS_Tight", "1mu_2tau_bloose_0J_OS_Tight", "1l_2tau_1Jp_OS_Tight"
+#histogramDir = cms.string('1l_2tau_OS_Tight')
 process.analyze_1l_2tau = cms.PSet(
     treeName = cms.string('Events'),
 
     process = cms.string('ttH'),
+    histogramDir = cms.vstring( ["1e_2tau_btight_0J", "1e_2tau_bloose_0J", "1mu_2tau_btight_0J", "1mu_2tau_bloose_0J", "1l_2tau_1Jp"]),
 
-    histogramDir = cms.string('1l_2tau_OS_Tight'),
+    categories = cms.VPSet(
+        cms.PSet(
+            input = cms.string("1e_2tau_btight_0J_OS_Tight/sel/evt"),
+            output = cms.string("ttH_1e_2tau_btight_0J")
+        ),
+        cms.PSet(
+            input = cms.string("1e_2tau_bloose_0J_OS_Tight/sel/evt"),
+            output = cms.string("ttH_1e_2tau_bloose_0J")
+        ),
+        cms.PSet(
+            input = cms.string("1mu_2tau_btight_0J_OS_Tight/sel/evt"),
+            output = cms.string("ttH_1mu_2tau_btight_0J")
+        ),
+        cms.PSet(
+            input = cms.string("1mu_2tau_bloose_0J_OS_Tight/sel/evt"),
+            output = cms.string("ttH_1mu_2tau_bloose_0J")
+        ),
+        cms.PSet(
+            input = cms.string("1l_2tau_1Jp_OS_Tight/sel/evt"),
+            output = cms.string("ttH_1l_2tau_1Jp")
+        )
+    ),
+    makeSubDir = cms.bool(True),
 
     era = cms.string('2017'),
 
