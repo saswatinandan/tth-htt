@@ -156,11 +156,15 @@ int main(int argc, char* argv[])
   bool isMCClosure_m = histogramDir.find("mcClosure_m") != std::string::npos;
   bool isMCClosure_t = histogramDir.find("mcClosure_t") != std::string::npos;
 
+  /*
   std::string era_string = cfg_analyze.getParameter<std::string>("era");
   int era = -1;
   if      ( era_string == "2017" ) era = kEra_2017;
   else throw cms::Exception("analyze_2lss_1tau")
     << "Invalid Configuration parameter 'era' = " << era_string << " !!\n";
+    */
+  int era = kEra_2017;
+  std::string era_string = "2017";
 
   vstring triggerNames_1e = cfg_analyze.getParameter<vstring>("triggers_1e");
   std::vector<hltPath*> triggers_1e = create_hltPaths(triggerNames_1e, "triggers_1e");
@@ -610,7 +614,7 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
 
 //--- open output file containing run:lumi:event numbers of events passing final event selection criteria
   std::ostream* selEventsFile = ( selEventsFileName_output != "" ) ? new std::ofstream(selEventsFileName_output.data(), std::ios::out) : 0;
-  std::cout << "selEventsFileName_output = " << selEventsFileName_output << std::endl;
+  std::cout << "selEventsFileName_output = " << selEventsFileName_output << " "<<era_string << std::endl;
 
 //--- declare histograms
   struct preselHistManagerType
@@ -657,6 +661,7 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
     EvtHistManager_2lss_1tau* evt_;
     std::map<std::string, EvtHistManager_2lss_1tau*> evt_in_decayModes_;
     std::map<std::string, EvtHistManager_2lss_1tau*> evt_in_categories_;
+    std::map<std::string, EvtHistManager_2lss_1tau*> evt_in_categories_in_decayModes_;
     EvtYieldHistManager* evtYield_;
     WeightHistManager* weights_;
   };
@@ -704,12 +709,12 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
       preselHistManager->evt_ = new EvtHistManager_2lss_1tau(makeHistManager_cfg(process_and_genMatch,
         Form("%s/presel/evt", histogramDir.data()), era_string, central_or_shift));
       preselHistManager->evt_->bookHistograms(fs);
-      edm::ParameterSet cfg_EvtYieldHistManager_presel = makeHistManager_cfg(process_and_genMatch, 
+      edm::ParameterSet cfg_EvtYieldHistManager_presel = makeHistManager_cfg(process_and_genMatch,
         Form("%s/presel/evtYield", histogramDir.data()), central_or_shift);
       cfg_EvtYieldHistManager_presel.addParameter<edm::ParameterSet>("runPeriods", cfg_EvtYieldHistManager);
       cfg_EvtYieldHistManager_presel.addParameter<bool>("isMC", isMC);
       preselHistManager->evtYield_ = new EvtYieldHistManager(cfg_EvtYieldHistManager_presel);
-      preselHistManager->evtYield_->bookHistograms(fs);  
+      preselHistManager->evtYield_->bookHistograms(fs);
       preselHistManagers[idxLepton][idxHadTau] = preselHistManager;
 
       selHistManagerType* selHistManager = new selHistManagerType();
@@ -771,6 +776,12 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
         Form("%s/sel/evt", histogramDir.data()), era_string, central_or_shift));
       selHistManager->evt_->bookHistograms(fs);
 
+      vstring categories_evt = {
+        "2ess_1tau_btight_0J", "2ess_1tau_bloose_0J",
+        "2muss_1tau_btight_0J", "2muss_1tau_bloose_0J",
+        "1mu1ess_1tau_btight_0J", "1mu1ess_1tau_bloose_0J",
+        "2lss_1tau_1Jp"
+      };
       const vstring decayModes_evt = eventInfo.getDecayModes();
       if(isSignal)
       {
@@ -788,14 +799,35 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
             central_or_shift
           ));
           selHistManager -> evt_in_decayModes_[decayMode_evt] -> bookHistograms(fs);
+          for ( vstring::const_iterator category = categories_evt.begin();
+                category != categories_evt.end(); ++category ) {
+            TString histogramDir_category = histogramDir.data();
+            histogramDir_category.ReplaceAll("2lss_1tau", category->data());
+            selHistManager->evt_in_categories_in_decayModes_[category->data()+decayMode_evt] = new EvtHistManager_2lss_1tau(makeHistManager_cfg(
+              decayMode_and_genMatch,
+              Form("%s/sel/evt", histogramDir_category.Data()),
+              era_string,
+              central_or_shift));
+            std::cout << category->data()+decayMode_evt << std::endl;
+            selHistManager->evt_in_categories_in_decayModes_[category->data()+decayMode_evt]->bookHistograms(fs);
+          }
         }
       }
-      edm::ParameterSet cfg_EvtYieldHistManager_sel = makeHistManager_cfg(process_and_genMatch, 
+      for ( vstring::const_iterator category = categories_evt.begin();
+            category != categories_evt.end(); ++category ) {
+        TString histogramDir_category = histogramDir.data();
+        histogramDir_category.ReplaceAll("2lss_1tau", category->data());
+        selHistManager->evt_in_categories_[*category] = new EvtHistManager_2lss_1tau(makeHistManager_cfg(process_and_genMatch,
+          Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
+        selHistManager->evt_in_categories_[*category]->bookHistograms(fs);
+      }
+
+      edm::ParameterSet cfg_EvtYieldHistManager_sel = makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evtYield", histogramDir.data()), central_or_shift);
       cfg_EvtYieldHistManager_sel.addParameter<edm::ParameterSet>("runPeriods", cfg_EvtYieldHistManager);
       cfg_EvtYieldHistManager_sel.addParameter<bool>("isMC", isMC);
       selHistManager->evtYield_ = new EvtYieldHistManager(cfg_EvtYieldHistManager_sel);
-      selHistManager->evtYield_->bookHistograms(fs);  
+      selHistManager->evtYield_->bookHistograms(fs);
       selHistManager->weights_ = new WeightHistManager(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/weights", histogramDir.data()), central_or_shift));
       selHistManager->weights_->bookHistograms(fs, { "genWeight", "pileupWeight", "triggerWeight", "data_to_MC_correction", "fakeRate" });
@@ -2028,6 +2060,19 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
     };
     const double mvaOutput_2lss_1tau_HTTMEM_SUM_M = mva_2lss_1tau_HTTMEM_SUM_M(mvaInputVariables_HTTMEM_SUM);
 
+    std::string category;
+     //if ( sel_HTTv2.size() > 0 ) category = "2lss_1tau_1Jp";
+     if ( selElectrons.size() >= 2 && selMuons.size() ==0 && selBJets_medium.size() >= 1  ) category = "2ess_1tau_btight_0J";
+     else if ( selElectrons.size() >= 2 && selMuons.size() ==0  ) category = "2ess_1tau_bloose_0J";
+     else if ( selMuons.size()     >= 2 && selElectrons.size() == 0 && selBJets_medium.size() >= 1  ) category = "2muss_1tau_btight_0J";
+     else if ( selMuons.size()     >= 2 && selElectrons.size() == 0                               ) category = "2muss_1tau_bloose_0J";
+     else if ( selMuons.size()     >= 1 && selElectrons.size() >= 1 && selBJets_medium.size() >= 1  ) category = "1mu1ess_1tau_btight_0J";
+     else if ( selMuons.size()     >= 1 && selElectrons.size() >= 1                               ) category = "1mu1ess_1tau_bloose_0J";
+     else {
+       std::cout<< " A category deffinition is missing! "<<std::endl;
+       std::cout<<selMuons.size()<<" "<< selElectrons.size() <<" "<< selBJets_medium.size() <<" "<<std::endl;
+       assert(0);
+     }
 //--- fill histograms with events passing final selection
     selHistManagerType* selHistManager = selHistManagers[idxSelLepton_genMatch][idxSelHadTau_genMatch];
     assert(selHistManager != 0);
@@ -2089,8 +2134,47 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
           mTauTauVis2_sel,
           memOutput_LR
         );
+        selHistManager->evt_in_categories_in_decayModes_[category+decayModeStr]->fillHistograms(
+          selElectrons.size(),
+          selMuons.size(),
+          selHadTaus.size(),
+          selJets.size(),
+          selBJets_loose.size(),
+          selBJets_medium.size(),
+          evtWeight,
+          mvaOutput_2lss_ttV,
+          mvaOutput_2lss_tt,
+          mvaOutput_2lss_1tau_plainKin_tt,
+          mvaOutput_2lss_1tau_plainKin_ttV,
+          mvaOutput_2lss_1tau_plainKin_1B_M,
+          mvaOutput_2lss_1tau_plainKin_SUM_M,
+          mvaOutput_2lss_1tau_HTT_SUM_M,
+          mvaOutput_2lss_1tau_HTTMEM_SUM_M,
+          mTauTauVis1_sel,
+          mTauTauVis2_sel,
+          memOutput_LR);
       }
     }
+    selHistManager->evt_in_categories_[category]->fillHistograms(
+      selElectrons.size(),
+      selMuons.size(),
+      selHadTaus.size(),
+      selJets.size(),
+      selBJets_loose.size(),
+      selBJets_medium.size(),
+      evtWeight,
+      mvaOutput_2lss_ttV,
+      mvaOutput_2lss_tt,
+      mvaOutput_2lss_1tau_plainKin_tt,
+      mvaOutput_2lss_1tau_plainKin_ttV,
+      mvaOutput_2lss_1tau_plainKin_1B_M,
+      mvaOutput_2lss_1tau_plainKin_SUM_M,
+      mvaOutput_2lss_1tau_HTT_SUM_M,
+      mvaOutput_2lss_1tau_HTTMEM_SUM_M,
+      mTauTauVis1_sel,
+      mTauTauVis2_sel,
+      memOutput_LR);
+
     selHistManager->evtYield_->fillHistograms(eventInfo, evtWeight);
     selHistManager->weights_->fillHistograms("genWeight", eventInfo.genWeight);
     selHistManager->weights_->fillHistograms("pileupWeight", eventInfo.pileupWeight);
@@ -2105,8 +2189,8 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
 
     if ( selEventsFile ) {
       //(*selEventsFile) << eventInfo.run << ':' << eventInfo.lumi << ':' << eventInfo.event << '\n';
-      (*selEventsFile) << "(" << eventInfo.run << ", " << eventInfo.lumi << ", " << eventInfo.event << "L, " << weight_fakeRate 
-		       << ", " << prob_fake_lepton_lead << ", " << passesTight_lepton_lead << ", " << prob_fake_lepton_sublead << ", " << passesTight_lepton_sublead 
+      (*selEventsFile) << "(" << eventInfo.run << ", " << eventInfo.lumi << ", " << eventInfo.event << "L, " << weight_fakeRate
+		       << ", " << prob_fake_lepton_lead << ", " << passesTight_lepton_lead << ", " << prob_fake_lepton_sublead << ", " << passesTight_lepton_sublead
 		       << ")" << '\n';
     }
 
