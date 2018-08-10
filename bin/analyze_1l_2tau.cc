@@ -87,6 +87,11 @@
 #include "tthAnalysis/HiggsToTauTau/interface/hltFilter.h" // hltFilter()
 #include "tthAnalysis/HiggsToTauTau/interface/EvtWeightManager.h" // EvtWeightManager
 
+#include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorHTTv2.h" // RecoJetSelectorHTTv2
+#include "tthAnalysis/HiggsToTauTau/interface/RecoJetHTTv2.h"
+#include "tthAnalysis/HiggsToTauTau/interface/RecoJetReaderHTTv2.h" // RecoJetReaderHTTv2
+#include "tthAnalysis/HiggsToTauTau/interface/JetHistManagerHTTv2.h" // JetHistManagerHTTv2
+
 #include "tthAnalysis/HiggsToTauTau/interface/GenParticle.h" // GenParticle
 #include "tthAnalysis/HiggsToTauTau/interface/GenParticleReader.h" // GenParticleReader
 #include "TLorentzVector.h"
@@ -327,6 +332,8 @@ int main(int argc, char* argv[])
   std::string branchName_muons = cfg_analyze.getParameter<std::string>("branchName_muons");
   std::string branchName_hadTaus = cfg_analyze.getParameter<std::string>("branchName_hadTaus");
   std::string branchName_jets = cfg_analyze.getParameter<std::string>("branchName_jets");
+  std::string branchName_jetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_jetsHTTv2");
+  std::string branchName_subjetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_subjetsHTTv2");
   std::string branchName_met = cfg_analyze.getParameter<std::string>("branchName_met");
 
   std::string branchName_genLeptons = cfg_analyze.getParameter<std::string>("branchName_genLeptons");
@@ -439,6 +446,11 @@ int main(int argc, char* argv[])
   if ( hadTauSelection_part2 != "" ) tightHadTauSelector.set(hadTauSelection_part2);
   tightHadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
   tightHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
+
+  RecoJetReaderHTTv2* jetReaderHTTv2 = new RecoJetReaderHTTv2(era, branchName_jetsHTTv2, branchName_subjetsHTTv2);
+  inputTree -> registerReader(jetReaderHTTv2);
+  RecoJetCollectionSelectorHTTv2 jetSelectorHTTv2(era);
+  RecoJetHTTv2CollectionCleaner jetCleanerHTTv2(0.75, isDEBUG); //to clean against leptons and hadronic taus
 
   RecoJetReader* jetReader = new RecoJetReader(era, isMC, branchName_jets, readGenObjects);
   jetReader->setPtMass_central_or_shift(jetPt_option);
@@ -599,6 +611,7 @@ int main(int argc, char* argv[])
     EvtHistManager_1l_2tau* evt_;
     std::map<std::string, EvtHistManager_1l_2tau*> evt_in_decayModes_;
     std::map<std::string, EvtHistManager_1l_2tau*> evt_in_categories_;
+    std::map<std::string, EvtHistManager_1l_2tau*> evt_in_categories_in_decayModes_;
     EvtYieldHistManager* evtYield_;
     WeightHistManager* weights_;
   };
@@ -651,12 +664,12 @@ int main(int argc, char* argv[])
       preselHistManager->evt_ = new EvtHistManager_1l_2tau(makeHistManager_cfg(process_and_genMatch,
         Form("%s/presel/evt", histogramDir.data()), central_or_shift));
       preselHistManager->evt_->bookHistograms(fs);
-      edm::ParameterSet cfg_EvtYieldHistManager_presel = makeHistManager_cfg(process_and_genMatch, 
+      edm::ParameterSet cfg_EvtYieldHistManager_presel = makeHistManager_cfg(process_and_genMatch,
         Form("%s/presel/evtYield", histogramDir.data()), central_or_shift);
       cfg_EvtYieldHistManager_presel.addParameter<edm::ParameterSet>("runPeriods", cfg_EvtYieldHistManager);
       cfg_EvtYieldHistManager_presel.addParameter<bool>("isMC", isMC);
       preselHistManager->evtYield_ = new EvtYieldHistManager(cfg_EvtYieldHistManager_presel);
-      preselHistManager->evtYield_->bookHistograms(fs);  
+      preselHistManager->evtYield_->bookHistograms(fs);
       preselHistManagers[idxLepton][idxHadTau] = preselHistManager;
 
       selHistManagerType* selHistManager = new selHistManagerType();
@@ -664,7 +677,7 @@ int main(int argc, char* argv[])
         Form("%s/sel/electrons", histogramDir.data()), central_or_shift));
       selHistManager->electrons_->bookHistograms(fs);
       vstring categories_e = {
-        "1e_2tau_bloose", "1e_2tau_btight"
+        "1e_2tau_bloose_0J", "1e_2tau_btight_0J"
       };
       std::map<std::string, ElectronHistManager*> selElectronHistManager_category; // key = category
       for ( vstring::const_iterator category = categories_e.begin();
@@ -679,7 +692,7 @@ int main(int argc, char* argv[])
         Form("%s/sel/muons", histogramDir.data()), central_or_shift));
       selHistManager->muons_->bookHistograms(fs);
       vstring categories_mu = {
-        "1mu_2tau_bloose", "1mu_2tau_btight"
+        "1mu_2tau_bloose_0J", "1mu_2tau_btight_0J"
       };
       for ( vstring::const_iterator category = categories_mu.begin();
             category != categories_mu.end(); ++category ) {
@@ -699,8 +712,10 @@ int main(int argc, char* argv[])
         Form("%s/sel/subleadHadTau", histogramDir.data()), central_or_shift));
       selHistManager->subleadHadTau_->bookHistograms(fs);
       vstring categories_tau = {
-        "1e_2tau_bloose", "1e_2tau_btight",
-        "1mu_2tau_bloose", "1mu_2tau_btight"
+        "1e_2tau_btight_0J", "1e_2tau_bloose_0J",
+        "1mu_2tau_btight_0J", "1mu_2tau_bloose_0J",
+        //"1l_2tau_0J" ,
+        "1l_2tau_1Jp"
       };
       for ( vstring::const_iterator category = categories_tau.begin();
             category != categories_tau.end(); ++category ) {
@@ -750,6 +765,12 @@ int main(int argc, char* argv[])
        Form("%s/sel/evt", histogramDir.data()), central_or_shift));
       selHistManager->evt_->bookHistograms(fs);
 
+      vstring categories_evt = {
+        "1e_2tau_btight_0J", "1e_2tau_bloose_0J",
+        "1mu_2tau_btight_0J", "1mu_2tau_bloose_0J",
+        //"1l_2tau_0J",
+        "1l_2tau_1Jp"
+      };
       const vstring decayModes_evt = eventInfo.getDecayModes();
       if(isSignal)
       {
@@ -765,13 +786,18 @@ int main(int argc, char* argv[])
             Form("%s/sel/evt", histogramDir.data()),
             central_or_shift
           ));
+          std::cout<<Form("%s/sel/evt", histogramDir.data())<<std::endl;
           selHistManager -> evt_in_decayModes_[decayMode_evt] -> bookHistograms(fs);
+          for ( vstring::const_iterator category = categories_evt.begin();
+                category != categories_evt.end(); ++category ) {
+            TString histogramDir_category = histogramDir.data();
+            histogramDir_category.ReplaceAll("1l_2tau", category->data());
+            selHistManager->evt_in_categories_in_decayModes_[category->data()+decayMode_evt] = new EvtHistManager_1l_2tau(makeHistManager_cfg(decayMode_and_genMatch,
+              Form("%s/sel/evt", histogramDir_category.Data()), central_or_shift));
+            selHistManager->evt_in_categories_in_decayModes_[category->data()+decayMode_evt]->bookHistograms(fs);
+          }
         }
       }
-      vstring categories_evt = {
-        "1e_2tau_bloose", "1e_2tau_btight",
-        "1mu_2tau_bloose", "1mu_2tau_btight"
-      };
       for ( vstring::const_iterator category = categories_evt.begin();
             category != categories_evt.end(); ++category ) {
         TString histogramDir_category = histogramDir.data();
@@ -780,12 +806,13 @@ int main(int argc, char* argv[])
           Form("%s/sel/evt", histogramDir_category.Data()), central_or_shift));
         selHistManager->evt_in_categories_[*category]->bookHistograms(fs);
       }
-      edm::ParameterSet cfg_EvtYieldHistManager_sel = makeHistManager_cfg(process_and_genMatch, 
+
+      edm::ParameterSet cfg_EvtYieldHistManager_sel = makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evtYield", histogramDir.data()), central_or_shift);
       cfg_EvtYieldHistManager_sel.addParameter<edm::ParameterSet>("runPeriods", cfg_EvtYieldHistManager);
       cfg_EvtYieldHistManager_sel.addParameter<bool>("isMC", isMC);
       selHistManager->evtYield_ = new EvtYieldHistManager(cfg_EvtYieldHistManager_sel);
-      selHistManager->evtYield_->bookHistograms(fs);  
+      selHistManager->evtYield_->bookHistograms(fs);
       selHistManager->weights_ = new WeightHistManager(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/weights", histogramDir.data()), central_or_shift));
       selHistManager->weights_->bookHistograms(fs,
@@ -840,7 +867,7 @@ int main(int argc, char* argv[])
     );
     bdt_filler -> bookTree(fs);
   }
-  
+
   int analyzedEntries = 0;
   int selectedEntries = 0;
   double selectedEntries_weighted = 0.;
@@ -892,6 +919,7 @@ int main(int argc, char* argv[])
                 << ") file (" << selectedEntries << " Entries selected)\n";
     }
     ++analyzedEntries;
+    if ( analyzedEntries > 500000 ) break;
     histogram_analyzedEntries->Fill(0.);
 
     if (run_lumi_eventSelector && !(*run_lumi_eventSelector)(eventInfo))
@@ -1012,7 +1040,7 @@ int main(int argc, char* argv[])
         }
         continue;
       }
-      // CV: commented-out for 2017 data-taking period, 
+      // CV: commented-out for 2017 data-taking period,
       //     as mu+tau (e+tau) cross trigger is stored in the same primary dataset as the single muon (single electron) trigger
       //if ( selTrigger_Tau && (isTriggered_SingleMuon || isTriggered_SingleElectron) ) {
       //  if ( run_lumi_eventSelector ) {
@@ -1122,10 +1150,17 @@ int main(int argc, char* argv[])
       printCollection("selHadTaus", selHadTaus);
     }
 
+    //--- build collections of jets reconstructed by hep-top-tagger (HTTv2) algorithm
+    std::vector<RecoJetHTTv2> jetsHTTv2 = jetReaderHTTv2->read();
+    std::vector<const RecoJetHTTv2*> jet_ptrsHTTv2raw = convert_to_ptrs(jetsHTTv2);
+    std::vector<const RecoJetHTTv2*> sel_HTTv2;
+    std::vector<const RecoJetHTTv2*> cleanedJetsHTTv2 = jetCleanerHTTv2(sel_HTTv2, selMuons, selElectrons, selHadTaus);
+    sel_HTTv2 =  jetSelectorHTTv2(cleanedJetsHTTv2, isHigherPt);
+
 //--- build collections of jets and select subset of jets passing b-tagging criteria
     std::vector<RecoJet> jets = jetReader->read();
     std::vector<const RecoJet*> jet_ptrs = convert_to_ptrs(jets);
-    std::vector<const RecoJet*> cleanedJets = jetCleaner(jet_ptrs, fakeableLeptons, fakeableHadTaus);
+    std::vector<const RecoJet*> cleanedJets = jetCleaner(jet_ptrs, fakeableLeptons, fakeableHadTaus, sel_HTTv2);
     std::vector<const RecoJet*> selJets = jetSelector(cleanedJets, isHigherPt);
     std::vector<const RecoJet*> selBJets_loose = jetSelectorBtagLoose(cleanedJets, isHigherPt);
     std::vector<const RecoJet*> selBJets_medium = jetSelectorBtagMedium(cleanedJets, isHigherPt);
@@ -1655,7 +1690,7 @@ int main(int argc, char* argv[])
     }
     cutFlowTable.update("signal region veto", evtWeight);
     cutFlowHistManager->fillHistograms("signal region veto", evtWeight);
-    
+
 //--- compute output of hadronic top tagger BDT
     //double max_mvaOutput_hadTopTagger = -1.;
     double max_mvaOutput_hadTopTaggerWithKinFit = -1.;
@@ -1867,6 +1902,28 @@ int main(int argc, char* argv[])
       mvaOutput_plainKin_SUM_VT,
       mTauTauVis,
       evtWeight);
+    selHistManager->evtYield_->fillHistograms(eventInfo, evtWeight);
+    selHistManager->weights_->fillHistograms("genWeight", eventInfo.genWeight);
+    selHistManager->weights_->fillHistograms("pileupWeight", eventInfo.pileupWeight);
+    selHistManager->weights_->fillHistograms("data_to_MC_correction", weight_data_to_MC_correction);
+    selHistManager->weights_->fillHistograms("triggerWeight", triggerWeight);
+    selHistManager->weights_->fillHistograms("leptonEff", weight_leptonEff);
+    selHistManager->weights_->fillHistograms("hadTauEff", weight_hadTauEff);
+    selHistManager->weights_->fillHistograms("fakeRate", weight_fakeRate);
+
+    //std::cout<< " make categories "<<std::endl;
+    std::string category;
+    if      ( sel_HTTv2.size() > 0 ) category = "1l_2tau_1Jp";
+    else if ( selElectrons.size() >= 1 && selBJets_medium.size() >= 1 ) category = "1e_2tau_btight_0J";
+    else if ( selElectrons.size() >= 1                                ) category = "1e_2tau_bloose_0J";
+    else if ( selMuons.size()     >= 1 && selBJets_medium.size() >= 1 ) category = "1mu_2tau_btight_0J";
+    else if ( selMuons.size()     >= 1                                ) category = "1mu_2tau_bloose_0J";
+    else {
+      std::cout<< " A category deffinition is missing! "<<std::endl;
+      std::cout<<selMuons.size()<<" "<< selElectrons.size() <<" "<< selBJets_medium.size() <<" "<< sel_HTTv2.size() <<" "<<std::endl;
+      assert(0);
+    }
+
     if( isSignal ) {
       const std::string decayModeStr = eventInfo.getDecayModeString();
       if ( !decayModeStr.empty() ) {
@@ -1885,23 +1942,18 @@ int main(int argc, char* argv[])
           mTauTauVis,
           evtWeight
         );
+        selHistManager->evt_in_categories_in_decayModes_[category+decayModeStr]->fillHistograms(
+            preselElectrons.size(), preselMuons.size(), selHadTaus.size(),
+            selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+            mvaOutput_plainKin_ttV,
+            mvaOutput_plainKin_tt,
+            mvaOutput_plainKin_1B_VT,
+            mvaOutput_HTT_SUM_VT,
+            mvaOutput_plainKin_SUM_VT,
+            mTauTauVis,
+            evtWeight);
       }
     }
-    selHistManager->evtYield_->fillHistograms(eventInfo, evtWeight);
-    selHistManager->weights_->fillHistograms("genWeight", eventInfo.genWeight);
-    selHistManager->weights_->fillHistograms("pileupWeight", eventInfo.pileupWeight);
-    selHistManager->weights_->fillHistograms("data_to_MC_correction", weight_data_to_MC_correction);
-    selHistManager->weights_->fillHistograms("triggerWeight", triggerWeight);
-    selHistManager->weights_->fillHistograms("leptonEff", weight_leptonEff);
-    selHistManager->weights_->fillHistograms("hadTauEff", weight_hadTauEff);
-    selHistManager->weights_->fillHistograms("fakeRate", weight_fakeRate);
-
-    std::string category;
-    if      ( selElectrons.size() >= 1 && selBJets_medium.size() >= 1 ) category = "1e_2tau_btight";
-    else if ( selElectrons.size() >= 1                                ) category = "1e_2tau_bloose";
-    else if ( selMuons.size()     >= 1 && selBJets_medium.size() >= 1 ) category = "1mu_2tau_btight";
-    else if ( selMuons.size()     >= 1                                ) category = "1mu_2tau_bloose";
-    else assert(0);
 
     if ( selHistManager->electrons_in_categories_.find(category) != selHistManager->electrons_in_categories_.end() ) {
       selHistManager->electrons_in_categories_[category]->fillHistograms(selElectrons, evtWeight);
