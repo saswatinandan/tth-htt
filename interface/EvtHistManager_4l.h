@@ -29,7 +29,10 @@ class EvtHistManager_4l
                  int numJets,
                  int numBJets_loose,
                  int numBJets_medium,
-                 double evtWeight);
+                 double evtWeight,
+                 double massLL1,
+                 double massLL2,
+                 double mass4L);
 
   const TH1 *
   getHistogram_EventCounter() const;
@@ -49,6 +52,11 @@ class EvtHistManager_4l
   TH2 * histogram_numBJets_medium_vs_numJets_;
 
   TH1 * histogram_EventCounter_;
+
+  TH1 * histogram_massLL1_;
+  TH1 * histogram_massLL2_;
+  TH1 * histogram_mass4L_;
+
 };
 
 #endif

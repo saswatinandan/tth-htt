@@ -113,21 +113,26 @@ int main(int argc, char* argv[])
 //--- keep track of time it takes the macro to execute
   TBenchmark clock;
   clock.Start("analyze_4l");
+  std::cout << "<analyze_4l 0>: "<< argv[1] << std::endl;
 
 //--- read python configuration parameters
   if ( !edm::readPSetsFrom(argv[1])->existsAs<edm::ParameterSet>("process") )
     throw cms::Exception("analyze_4l")
       << "No ParameterSet 'process' found in configuration file = " << argv[1] << " !!\n";
+  std::cout << "<analyze_4l 0 1>:" << std::endl;
 
   edm::ParameterSet cfg = edm::readPSetsFrom(argv[1])->getParameter<edm::ParameterSet>("process");
+  std::cout << "<analyze_4l 0 2>:" << std::endl;
 
   edm::ParameterSet cfg_analyze = cfg.getParameter<edm::ParameterSet>("analyze_4l");
+  std::cout << "<analyze_4l 0 3>:" << std::endl;
 
   std::string treeName = cfg_analyze.getParameter<std::string>("treeName");
 
   std::string process_string = cfg_analyze.getParameter<std::string>("process");
   bool isSignal = ( process_string == "signal" ) ? true : false;
 
+  std::cout << "<analyze_4l 2>:" << std::endl;
   std::string histogramDir = cfg_analyze.getParameter<std::string>("histogramDir");
   bool isMCClosure_e = histogramDir.find("mcClosure_e") != std::string::npos;
   bool isMCClosure_m = histogramDir.find("mcClosure_m") != std::string::npos;
@@ -135,6 +140,7 @@ int main(int argc, char* argv[])
   std::string era_string = cfg_analyze.getParameter<std::string>("era");
   const int era = get_era(era_string);
 
+  std::cout << "<analyze_4l 3>:" << std::endl;
   // single lepton triggers
   vstring triggerNames_1e = cfg_analyze.getParameter<vstring>("triggers_1e");
   std::vector<hltPath*> triggers_1e = create_hltPaths(triggerNames_1e, "triggers_1e");
@@ -188,6 +194,7 @@ int main(int argc, char* argv[])
   std::vector<leptonGenMatchEntry> leptonGenMatch_definitions = getLeptonGenMatch_definitions_4lepton(apply_leptonGenMatching);
   std::cout << "leptonGenMatch_definitions:" << std::endl;
   std::cout << leptonGenMatch_definitions;
+  std::cout << "<analyze_4l 4>:" << std::endl;
 
   enum { kOS, kSS };
   std::string chargeSumSelection_string = cfg_analyze.getParameter<std::string>("chargeSumSelection");
@@ -199,6 +206,7 @@ int main(int argc, char* argv[])
 
   int minNumJets = cfg_analyze.getParameter<int>("minNumJets");
   std::cout << "minNumJets = " << minNumJets << std::endl;
+  std::cout << "<analyze_4l 5>:" << std::endl;
 
   bool isMC = cfg_analyze.getParameter<bool>("isMC");
   bool isMC_tH = ( process_string == "tHq" || process_string == "tHW" ) ? true : false;
@@ -212,12 +220,14 @@ int main(int argc, char* argv[])
   MEtFilterSelector metFilterSelector(cfgMEtFilter, isMC);
   const bool useNonNominal = cfg_analyze.getParameter<bool>("useNonNominal");
   const bool useNonNominal_jetmet = useNonNominal || ! isMC;
+  std::cout << "<analyze_4l 6>:" << std::endl;
 
   const edm::ParameterSet syncNtuple_cfg = cfg_analyze.getParameter<edm::ParameterSet>("syncNtuple");
   const std::string syncNtuple_tree = syncNtuple_cfg.getParameter<std::string>("tree");
   const std::string syncNtuple_output = syncNtuple_cfg.getParameter<std::string>("output");
   const bool sync_requireGenMatching = syncNtuple_cfg.getParameter<bool>("requireGenMatching");
   const bool do_sync = ! syncNtuple_tree.empty() && ! syncNtuple_output.empty();
+  std::cout << "<analyze_4l 7>:" << std::endl;
 
   const edm::ParameterSet additionalEvtWeight = cfg_analyze.getParameter<edm::ParameterSet>("evtWeight");
   const bool applyAdditionalEvtWeight = additionalEvtWeight.getParameter<bool>("apply");
@@ -229,6 +239,7 @@ int main(int argc, char* argv[])
 
   bool isDEBUG = cfg_analyze.getParameter<bool>("isDEBUG");
   if ( isDEBUG ) std::cout << "Warning: DEBUG mode enabled -> trigger selection will not be applied for data !!" << std::endl;
+  std::cout << "<analyze_4l 9>:" << std::endl;
 
   checkOptionValidity(central_or_shift, isMC);
   const int jetToLeptonFakeRate_option = getJetToLeptonFR_option(central_or_shift);
@@ -254,6 +265,7 @@ int main(int argc, char* argv[])
   cfg_dataToMCcorrectionInterface.addParameter<int>("hadTauSelection_antiElectron", -1);
   cfg_dataToMCcorrectionInterface.addParameter<int>("hadTauSelection_antiMuon", -1);
   cfg_dataToMCcorrectionInterface.addParameter<std::string>("central_or_shift", central_or_shift);
+  std::cout << "<analyze_4l 10>:" << std::endl;
   Data_to_MC_CorrectionInterface_Base * dataToMCcorrectionInterface = nullptr;
   switch(era)
   {
@@ -269,6 +281,7 @@ int main(int argc, char* argv[])
   else if ( applyFakeRateWeights_string == "4lepton"  ) applyFakeRateWeights = kFR_4lepton;
   else throw cms::Exception("analyze_4l")
     << "Invalid Configuration parameter 'applyFakeRateWeights' = " << applyFakeRateWeights_string << " !!\n";
+  std::cout << "<analyze_4l 11>:" << std::endl;
 
   LeptonFakeRateInterface* leptonFakeRateInterface = 0;
   if ( applyFakeRateWeights == kFR_4lepton) {
@@ -289,6 +302,7 @@ int main(int argc, char* argv[])
   std::string branchName_genPhotons = cfg_analyze.getParameter<std::string>("branchName_genPhotons");
   std::string branchName_genJets = cfg_analyze.getParameter<std::string>("branchName_genJets");
   const bool redoGenMatching = cfg_analyze.getParameter<bool>("redoGenMatching");
+  std::cout << "<analyze_4l 12 >:" << std::endl;
 
   std::string selEventsFileName_input = cfg_analyze.getParameter<std::string>("selEventsFileName_input");
   std::cout << "selEventsFileName_input = " << selEventsFileName_input << std::endl;
@@ -478,7 +492,7 @@ int main(int argc, char* argv[])
     preselHistManager->evt_ = new EvtHistManager_4l(makeHistManager_cfg(process_and_genMatch,
       Form("%s/presel/evt", histogramDir.data()), era_string, central_or_shift));
     preselHistManager->evt_->bookHistograms(fs);
-    edm::ParameterSet cfg_EvtYieldHistManager_presel = makeHistManager_cfg(process_and_genMatch, 
+    edm::ParameterSet cfg_EvtYieldHistManager_presel = makeHistManager_cfg(process_and_genMatch,
       Form("%s/presel/evtYield", histogramDir.data()), central_or_shift);
     cfg_EvtYieldHistManager_presel.addParameter<edm::ParameterSet>("runPeriods", cfg_EvtYieldHistManager);
     cfg_EvtYieldHistManager_presel.addParameter<bool>("isMC", isMC);
@@ -530,7 +544,7 @@ int main(int argc, char* argv[])
       {
 	std::string decayMode_and_genMatch = decayMode_evt;
 	if ( apply_leptonGenMatching ) decayMode_and_genMatch += leptonGenMatch_definition -> name_;
-        
+
 	selHistManager -> evt_in_decayModes_[decayMode_evt] = new EvtHistManager_4l(makeHistManager_cfg(
           decayMode_and_genMatch,
 	  Form("%s/sel/evt", histogramDir.data()),
@@ -540,7 +554,7 @@ int main(int argc, char* argv[])
 	selHistManager -> evt_in_decayModes_[decayMode_evt] -> bookHistograms(fs);
       }
     }
-    edm::ParameterSet cfg_EvtYieldHistManager_sel = makeHistManager_cfg(process_and_genMatch, 
+    edm::ParameterSet cfg_EvtYieldHistManager_sel = makeHistManager_cfg(process_and_genMatch,
       Form("%s/sel/evtYield", histogramDir.data()), central_or_shift);
     cfg_EvtYieldHistManager_sel.addParameter<edm::ParameterSet>("runPeriods", cfg_EvtYieldHistManager);
     cfg_EvtYieldHistManager_sel.addParameter<bool>("isMC", isMC);
@@ -581,9 +595,9 @@ int main(int argc, char* argv[])
       makeHistManager_cfg(process_string, Form("%s/sel/evtntuple", histogramDir.data()), central_or_shift)
     );
     bdt_filler -> register_variable<float_type>(
-      "lep1_pt", "lep1_conePt", "lep1_eta", "lep1_tth_mva", "mindr_lep1_jet", "mT_lep1", 
+      "lep1_pt", "lep1_conePt", "lep1_eta", "lep1_tth_mva", "mindr_lep1_jet", "mT_lep1",
       "lep2_pt", "lep2_conePt", "lep2_eta", "lep2_tth_mva", "mindr_lep2_jet", "mT_lep2",
-      "lep3_pt", "lep3_conePt", "lep3_eta", "lep3_tth_mva", "mindr_lep3_jet", "mT_lep3", 
+      "lep3_pt", "lep3_conePt", "lep3_eta", "lep3_tth_mva", "mindr_lep3_jet", "mT_lep3",
       "lep4_pt", "lep4_conePt", "lep4_eta", "lep4_tth_mva", "mindr_lep4_jet", "mT_lep4",
       "avg_dr_jet", "ptmiss",  "htmiss", "dr_leps",
       "lumiScale", "genWeight", "evtWeight",
@@ -1036,9 +1050,9 @@ int main(int argc, char* argv[])
     preselHistManager->met_->fillHistograms(met, mht_p4, met_LD, 1.);
     preselHistManager->metFilters_->fillHistograms(metFilters, 1.);
     preselHistManager->evt_->fillHistograms(
-      preselElectrons.size(), preselMuons.size(), 
+      preselElectrons.size(), preselMuons.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-      1.);
+      1., 1., 1., 1.);
     preselHistManager->evtYield_->fillHistograms(eventInfo, 1.);
 
 //--- apply final event selection
@@ -1271,7 +1285,7 @@ int main(int argc, char* argv[])
     std::cout << "event " << eventInfo.str() << " FAILS lepton pT selection." << std::endl;
 	std::cout << " (leading selLepton pT = " << selLepton_lead->pt() << ", minPt_lead = " << minPt_lead
 		  << ", subleading selLepton pT = " << selLepton_sublead->pt() << ", minPt_sublead = " << minPt_sublead
-		  << ", third selLepton pT = " << selLepton_third->pt() << ", minPt_third = " << minPt_third 
+		  << ", third selLepton pT = " << selLepton_third->pt() << ", minPt_third = " << minPt_third
 		  << ", fourth selLepton pT = " << selLepton_fourth->pt() << ", minPt_fourth = " << minPt_fourth << ")" << std::endl;
       }
       continue;
@@ -1287,7 +1301,7 @@ int main(int argc, char* argv[])
     std::cout << "event " << eventInfo.str() << " FAILS lepton charge selection." << std::endl;
 	std::cout << " (leading selLepton charge = " << selLepton_lead->charge()
 		  << ", subleading selLepton charge = " << selLepton_sublead->charge()
-		  << ", third selLepton charge = " << selLepton_third->charge() 
+		  << ", third selLepton charge = " << selLepton_third->charge()
 		  << ", fourth selLepton charge = " << selLepton_fourth->charge() << ", chargeSumSelection = OS)" << std::endl;
       }
       continue;
@@ -1297,7 +1311,7 @@ int main(int argc, char* argv[])
     std::cout << "event " << eventInfo.str() << " FAILS lepton charge selection." << std::endl;
 	std::cout << " (leading selLepton charge = " << selLepton_lead->charge()
 		  << ", subleading selLepton charge = " << selLepton_sublead->charge()
-		  << ", third selLepton charge = " << selLepton_third->charge() 
+		  << ", third selLepton charge = " << selLepton_third->charge()
 		  << ", fourth selLepton charge = " << selLepton_fourth->charge() << ", chargeSumSelection = SS)" << std::endl;
       }
       continue;
@@ -1403,6 +1417,34 @@ int main(int argc, char* argv[])
     cutFlowTable.update("signal region veto", evtWeight);
     cutFlowHistManager->fillHistograms("signal region veto", evtWeight);
 
+    double massLL1 = 0;
+    double massLL2 = 0;
+    double mass4L = 0;
+    for ( std::vector<const RecoLepton*>::const_iterator lepton1 = selLeptons.begin();
+    lepton1 != preselLeptonsFull.end(); ++lepton1 ) {
+      for ( std::vector<const RecoLepton*>::const_iterator lepton2 = lepton1 + 1;
+      lepton2 != selLeptons.end(); ++lepton2 ) {
+  if ( (*lepton1)->charge() == -(*lepton2)->charge() ) { // first pair of opposite charge
+    for ( std::vector<const RecoLepton*>::const_iterator lepton3 = selLeptons.begin();
+    lepton3 != preselLeptons.end(); ++lepton3 ) {
+      if ( (*lepton3) == (*lepton1) || (*lepton3) == (*lepton2) ) continue;
+      for ( std::vector<const RecoLepton*>::const_iterator lepton4 = lepton3 + 1;
+      lepton4 != preselLeptons.end(); ++lepton4 ) {
+        if ( (*lepton4) == (*lepton1) || (*lepton4) == (*lepton2) ) continue;
+        if ( (*lepton3)->charge() == -(*lepton4)->charge() ) { // second pair of same flavor leptons of opposite charge
+          if ( mass4L ==0 ){
+            // keep of the leading pT leptons (in case there are more than 4)
+            mass4L = ((*lepton1)->p4() + (*lepton2)->p4() + (*lepton3)->p4() + (*lepton4)->p4()).mass();
+            massLL1 = ((*lepton1)->p4() + (*lepton2)->p4()).mass();
+            massLL2 = ((*lepton3)->p4() + (*lepton4)->p4()).mass();
+          }
+        }
+      }
+    }
+  }
+      }
+    }
+
 //--- fill histograms with events passing final selection
     selHistManagerType* selHistManager = selHistManagers[idxSelLepton_genMatch];
     assert(selHistManager != 0);
@@ -1418,9 +1460,13 @@ int main(int argc, char* argv[])
     selHistManager->met_->fillHistograms(met, mht_p4, met_LD, evtWeight);
     selHistManager->metFilters_->fillHistograms(metFilters, evtWeight);
     selHistManager->evt_->fillHistograms(
-      selElectrons.size(), selMuons.size(), 
+      selElectrons.size(), selMuons.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-      evtWeight);
+      evtWeight,
+      massLL1,
+      massLL2,
+      mass4L
+    );
     if(isSignal)
     {
       const std::string decayModeStr = eventInfo.getDecayModeString();
@@ -1432,7 +1478,10 @@ int main(int argc, char* argv[])
           selJets.size(),
           selBJets_loose.size(),
           selBJets_medium.size(),
-          evtWeight
+          evtWeight,
+          massLL1,
+          massLL2,
+          mass4L
         );
       }
     }
@@ -1504,7 +1553,7 @@ int main(int argc, char* argv[])
           ("lep4_eta",            selLepton_fourth -> eta())
           ("lep4_tth_mva",        selLepton_fourth -> mvaRawTTH())
           ("mindr_lep4_jet",      TMath::Min(10., comp_mindr_lep1_jet(*selLepton_fourth, selJets)))
-          ("mT_lep4",             comp_MT_met_lep1(*selLepton_fourth, met.pt(), met.phi()))	
+          ("mT_lep4",             comp_MT_met_lep1(*selLepton_fourth, met.pt(), met.phi()))
           ("avg_dr_jet",          comp_avg_dr_jet(selJets))
           ("ptmiss",              met.pt())
           ("htmiss",              mht_p4.pt())
