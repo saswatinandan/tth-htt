@@ -95,6 +95,12 @@ process.analyze_3l = cms.PSet(
     branchName_genHadTaus = cms.string('GenVisTau'),
     branchName_genPhotons = cms.string('GenPhoton'),
     branchName_genJets = cms.string('GenJet'),
+    branchName_jetsHTTv2 = cms.string('HTTV2'),
+    branchName_subjetsHTTv2 = cms.string('HTTV2Subjets'),
+    branchName_jetsAK12 = cms.string('FatJetAK12'),
+    branchName_subjetsAK12 = cms.string('SubJetAK12'),
+    branchName_jetsAK8 = cms.string('FatJet'),
+    branchName_subjetsAK8 = cms.string('SubJet'),
     redoGenMatching = cms.bool(True),
 
     selEventsFileName_input = cms.string(''),
