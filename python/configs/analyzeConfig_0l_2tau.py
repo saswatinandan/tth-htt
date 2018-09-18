@@ -79,7 +79,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
       outputDir          = outputDir,
       executable_analyze = executable_analyze,
       channel            = "0l_2tau",
-      subcategories      = [],
+      subcategories      = ["0l_2tau", "0l_2tau_bloose", "0l_2tau_btight", "0l_2tau_1Jp"],
       samples            = samples,
       lep_mva_wp         = lep_mva_wp,
       central_or_shifts  = central_or_shifts,
@@ -135,7 +135,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
     self.executable_addFakes = executable_addBackgroundJetToTauFakes
 
     self.nonfake_backgrounds = [ "TT", "TTW", "TTWW", "TTZ", "EWK", "Rares" ]
-    self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [ "fakes_data", "fakes_mc" ]
+    self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [ "conversions", "fakes_data", "fakes_mc" ] ##Xanda === conversions are not on stage1 check why
     ##self.make_plots_backgrounds = self.nonfake_backgrounds + [ "fakes_data" ]
     self.make_plots_backgrounds = [ "TT", "TTW", "TTZ", "TTWW", "EWK", "Rares", "fakes_data" ]
 
@@ -230,7 +230,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
         lines.append("    signal = cms.string('%s')," % cat_folder)
         lines.append("    sideband = cms.string('%s')," % cat_folder.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights"))
         lines.append("    label = cms.string('%s')" % self.subcategories[cc]) #self.channel)
-        lines.append("  )")
+        lines.append("  ),")
     lines.append(")")
     lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % self.lumi)
     create_cfg(self.cfgFile_make_plots_mcClosure, jobOptions['cfgFile_modified'], lines)
@@ -587,7 +587,8 @@ class analyzeConfig_0l_2tau(analyzeConfig):
       key_hadd_stage1_5 = getKey(get_hadTau_selection_and_frWeight("Fakeable", "enabled"), hadTau_charge_selection)
       category_sideband = None
       if self.applyFakeRateWeights == "2tau":
-        category_sideband = "0l_2tau_%s_Fakeable_wFakeRateWeights" % hadTau_charge_selection
+        category_sideband = getHistogramDirList("Fakeable", "enabled", hadTau_charge_selection, self.subcategories)
+        #category_sideband = "0l_2tau_%s_Fakeable_wFakeRateWeights" % hadTau_charge_selection
       else:
         raise ValueError("Invalid Configuration parameter 'applyFakeRateWeights' = %s !!" % self.applyFakeRateWeights)
       self.jobOptions_addFakes[key_addFakes_job] = {
@@ -598,10 +599,10 @@ class analyzeConfig_0l_2tau(analyzeConfig):
           (self.channel, hadTau_charge_selection)),
         'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgroundLeptonFakes_%s_%s.log" % \
           (self.channel, hadTau_charge_selection)),
-        'category_signal' : "0l_2tau_%s_Tight" % hadTau_charge_selection,
+        'category_signal' : getHistogramDirList("Tight", "", hadTau_charge_selection, self.subcategories), #"0l_2tau_%s_Tight" % hadTau_charge_selection,
         'category_sideband' : category_sideband
       }
-      self.createCfg_addFakes(self.jobOptions_addFakes[key_addFakes_job])
+      self.createCfg_addFakes(self.jobOptions_addFakes[key_addFakes_job], False) ## Xanda: conversions is not on stage1 == discover why
       key_hadd_stage2 = getKey(get_hadTau_selection_and_frWeight("Tight", "disabled"), hadTau_charge_selection)
       self.inputFiles_hadd_stage2[key_hadd_stage2].append(self.jobOptions_addFakes[key_addFakes_job]['outputFile'])
 
@@ -667,6 +668,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
             for cat in self.histogramDir_prep_dcard_SS :
                 histogramDir_nominal+=[ "%s/sel/evt/fakes_mc/%s" % (cat, histogramToFit)]
                 histogramDir_mcClosure+=[ "%s/sel/evt/fakes_mc/%s" % (cat.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights"), histogramToFit)]
+                # cat_folder.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights")
         else:
           raise ValueError("Invalid parameter 'hadTau_charge_selection' = %s !!" % hadTau_charge_selection)
         for hadTau_type in [ 't', ]:

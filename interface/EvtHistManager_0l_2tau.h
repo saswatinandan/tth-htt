@@ -30,6 +30,7 @@ public:
                  int numJets,
                  int numBJets_loose,
                  int numBJets_medium,
+                 int num_HTTv2,
                  double mvaOutput_0l_2tau_ttbar,
                  double mTauTauVis,
                  double mTauTau,
@@ -43,9 +44,10 @@ private:
   TH1 * histogram_numMuons_;
   TH1 * histogram_numHadTaus_;
   TH1 * histogram_numJets_;
+  TH1 * histogram_numHTTv2_;
   TH1 * histogram_numBJets_loose_;
   TH1 * histogram_numBJets_medium_;
-  
+
   // CV: used to check loss in signal efficiency in case events with
   // high jet and b-jet multiplicity are vetoed to avoid overlap with ttH, H->bb analysis
   // (alternative: ttH, H->bb analysis adds hadronic tau veto)
