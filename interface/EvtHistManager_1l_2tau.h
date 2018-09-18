@@ -30,6 +30,7 @@ public:
                  int numJets,
                  int numBJets_loose,
                  int numBJets_medium,
+                 int numBJets_HTTv2,
                  double mvaOutput_plainKin_ttV,
                  double mvaOutput_plainKin_tt,
                  double mvaOutput_plainKin_1B_VT,
@@ -48,6 +49,7 @@ public:
   TH1 * histogram_numJets_;
   TH1 * histogram_numBJets_loose_;
   TH1 * histogram_numBJets_medium_;
+  TH1 * histogram_numHTTv2_;
 
   // CV: used to check loss in signal efficiency in case events with
   // high jet and b-jet multiplicity are vetoed to avoid overlap with ttH, H->bb analysis

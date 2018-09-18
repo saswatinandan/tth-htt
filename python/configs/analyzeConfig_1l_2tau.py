@@ -252,7 +252,7 @@ class analyzeConfig_1l_2tau(analyzeConfig):
         lines.append("    signal = cms.string('%s')," % cat_folder)
         lines.append("    sideband = cms.string('%s')," % cat_folder.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights"))
         lines.append("    label = cms.string('%s')" % self.subcategories[cc]) #self.channel)
-        lines.append("  )")
+        lines.append("  ),")
     lines.append(")")
     lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % self.lumi)
     create_cfg(self.cfgFile_make_plots_mcClosure, jobOptions['cfgFile_modified'], lines)
@@ -684,7 +684,7 @@ class analyzeConfig_1l_2tau(analyzeConfig):
       key_hadd_stage1_5 = getKey(get_lepton_and_hadTau_selection_and_frWeight("Fakeable", "enabled"), hadTau_charge_selection)
       category_sideband = None
       if self.applyFakeRateWeights == "3L" or self.applyFakeRateWeights == "2tau":
-        category_sideband = getHistogramDirList(hadTau_selection, "enabled", hadTau_charge_selection, self.subcategories) #"1l_2tau_%s_Fakeable_wFakeRateWeights" % hadTau_charge_selection
+        category_sideband = getHistogramDirList("Fakeable", "enabled", hadTau_charge_selection, self.subcategories) #"1l_2tau_%s_Fakeable_wFakeRateWeights" % hadTau_charge_selection
       else:
         raise ValueError("Invalid Configuration parameter 'applyFakeRateWeights' = %s !!" % self.applyFakeRateWeights)
       self.jobOptions_addFakes[key_addFakes_job] = {
@@ -695,7 +695,7 @@ class analyzeConfig_1l_2tau(analyzeConfig):
           (self.channel, hadTau_charge_selection)),
         'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgroundLeptonFakes_%s_%s.log" % \
           (self.channel, hadTau_charge_selection)),
-        'category_signal' : getHistogramDirList(hadTau_selection, "", hadTau_charge_selection, self.subcategories), # "1l_2tau_%s_Tight" % hadTau_charge_selection,
+        'category_signal' : getHistogramDirList("Tight", "", hadTau_charge_selection, self.subcategories), # "1l_2tau_%s_Tight" % hadTau_charge_selection,
         'category_sideband' : category_sideband
       }
       self.createCfg_addFakes(self.jobOptions_addFakes[key_addFakes_job])
