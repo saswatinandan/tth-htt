@@ -160,6 +160,7 @@ if __name__ == '__main__':
     histograms_to_fit         = {
       "EventCounter"         : {},
       "numJets"              : {},
+      "numHTTv2"             : {},
       "mvaOutput_2lss_ttV"   : {},
       "mvaOutput_2lss_ttbar" : {},
       "mvaDiscr_2lss"        : {},

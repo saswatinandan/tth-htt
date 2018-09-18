@@ -15,14 +15,18 @@ def get_lepton_selection_and_frWeight(lepton_selection, lepton_frWeight):
   lepton_selection_and_frWeight = lepton_selection_and_frWeight.replace("|", "_")
   return lepton_selection_and_frWeight
 
-def getHistogramDir(lepton_selection, lepton_frWeight, lepton_charge_selection):
-  histogramDir = "2lss_%s_%s" % (lepton_charge_selection, lepton_selection)
-  if lepton_selection.find("Fakeable") != -1:
-    if lepton_frWeight == "enabled":
-      histogramDir += "_wFakeRateWeights"
-    elif lepton_frWeight == "disabled":
-      histogramDir += "_woFakeRateWeights"
-  return histogramDir
+def getHistogramDirList(lepton_selection, lepton_frWeight, lepton_charge_selection, subcategories):
+  histogramDirListL = []
+  for cc, cat in enumerate(subcategories) :
+    #histogramDir = "2lss_%s_%s" % (lepton_charge_selection, lepton_selection)
+    histogramDir = "%s_%s_%s" % (cat,lepton_charge_selection, lepton_selection)
+    if lepton_selection.find("Fakeable") != -1:
+      if lepton_frWeight == "enabled":
+        histogramDir += "_wFakeRateWeights"
+      elif lepton_frWeight == "disabled":
+        histogramDir += "_woFakeRateWeights"
+    histogramDirListL += [histogramDir]
+  return histogramDirListL
 
 class analyzeConfig_2lss(analyzeConfig):
   """Configuration metadata needed to run analysis in a single go.
@@ -76,6 +80,15 @@ class analyzeConfig_2lss(analyzeConfig):
       outputDir                 = outputDir,
       executable_analyze        = executable_analyze,
       channel                   = "2lss",
+      subcategories             = [
+        "2lss",
+        "2lss_ee_neg", "2lss_ee_pos",
+        "2lss_em_bl_neg", "2lss_em_bl_pos", "2lss_em_bt_neg", "2lss_em_bt_pos",
+        "2lss_mm_bl_neg", "2lss_mm_bl_pos", "2lss_mm_bt_neg", "2lss_mm_bt_pos",
+        "2lss_1J", "2lss_ee_neg_0J", "2lss_ee_pos_0J",
+        "2lss_em_bl_neg_0J", "2lss_em_bl_pos_0J", "2lss_em_bt_neg_0J", "2lss_em_bt_pos_0J",
+        "2lss_mm_bl_neg_0J", "2lss_mm_bl_pos_0J", "2lss_mm_bt_neg_0J", "2lss_mm_bt_pos_0J"
+        ],
       samples                   = samples,
       central_or_shifts         = central_or_shifts,
       max_files_per_job         = max_files_per_job,
@@ -146,8 +159,15 @@ class analyzeConfig_2lss(analyzeConfig):
     self.outputFile_hadd_stage1_6 = None
     self.cfgFile_addFlips = os.path.join(self.template_dir, "addBackgroundLeptonFlips_cfg.py")
     self.jobOptions_addFlips = {}
-    self.histogramDir_prep_dcard = "2lss_SS_Tight"
-    self.histogramDir_prep_dcard_OS = "2lss_OS_Tight"
+    #self.histogramDir_prep_dcard = "2lss_SS_Tight"
+    #self.histogramDir_prep_dcard_OS = "2lss_OS_Tight"
+    histogramDir_prep_dcard_local = []
+    histogramDir_prep_dcard_OS_local = []
+    for cc, cat in enumerate(self.subcategories) :
+        histogramDir_prep_dcard_local+=[self.subcategories[cc]+"_SS_Tight"]
+        histogramDir_prep_dcard_OS_local+=[self.subcategories[cc]+"_OS_Tight"]
+    self.histogramDir_prep_dcard = histogramDir_prep_dcard_local
+    self.histogramDir_prep_dcard_OS = histogramDir_prep_dcard_OS_local
     self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_2lss_cfg.py")
     self.cfgFile_make_plots_mcClosure = os.path.join(self.template_dir, "makePlots_mcClosure_2lss_cfg.py") #TODO
 
@@ -178,7 +198,7 @@ class analyzeConfig_2lss(analyzeConfig):
          central_or_shift: either 'central' or one of the systematic uncertainties defined in $CMSSW_BASE/src/tthAnalysis/HiggsToTauTau/bin/analyze_2lss.cc
     """
     lepton_frWeight = "disabled" if jobOptions['applyFakeRateWeights'] == "disabled" else "enabled"
-    jobOptions['histogramDir'] = getHistogramDir(lepton_selection, lepton_frWeight, jobOptions['leptonChargeSelection'])
+    jobOptions['histogramDir'] = getHistogramDirList(lepton_selection, lepton_frWeight, jobOptions['leptonChargeSelection'], self.subcategories)[0]
     if 'mcClosure' in lepton_selection:
       self.mcClosure_dir['%s_%s' % (lepton_selection, jobOptions['leptonChargeSelection'])] = jobOptions['histogramDir']
 
@@ -201,10 +221,11 @@ class analyzeConfig_2lss(analyzeConfig):
     lines.append("process.fwliteInput.fileNames = cms.vstring('%s')" % jobOptions['inputFile'])
     lines.append("process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['outputFile']))
     lines.append("process.addBackgroundLeptonFlips.categories = cms.VPSet(")
-    lines.append("    cms.PSet(")
-    lines.append("        signal = cms.string('%s')," % jobOptions['category_signal'])
-    lines.append("        sideband = cms.string('%s')" % jobOptions['category_sideband'])
-    lines.append("    )")
+    for cc, cat in enumerate(jobOptions['category_signal']) :
+        lines.append("    cms.PSet(")
+        lines.append("        signal = cms.string('%s')," % cat)
+        lines.append("        sideband = cms.string('%s')" % jobOptions['category_sideband'][cc])
+        lines.append("    ),")
     lines.append(")")
     processesToSubtract = [ "fakes_data" ]
     processesToSubtract.extend([ nonfake_background for nonfake_background in self.nonfake_backgrounds if nonfake_background != "TT" ])
@@ -225,11 +246,12 @@ class analyzeConfig_2lss(analyzeConfig):
     lines.append("process.makePlots.processesBackground = cms.vstring(%s)" % self.make_plots_backgrounds)
     lines.append("process.makePlots.processSignal = cms.string('%s')" % self.make_plots_signal)
     lines.append("process.makePlots.categories = cms.VPSet(")
-    lines.append("  cms.PSet(")
-    lines.append("    signal = cms.string('%s')," % jobOptions['histogramDir_signal'])
-    lines.append("    sideband = cms.string('%s')," % jobOptions['histogramDir_sideband'])
-    lines.append("    label = cms.string('%s')" % self.channel)
-    lines.append("  )")
+    for cc, cat_folder in enumerate(jobOptions['histogramDir_signal']) :
+        lines.append("  cms.PSet(")
+        lines.append("    signal = cms.string('%s')," % cat_folder)
+        lines.append("    sideband = cms.string('%s')," % jobOptions['histogramDir_sideband'][cc])
+        lines.append("    label = cms.string('%s')" % self.subcategories[cc])
+        lines.append("  ),")
     lines.append(")")
     lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % self.lumi)
     create_cfg(self.cfgFile_make_plots_mcClosure, jobOptions['cfgFile_modified'], lines)
@@ -557,7 +579,7 @@ class analyzeConfig_2lss(analyzeConfig):
                         'cfgFile_modified' : cfgFile_modified,
                         'outputFile' : outputFile,
                         'logFile' : os.path.join(self.dirs[DKEY_LOGS], os.path.basename(cfgFile_modified).replace("_cfg.py", ".log")),
-                        'categories' : [ getHistogramDir(lepton_selection, lepton_frWeight, lepton_charge_selection) ],
+                        'categories' : getHistogramDirList(lepton_selection, lepton_frWeight, lepton_charge_selection, self.subcategories) ,
                         'processes_input' : processes_input,
                         'process_output' : process_output
                       }
@@ -604,7 +626,7 @@ class analyzeConfig_2lss(analyzeConfig):
               (self.channel, lepton_selection_and_frWeight, lepton_charge_selection)),
             'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgrounds_%s_fakes_mc_%s_%s.log" % \
               (self.channel, lepton_selection_and_frWeight, lepton_charge_selection)),
-            'categories' : [ getHistogramDir(lepton_selection, lepton_frWeight, lepton_charge_selection) ],
+            'categories' : getHistogramDirList(lepton_selection, lepton_frWeight, lepton_charge_selection, self.subcategories) ,
             'processes_input' : processes_input,
             'process_output' : "fakes_mc"
           }
@@ -628,7 +650,7 @@ class analyzeConfig_2lss(analyzeConfig):
               (self.channel, lepton_selection_and_frWeight, lepton_charge_selection)),
             'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgrounds_%s_conversions_%s_%s.log" % \
               (self.channel, lepton_selection_and_frWeight, lepton_charge_selection)),
-            'categories' : [ getHistogramDir(lepton_selection, lepton_frWeight, lepton_charge_selection) ],
+            'categories' :  getHistogramDirList(lepton_selection, lepton_frWeight, lepton_charge_selection, self.subcategories) ,
             'processes_input' : processes_input,
             'process_output' : "conversions"
           }
@@ -677,7 +699,8 @@ class analyzeConfig_2lss(analyzeConfig):
       key_hadd_stage1_5 = getKey(get_lepton_selection_and_frWeight("Fakeable", "enabled"), lepton_charge_selection)
       category_sideband = None
       if self.applyFakeRateWeights == "2lepton":
-        category_sideband = "2lss_%s_Fakeable_wFakeRateWeights" % lepton_charge_selection
+        #category_sideband = "2lss_%s_Fakeable_wFakeRateWeights" % lepton_charge_selection
+        category_sideband = getHistogramDirList("Fakeable",  "enabled", lepton_charge_selection, self.subcategories)
       else:
         raise ValueError("Invalid Configuration parameter 'applyFakeRateWeights' = %s !!" % self.applyFakeRateWeights)
       self.jobOptions_addFakes[key_addFakes_job] = {
@@ -688,7 +711,7 @@ class analyzeConfig_2lss(analyzeConfig):
           (self.channel, lepton_charge_selection)),
         'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgroundLeptonFakes_%s_%s.log" % \
           (self.channel, lepton_charge_selection)),
-        'category_signal' : "2lss_%s_Tight" % lepton_charge_selection,
+        'category_signal' : getHistogramDirList("Tight", "", lepton_charge_selection, self.subcategories),#"2lss_%s_Tight" % lepton_charge_selection,
         'category_sideband' : category_sideband
       }
       self.createCfg_addFakes(self.jobOptions_addFakes[key_addFakes_job])
@@ -713,14 +736,17 @@ class analyzeConfig_2lss(analyzeConfig):
       'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "addBackgroundLeptonFlips_%s_cfg.py" % self.channel),
       'outputFile' : os.path.join(self.dirs[DKEY_HIST], "addBackgroundLeptonFlips_%s.root" % self.channel),
       'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgroundLeptonFlips_%s.log" % self.channel),
-      'category_signal' : "2lss_SS_Tight",
-      'category_sideband' : "2lss_OS_Tight"
+      'category_signal' : self.histogramDir_prep_dcard, #"2lss_SS_Tight",
+      'category_sideband' : self.histogramDir_prep_dcard_OS #"2lss_OS_Tight"
     }
     self.createCfg_addFlips(self.jobOptions_addFlips[key_addFlips_job])
     key_hadd_stage2 = getKey(get_lepton_selection_and_frWeight("Tight", "disabled"), "SS")
     self.inputFiles_hadd_stage2[key_hadd_stage2].append(self.jobOptions_addFlips[key_addFlips_job]['outputFile'])
 
     logging.info("Creating configuration files to run 'prepareDatacards'")
+    makeSubDir = False
+    if len(self.subcategories) > 1 :
+        makeSubDir = True
     for histogramToFit in self.histograms_to_fit:
       key_prep_dcard_job = getKey(histogramToFit)
       key_hadd_stage2 = getKey(get_lepton_selection_and_frWeight("Tight", "disabled"), "SS")
@@ -728,6 +754,8 @@ class analyzeConfig_2lss(analyzeConfig):
         'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2],
         'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "prepareDatacards_%s_%s_cfg.py" % (self.channel, histogramToFit)),
         'datacardFile' : os.path.join(self.dirs[DKEY_DCRD], "prepareDatacards_%s_%s.root" % (self.channel, histogramToFit)),
+        'category' : self.subcategories,
+        'makeSubDir' : makeSubDir,
         'histogramDir' : self.histogramDir_prep_dcard,
         'histogramToFit' : histogramToFit,
         'label' : None
@@ -746,24 +774,31 @@ class analyzeConfig_2lss(analyzeConfig):
         'inputFile' : self.jobOptions_prep_dcard[key_prep_dcard_job]['datacardFile'],
         'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "addSystFakeRates_%s_%s_cfg.py" % (self.channel, histogramToFit)),
         'outputFile' : os.path.join(self.dirs[DKEY_DCRD], "addSystFakeRates_%s_%s.root" % (self.channel, histogramToFit)),
-        'category' : self.channel,
+        'category' : self.subcategories,
         'histogramToFit' : histogramToFit,
         'plots_outputFileName' : os.path.join(self.dirs[DKEY_PLOT], "addSystFakeRates.png")
       }
-      histogramDir_nominal = self.histogramDir_prep_dcard
+
       for lepton_type in [ 'e', 'm' ]:
         lepton_mcClosure = "Fakeable_mcClosure_%s" % lepton_type
         if lepton_mcClosure not in self.lepton_selections:
           continue
+        histogramDir_nominal = []
+        histogramDir_mcClosure = []
+        for cat in self.histogramDir_prep_dcard :
+            histogramDir_nominal+=[ "%s/sel/evt/fakes_mc/%s" % (cat, histogramToFit)]
+            # histogramDir_nominal = self.histogramDir_prep_dcard
+            histogramDir_mcClosure+=[ "%s_%s_%s/sel/evt/fakes_mc/%s" % (cat, lepton_mcClosure, 'SS', histogramToFit)]
+            # histogramDir_mcClosure = self.mcClosure_dir['%s_%s' % (lepton_mcClosure, 'SS')]
         lepton_selection_and_frWeight = get_lepton_selection_and_frWeight(lepton_mcClosure, "enabled")
         key_addBackgrounds_job_fakes = getKey(lepton_selection_and_frWeight, 'SS', "fakes")
-        histogramDir_mcClosure = self.mcClosure_dir['%s_%s' % (lepton_mcClosure, 'SS')]
+
         self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job].update({
           'add_Clos_%s' % lepton_type : ("Fakeable_mcClosure_%s" % lepton_type) in self.lepton_selections,
           'inputFile_nominal_%s' % lepton_type : self.outputFile_hadd_stage2[key_hadd_stage2],
-          'histogramName_nominal_%s' % lepton_type : "%s/sel/evt/fakes_mc/%s" % (histogramDir_nominal, histogramToFit),
+          'histogramName_nominal_%s' % lepton_type : histogramDir_nominal, # "%s/sel/evt/fakes_mc/%s" % (histogramDir_nominal, histogramToFit),
           'inputFile_mcClosure_%s' % lepton_type : self.jobOptions_addBackgrounds_sum[key_addBackgrounds_job_fakes]['outputFile'],
-          'histogramName_mcClosure_%s' % lepton_type : "%s/sel/evt/fakes_mc/%s" % (histogramDir_mcClosure, histogramToFit)
+          'histogramName_mcClosure_%s' % lepton_type : histogramDir_mcClosure # "%s/sel/evt/fakes_mc/%s" % (histogramDir_mcClosure, histogramToFit)
         })
       self.createCfg_add_syst_fakerate(self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job])
 
@@ -776,7 +811,7 @@ class analyzeConfig_2lss(analyzeConfig):
         'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s_cfg.py" % self.channel),
         'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s.png" % self.channel),
         'histogramDir' : self.histogramDir_prep_dcard,
-        'label' : "2lSS",
+        'label' : self.subcategories,
         'make_plots_backgrounds' : self.make_plots_backgrounds
       }
       self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])
@@ -792,7 +827,7 @@ class analyzeConfig_2lss(analyzeConfig):
           'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s_OS_cfg.py" % self.channel),
           'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s_OS.png" % self.channel),
           'histogramDir' : self.histogramDir_prep_dcard_OS,
-          'label' : "2lSS OS",
+          'label' : self.subcategories,
           'make_plots_backgrounds' : make_plots_backgrounds
         }
         self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])
@@ -805,7 +840,7 @@ class analyzeConfig_2lss(analyzeConfig):
           'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_mcClosure_%s_cfg.py" % self.channel),
           'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_mcClosure_%s.png" % self.channel),
           'histogramDir_signal' : self.histogramDir_prep_dcard,
-          'histogramDir_sideband' : (self.histogramDir_prep_dcard.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights"))
+          'histogramDir_sideband' : self.histogramDir_prep_dcard.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights")
         }
         self.createCfg_makePlots_mcClosure(self.jobOptions_make_plots[key_makePlots_job])
 
