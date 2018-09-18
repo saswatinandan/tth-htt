@@ -199,28 +199,6 @@ class analyzeConfig_3l(analyzeConfig):
     lines = super(analyzeConfig_3l, self).createCfg_analyze(jobOptions, sample_info)
     create_cfg(self.cfgFile_analyze, jobOptions['cfgFile_modified'], lines)
 
-  def createCfg_makePlots_mcClosure(self, jobOptions): #TODO
-    """Fills the template of python configuration file for making control plots
-
-    Args:
-      histogramFile: name of the input ROOT file
-    """
-    lines = []
-    lines.append("process.fwliteInput.fileNames = cms.vstring('%s')" % jobOptions['inputFile'])
-    lines.append("process.makePlots.outputFileName = cms.string('%s')" % jobOptions['outputFile'])
-    lines.append("process.makePlots.processesBackground = cms.vstring(%s)" % self.make_plots_backgrounds)
-    lines.append("process.makePlots.processSignal = cms.string('%s')" % self.make_plots_signal)
-    lines.append("process.makePlots.categories = cms.VPSet(")
-    for cc, cat in enumerate(jobOptions['category_signal']) :
-        lines.append("  cms.PSet(")
-        lines.append("    signal = cms.string('%s')," % cat) # self.histogramDir_prep_dcard
-        lines.append("    sideband = cms.string('%s')," % cat.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights"))
-        lines.append("    label = cms.string('%s')" % self.subcategories[cc])
-        lines.append("  ),")
-    lines.append(")")
-    lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % self.lumi)
-    create_cfg(self.cfgFile_make_plots_mcClosure, jobOptions['cfgFile_modified'], lines)
-
   def create(self):
     """Creates all necessary config files and runs the complete analysis workfow -- either locally or on the batch system
     """
@@ -485,7 +463,7 @@ class analyzeConfig_3l(analyzeConfig):
                       processes_input = [ "%s%s" % (sample_category, genMatch) for genMatch in self.lepton_genMatches_conversions ]
 
                     process_output = "%s_conversion" % sample_category
-                    key_addBackgrounds_job = getKey(process_name, "%s_fake" % sample_category, lepton_selection_and_frWeight, chargeSumSelection)
+                    key_addBackgrounds_job = getKey(process_name, "%s_conversion" % sample_category, lepton_selection_and_frWeight, chargeSumSelection)
                     cfgFile_modified = os.path.join(self.dirs[DKEY_CFGS], "addBackgrounds_%s_conversions_%s_%s_%s_%s_cfg.py" % \
                       (self.channel, process_name, sample_category, lepton_selection_and_frWeight, chargeSumSelection))
                     outputFile = os.path.join(self.dirs[DKEY_HIST], "addBackgrounds_%s_conversions_%s_%s_%s_%s.root" % \

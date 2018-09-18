@@ -32,6 +32,10 @@ public:
                  int numBJets_medium,
                  int num_HTTv2,
                  double mvaOutput_0l_2tau_ttbar,
+		 double mvaOutput_0l_2tau_HTT_tt,
+		 double mvaOutput_0l_2tau_HTT_ttv,
+		 double mvaOutput_0l_2tau_HTT_sum,
+		 float mvaDiscr_0l_2tau_HTT,
                  double mTauTauVis,
                  double mTauTau,
                  double evtWeight);
@@ -55,6 +59,11 @@ private:
   TH2 * histogram_numBJets_medium_vs_numJets_;
 
   TH1 * histogram_mvaOutput_0l_2tau_ttbar_;
+
+  TH1 * histogram_mvaOutput_0l_2tau_HTT_tt_;
+  TH1 * histogram_mvaOutput_0l_2tau_HTT_ttv_;
+  TH1 * histogram_mvaOutput_0l_2tau_HTT_sum_;
+  TH1 * histogram_mvaDiscr_0l_2tau_HTT_;
 
   TH1 * histogram_mTauTauVis_;
   TH1 * histogram_mTauTau_;

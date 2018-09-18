@@ -213,28 +213,6 @@ class analyzeConfig_0l_2tau(analyzeConfig):
 
     create_cfg(self.cfgFile_analyze, jobOptions['cfgFile_modified'], lines)
 
-  def createCfg_makePlots_mcClosure(self, jobOptions): #TODO
-    """Fills the template of python configuration file for making control plots
-
-    Args:
-      histogramFile: name of the input ROOT file
-    """
-    lines = []
-    lines.append("process.fwliteInput.fileNames = cms.vstring('%s')" % jobOptions['inputFile'])
-    lines.append("process.makePlots.outputFileName = cms.string('%s')" % jobOptions['outputFile'])
-    lines.append("process.makePlots.processesBackground = cms.vstring(%s)" % self.make_plots_backgrounds)
-    lines.append("process.makePlots.processSignal = cms.string('%s')" % self.make_plots_signal)
-    lines.append("process.makePlots.categories = cms.VPSet(")
-    for cc, cat_folder in enumerate(self.histogramDir_prep_dcard) :
-        lines.append("  cms.PSet(")
-        lines.append("    signal = cms.string('%s')," % cat_folder)
-        lines.append("    sideband = cms.string('%s')," % cat_folder.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights"))
-        lines.append("    label = cms.string('%s')" % self.subcategories[cc]) #self.channel)
-        lines.append("  ),")
-    lines.append(")")
-    lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % self.lumi)
-    create_cfg(self.cfgFile_make_plots_mcClosure, jobOptions['cfgFile_modified'], lines)
-
   def create(self):
     """Creates all necessary config files and runs the complete analysis workfow -- either locally or on the batch system
     """
