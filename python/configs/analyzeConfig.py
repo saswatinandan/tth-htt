@@ -523,7 +523,7 @@ class analyzeConfig(object):
             return central_or_shift
         return "central"
 
-    def createCfg_analyze(self, jobOptions, sample_info, additionalJobOptions = [], isLeptonFR = False):
+    def createCfg_analyze(self, jobOptions, sample_info, additionalJobOptions = [], isLeptonFR = False, isHTT = False):
         process_string = 'process.analyze_%s' % self.channel
         current_function_name = inspect.stack()[0][3]
 
@@ -622,7 +622,15 @@ class analyzeConfig(object):
         jobOptions_keys = jobOptions_local + additionalJobOptions
         max_option_len = max(map(len, [ key for key in jobOptions_keys if key in jobOptions ]))
 
-        lines = [
+        if isHTT : lines = [
+            "# Filled in %s" % current_function_name,
+            "process.fwliteInput.fileNames = cms.vstring(%s)"  % jobOptions['ntupleFiles'],
+            "process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['histogramFile']),
+            "{}.{:<{len}} = cms.string('{}')".format        (process_string, 'era',                    self.era,     len = max_option_len),
+            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'redoGenMatching',       'False',       len = max_option_len),
+            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'isDEBUG',                self.isDebug, len = max_option_len),
+        ]
+        else : lines = [
             "# Filled in %s" % current_function_name,
             "process.fwliteInput.fileNames = cms.vstring(%s)"  % jobOptions['ntupleFiles'],
             "process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['histogramFile']),
@@ -728,7 +736,7 @@ class analyzeConfig(object):
             lines.append("process.addBackgrounds.sysShifts = cms.vstring(%s)" % self.central_or_shifts)
         create_cfg(self.cfgFile_addBackgrounds, jobOptions['cfgFile_modified'], lines)
 
-    def createCfg_addFakes(self, jobOptions):
+    def createCfg_addFakes(self, jobOptions, addConversion=True):
         """Create python configuration file for the addBackgroundLeptonFakes executable (data-driven estimation of 'Fakes' backgrounds)
 
            Args:
@@ -747,7 +755,7 @@ class analyzeConfig(object):
         lines.append(")")
         processesToSubtract = []
         processesToSubtract.extend(self.nonfake_backgrounds)
-        processesToSubtract.extend([ "%s_conversion" % nonfake_background for nonfake_background in self.nonfake_backgrounds])
+        if addConversion : processesToSubtract.extend([ "%s_conversion" % nonfake_background for nonfake_background in self.nonfake_backgrounds])
         lines.append("process.addBackgroundLeptonFakes.processesToSubtract = cms.vstring(%s)" % processesToSubtract)
         lines.append("process.addBackgroundLeptonFakes.sysShifts = cms.vstring(%s)" % self.central_or_shifts)
         create_cfg(self.cfgFile_addFakes, jobOptions['cfgFile_modified'], lines)
@@ -898,7 +906,7 @@ class analyzeConfig(object):
             lines.append("  cms.PSet(")
             lines.append("    name = cms.string('%s')," % cat)
             lines.append("    label = cms.string('%s')" % category_label)
-            lines.append("  )")
+            lines.append("  ),")
         lines.append(")")
         lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % self.lumi)
         create_cfg(self.cfgFile_make_plots, jobOptions['cfgFile_modified'], lines)
