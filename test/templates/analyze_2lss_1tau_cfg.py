@@ -91,6 +91,10 @@ process.analyze_2lss_1tau = cms.PSet(
     branchName_muons = cms.string('Muon'),
     branchName_hadTaus = cms.string('Tau'),
     branchName_jets = cms.string('Jet'),
+    branchName_jetsHTTv2 = cms.string('HTTV2'),
+    branchName_subjetsHTTv2 = cms.string('HTTV2Subjets'),
+    branchName_jetsAK12 = cms.string('FatJetAK12'),
+    branchName_subjetsAK12 = cms.string('SubJetAK12'),
     branchName_met = cms.string('MET'),
     branchName_memOutput = cms.string(''),
 
