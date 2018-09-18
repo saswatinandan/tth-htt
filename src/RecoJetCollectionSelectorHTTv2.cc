@@ -113,18 +113,33 @@ RecoJetSelectorHTTv2::get_subJet3_min_pt() const
 bool
 RecoJetSelectorHTTv2::operator()(const RecoJetHTTv2 & jet) const
 {
+  double subjet_pt1 = 0;
+  double subjet_pt2 = 0;
+  double subjet_pt3 = 0;
+  if (jet.subJet1() != nullptr && jet.subJet1() != 0) subjet_pt1 = jet.subJet1()->pt();
+  if (jet.subJet2() != nullptr && jet.subJet2() != 0) subjet_pt2 = jet.subJet2()->pt();
+  if (jet.subJet3() != nullptr && jet.subJet3() != 0) subjet_pt3 = jet.subJet3()->pt();
+
   const bool passes =
     jet.pt()     >= min_pt_     &&
     jet.absEta() <= max_absEta_ &&
-    jet.subJet1()->IDPassed()  > subJet1_min_jetId_ &&
-    jet.subJet2()->IDPassed()  > subJet2_min_jetId_ &&
-    jet.subJet3()->IDPassed()  > subJet3_min_jetId_ &&
-    jet.subJet1()->pt()  >= subJet1_min_pt_ &&
-    jet.subJet2()->pt()  >= subJet2_min_pt_ &&
-    jet.subJet3()->pt()  >= subJet3_min_pt_
+    //jet.subJet1()->IDPassed()  > subJet1_min_jetId_ &&
+    //jet.subJet2()->IDPassed()  > subJet2_min_jetId_ &&
+    //jet.subJet3()->IDPassed()  > subJet3_min_jetId_ &&
+    subjet_pt1  >= subJet1_min_pt_ &&
+    subjet_pt2  >= subJet2_min_pt_ &&
+    subjet_pt3  >= subJet3_min_pt_
   ;
   if(debug_)
   {
+    std::cout << jet.pt()     << " > " << min_pt_     << std::endl;
+    std::cout << jet.absEta() << " < " << max_absEta_ << std::endl;
+    //jet.subJet1()->IDPassed()  > subJet1_min_jetId_ &&
+    //jet.subJet2()->IDPassed()  > subJet2_min_jetId_ &&
+    //jet.subJet3()->IDPassed()  > subJet3_min_jetId_ &&
+    std::cout << subjet_pt1  << " > " << subJet1_min_pt_ << std::endl;
+    std::cout << subjet_pt2  << " > " << subJet2_min_pt_ << std::endl;
+    std::cout << subjet_pt3  << " > " << subJet3_min_pt_ << std::endl;
     std::cout << "<RecoJetSelector::operator()>:\n jet: " << jet << " "
                  "(" << (passes ? "passes" : "fails") << ")\n"
     ;

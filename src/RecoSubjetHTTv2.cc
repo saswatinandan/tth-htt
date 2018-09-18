@@ -17,7 +17,9 @@ RecoSubjetHTTv2::~RecoSubjetHTTv2()
 Bool_t
 RecoSubjetHTTv2::IDPassed() const
 {
-  return IDPassed_;
+  //return IDPassed_;
+	if (IDPassed_ != 0 and IDPassed_ != 1) return IDPassed_;
+	else return 0;
 }
 
 Double_t

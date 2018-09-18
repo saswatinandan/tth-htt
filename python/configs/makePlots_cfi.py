@@ -45,11 +45,11 @@ process.makePlots = cms.PSet(
             xAxisTitle = cms.string("muon Multiplicity"),
             yAxisTitle = cms.string("Events")
         ),
-        cms.PSet(
-            histogramName = cms.string("sel/evtYield/$PROCESS/evtYield"),
-            xAxisTitle = cms.string("Run Period"),
-            yAxisTitle = cms.string("Events / 1 fb^{-1}")
-        ),
+        #cms.PSet(
+        #    histogramName = cms.string("sel/evtYield/$PROCESS/evtYield"),
+        #    xAxisTitle = cms.string("Run Period"),
+        #    yAxisTitle = cms.string("Events / 1 fb^{-1}")
+        #), Xanda: now is missing on 2lss_1tau
     ),
 
     nuisanceParameters = cms.PSet(
