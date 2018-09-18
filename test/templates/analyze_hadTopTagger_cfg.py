@@ -44,7 +44,7 @@ process.analyze_hadTopTagger = cms.PSet(
     apply_offline_e_trigger_cuts_2mu = cms.bool(False),
     apply_offline_e_trigger_cuts_1e1mu = cms.bool(False),
 
-    leptonSelection = cms.string(''),
+    #leptonSelection = cms.string(''),
     apply_leptonGenMatching = cms.bool(True),
     leptonChargeSelection = cms.string(''),
 

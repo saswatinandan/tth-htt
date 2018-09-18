@@ -34,15 +34,15 @@ HadTopTaggerFill::operator()(const Particle::LorentzVector & recBJet,
   mvaInputs_["pT_b"]                   = recBJet.pt();
   mvaInputs_["eta_b"]                  = abs(recBJet.eta());
   //mvaInputs_["phi_b"]                  = recBJet.phi();
-  //mvaInputs_["mass_b"]                 = recBJet.mass();
+  mvaInputs_["mass_b"]                 = recBJet.mass();
   mvaInputs_["pT_Wj1"]                 = recWJet1.pt();
   mvaInputs_["eta_Wj1"]                = abs(recWJet1.eta());
   //mvaInputs_["phi_Wj1"]                = recWJet1.phi();
-  //mvaInputs_["mass_Wj1"]               = recWJet1.mass();
+  mvaInputs_["mass_Wj1"]               = recWJet1.mass();
   mvaInputs_["pT_Wj2"]                 = recWJet2.pt();
   mvaInputs_["eta_Wj2"]                = abs(recWJet2.eta());
   //mvaInputs_["phi_Wj2"]                = recWJet2.phi();
-  //mvaInputs_["mass_Wj2"]               = recWJet2.mass();
+  mvaInputs_["mass_Wj2"]               = recWJet2.mass();
   mvaInputs_["dR_bWj1"]                = deltaR(recBJet, recWJet1);
   mvaInputs_["dR_bWj2"]                = deltaR(recBJet, recWJet2);
   mvaInputs_["dR_Wj1Wj2"]              = deltaR(recWJet1, recWJet2);
@@ -50,9 +50,9 @@ HadTopTaggerFill::operator()(const Particle::LorentzVector & recBJet,
 
   kinFit_->fit(recBJet, recWJet1, recWJet2);
 
-  mvaInputs_["statusKinFit"]           = kinFit_->fit_status();
+  //mvaInputs_["statusKinFit"]           = kinFit_->fit_status();
   mvaInputs_["nllKinFit"]              = kinFit_->nll();
-  mvaInputs_["alphaKinFit"]            = kinFit_->alpha();
+  //mvaInputs_["alphaKinFit"]            = kinFit_->alpha();
 
   mvaInputs_["kinFit_pT_b"]            = kinFit_->fittedBJet().pt();
   //mvaInputs_["kinFit_eta_b"]           = kinFit_->fittedBJet().absEta();
@@ -68,6 +68,7 @@ HadTopTaggerFill::operator()(const Particle::LorentzVector & recBJet,
   //mvaInputs_["kinFit_mass_Wj2"]        = kinFit_->fittedWJet2().mass();
 
 //--- star angle computation
+  /*
   TLorentzVector PWj1, PWj2;
   PWj1.SetPtEtaPhiM(recWJet1.pt(), recWJet1.eta(), recWJet1.phi(), recWJet1.mass());
   PWj2.SetPtEtaPhiM(recWJet2.pt(), recWJet2.eta(), recWJet2.phi(), recWJet2.mass());
@@ -120,6 +121,7 @@ HadTopTaggerFill::operator()(const Particle::LorentzVector & recBJet,
   }
 
 //---
+
   TLorentzVector kinFit_PWj1, kinFit_PWj2;
   const Particle::LorentzVector & kinFit_WJet1 = kinFit_->fittedWJet1();
   const Particle::LorentzVector & kinFit_WJet2 = kinFit_->fittedWJet2();
@@ -163,9 +165,10 @@ HadTopTaggerFill::operator()(const Particle::LorentzVector & recBJet,
 
   mvaInputs_["cosTheta_leadWj_restTop"]        = leadingCostS_Wj_top;
   mvaInputs_["cosTheta_subleadWj_restTop"]     = subleadingCostS_Wj_top;
-  mvaInputs_["cosTheta_Kin_leadWj_restTop"]    = kinFit_leadingCostS_Wj_top;
-  mvaInputs_["cosTheta_Kin_subleadWj_restTop"] = kinFit_subleadingCostS_Wj_top;
-
+  */
+  //mvaInputs_["cosTheta_Kin_leadWj_restTop"]    = kinFit_leadingCostS_Wj_top;
+  //mvaInputs_["cosTheta_Kin_subleadWj_restTop"] = kinFit_subleadingCostS_Wj_top;
+  /*
   double kinFit_leadingECostS_Wj_top    = -100;
   double kinFit_subleadingECostS_Wj_top = -100;
   if(kinFit_PWj1boostTop.E() > kinFit_PWj2boostTop.E())
@@ -179,31 +182,33 @@ HadTopTaggerFill::operator()(const Particle::LorentzVector & recBJet,
     kinFit_subleadingECostS_Wj_top = kinFit_PWj1boostTop.CosTheta();
   }
 
+
   mvaInputs_["cosTheta_leadEWj_restTop"]        = leadingECostS_Wj_top;
   mvaInputs_["cosTheta_subleadEWj_restTop"]     = subleadingECostS_Wj_top;
-  mvaInputs_["cosTheta_Kin_leadEWj_restTop"]    = kinFit_leadingECostS_Wj_top;
-  mvaInputs_["cosTheta_Kin_subleadEWj_restTop"] = kinFit_subleadingECostS_Wj_top;
+  //mvaInputs_["cosTheta_Kin_leadEWj_restTop"]    = kinFit_leadingECostS_Wj_top;
+  //mvaInputs_["cosTheta_Kin_subleadEWj_restTop"] = kinFit_subleadingECostS_Wj_top;
 
   mvaInputs_["cosThetaW_rest"]    = PWboost.CosTheta();
-  mvaInputs_["cosThetaKinW_rest"] = kinFit_PWboost.CosTheta();
-  mvaInputs_["cosThetaW_lab"]     = PW.CosTheta();
-  mvaInputs_["cosThetaKinW_lab"]  = kinFit_PW.CosTheta();
+  //mvaInputs_["cosThetaKinW_rest"] = kinFit_PWboost.CosTheta();
+  //mvaInputs_["cosThetaW_lab"]     = PW.CosTheta();
+  //mvaInputs_["cosThetaKinW_lab"]  = kinFit_PW.CosTheta();
 
   mvaInputs_["cosThetab_rest"]    = Pbboost.CosTheta();
   mvaInputs_["cosThetaKinb_rest"] = kinFit_Pbboost.CosTheta();
   mvaInputs_["cosThetab_lab"]     = Pb.CosTheta();
   mvaInputs_["cosThetaKinb_lab"]  = kinFit_Pb.CosTheta();
 
-  mvaInputs_["Dphi_Wj1_Wj2_lab"]       = PWj1.DeltaPhi(PWj2);
-  mvaInputs_["Dphi_KinWj1_KinWj2_lab"] = kinFit_PWj1.DeltaPhi(kinFit_PWj2);
+  //mvaInputs_["Dphi_Wj1_Wj2_lab"]       = PWj1.DeltaPhi(PWj2);
+  //mvaInputs_["Dphi_KinWj1_KinWj2_lab"] = kinFit_PWj1.DeltaPhi(kinFit_PWj2);
 
-  mvaInputs_["Dphi_Wb_rest"]    = Pbboost.DeltaPhi(PWboost);
-  mvaInputs_["Dphi_KinWb_rest"] = kinFit_Pbboost.DeltaPhi(kinFit_PWboost);
-  mvaInputs_["Dphi_Wb_lab"]     = Pb.DeltaPhi(PW);
-  mvaInputs_["Dphi_KinWb_lab"]  = kinFit_Pb.DeltaPhi(kinFit_PW);
+  //mvaInputs_["Dphi_Wb_rest"]    = Pbboost.DeltaPhi(PWboost);
+  //mvaInputs_["Dphi_KinWb_rest"] = kinFit_Pbboost.DeltaPhi(kinFit_PWboost);
+  //mvaInputs_["Dphi_Wb_lab"]     = Pb.DeltaPhi(PW);
+  //mvaInputs_["Dphi_KinWb_lab"]  = kinFit_Pb.DeltaPhi(kinFit_PW);
 
-  mvaInputs_["cosThetaWj1_restW"]   = PWj1boost.CosTheta();
-  mvaInputs_["cosThetaKinWj_restW"] = kinFit_PWj1boost.CosTheta();
+  //mvaInputs_["cosThetaWj1_restW"]   = PWj1boost.CosTheta();
+  //mvaInputs_["cosThetaKinWj_restW"] = kinFit_PWj1boost.CosTheta();
+  */
 
   //kinFit_->integrate(recBJet, recWJet1, recWJet2);
   //mvaInputs_["logPKinFit"]         = kinFit_->p()    > 0. ? std::log(kinFit_->p())    : -1.e+3;
