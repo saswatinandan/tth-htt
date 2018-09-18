@@ -113,6 +113,9 @@ class analyzeConfig_2l_2tau(analyzeConfig):
     self.lepton_charge_selections = lepton_charge_selections
     self.hadTau_charge_selections = hadTau_charge_selections
     run_mcClosure = 'central' not in self.central_or_shifts or len(central_or_shifts) > 1 or self.do_sync
+    if self.era != '2017':
+      logging.warning('mcClosure for lepton FR not possible for era %s' % self.era)
+      run_mcClosure = False
     if run_mcClosure:
       # Run MC closure jobs only if the analysis is run w/ (at least some) systematic uncertainties
       #self.lepton_and_hadTau_selections.extend([ "Fakeable_mcClosure_all" ]) #TODO
@@ -185,6 +188,8 @@ class analyzeConfig_2l_2tau(analyzeConfig):
 
     self.cfgFile_analyze = os.path.join(self.template_dir, cfgFile_analyze)
     self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [ "conversions", "fakes_data", "fakes_mc" ]
+    histogramDir_prep_dcard_local = []
+    histogramDir_prep_dcard_SS_local = []
     for cc, cat in enumerate(self.subcategories) :
         histogramDir_prep_dcard_local+=[self.subcategories[cc]+"_sumOS_Tight"]
         histogramDir_prep_dcard_SS_local+=[self.subcategories[cc]+"_sumSS_Tight"]
@@ -282,6 +287,7 @@ class analyzeConfig_2l_2tau(analyzeConfig):
         lines.append("    label = cms.string('%s')" % self.subcategories[cc]) #self.channel)
         lines.append("  )")
     lines.append(")")
+    lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % self.lumi)
     create_cfg(self.cfgFile_make_plots_mcClosure, jobOptions['cfgFile_modified'], lines)
 
   def addToMakefile_backgrounds_from_data(self, lines_makefile):
@@ -935,7 +941,7 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
           'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s%s_cfg.py" % (self.channel, lepton_and_hadTau_charge_selection)),
           'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s%s.png" % (self.channel, lepton_and_hadTau_charge_selection)),
           'histogramDir' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, "OS"),
-          'label' : None,
+          'label' : "2l+2#tau_{h}",
           'make_plots_backgrounds' : self.make_plots_backgrounds
         }
         self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])
@@ -948,7 +954,7 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
             'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s%s_sumSS_cfg.py" % (self.channel, lepton_and_hadTau_charge_selection)),
             'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s%s_sumSS.png" % (self.channel, lepton_and_hadTau_charge_selection)),
             'histogramDir' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, "SS"),
-            'label' : "SS",
+            'label' : "2l+2#tau_{h} SS",
             'make_plots_backgrounds' : self.make_plots_backgrounds
           }
           self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])

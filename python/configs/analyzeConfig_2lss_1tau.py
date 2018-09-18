@@ -125,6 +125,9 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
     self.hadTau_selection_veto = hadTau_selection_veto
     self.applyFakeRateWeights = applyFakeRateWeights
     run_mcClosure = 'central' not in self.central_or_shifts or len(central_or_shifts) > 1 or self.do_sync
+    if self.era != '2017':
+      logging.warning('mcClosure for lepton FR not possible for era %s' % self.era)
+      run_mcClosure = False
     if run_mcClosure:
       # Run MC closure jobs only if the analysis is run w/ (at least some) systematic uncertainties
       #self.lepton_and_hadTau_selections.extend([ "Fakeable_mcClosure_all" ]) #TODO
@@ -293,7 +296,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
         lines.append("    cms.PSet(")
         lines.append("        signal = cms.string('%s')," % cat )
         lines.append("        sideband = cms.string('%s')" % jobOptions['category_sideband'][cc] )
-        lines.append("    )")
+        lines.append("    ),")
     lines.append(")")
     processesToSubtract = [ "fakes_data" ]
     processesToSubtract.extend([ nonfake_background for nonfake_background in self.nonfake_backgrounds if nonfake_background != "TT" ])
@@ -319,9 +322,9 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
         lines.append("    signal = cms.string('%s')," % cat_folder)
         lines.append("    sideband = cms.string('%s')," % jobOptions['histogramDir_sideband'][cc])
         lines.append("    label = cms.string('%s')" % self.subcategories[cc]) #self.channel)
-        lines.append("  )")
+        lines.append("  ),")
     lines.append(")")
-    lines.append(")")
+    lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % self.lumi)
     create_cfg(self.cfgFile_make_plots_mcClosure, jobOptions['cfgFile_modified'], lines)
 
   def addToMakefile_hadd_stage1_6(self, lines_makefile):
@@ -851,12 +854,9 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
         key_addFakes_job = getKey("fakes_data", lepton_charge_selection, chargeSumSelection)
         key_hadd_stage1_5 = getKey(get_lepton_and_hadTau_selection_and_frWeight("Fakeable", "enabled"), lepton_charge_selection, chargeSumSelection)
         category_sideband = None
-        if self.applyFakeRateWeights == "2lepton":
-          category_sideband = "2lss_1tau_lep%s_sum%s_Fakeable_wFakeRateWeights" % (lepton_charge_selection, chargeSumSelection)
-        elif self.applyFakeRateWeights == "3L":
-          category_sideband = "2lss_1tau_lep%s_sum%s_Fakeable_wFakeRateWeights" % (lepton_charge_selection, chargeSumSelection)
-        elif self.applyFakeRateWeights == "1tau":
-          category_sideband = "2lss_1tau_lep%s_sum%s_Fakeable_wFakeRateWeights" % (lepton_charge_selection, chargeSumSelection)
+        if self.applyFakeRateWeights == "2lepton" or self.applyFakeRateWeights == "3L" or self.applyFakeRateWeights == "1tau" :
+          #category_sideband = "2lss_1tau_lep%s_sum%s_Fakeable_wFakeRateWeights" % (lepton_charge_selection, chargeSumSelection)
+          category_sideband = getHistogramDirList("Fakeable", "Fakeable", "enabled", lepton_charge_selection, chargeSumSelection, self.subcategories)
         else:
           raise ValueError("Invalid Configuration parameter 'applyFakeRateWeights' = %s !!" % self.applyFakeRateWeights)
         self.jobOptions_addFakes[key_addFakes_job] = {
@@ -867,7 +867,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
             (self.channel, lepton_charge_selection, chargeSumSelection)),
           'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgroundLeptonFakes_%s_lep%s_sum%s.log" % \
             (self.channel, lepton_charge_selection, chargeSumSelection)),
-          'category_signal' : "2lss_1tau_lep%s_sum%s_Tight" % (lepton_charge_selection, chargeSumSelection),
+          'category_signal' : getHistogramDirList("Tight", "Tight", "", lepton_charge_selection, chargeSumSelection, self.subcategories), #"2lss_1tau_lep%s_sum%s_Tight" % (lepton_charge_selection, chargeSumSelection),
           'category_sideband' : category_sideband
         }
         self.createCfg_addFakes(self.jobOptions_addFakes[key_addFakes_job])
@@ -1018,7 +1018,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
           'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s_sum%s_cfg.py" % (self.channel, chargeSumSelection)),
           'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s_sum%s.png" % (self.channel, chargeSumSelection)),
           'histogramDir' : histogramDirList, #(self.histogramDir_prep_dcard % chargeSumSelection),
-          'label' : None,
+          'label' :  "2lSS+1#tau_{h}",
           'make_plots_backgrounds' : self.make_plots_backgrounds
         }
         self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])
@@ -1034,7 +1034,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
             'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s_lepOS_sum%s_cfg.py" % (self.channel, chargeSumSelection)),
             'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s_lepOS_sum%s.png" % (self.channel, chargeSumSelection)),
             'histogramDir' : histogramDirList_OS, #(self.histogramDir_prep_dcard_OS % chargeSumSelection),
-            'label' : "OS",
+            'label' : "2lSS+1#tau_{h} OS",
             'make_plots_backgrounds' : make_plots_backgrounds
           }
           self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])
