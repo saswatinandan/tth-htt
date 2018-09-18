@@ -15,14 +15,17 @@ def get_lepton_selection_and_frWeight(lepton_selection, lepton_frWeight):
   lepton_selection_and_frWeight = lepton_selection_and_frWeight.replace("|", "_")
   return lepton_selection_and_frWeight
 
-def getHistogramDir(lepton_selection, lepton_frWeight):
-  histogramDir = "ttZctrl_%s" % lepton_selection
-  if lepton_selection.find("Fakeable") != -1:
-    if lepton_frWeight == "enabled":
-      histogramDir += "_wFakeRateWeights"
-    elif lepton_frWeight == "disabled":
-      histogramDir += "_woFakeRateWeights"
-  return histogramDir
+def getHistogramDirList(lepton_selection, lepton_frWeight, subcategories):
+  histogramDirListL = []
+  for cc, cat in enumerate(subcategories) :
+    histogramDir = "%s_%s" % (cat,lepton_selection)
+    if lepton_selection.find("Fakeable") != -1:
+      if lepton_frWeight == "enabled":
+        histogramDir += "_wFakeRateWeights"
+      elif lepton_frWeight == "disabled":
+        histogramDir += "_woFakeRateWeights"
+    histogramDirListL += [histogramDir]
+  return histogramDirListL
 
 class analyzeConfig_ttZctrl(analyzeConfig):
   """Configuration metadata needed to run analysis in a single go.
@@ -69,6 +72,9 @@ class analyzeConfig_ttZctrl(analyzeConfig):
       outputDir                 = outputDir,
       executable_analyze        = executable_analyze,
       channel                   = "ttZctrl",
+      subcategories             = [
+        "ttZctrl",
+        "ttZctrl_bl_neg", "ttZctrl_bl_pos", "ttZctrl_bt_neg", "ttZctrl_bt_pos"],
       samples                   = samples,
       central_or_shifts         = central_or_shifts,
       max_files_per_job         = max_files_per_job,
@@ -129,7 +135,11 @@ class analyzeConfig_ttZctrl(analyzeConfig):
 
     self.cfgFile_analyze = os.path.join(self.template_dir, cfgFile_analyze)
     self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [ "conversions", "fakes_data", "fakes_mc" ]
-    self.histogramDir_prep_dcard = "ttZctrl_Tight"
+    #self.histogramDir_prep_dcard = "ttZctrl_Tight"
+    histogramDir_prep_dcard_local = []
+    for cc, cat in enumerate(self.subcategories) :
+        histogramDir_prep_dcard_local+=[self.subcategories[cc]+"_Tight"]
+    self.histogramDir_prep_dcard = histogramDir_prep_dcard_local
     self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "conversions", "fakes_data" ]
     self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_ttZctrl_cfg.py")
     self.make_plots_signal = "TTZ"
@@ -151,7 +161,7 @@ class analyzeConfig_ttZctrl(analyzeConfig):
       central_or_shift: either 'central' or one of the systematic uncertainties defined in $CMSSW_BASE/src/tthAnalysis/HiggsToTauTau/bin/analyze_ttZctrl.cc
     """
     lepton_frWeight = "disabled" if jobOptions['applyFakeRateWeights'] == "disabled" else "enabled"
-    jobOptions['histogramDir'] = getHistogramDir(lepton_selection, lepton_frWeight)
+    jobOptions['histogramDir'] = getHistogramDirList(lepton_selection, lepton_frWeight, self.subcategories)[0]
     if 'mcClosure' in lepton_selection:
       self.mcClosure_dir[lepton_selection] = jobOptions['histogramDir']
 
@@ -315,6 +325,7 @@ class analyzeConfig_ttZctrl(analyzeConfig):
                 'muonSelection'            : muon_selection,
                 'apply_leptonGenMatching'  : self.apply_leptonGenMatching,
                 'hadTauSelection_veto'     : hadTauVeto_selection,
+                'hadTauSelection'          :  hadTau_selection,
                 'applyFakeRateWeights'     : self.applyFakeRateWeights if not lepton_selection == "Tight" else "disabled",
                 'central_or_shift'         : central_or_shift,
                 'syncOutput'               : syncOutput,
@@ -429,7 +440,7 @@ class analyzeConfig_ttZctrl(analyzeConfig):
                     'cfgFile_modified' : cfgFile_modified,
                     'outputFile' : outputFile,
                     'logFile' : os.path.join(self.dirs[DKEY_LOGS], os.path.basename(cfgFile_modified).replace("_cfg.py", ".log")),
-                    'categories' : [ getHistogramDir(lepton_selection, lepton_frWeight) ],
+                    'categories' : getHistogramDirList(lepton_selection, lepton_frWeight, self.subcategories),
                     'processes_input' : processes_input,
                     'process_output' : process_output
                   }
@@ -472,7 +483,7 @@ class analyzeConfig_ttZctrl(analyzeConfig):
             (self.channel, lepton_selection_and_frWeight)),
           'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgrounds_%s_fakes_mc_%s.log" % \
             (self.channel, lepton_selection_and_frWeight)),
-          'categories' : [ getHistogramDir(lepton_selection, lepton_frWeight) ],
+          'categories' : getHistogramDirList(lepton_selection, lepton_frWeight, self.subcategories) ,
           'processes_input' : processes_input,
           'process_output' : "fakes_mc"
         }
@@ -496,7 +507,7 @@ class analyzeConfig_ttZctrl(analyzeConfig):
             (self.channel, lepton_selection_and_frWeight)),
           'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgrounds_%s_conversions_%s.log" % \
             (self.channel, lepton_selection_and_frWeight)),
-          'categories' : [ getHistogramDir(lepton_selection, lepton_frWeight) ],
+          'categories' : getHistogramDirList(lepton_selection, lepton_frWeight, self.subcategories) ,
           'processes_input' : processes_input,
           'process_output' : "conversions"
         }
@@ -539,7 +550,7 @@ class analyzeConfig_ttZctrl(analyzeConfig):
       'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "addBackgroundLeptonFakes_%s_cfg.py" % self.channel),
       'outputFile' : os.path.join(self.dirs[DKEY_HIST], "addBackgroundLeptonFakes_%s.root" % self.channel),
       'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgroundLeptonFakes_%s.log" % self.channel),
-      'category_signal' : "ttZctrl_Tight",
+      'category_signal' : getHistogramDirList("Tight", "", self.subcategories),#"ttZctrl_Tight",
       'category_sideband' : category_sideband
     }
     self.createCfg_addFakes(self.jobOptions_addFakes[key_addFakes_job])
@@ -547,6 +558,9 @@ class analyzeConfig_ttZctrl(analyzeConfig):
     self.inputFiles_hadd_stage2[key_hadd_stage2].append(self.jobOptions_addFakes[key_addFakes_job]['outputFile'])
 
     logging.info("Creating configuration files to run 'prepareDatacards'")
+    makeSubDir = False
+    if len(self.subcategories) > 1 :
+        makeSubDir = True
     for histogramToFit in self.histograms_to_fit:
       key_prep_dcard_job = getKey(histogramToFit)
       key_hadd_stage2 = getKey(get_lepton_selection_and_frWeight("Tight", "disabled"))
@@ -556,6 +570,8 @@ class analyzeConfig_ttZctrl(analyzeConfig):
         'datacardFile' : os.path.join(self.dirs[DKEY_DCRD], "prepareDatacards_%s_%s.root" % (self.channel, histogramToFit)),
         'histogramDir' : self.histogramDir_prep_dcard,
         'histogramToFit' : histogramToFit,
+        'category' : self.subcategories,
+        'makeSubDir' : makeSubDir,
         'label' : None
       }
       self.createCfg_prep_dcard(self.jobOptions_prep_dcard[key_prep_dcard_job])
@@ -572,24 +588,29 @@ class analyzeConfig_ttZctrl(analyzeConfig):
         'inputFile' : self.jobOptions_prep_dcard[key_prep_dcard_job]['datacardFile'],
         'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "addSystFakeRates_%s_%s_cfg.py" % (self.channel, histogramToFit)),
         'outputFile' : os.path.join(self.dirs[DKEY_DCRD], "addSystFakeRates_%s_%s.root" % (self.channel, histogramToFit)),
-        'category' : self.channel,
+        'category' : self.subcategories,
         'histogramToFit' : histogramToFit,
         'plots_outputFileName' : os.path.join(self.dirs[DKEY_PLOT], "addSystFakeRates.png")
       }
-      histogramDir_nominal = self.histogramDir_prep_dcard
+      #histogramDir_nominal = self.histogramDir_prep_dcard
       for lepton_type in [ 'e', 'm' ]:
         lepton_mcClosure = "Fakeable_mcClosure_%s" % lepton_type
         if lepton_mcClosure not in self.lepton_selections:
           continue
+        histogramDir_nominal = []
+        histogramDir_mcClosure = []
+        for cat in self.histogramDir_prep_dcard :
+          histogramDir_nominal+=[ "%s/sel/evt/fakes_mc/%s" % (cat, histogramToFit)]
+          histogramDir_mcClosure+=[ "%s_%s/sel/evt/fakes_mc/%s" % (cat, lepton_mcClosure, histogramToFit)]
         lepton_selection_and_frWeight = get_lepton_selection_and_frWeight(lepton_mcClosure, "enabled")
         key_addBackgrounds_job_fakes = getKey(lepton_selection_and_frWeight, "fakes")
-        histogramDir_mcClosure = self.mcClosure_dir[lepton_mcClosure]
+        #histogramDir_mcClosure = self.mcClosure_dir[lepton_mcClosure]
         self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job].update({
           'add_Clos_%s' % lepton_type : ("Fakeable_mcClosure_%s" % lepton_type) in self.lepton_selections,
           'inputFile_nominal_%s' % lepton_type : self.outputFile_hadd_stage2[key_hadd_stage2],
-          'histogramName_nominal_%s' % lepton_type : "%s/sel/evt/fakes_mc/%s" % (histogramDir_nominal, histogramToFit),
+          'histogramName_nominal_%s' % lepton_type : histogramDir_nominal, #"%s/sel/evt/fakes_mc/%s" % (histogramDir_nominal, histogramToFit),
           'inputFile_mcClosure_%s' % lepton_type : self.jobOptions_addBackgrounds_sum[key_addBackgrounds_job_fakes]['outputFile'],
-          'histogramName_mcClosure_%s' % lepton_type : "%s/sel/evt/fakes_mc/%s" % (histogramDir_mcClosure, histogramToFit)
+          'histogramName_mcClosure_%s' % lepton_type : histogramDir_mcClosure # "%s/sel/evt/fakes_mc/%s" % (histogramDir_mcClosure, histogramToFit)
         })
       self.createCfg_add_syst_fakerate(self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job])
 
@@ -602,7 +623,7 @@ class analyzeConfig_ttZctrl(analyzeConfig):
       'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s_cfg.py" % self.channel),
       'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s.png" % self.channel),
       'histogramDir' : self.histogramDir_prep_dcard,
-      'label' : "t#bar{t}Z control region",
+      'label' : self.subcategories ,#"t#bar{t}Z control region",
       'make_plots_backgrounds' : self.make_plots_backgrounds
     }
     self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])
@@ -634,4 +655,3 @@ class analyzeConfig_ttZctrl(analyzeConfig):
     logging.info("Done")
 
     return self.num_jobs
-
