@@ -1,8 +1,8 @@
-#include "tthAnalysis/HiggsToTauTau/interface/mT2_2particle.h"
+#include "tthAnalysis/HiggsToTauTau/interface/mT2_3particle.h"
 
 #include "Math/Factory.h"
 
-mT2_2particle::mT2_2particle(int numSteps)
+mT2_3particle::mT2_3particle(int numSteps)
   : minimizer_(nullptr)
   , f_(nullptr)
   , numSteps_(numSteps)
@@ -14,16 +14,20 @@ mT2_2particle::mT2_2particle(int numSteps)
   minimizer_->SetFunction(*f_);
 }
 
-mT2_2particle::~mT2_2particle()
+mT2_3particle::~mT2_3particle()
 {
   delete minimizer_;
   delete f_;
 }
 
-void mT2_2particle::operator()(double b1Px, double b1Py, double b1Mass, 
+void mT2_3particle::operator()(double a1Px, double a1Py, double a1Mass, 
+			       double a2Px, double a2Py, double a2Mass,
+			       double b1Px, double b1Py, double b1Mass, 
 			       double b2Px, double b2Py, double b2Mass,
 			       double cSumPx, double cSumPy, double cMass)
 {
+  mT2Functor_.set_a1(a1Px, a1Py, a1Mass);
+  mT2Functor_.set_a2(a2Px, a2Py, a2Mass);
   mT2Functor_.set_b1(b1Px, b1Py, b1Mass);
   mT2Functor_.set_b2(b2Px, b2Py, b2Mass);
   mT2Functor_.set_cSum(cSumPx, cSumPy, cMass);
@@ -49,12 +53,12 @@ void mT2_2particle::operator()(double b1Px, double b1Py, double b1Mass,
   }
 }
   
-double mT2_2particle::get_min_mT2() const
+double mT2_3particle::get_min_mT2() const
 {
   return min_mT2_;
 }
  
-int mT2_2particle::get_min_step() const
+int mT2_3particle::get_min_step() const
 {
   return min_step_;
 }

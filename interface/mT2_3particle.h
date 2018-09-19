@@ -1,28 +1,19 @@
-#ifndef tthAnalysis_HiggsToTauTau_mt2_2particle_h
-#define tthAnalysis_HiggsToTauTau_mt2_2particle_h
+#ifndef tthAnalysis_HiggsToTauTau_mt2_3particle_h
+#define tthAnalysis_HiggsToTauTau_mt2_3particle_h
 
-/** \class mt2_2particle
+/** \class mt2_3particle
  *
- * Compute generalized mT2 variable, described in the papers
+ * Compute generalized mT2 variable, described in the paper
  * [1] "Using subsystem mT2 for complete mass determination in decay chains with missing energy at hadron colliders",
  *      M. Burns, K. Kong and K.T. Matchev
  *    arXiv: 0810.5576
- * [2] "Di-Higgs final states augMTed - selecting hh events at the high luminosity LHC",
- *      A.J. Barr, M.J. Dolan, C. Englert and M. Spannowsky
- *    arXiv: 1309.6318
  *
- * This class implements the mT2 computation for the case that 2 "stable" visible particles are produced per decay chain.
- * It covers the cases:
- *  1) WW -> lnu lnu 
- *    (case mT2(1,1,0 in Ref. [1]; with b1=lepton1, b2=lepton2, cSum=MET, cMass=0)
- *  2) ttbar -> bW bW, 
+ * This class implements the mT2 computation for the case that 3 "stable" visible particles are produced per decay chain.
+ * It covers the case:
+ *  1) ttbar -> bW bW -> blnu blnu, 
  *     where both W bosons decay to electrons or muons, 
  *     the latter being referred to as "lepton1" and "lepton2" 
- *    (case mT2(2,1,0) in Ref. [2]; with b1=bjet1, b2=bjet2, cSum=lepton1+lepton2+MET, cMass=mW)
- *  3) ttbar -> bW bW, 
- *     where both W bosons decay to tau leptons, which subsequently decay to electrons, muons, or tau_h, 
- *     the latter being referred to as "vis1" and "vis2" 
- *    (described in Section "KINEMATIC BOUNDING VARIABLES" in Ref. [2]; with b1=bjet1, b2=bjet2, cSum=vis1+vis2+MET, cMass=mW)
+ *    (case mT2(2,2,0) in Ref. [1]; with a1=bjet1, a2=bjet2, b1=lepton1, b2=lepton2, cSum=MET, cMass=0 [ c=neutrinos produced in W boson decays])
  *
  * \author Christian Veelken, Tallinn
  *
@@ -35,21 +26,35 @@
 #include <TRandom3.h>
 #include <TMath.h>
 
-namespace mT2_2particle_namespace
+namespace mT2_3particle_namespace
 {
-  double comp_mT_2particle(double bPx, double bPy, double bMass, double cPx, double cPy, double cMass)
+  double comp_mT_3particle(double aPx, double aPy, double aMass, double bPx, double bPy, double bMass, double cPx, double cPy, double cMass)
   {
+    double aMass2 = aMass*aMass;
+    double aET = TMath::Sqrt(aMass2 + aPx*aPx + aPy*aPy);
     double bMass2 = bMass*bMass;
     double bET = TMath::Sqrt(bMass2 + bPx*bPx + bPy*bPy);
     double cMass2 = cMass*cMass;
     double cET = TMath::Sqrt(cMass2 + cPx*cPx + cPy*cPy);
-    double mT2 = bMass2 + cMass2 + 2.*(bET*cET - (bPx*cPx + bPy*cPy));
+    double mT2 = aMass2 + bMass2 + cMass2 + 2.*(aET*bET - (aPx*bPx + aPy*bPy)) + 2.*(aET*cET - (aPx*cPx + aPy*cPy)) + 2.*(bET*cET - (bPx*cPx + bPy*cPy));
     return mT2;
   }
 
-  class mt2Functor_2particle
+  class mt2Functor_3particle
   {
    public:
+    void set_a1(double a1Px, double a1Py, double a1Mass)
+    {
+      a1Px_   = a1Px;
+      a1Py_   = a1Py;
+      a1Mass_ = a1Mass;
+    }
+    void set_a2(double a2Px, double a2Py, double a2Mass)
+    {
+      a2Px_   = a2Px; 
+      a2Py_   = a2Py;
+      a2Mass_ = a2Mass;
+    }
     void set_b1(double b1Px, double b1Py, double b1Mass)
     {
       b1Px_   = b1Px;
@@ -75,15 +80,21 @@ namespace mT2_2particle_namespace
 
       double c1Px  = TMath::Cos(c1Phi)*c1Pt;
       double c1Py  = TMath::Sin(c1Phi)*c1Pt;
-      double mT2_1 = comp_mT_2particle(b1Px_, b1Py_, b1Mass_, c1Px, c1Py, cMass_);
+      double mT2_1 = comp_mT_3particle(a1Px_, a1Py_, a1Mass_, b1Px_, b1Py_, b1Mass_, c1Px, c1Py, cMass_);
 
       double c2Px  = cSumPx_ - c1Px; 
       double c2Py  = cSumPy_ - c1Py;
-      double mT2_2 = comp_mT_2particle(b2Px_, b2Py_, b2Mass_, c2Px, c2Py, cMass_);
+      double mT2_2 = comp_mT_3particle(a2Px_, a2Py_, a2Mass_, b2Px_, b2Py_, b2Mass_, c2Px, c2Py, cMass_);
 
       return TMath::Sqrt(TMath::Max(mT2_1, mT2_2));
     }
    private:
+    double a1Px_;
+    double a1Py_;
+    double a1Mass_;
+    double a2Px_;
+    double a2Py_;
+    double a2Mass_;
     double b1Px_;
     double b1Py_;
     double b1Mass_;
@@ -96,17 +107,19 @@ namespace mT2_2particle_namespace
   };
 }
 
-class mT2_2particle
+class mT2_3particle
 {
  public:
   /// constructor
-  mT2_2particle(int numSteps = 100);
+  mT2_3particle(int numSteps = 100);
 
   /// destructor
-  ~mT2_2particle();
+  ~mT2_3particle();
 
   /// compute mT2 variable
-  void operator()(double b1Px, double b1Py, double b1Mass, 
+  void operator()(double a1Px, double a1Py, double a1Mass, 
+		  double a2Px, double a2Py, double a2Mass,
+		  double b1Px, double b1Py, double b1Mass, 
 		  double b2Px, double b2Py, double b2Mass,
 		  double cSumPx, double cSumPy, double cMass);
   
@@ -115,7 +128,7 @@ class mT2_2particle
 
  protected:
   ROOT::Math::Minimizer* minimizer_;
-  mT2_2particle_namespace::mt2Functor_2particle mT2Functor_;
+  mT2_3particle_namespace::mt2Functor_3particle mT2Functor_;
   ROOT::Math::Functor* f_;
   int numSteps_;
   TRandom3 rnd_;
