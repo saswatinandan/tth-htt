@@ -107,6 +107,12 @@ process.analyze_3l = cms.PSet(
     selEventsFileName_output = cms.string(''),
     selectBDT = cms.bool(False),
 
+    branchName_genTopQuarks = cms.string('GenTop'),
+    branchName_genBJets = cms.string('GenBQuarkFromTop'),
+    branchName_genWBosons = cms.string('GenVbosons'),
+    branchName_genWJets = cms.string('GenWZQuark'),
+    branchName_genQuarkFromTop = cms.string('GenQuarkFromTop'),
+
     syncNtuple = cms.PSet(
         tree = cms.string(''),
         output = cms.string(''),

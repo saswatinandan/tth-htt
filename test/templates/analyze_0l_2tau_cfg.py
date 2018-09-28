@@ -71,6 +71,8 @@ process.analyze_0l_2tau = cms.PSet(
     branchName_subjetsHTTv2 = cms.string('HTTV2Subjets'),
     branchName_jetsAK12 = cms.string('FatJetAK12'),
     branchName_subjetsAK12 = cms.string('SubJetAK12'),
+    branchName_jetsAK8 = cms.string('FatJet'),
+    branchName_subjetsAK8 = cms.string('SubJet'),
     branchName_met = cms.string('MET'),
 
     branchName_genLeptons = cms.string('GenLep'),
