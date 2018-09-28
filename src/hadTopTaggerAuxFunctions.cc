@@ -3,73 +3,11 @@
 #include "tthAnalysis/HiggsToTauTau/interface/analysisAuxFunctions.h" // isHigherPt()
 #include "tthAnalysis/HiggsToTauTau/interface/cmsException.h" // cmsException()
 
+#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // kGenTop...
+
 #include <algorithm> // std::sort()
 #include <numeric> // iota
-
-std::map<int, bool>
-isGenMatchedJetTriplet(const Particle::LorentzVector & recBJet,
-                       const Particle::LorentzVector & recWJet1,
-                       const Particle::LorentzVector & recWJet2,
-                       const Particle::LorentzVector  genTopQuarks,
-                       const Particle::LorentzVector  genBJetFromTop,
-                       const Particle::LorentzVector  genWBosons,
-                       const Particle::LorentzVector  genWJetFromTop_lead,
-                       const Particle::LorentzVector  genWJetFromTop_sublead,
-                       int mode,
-		       int TypeTop,
-		       const Particle::LorentzVector  recFatJet,
-		       bool isAnalysisModeGenStudy)
-{
-  std::map<int, bool> genMatchFlags = {
-    { kGenMatchedBJet ,     false },
-    { kGenMatchedWJet1 ,    false },
-    { kGenMatchedWJet2 ,    false },
-    { kGenMatchedTriplet ,  false },
-    { kGenMatchedFatJet ,   false },
-  };
-
-  double jetGenMatchdRThrsh = 0.4;
-  double fatjetGenMatchdRThrsh = 0.4;
-  if (TypeTop==1) {fatjetGenMatchdRThrsh = 1.5; jetGenMatchdRThrsh = 0.3;}
-  if (TypeTop==2) {fatjetGenMatchdRThrsh = 1.2; jetGenMatchdRThrsh = 0.3;}
-
-  genMatchFlags[kGenMatchedBJet]    = deltaR(recBJet, genBJetFromTop) < jetGenMatchdRThrsh;
-  if ( !isAnalysisModeGenStudy) {
-    genMatchFlags[kGenMatchedWJet1]   =
-      (genWJetFromTop_lead.pt() > 0    && deltaR(recWJet1, genWJetFromTop_lead)    < jetGenMatchdRThrsh) ||
-      (genWJetFromTop_sublead.pt() > 0 && deltaR(recWJet1, genWJetFromTop_sublead) < jetGenMatchdRThrsh)
-      ;
-    genMatchFlags[kGenMatchedWJet2]   =
-      (genWJetFromTop_lead.pt() > 0    && deltaR(recWJet2, genWJetFromTop_lead)    < jetGenMatchdRThrsh) ||
-      (genWJetFromTop_sublead.pt() > 0 && deltaR(recWJet2, genWJetFromTop_sublead) < jetGenMatchdRThrsh)
-      ;
-  } else {
-    genMatchFlags[kGenMatchedWJet1]   =
-      (genWJetFromTop_lead.pt() > 0    && deltaR(recWJet1, genWJetFromTop_lead)    < jetGenMatchdRThrsh)
-      ;
-    genMatchFlags[kGenMatchedWJet2]   =
-      (genWJetFromTop_sublead.pt() > 0 && deltaR(recWJet2, genWJetFromTop_sublead) < jetGenMatchdRThrsh)
-      ;
-  }
-
-  
-  genMatchFlags[kGenMatchedTriplet] =
-    genMatchFlags[kGenMatchedBJet]  &&
-    genMatchFlags[kGenMatchedWJet1] &&
-    genMatchFlags[kGenMatchedWJet2]
-  ;
-
-  if (TypeTop==1) {
-    genMatchFlags[kGenMatchedFatJet] =
-      (recFatJet.pt() > 0. && recFatJet.mass() > 0.  && deltaR(recFatJet, genTopQuarks) < fatjetGenMatchdRThrsh);
-  } else if (TypeTop==2) {
-    genMatchFlags[kGenMatchedFatJet] =
-      (recFatJet.pt() > 0. && recFatJet.mass() > 0.  && deltaR(recFatJet, genWBosons) < fatjetGenMatchdRThrsh);
-  }
-  
-  return genMatchFlags;
-}
-
+#include <map>
 
 std::map<int, Particle::LorentzVector>
 isGenMatchedJetTripletVar(const std::vector<GenParticle> & genTopQuarks,
@@ -135,7 +73,7 @@ isGenMatchedJetTripletVar(const std::vector<GenParticle> & genTopQuarks,
 
   double mass_diff = 1000000.;
   const GenParticle * genWBosonFromTopFinal = nullptr;
-  //for(auto itW = genWBosons.cbegin(); itW != genWBosons.cend(); ++itW) 
+  //for(auto itW = genWBosons.cbegin(); itW != genWBosons.cend(); ++itW)
   for(auto itW = genWBosonsFromTop.cbegin(); itW != genWBosonsFromTop.cend(); ++itW) // Edit Siddhesh
   {
     const GenParticle * genWBosonFromTop = (*itW);
@@ -202,7 +140,7 @@ isGenMatchedJetTripletVar(const std::vector<GenParticle> & genTopQuarks,
   genMatchValues[kGenTopWj1].SetPxPyPzE(genWJetFromTop_lead->p4().x(), genWJetFromTop_lead->p4().y(), genWJetFromTop_lead->p4().z(), genWJetFromTop_lead->p4().energy());
   genMatchValues[kGenTopWj2].SetPxPyPzE(genWJetFromTop_sublead->p4().x(), genWJetFromTop_sublead->p4().y(), genWJetFromTop_sublead->p4().z(), genWJetFromTop_sublead->p4().energy());
 
-  
+
   return genMatchValues;
 
 }
@@ -223,17 +161,6 @@ getType(size_t sizeHTTv2, size_t sizeFatW, size_t sizeResolved){
   else if (sizeFatW >0) typeTop = 2;
   else if (sizeResolved >0) typeTop = 3;
   return typeTop;
-}
-
-//template <typename T>
-std::vector<size_t>
-sort_indexes(const std::vector<double> &v) {
-  // initialize original index locations
-  std::vector<size_t> idx(v.size());
-  iota(idx.begin(), idx.end(), 0);
-  // sort indexes based on comparing values in v
-  sort(idx.begin(), idx.end(), [&v](size_t i1, size_t i2) {return v[i1] > v[i2];});
-  return idx;
 }
 
 std::vector<double>
@@ -259,4 +186,314 @@ calRank( std::vector<double> & btag_disc ) {
     //for (auto i: btag_disc) std::cout << i << " ";
     //std::cout<<std::endl;
     return result;
+}
+
+void get_two_maximal(
+  double &  MVA_1_mvaOutput,
+  bool &    MVA_1_truth,
+  double &  MVA_1_genTopPt,
+  double &  MVA_1_recTopPt,
+  double & MVA_2_mvaOutput,
+  bool &   MVA_2_truth,
+  double & MVA_2_genTopPt,
+  double & MVA_2_recTopPt,
+  double & MVA_med_mvaOutput,
+  bool   & MVA_med_truth,
+  double & MVA_med_genTopPt,
+  double & MVA_med_recTopPt,
+  double & Wj1_pt_1, double & Wj2_pt_1, double & b_pt_1,
+  double & Wj1_pt_2, double & Wj2_pt_2, double & b_pt_2,
+  double & Wj1_pt_med, double & Wj2_pt_med, double & b_pt_med,
+  double MVA, double recTopPt, double genTopPt_teste, bool isGenMatched,
+  double Wj1_pt, double Wj2_pt, double b_pt
+  // remove combinations in which jets overlap among first and second
+
+) {
+
+  if ( MVA == 0. ) return;
+
+  if ( MVA_1_mvaOutput == 0. || MVA_1_mvaOutput == -1. ) {
+    MVA_1_mvaOutput = MVA;
+    MVA_1_recTopPt = recTopPt;
+    MVA_1_genTopPt = genTopPt_teste;
+    Wj1_pt_1 = Wj1_pt;
+    Wj2_pt_1 = Wj2_pt;
+    b_pt_1 = b_pt;
+    //std::cout << "start 1" << std::endl;
+    return;
+  }
+
+  if ( MVA_2_mvaOutput == 0. || MVA_2_mvaOutput == -1.) {
+    if (  MVA < MVA_1_mvaOutput &&
+        (
+        Wj1_pt == -1.0 || (
+        Wj1_pt != Wj1_pt_1 && Wj1_pt != Wj2_pt_1 && Wj1_pt != b_pt_1 &&
+        Wj2_pt != Wj1_pt_1 && Wj2_pt != Wj2_pt_1 && Wj2_pt != b_pt_1 &&
+        b_pt   != Wj1_pt_1 && b_pt   != Wj2_pt_1 && b_pt   != b_pt_1
+        )
+        )
+    ) {
+      MVA_2_mvaOutput = MVA;
+      MVA_2_recTopPt = recTopPt;
+      MVA_2_genTopPt = genTopPt_teste;
+      Wj1_pt_2 = Wj1_pt;
+      Wj2_pt_2 = Wj2_pt;
+      b_pt_2 = b_pt;
+      //std::cout << "start 2" << std::endl;
+      return;
+    } else if ( MVA > MVA_1_mvaOutput ) {
+        //std::cout << "start 1A" << std::endl;
+        if (
+        Wj1_pt == -1.0 || (
+        Wj1_pt != Wj1_pt_1 && Wj1_pt != Wj2_pt_1 && Wj1_pt != b_pt_1 &&
+        Wj2_pt != Wj1_pt_1 && Wj2_pt != Wj2_pt_1 && Wj2_pt != b_pt_1 &&
+        b_pt   != Wj1_pt_1 && b_pt   != Wj2_pt_1 && b_pt   != b_pt_1
+        )
+        ) {
+          MVA_2_mvaOutput = MVA_1_mvaOutput;
+          MVA_2_truth     = MVA_1_truth;
+          MVA_2_genTopPt  = MVA_1_genTopPt;
+          MVA_2_recTopPt  = MVA_1_recTopPt;
+          Wj1_pt_2 = Wj1_pt_1;
+          Wj2_pt_2 = Wj2_pt_1;
+          b_pt_2 = b_pt_1;
+
+          MVA_1_mvaOutput = MVA;
+          MVA_1_recTopPt = recTopPt;
+          MVA_1_genTopPt = genTopPt_teste;
+          Wj1_pt_1 = Wj1_pt;
+          Wj2_pt_1 = Wj2_pt;
+          b_pt_1 = b_pt;
+          //std::cout << "start 2A" << std::endl;
+          return;
+        } else {
+          MVA_1_mvaOutput = MVA;
+          MVA_1_recTopPt = recTopPt;
+          MVA_1_genTopPt = genTopPt_teste;
+          Wj1_pt_1 = Wj1_pt;
+          Wj2_pt_1 = Wj2_pt;
+          b_pt_1 = b_pt;
+        }
+
+      }
+      //std::cout << "could not fill 2 yet -- > try again" << std::endl;
+      return;
+  } //  close if MV2 not filled
+
+  /// -- first stage
+  if ( ( MVA >  MVA_2_mvaOutput && MVA < MVA_1_mvaOutput ) &&
+      (
+      Wj1_pt == -1.0 || (
+      Wj1_pt != Wj1_pt_1 && Wj1_pt != Wj2_pt_1 && Wj1_pt != b_pt_1 &&
+      Wj2_pt != Wj1_pt_1 && Wj2_pt != Wj2_pt_1 && Wj2_pt != b_pt_1 &&
+      b_pt   != Wj1_pt_1 && b_pt   != Wj2_pt_1 && b_pt   != b_pt_1
+      )
+      )
+    ) {
+      MVA_med_mvaOutput = MVA_2_mvaOutput;
+      MVA_med_truth     = MVA_2_truth;
+      MVA_med_genTopPt  = MVA_2_genTopPt;
+      MVA_med_recTopPt  = MVA_2_recTopPt;
+      Wj1_pt_med = Wj1_pt_2;
+      Wj2_pt_med = Wj2_pt_2;
+      b_pt_med = b_pt_2;
+      //
+      MVA_2_truth = isGenMatched;
+      MVA_2_mvaOutput = MVA;
+      MVA_2_recTopPt = recTopPt;
+      MVA_2_genTopPt = genTopPt_teste;
+      Wj1_pt_2 = Wj1_pt;
+      Wj2_pt_2 = Wj2_pt;
+      b_pt_2 = b_pt;
+      //std::cout << "change A (MVA_2_mvaOutput) "<< MVA_2_mvaOutput << std::endl;
+  } else if ( MVA >  MVA_2_mvaOutput &&  MVA > MVA_1_mvaOutput && MVA > MVA_med_mvaOutput ) {
+      if ( ( MVA_2_mvaOutput < MVA_1_mvaOutput && MVA_med_mvaOutput <  MVA_1_mvaOutput )
+      &&
+        (Wj1_pt == -1.0 || (
+        Wj1_pt != Wj1_pt_1 && Wj1_pt != Wj2_pt_1 && Wj1_pt != b_pt_1 &&
+        Wj2_pt != Wj1_pt_1 && Wj2_pt != Wj2_pt_1 && Wj2_pt != b_pt_1 &&
+        b_pt   != Wj1_pt_1 && b_pt   != Wj2_pt_1 && b_pt   != b_pt_1
+        )
+        )
+      ) {
+        if ( MVA_med_mvaOutput < MVA_2_mvaOutput  ){
+          MVA_med_mvaOutput = MVA_2_mvaOutput;
+          MVA_med_truth     = MVA_2_truth;
+          MVA_med_genTopPt  = MVA_2_genTopPt;
+          MVA_med_recTopPt  = MVA_2_recTopPt;
+          Wj1_pt_med = Wj1_pt_2;
+          Wj2_pt_med = Wj2_pt_2;
+          b_pt_med = b_pt_2;
+          //std::cout << "change 8" << std::endl;
+        }
+        ///
+        MVA_2_mvaOutput = MVA_1_mvaOutput;
+        MVA_2_truth     = MVA_1_truth;
+        MVA_2_genTopPt  = MVA_1_genTopPt;
+        MVA_2_recTopPt  = MVA_1_recTopPt;
+        Wj1_pt_2 = Wj1_pt_1;
+        Wj2_pt_2 = Wj2_pt_1;
+        b_pt_2 = b_pt_1;
+        //std::cout << "change B1" << std::endl;
+    } else if ( MVA_2_mvaOutput < MVA_1_mvaOutput ) {
+        // chck med
+        if ( Wj1_pt == -1.0 ||
+          ( //
+        Wj1_pt_med != Wj1_pt && Wj1_pt_med != Wj2_pt && Wj1_pt_med != b_pt_1 &&
+        Wj2_pt_med != Wj1_pt && Wj2_pt_med != Wj2_pt && Wj2_pt_med != b_pt_1 &&
+        b_pt_med   != Wj1_pt && b_pt_med   != Wj2_pt && b_pt_med   != b_pt_1
+        )
+        ) {
+          MVA_2_mvaOutput = MVA_med_mvaOutput;
+          MVA_2_truth     = MVA_med_truth;
+          MVA_2_genTopPt  = MVA_med_genTopPt;
+          MVA_2_recTopPt  = MVA_med_recTopPt;
+          Wj1_pt_2 = Wj1_pt_med;
+          Wj2_pt_2 = Wj2_pt_med;
+          b_pt_2 = b_pt_med;
+          ///
+          MVA_med_mvaOutput = MVA_1_mvaOutput;
+          MVA_med_truth     = MVA_1_truth;
+          MVA_med_genTopPt  = MVA_1_genTopPt;
+          MVA_med_recTopPt  = MVA_1_recTopPt;
+          Wj1_pt_med = Wj1_pt_1;
+          Wj2_pt_med = Wj2_pt_1;
+          b_pt_med = b_pt_1;
+          //std::cout << "change 7" << std::endl;
+        } else if ( !( Wj1_pt == -1.0 ||
+          ( // not 2 +! new
+        Wj1_pt_2 != Wj1_pt && Wj1_pt_2 != Wj2_pt && Wj1_pt != b_pt_1 &&
+        Wj2_pt_2 != Wj1_pt && Wj2_pt_2 != Wj2_pt && Wj2_pt != b_pt_1 &&
+        b_pt_2   != Wj1_pt && b_pt_2   != Wj2_pt && b_pt   != b_pt_1
+        ))
+      ) {
+        MVA_2_mvaOutput = 0.;
+        MVA_2_truth     = false;
+        MVA_2_genTopPt  = 0.;
+        MVA_2_recTopPt  = 0.;
+        Wj1_pt_2 = 0.;
+        Wj2_pt_2 = 0.;
+        b_pt_2 = 0.;
+        // the second HTT does not pass sorting + mass cuts if keeping the first HTT as the highest
+        //std::cout << "change 15" << std::endl;
+      } //else std::cout << "change B fail : " << MVA << " " << MVA_1_mvaOutput << " " << MVA_2_mvaOutput << " " << MVA_med_mvaOutput << std::endl;
+    } //
+    MVA_1_truth = isGenMatched;
+    MVA_1_mvaOutput = MVA;
+    MVA_1_recTopPt = recTopPt;
+    MVA_1_genTopPt = genTopPt_teste;
+    Wj1_pt_1 = Wj1_pt;
+    Wj2_pt_1 = Wj2_pt;
+    b_pt_1 = b_pt; //--> new also has to be different of 2
+    //std::cout << "change B" << std::endl;
+  } else if ( MVA > MVA_1_mvaOutput && MVA_1_mvaOutput < MVA_med_mvaOutput && MVA < MVA_med_mvaOutput )
+  {
+    //std::cout << "change 6 : " << MVA << " " << MVA_1_mvaOutput << " " << MVA_2_mvaOutput << " " << MVA_med_mvaOutput << std::endl;
+      double MVA_ex_mvaOutput = MVA_1_mvaOutput;
+      double MVA_ex_truth     = MVA_1_truth;
+      double MVA_ex_genTopPt  = MVA_1_genTopPt;
+      double MVA_ex_recTopPt  = MVA_1_recTopPt;
+      double Wj1_pt_ex = Wj1_pt_1;
+      double Wj2_pt_ex = Wj2_pt_1;
+      double b_pt_ex = b_pt_1;
+      // check med
+
+      MVA_1_mvaOutput = MVA_med_mvaOutput;
+      MVA_1_truth     = MVA_med_truth;
+      MVA_1_genTopPt  = MVA_med_genTopPt;
+      MVA_1_recTopPt  = MVA_med_recTopPt;
+      Wj1_pt_1 = Wj1_pt_med;
+      Wj2_pt_1 = Wj2_pt_med;
+      b_pt_1 = b_pt_med;
+
+    if ( ( MVA_2_mvaOutput < MVA ) &&
+      (
+        Wj1_pt == -1.0 || (
+        Wj1_pt != Wj1_pt_1 && Wj1_pt != Wj2_pt_1 && Wj1_pt != b_pt_1 &&
+        Wj2_pt != Wj1_pt_1 && Wj2_pt != Wj2_pt_1 && Wj2_pt != b_pt_1 &&
+        b_pt   != Wj1_pt_1 && b_pt   != Wj2_pt_1 && b_pt   != b_pt_1
+        )
+        )
+      ) {
+
+        if ( MVA_2_mvaOutput > MVA_ex_mvaOutput ) {
+          MVA_med_mvaOutput = MVA_2_mvaOutput;
+          MVA_med_truth     = MVA_2_truth;
+          MVA_med_genTopPt  = MVA_2_genTopPt;
+          MVA_med_recTopPt  = MVA_2_recTopPt;
+          Wj1_pt_med = Wj1_pt_2;
+          Wj2_pt_med = Wj2_pt_2;
+          b_pt_med = b_pt_2;
+          //std::cout << "change 4A" << std::endl;
+        } else {
+          MVA_med_mvaOutput = MVA_ex_mvaOutput;
+          MVA_med_truth     = MVA_ex_truth;
+          MVA_med_genTopPt  = MVA_ex_genTopPt;
+          MVA_med_recTopPt  = MVA_ex_recTopPt;
+          Wj1_pt_med = Wj1_pt_ex;
+          Wj2_pt_med = Wj2_pt_ex;
+          b_pt_med = b_pt_ex;
+          //std::cout << "change 4B" << std::endl;
+        }
+        MVA_2_truth = isGenMatched;
+        MVA_2_mvaOutput = MVA;
+        MVA_2_recTopPt = recTopPt;
+        MVA_2_genTopPt = genTopPt_teste;
+        Wj1_pt_2 = Wj1_pt;
+        Wj2_pt_2 = Wj2_pt;
+        b_pt_2 = b_pt;
+        //std::cout << "change 9" << std::endl;
+    } else  { //(mva2 > mva)
+      if ( MVA <  MVA_2_mvaOutput ){
+        MVA_med_truth = isGenMatched;
+        MVA_med_mvaOutput = MVA;
+        MVA_med_recTopPt = recTopPt;
+        MVA_med_genTopPt = genTopPt_teste;
+        Wj1_pt_med = Wj1_pt;
+        Wj2_pt_med = Wj2_pt;
+        b_pt_med = b_pt;
+        //std::cout << "change 5" << std::endl;
+      } else if ( MVA >  MVA_ex_mvaOutput && MVA >  MVA_2_mvaOutput &&
+          (Wj1_pt == -1.0 || (
+            Wj1_pt != Wj1_pt_1 && Wj1_pt != Wj2_pt_1 && Wj1_pt != b_pt_1 &&
+            Wj2_pt != Wj1_pt_1 && Wj2_pt != Wj2_pt_1 && Wj2_pt != b_pt_1 &&
+            b_pt   != Wj1_pt_1 && b_pt   != Wj2_pt_1 && b_pt   != b_pt_1
+            )
+            )
+          ) {
+              MVA_2_truth = isGenMatched;
+              MVA_2_mvaOutput = MVA;
+              MVA_2_recTopPt = recTopPt;
+              MVA_2_genTopPt = genTopPt_teste;
+              Wj1_pt_2 = Wj1_pt;
+              Wj2_pt_2 = Wj2_pt;
+              b_pt_2 = b_pt;
+              //std::cout << "change 10" << std::endl;
+              if ( MVA_ex_mvaOutput > MVA_2_mvaOutput ) {
+                MVA_med_mvaOutput = MVA_ex_mvaOutput;
+                MVA_med_truth     = MVA_ex_truth;
+                MVA_med_genTopPt  = MVA_ex_genTopPt;
+                MVA_med_recTopPt  = MVA_ex_recTopPt;
+                Wj1_pt_med = Wj1_pt_ex;
+                Wj2_pt_med = Wj2_pt_ex;
+                b_pt_med = b_pt_ex;
+                //std::cout << "change 11" << std::endl;
+              } else {
+                MVA_med_mvaOutput = MVA_2_mvaOutput;
+                MVA_med_truth     = MVA_2_truth;
+                MVA_med_genTopPt  = MVA_2_genTopPt;
+                MVA_med_recTopPt  = MVA_2_recTopPt;
+                Wj1_pt_med = Wj1_pt_2;
+                Wj2_pt_med = Wj2_pt_2;
+                b_pt_med = b_pt_2;
+                //std::cout << "change 4B" << std::endl;
+              }
+
+      }
+    } //else std::cout << MVA_1_mvaOutput << " " << MVA_2_mvaOutput << " " << MVA_med_mvaOutput << std::endl;
+
+  }
+
+    return;
+
 }
