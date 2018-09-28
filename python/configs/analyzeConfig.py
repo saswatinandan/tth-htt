@@ -112,12 +112,6 @@ class analyzeConfig(object):
         if len(subcategories) > 0 : self.subcategories = subcategories
         else : self.subcategories = [channel]
 
-        if self.channel.startswith('hh'):
-          DEPENDENCIES.extend([
-            "hhAnalysis/multilepton",
-            "TauAnalysis/ClassicSVfit4tau",
-          ])
-
         # sum the event counts for samples which cover the same phase space only if
         # there are multiple such samples
         event_sums = copy.deepcopy(samples['sum_events'])
@@ -815,9 +809,15 @@ class analyzeConfig(object):
            Args:
              histogramToFit: name of the histogram used for signal extraction
         """
+
         #category_output = self.channel
         #if jobOptions['label']:
         #    category_output += "_%s" % jobOptions['label']
+        ## Xanda test if this passes   =======
+        category_output = self.channel
+        if 'label' in jobOptions.keys() and jobOptions['label']:
+            category_output += "_%s" % jobOptions['label']
+
         histogramToFit = jobOptions['histogramToFit']
         lines = []
         lines.append("process.fwliteInput.fileNames = cms.vstring('%s')" % jobOptions['inputFile'])
@@ -942,12 +942,9 @@ class analyzeConfig(object):
            Args:
              histogram_file: name of the input ROOT file
         """
-        if 'skipChannel' in jobOptions and jobOptions['skipChannel']:
-          category_label = jobOptions['label']
-        else:
-          category_label = self.channel
-          if jobOptions['label']:
-              category_label += " (%s)" % jobOptions['label']
+        category_label = self.channel
+        if jobOptions['label']:
+            category_label += " (%s)" % jobOptions['label']
         lines = []
         lines.append("process.fwliteInput.fileNames = cms.vstring('%s')" % jobOptions['inputFile'])
         lines.append("process.makePlots.outputFileName = cms.string('%s')" % jobOptions['outputFile'])
@@ -961,14 +958,6 @@ class analyzeConfig(object):
             lines.append("  ),")
         lines.append(")")
         lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % (self.lumi / 1000))
-        if 'massPoint' in jobOptions:
-            for plotOption in [ 'legendEntrySignal', 'labelOnTop' ]:
-                lines.append("if 'masspoint' in process.makePlots.%s._value:" % plotOption)
-                lines.append("  process.makePlots.{plotOption} = cms.string(process.makePlots.{plotOption}._value.replace('masspoint', '{massPoint}'))".format(
-                  massPoint = jobOptions['massPoint'],
-                  plotOption = plotOption,
-                ))
-            lines.append("  process.makePlots.nuisanceParameters.normalization.signal_radion_{massPoint} = cms.string('1.0 +/- 0.20')".format(massPoint = jobOptions['massPoint']))
         create_cfg(self.cfgFile_make_plots, jobOptions['cfgFile_modified'], lines)
 
     def createCfg_makePlots_mcClosure(self, jobOptions): #TODO
@@ -990,14 +979,6 @@ class analyzeConfig(object):
       lines.append("  )")
       lines.append(")")
       lines.append("process.makePlots.intLumiData = cms.double(%.1f)" % self.lumi)
-      if 'massPoint' in jobOptions:
-            for plotOption in [ 'legendEntrySignal', 'labelOnTop' ]:
-                lines.append("if '{masspoint}' in process.makePlots.%s._value:" % plotOption)
-                lines.append("  process.makePlots.{plotOption} = cms.string(process.makePlots.{plotOption}._value.format(masspoint = '{massPoint}'))".format(
-                  massPoint = jobOptions['massPoint'],
-                  plotOption = plotOption,
-                ))
-                lines.append("  process.makePlots.nuisanceParameters.normalization.signal_hh_{massPoint} = cms.string('1.0 +/- 0.20')".format(massPoint = jobOptions['massPoint']))
       create_cfg(self.cfgFile_make_plots_mcClosure, jobOptions['cfgFile_modified'], lines)
 
     def createScript_sbatch(self, executable, sbatchFile, jobOptions,

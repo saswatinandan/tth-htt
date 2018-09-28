@@ -90,23 +90,42 @@ elif mode == 'leptonFR_sync':
     else:
       raise ValueError("Invalid era: %s" % era)
 elif mode == 'hh':
-  if era == "2016":
-    from hhAnalysis.multilepton.samples.hhAnalyzeSamples_2016_nanoAOD import samples_2016 as samples
-    pileup = os.path.join(
-      os.environ['CMSSW_BASE'], 'src/hhAnalysis/multilepton/data/pileup_hh_2016.root'
-    )
-  elif era == "2017":
-    from hhAnalysis.multilepton.samples.hhAnalyzeSamples_2017_nanoAOD_hh_private import samples_2017 as samples
-    pileup = os.path.join(
-      os.environ['CMSSW_BASE'], 'src/hhAnalysis/multilepton/data/pileup_hh_private_2017.root'
-    )
-  elif era == "2018":
-    from hhAnalysis.multilepton.samples.hhAnalyzeSamples_2018_nanoAOD import samples_2018 as samples
-    pileup = os.path.join(
-      os.environ['CMSSW_BASE'], 'src/hhAnalysis/multilepton/data/pileup_hh_2018.root'
-    )
+  if preselection:
+    if era == "2016":
+      from hhAnalysis.multilepton.samples.hhAnalyzeSamples_2016 import samples_2016 as samples
+      pileup = os.path.join(
+        os.environ['CMSSW_BASE'], 'src/hhAnalysis/multilepton/data/pileup_hh_2016.root'
+      )
+    elif era == "2017":
+      from hhAnalysis.multilepton.samples.hhAnalyzeSamples_2017 import samples_2017 as samples
+      pileup = os.path.join(
+        os.environ['CMSSW_BASE'], 'src/hhAnalysis/multilepton/data/pileup_hh_2017.root'
+      )
+    elif era == "2018":
+      from hhAnalysis.multilepton.samples.hhAnalyzeSamples_2018 import samples_2018 as samples
+      pileup = os.path.join(
+        os.environ['CMSSW_BASE'], 'src/hhAnalysis/multilepton/data/pileup_hh_2018.root'
+      )
+    else:
+      raise ValueError("Invalid era: %s" % era)
   else:
-    raise ValueError("Invalid era: %s" % era)
+    if era == "2016":
+      from hhAnalysis.multilepton.samples.hhAnalyzeSamples_2016_nanoAOD import samples_2016 as samples
+      pileup = os.path.join(
+        os.environ['CMSSW_BASE'], 'src/hhAnalysis/multilepton/data/pileup_hh_2016.root'
+      )
+    elif era == "2017":
+      from hhAnalysis.multilepton.samples.hhAnalyzeSamples_2017_nanoAOD_hh_merged import samples_2017 as samples
+      pileup = os.path.join(
+        os.environ['CMSSW_BASE'], 'src/hhAnalysis/multilepton/data/pileup_hh_2017.root'
+      )
+    elif era == "2018":
+      from hhAnalysis.multilepton.samples.hhAnalyzeSamples_2018_nanoAOD import samples_2018 as samples
+      pileup = os.path.join(
+        os.environ['CMSSW_BASE'], 'src/hhAnalysis/multilepton/data/pileup_hh_2018.root'
+      )
+    else:
+      raise ValueError("Invalid era: %s" % era)
 else:
   if preselection:
     if era == "2016":
@@ -136,7 +155,8 @@ elif era == "2018":
 else:
   raise ValueError("Invalid era: %s" % era)
 
-del samples['sum_events']
+if 'sum_events' in samples:
+  del samples['sum_events']
 for sample_name, sample_entry in samples.items():
   if mode == "all":
     sample_entry['use_it'] = True
@@ -162,6 +182,7 @@ if preselection:
       'minNumBJets_medium'        : -1,
       'maxNumBJets_loose'         : 1,
       'maxNumBJets_medium'        : 0,
+      'applyJetEtaCut'            : True,
     }
   else:
     preselection_cuts = {
@@ -173,6 +194,7 @@ if preselection:
       'minNumBJets_medium'         : 1,
       'maxNumBJets_loose'          : -1,
       'maxNumBJets_medium'         : -1,
+      'applyJetEtaCut'             : True,
     }
   leptonSelection = 'Fakeable'
   hadTauSelection = 'Fakeable'
@@ -186,6 +208,7 @@ else:
     'minNumBJets_medium'        : -1,
     'maxNumBJets_loose'         : -1,
     'maxNumBJets_medium'        : -1,
+    'applyJetEtaCut'            : True, # disable the cut for VBF HH->2b2W analysis
   }
   leptonSelection = 'Loose'
   hadTauSelection = 'Loose'

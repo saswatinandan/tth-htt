@@ -16813,7 +16813,7 @@ samples_2017["/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17MiniAOD-94X_
   ("fsize_local",                     21079211759), # 21.08GB, avg file size 115.19MB
   ("fsize_db",                        640897723581), # 640.90GB, avg file size 2.66GB
   ("use_it",                          False),
-  ("xsection",                        0.7834),
+  ("xsection",                        0.8393),
   ("genWeight",                       True),
   ("triggers",                        ['1e', '1mu', '2e', '2mu', '1e1mu', '3e', '3mu', '2e1mu', '1e2mu', '1e1tau', '1mu1tau', '2tau']),
   ("has_LHE",                         True),
@@ -16924,7 +16924,7 @@ samples_2017["/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17MiniAOD-94X_
   ("fsize_local",                     12213858836), # 12.21GB, avg file size 115.23MB
   ("fsize_db",                        310644652158), # 310.64GB, avg file size 2.03GB
   ("use_it",                          False),
-  ("xsection",                        0.4606),
+  ("xsection",                        0.6008),
   ("genWeight",                       True),
   ("triggers",                        ['1e', '1mu', '2e', '2mu', '1e1mu', '3e', '3mu', '2e1mu', '1e2mu', '1e1tau', '1mu1tau', '2tau']),
   ("has_LHE",                         True),
@@ -17451,7 +17451,7 @@ samples_2017["/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAOD-94X_
       OD([
         ("path",      "/hdfs/cms/store/user/kaehatah/NanoProduction_v2_2018Apr26/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/NanoProduction_v2_2018Apr26_TTToHadronic_TuneCP5_13TeV-powheg-pythia8__RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180426_011722"),
         ("selection", "*"),
-        ("blacklist", []),
+        ("blacklist", [675]),
       ]),
     ]
   ),
@@ -20300,7 +20300,7 @@ samples_2017["/QCD_Pt-600to800_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17Mi
       OD([
         ("path",      "/hdfs/cms/store/user/kaehatah/NanoProduction_v2_2018Jun08/QCD_Pt-600to800_MuEnrichedPt5_TuneCP5_13TeV_pythia8/NanoProduction_v2_2018Jun08_QCD_Pt-600to800_MuEnrichedPt5_TuneCP5_13TeV_pythia8__RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/180608_203537"),
         ("selection", "*"),
-        ("blacklist", []),
+        ("blacklist", [313]),
       ]),
     ]
   ),

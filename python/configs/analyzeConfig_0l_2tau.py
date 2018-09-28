@@ -134,10 +134,9 @@ class analyzeConfig_0l_2tau(analyzeConfig):
     self.executable_addBackgrounds = executable_addBackgrounds
     self.executable_addFakes = executable_addBackgroundJetToTauFakes
 
-    self.nonfake_backgrounds = [ "TT", "TTW", "TTWW", "TTZ", "EWK", "Rares" ]
-    self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [ "conversions", "fakes_data", "fakes_mc" ] ##Xanda === conversions are not on stage1 check why
-    ##self.make_plots_backgrounds = self.nonfake_backgrounds + [ "fakes_data" ]
-    self.make_plots_backgrounds = [ "TT", "TTW", "TTZ", "TTWW", "EWK", "Rares", "fakes_data" ]
+    self.nonfake_backgrounds = [ "TT", "TTW", "TTWW", "TTZ", "EWK", "Rares", "VH", "tHW", "tHq" ]
+    self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [ "fakes_data", "fakes_mc" ]
+    self.make_plots_backgrounds = self.nonfake_backgrounds + [ "fakes_data" ]
 
     self.cfgFile_analyze = os.path.join(self.template_dir, cfgFile_analyze)
     histogramDir_prep_dcard_local = []
