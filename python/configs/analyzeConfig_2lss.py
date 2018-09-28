@@ -318,8 +318,8 @@ class analyzeConfig_2lss(analyzeConfig):
       hadTauVeto_selection = "|".join([ hadTauVeto_selection, self.hadTauVeto_selection_part2 ])
 
       if lepton_selection == "forBDTtraining":
-        electron_selection = "Loose"
-        muon_selection = "Loose"
+        electron_selection = "Loose" # "Tight" 
+        muon_selection =  "Loose" # "Tight"
       elif lepton_selection == "Fakeable_mcClosure_e":
         electron_selection = "Fakeable"
         muon_selection = "Tight"

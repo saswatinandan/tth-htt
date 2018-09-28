@@ -767,12 +767,8 @@ class analyzeConfig(object):
         lines.append(")")
         processesToSubtract = []
         processesToSubtract.extend(self.nonfake_backgrounds)
-<<<<<<< HEAD
-        if addConversion : processesToSubtract.extend([ "%s_conversion" % nonfake_background for nonfake_background in self.nonfake_backgrounds])
-=======
-        if '0l' not in self.channel:
+        if '0l' not in self.channel and addConversion:
             processesToSubtract.extend([ "%s_conversion" % nonfake_background for nonfake_background in self.nonfake_backgrounds])
->>>>>>> 819e4f2621da90928124e4de30d6d03beda4ee19
         lines.append("process.addBackgroundLeptonFakes.processesToSubtract = cms.vstring(%s)" % processesToSubtract)
         lines.append("process.addBackgroundLeptonFakes.sysShifts = cms.vstring(%s)" % self.central_or_shifts)
         create_cfg(self.cfgFile_addFakes, jobOptions['cfgFile_modified'], lines)
