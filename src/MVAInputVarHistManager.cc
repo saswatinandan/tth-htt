@@ -102,6 +102,8 @@ MVAInputVarHistManager::MVAInputVarHistManager(const edm::ParameterSet & cfg)
   binningOptions_["tau1_pt"]                    = new binningOptionType("tau1_pt",                    40,  0.,  200.);
   binningOptions_["tau2_pt"]                    = new binningOptionType("tau2_pt",                    40,  0.,  200.);
   binningOptions_["tt_deltaR"]                  = new binningOptionType("tt_deltaR",                  50,  0.,    5.);
+  binningOptions_["m_bWj1"]                     = new binningOptionType("m_bWj1",                  50,  0.,    5.);
+  binningOptions_["m_bWj2"]                     = new binningOptionType("m_bWj2",                  50,  0.,    5.);
   binningOptions_["tt_sumpt"]                   = new binningOptionType("tt_sumpt",                   40,  0.,  200.);
   binningOptions_["tt_visiblemass"]             = new binningOptionType("tt_visiblemass",             40,  0.,  200.);
   binningOptions_["TMath::Abs(lep_eta)"]        = new binningOptionType("lep_absEta",                 50,  0.,   +2.5);
