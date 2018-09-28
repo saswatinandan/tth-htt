@@ -1,0 +1,85 @@
+('Date: ', 'Mon Sep 24 02:25:02 2018')
+(0, 3)
+(1, 3)
+(2, 3)
+(3, 3)
+(4, 3)
+(5, 3)
+(6, 3)
+typeTop == 3 && passJetSel && m_bWj1Wj2 > 75 && m_bWj1Wj2 < 275 && m_Wj1Wj2 < 150 && btagDisc_Wj1 < btagDisc_b && btagDisc_Wj2 < btagDisc_b
+['btagDisc_b', 'btagDisc_Wj1', 'btagDisc_Wj2', 'qg_Wj1', 'qg_Wj2', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'dR_bW', 'm_bWj1', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b']
+('Date: ', 'Mon Sep 24 02:36:56 2018')
+data loaded
+('Date: ', 'Mon Sep 24 02:37:12 2018')
+('nev sig', 915649, ' nev total ', 1896241)
+('len sig/BKG : ', 1070794, 29433904)
+(6, 'Doing more branches: ', 'Mon Sep 24 02:37:23 2018')
+(6, 'read one file: ', '/hdfs/local/acaan/ttHAnalysis/2017/HTT_wBoost_2018Sep13/histograms/hadTopTagger/TTZJets_LO/TTZJets_LO_1.root')
+(6, 'Throw away BKG: ', 'Mon Sep 24 02:37:23 2018')
+0.96
+Mon Sep 24 02:37:23 2018
+(6, 'len sig/BKG after reduction: ', 1070794, 1177357)
+['btagDisc_b', 'btagDisc_Wj1', 'btagDisc_Wj2', 'qg_Wj1', 'qg_Wj2', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'dR_bW', 'm_bWj1', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b']
+('Date: ', 'Mon Sep 24 02:53:21 2018')
+data loaded
+('Date: ', 'Mon Sep 24 02:53:44 2018')
+('nev sig', 958132, ' nev total ', 1983064)
+('len sig/BKG : ', 1135509, 44769816)
+(6, 'Doing more branches: ', 'Mon Sep 24 02:54:00 2018')
+(6, 'read one file: ', '/hdfs/local/acaan/ttHAnalysis/2017/HTT_wBoost_2018Sep13/histograms/hadTopTagger/ttHToNonbb_M125_powheg/ttHToNonbb_M125_powheg_1.root')
+(6, 'Throw away BKG: ', 'Mon Sep 24 02:54:00 2018')
+0.96
+Mon Sep 24 02:54:00 2018
+(6, 'len sig/BKG after reduction: ', 1135509, 1790793)
+['btagDisc_b', 'btagDisc_Wj1', 'btagDisc_Wj2', 'qg_Wj1', 'qg_Wj2', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'dR_bW', 'm_bWj1', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b']
+('Date: ', 'Mon Sep 24 03:06:50 2018')
+data loaded
+('Date: ', 'Mon Sep 24 03:07:04 2018')
+('nev sig', 1420039, ' nev total ', 2404701)
+('len sig/BKG : ', 1748585, 27625726)
+(6, 'Doing more branches: ', 'Mon Sep 24 03:07:15 2018')
+(6, 'read one file: ', '/hdfs/local/acaan/ttHAnalysis/2017/HTT_wBoost_2018Sep13/histograms/hadTopTagger/TTToHadronic/TTToHadronic_5.root')
+(6, 'Throw away BKG: ', 'Mon Sep 24 03:07:15 2018')
+0.96
+Mon Sep 24 03:07:15 2018
+(6, 'len sig/BKG after reduction: ', 1748585, 1105030)
+('Date: ', 'Mon Sep 24 03:07:50 2018')
+Total
+('total_evt', 6284006)
+('total_sig_evt', 3293820)
+('total_bkg_entries', 101829446)
+('total_sig_entries', 3954888)
+('total_bkg_entries_reduced', 4073180)
+length of sig, bkg without NaN:  1105030 1748585
+('Date: ', 'Mon Sep 24 03:07:51 2018', 'balance datasets')
+('sum weights sig/BKG', 500000.00001024106, 499999.9999849919)
+('len sig (gen pt > 200)', 118943)
+('len sig/BKG (fattag)', 0, 2853615)
+('len sig/BKG (target)', 1748585, 1105030)
+('sum weights sig/BKG', 500000.00001024106, 499999.9999849919)
+('HadTopTagger_2017_boosted_final/cat_3_nvar_17_ak12_signal_corr_sel_6.pdf', 'saved')
+('HadTopTagger_2017_boosted_final/cat_3_nvar_17_ak12_BKG_corr_sel_6.pdf', 'saved')
+['btagDisc_b', 'btagDisc_Wj1', 'btagDisc_Wj2', 'qg_Wj1', 'qg_Wj2', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'dR_bW', 'm_bWj1', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b']
+('opt being saved on ', 'HadTopTagger_2017_boosted_final/btagHighest_ntrees_2500_deph_5_lr_0o010_17_sel_6_cat_3_roc.log')
+['btagDisc_b', 'btagDisc_Wj1', 'btagDisc_Wj2', 'qg_Wj1', 'qg_Wj2', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'dR_bW', 'm_bWj1', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b']
+XGBoost trained
+[[  9.97070312e-01   6.72149658e-03   3.52172852e-02 ...,   2.71644568e+00
+    5.66917496e+01   1.22908573e+01]
+ [  7.42187500e-02   2.61230469e-02   3.63464355e-02 ...,   6.54104185e+00
+    4.80289726e+01   7.21004200e+00]
+ [  6.41113281e-01   1.39694214e-02   3.15429688e-01 ...,   3.85154176e+00
+    8.57973785e+01   1.49838095e+01]
+ ..., 
+ [  9.62890625e-01   2.32696533e-02   5.62500000e-01 ...,   6.76335382e+00
+    4.71792564e+01   9.05807877e+00]
+ [  9.82421875e-01   2.52990723e-02   1.53045654e-02 ...,   5.30347061e+00
+    5.73105736e+01   1.08905706e+01]
+ [  9.96582031e-01   1.44958496e-02   1.59912109e-02 ...,   6.72354937e+00
+    8.12074432e+01   8.88922310e+00]]
+XGBoost train set auc - 0.906687907453
+XGBoost test set auc - 0.897990990131
+nvar = 17
+('Date: ', 'Mon Sep 24 03:54:25 2018')
+('Output pkl ', 'Mon Sep 24 03:54:25 2018')
+saved HadTopTagger_2017_boosted_final/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_5_lr_0o010_btagHighest_nvar17_cat_3.pkl
+starting xml conversion

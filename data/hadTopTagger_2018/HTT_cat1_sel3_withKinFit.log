@@ -1,0 +1,133 @@
+('Date: ', 'Sun Sep 23 01:33:03 2018')
+(0, 1)
+(1, 1)
+(2, 1)
+(3, 1)
+typeTop == 1 && passJetSel && m_bWj1Wj2 > 75 && m_bWj1Wj2 < 275 && m_Wj1Wj2 < 150
+['tau32Top', 'btagDisc_b', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'pT_bWj1Wj2', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b', 'kinFit_pT_b_o_pT_b', 'kinFit_pT_Wj2_o_pT_Wj2', 'nllKinFit']
+('Date: ', 'Sun Sep 23 01:56:00 2018')
+data loaded
+('Date: ', 'Sun Sep 23 01:56:01 2018')
+('nev sig', 379088, ' nev total ', 1065484)
+('len sig/BKG : ', 400296, 836435)
+(3, 'Doing more branches: ', 'Sun Sep 23 01:56:01 2018')
+(3, 'read one file: ', '/hdfs/local/acaan/ttHAnalysis/2017/HTT_wBoost_2018Sep13/histograms/hadTopTagger/TTWJets_LO/TTWJets_LO_1.root')
+(3, 'Throw away BKG: ', 'Sun Sep 23 01:56:01 2018')
+0.5
+Sun Sep 23 01:56:01 2018
+(3, 'len sig/BKG after reduction: ', 400296, 418218)
+['tau32Top', 'btagDisc_b', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'pT_bWj1Wj2', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b', 'kinFit_pT_b_o_pT_b', 'kinFit_pT_Wj2_o_pT_Wj2', 'nllKinFit']
+('Date: ', 'Sun Sep 23 02:05:32 2018')
+data loaded
+('Date: ', 'Sun Sep 23 02:05:33 2018')
+('nev sig', 160380, ' nev total ', 482726)
+('len sig/BKG : ', 167820, 390795)
+(3, 'Doing more branches: ', 'Sun Sep 23 02:05:33 2018')
+(3, 'read one file: ', '/hdfs/local/acaan/ttHAnalysis/2017/HTT_wBoost_2018Sep13/histograms/hadTopTagger/TTZJets_LO/TTZJets_LO_1.root')
+(3, 'Throw away BKG: ', 'Sun Sep 23 02:05:33 2018')
+0.5
+Sun Sep 23 02:05:33 2018
+(3, 'len sig/BKG after reduction: ', 167820, 195398)
+['tau32Top', 'btagDisc_b', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'pT_bWj1Wj2', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b', 'kinFit_pT_b_o_pT_b', 'kinFit_pT_Wj2_o_pT_Wj2', 'nllKinFit']
+('Date: ', 'Sun Sep 23 02:15:03 2018')
+data loaded
+('Date: ', 'Sun Sep 23 02:15:04 2018')
+('nev sig', 160194, ' nev total ', 483257)
+('len sig/BKG : ', 167460, 391824)
+(3, 'Doing more branches: ', 'Sun Sep 23 02:15:04 2018')
+(3, 'read one file: ', '/hdfs/local/acaan/ttHAnalysis/2017/HTT_wBoost_2018Sep13/histograms/hadTopTagger/TTZJets_LO/TTZJets_LO_2.root')
+(3, 'Throw away BKG: ', 'Sun Sep 23 02:15:04 2018')
+0.5
+Sun Sep 23 02:15:04 2018
+(3, 'len sig/BKG after reduction: ', 167460, 195912)
+['tau32Top', 'btagDisc_b', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'pT_bWj1Wj2', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b', 'kinFit_pT_b_o_pT_b', 'kinFit_pT_Wj2_o_pT_Wj2', 'nllKinFit']
+('Date: ', 'Sun Sep 23 02:29:38 2018')
+data loaded
+('Date: ', 'Sun Sep 23 02:29:38 2018')
+('nev sig', 161379, ' nev total ', 594666)
+('len sig/BKG : ', 167463, 541701)
+(3, 'Doing more branches: ', 'Sun Sep 23 02:29:38 2018')
+(3, 'read one file: ', '/hdfs/local/acaan/ttHAnalysis/2017/HTT_wBoost_2018Sep13/histograms/hadTopTagger/ttHToNonbb_M125_powheg/ttHToNonbb_M125_powheg_1.root')
+(3, 'Throw away BKG: ', 'Sun Sep 23 02:29:38 2018')
+0.5
+Sun Sep 23 02:29:38 2018
+(3, 'len sig/BKG after reduction: ', 167463, 270851)
+['tau32Top', 'btagDisc_b', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'pT_bWj1Wj2', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b', 'kinFit_pT_b_o_pT_b', 'kinFit_pT_Wj2_o_pT_Wj2', 'nllKinFit']
+('Date: ', 'Sun Sep 23 02:44:01 2018')
+data loaded
+('Date: ', 'Sun Sep 23 02:44:01 2018')
+('nev sig', 162020, ' nev total ', 593940)
+('len sig/BKG : ', 168221, 540296)
+(3, 'Doing more branches: ', 'Sun Sep 23 02:44:01 2018')
+(3, 'read one file: ', '/hdfs/local/acaan/ttHAnalysis/2017/HTT_wBoost_2018Sep13/histograms/hadTopTagger/ttHToNonbb_M125_powheg/ttHToNonbb_M125_powheg_3.root')
+(3, 'Throw away BKG: ', 'Sun Sep 23 02:44:01 2018')
+0.5
+Sun Sep 23 02:44:01 2018
+(3, 'len sig/BKG after reduction: ', 168221, 270148)
+['tau32Top', 'btagDisc_b', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'pT_bWj1Wj2', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b', 'kinFit_pT_b_o_pT_b', 'kinFit_pT_Wj2_o_pT_Wj2', 'nllKinFit']
+('Date: ', 'Sun Sep 23 02:46:34 2018')
+data loaded
+('Date: ', 'Sun Sep 23 02:46:34 2018')
+('nev sig', 36583, ' nev total ', 83392)
+('len sig/BKG : ', 39996, 57465)
+(3, 'Doing more branches: ', 'Sun Sep 23 02:46:34 2018')
+(3, 'read one file: ', '/hdfs/local/acaan/ttHAnalysis/2017/HTT_wBoost_2018Sep13/histograms/hadTopTagger/TTToHadronic_PSweights/TTToHadronic_PSweights_14.root')
+(3, 'Throw away BKG: ', 'Sun Sep 23 02:46:34 2018')
+0.5
+Sun Sep 23 02:46:34 2018
+(3, 'len sig/BKG after reduction: ', 39996, 28733)
+['tau32Top', 'btagDisc_b', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'pT_bWj1Wj2', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b', 'kinFit_pT_b_o_pT_b', 'kinFit_pT_Wj2_o_pT_Wj2', 'nllKinFit']
+('Date: ', 'Sun Sep 23 03:13:56 2018')
+data loaded
+('Date: ', 'Sun Sep 23 03:13:57 2018')
+('nev sig', 401264, ' nev total ', 915921)
+('len sig/BKG : ', 438605, 631212)
+(3, 'Doing more branches: ', 'Sun Sep 23 03:13:57 2018')
+(3, 'read one file: ', '/hdfs/local/acaan/ttHAnalysis/2017/HTT_wBoost_2018Sep13/histograms/hadTopTagger/TTToHadronic/TTToHadronic_1.root')
+(3, 'Throw away BKG: ', 'Sun Sep 23 03:13:57 2018')
+0.5
+Sun Sep 23 03:13:57 2018
+(3, 'len sig/BKG after reduction: ', 438605, 315606)
+('Date: ', 'Sun Sep 23 03:14:01 2018')
+Total
+('total_evt', 4219386)
+('total_sig_evt', 1460908)
+('total_bkg_entries', 3389728)
+('total_sig_entries', 1549861)
+('total_bkg_entries_reduced', 1694866)
+length of sig, bkg without NaN:  315606 438605
+('Date: ', 'Sun Sep 23 03:14:01 2018', 'balance datasets')
+('sum weights sig/BKG', 499999.9999975982, 500000.0000023907)
+('len sig (gen pt > 200)', 431685)
+('len sig/BKG (fattag)', 727094, 27117)
+('len sig/BKG (target)', 438605, 315606)
+('sum weights sig/BKG', 499999.9999975982, 500000.0000023907)
+('HadTopTagger_2017_boosted_final/cat_1_nvar_16_ak12_signal_corr_sel_3.pdf', 'saved')
+('HadTopTagger_2017_boosted_final/cat_1_nvar_16_ak12_BKG_corr_sel_3.pdf', 'saved')
+['tau32Top', 'btagDisc_b', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'pT_bWj1Wj2', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b', 'kinFit_pT_b_o_pT_b', 'kinFit_pT_Wj2_o_pT_Wj2', 'nllKinFit']
+('opt being saved on ', 'HadTopTagger_2017_boosted_final/btagHighest_ntrees_2500_deph_4_lr_0o03_16_sel_3_cat_1_roc.log')
+['tau32Top', 'btagDisc_b', 'm_Wj1Wj2_div_m_bWj1Wj2', 'pT_Wj1Wj2', 'dR_Wj1Wj2', 'm_bWj1Wj2', 'pT_bWj1Wj2', 'm_bWj2', 'mass_Wj1', 'pT_Wj2', 'mass_Wj2', 'pT_b', 'mass_b', 'kinFit_pT_b_o_pT_b', 'kinFit_pT_Wj2_o_pT_Wj2', 'nllKinFit']
+XGBoost trained
+[[ 0.53065825  0.98925781  0.50525564 ...,  0.90728623  0.85981411
+   6.32723284]
+ [ 0.63968015  0.99755859  0.47968885 ...,  0.87909627  0.92328256
+   1.2169739 ]
+ [ 0.7313984   0.42700195  0.47901455 ...,  0.99869353  0.92388666
+   0.42788863]
+ ..., 
+ [ 0.70521444  0.91455078  0.404659   ...,  0.78743649  1.19378996
+   3.45816422]
+ [ 0.64220566  0.99511719  0.71613342 ...,  2.94618058  0.91080779
+   6.92602015]
+ [ 0.66739368  0.83154297  0.48270425 ...,  1.37213731  1.08804107
+   2.54983258]]
+XGBoost train set auc - 0.910846471605
+XGBoost test set auc - 0.905064661308
+nvar = 16
+('Date: ', 'Sun Sep 23 03:27:10 2018')
+('Output pkl ', 'Sun Sep 23 03:27:10 2018')
+saved HadTopTagger_2017_boosted_final/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_4_lr_0o03_btagHighest_nvar16_cat_1_withKinFit.pkl
+starting xml conversion
+(4, 1)
+(5, 1)
+(6, 1)
