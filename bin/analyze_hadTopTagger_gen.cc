@@ -30,6 +30,7 @@
 #include "tthAnalysis/HiggsToTauTau/interface/MEMOutput_2lss_1tau.h" // MEMOutput_2lss_1tau
 #include "tthAnalysis/HiggsToTauTau/interface/TMVAInterface.h" // TMVAInterface
 #include "tthAnalysis/HiggsToTauTau/interface/mvaAuxFunctions.h" // check_mvaInputs, get_mvaInputVariables
+
 #include "tthAnalysis/HiggsToTauTau/interface/mvaInputVariables.h" // auxiliary functions for computing input variables of the MVA used for signal extraction in the 2lss_1tau category
 #include "tthAnalysis/HiggsToTauTau/interface/LeptonFakeRateInterface.h" // LeptonFakeRateInterface
 #include "tthAnalysis/HiggsToTauTau/interface/JetToTauFakeRateInterface.h" // JetToTauFakeRateInterface
@@ -80,7 +81,9 @@
 #include "tthAnalysis/HiggsToTauTau/interface/analysisAuxFunctions.h" // getBTagWeight_option, getHadTau_genPdgId, isHigherPt, isMatched
 #include "tthAnalysis/HiggsToTauTau/interface/HistManagerBase.h" // HistManagerBase
 #include "tthAnalysis/HiggsToTauTau/interface/histogramAuxFunctions.h" // fillWithOverFlow2d
-#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions.h" // isGenMatchedJetTriplet
+#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions.h" // isGenMatchedJetTripletVav
+#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_internal.h" // isGenMatchedJetTriplet
+#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // isGenMatchedJetTriplet
 #include "tthAnalysis/HiggsToTauTau/interface/leptonGenMatchingAuxFunctions.h" // getLeptonGenMatch_definitions_1lepton, getLeptonGenMatch_string, getLeptonGenMatch_int
 #include "tthAnalysis/HiggsToTauTau/interface/hadTauGenMatchingAuxFunctions.h" // getHadTauGenMatch_definitions_1tau, getHadTauGenMatch_string, getHadTauGenMatch_int
 #include "tthAnalysis/HiggsToTauTau/interface/fakeBackgroundAuxFunctions.h" // getWeight_2L, getWeight_3L
@@ -246,7 +249,7 @@ CheckGenHTTv2JetMatching(int kGenMode, const GenParticle **genParticle, //Partic
 		 genBJetFromTop->pt(),genBJetFromTop->eta(),genBJetFromTop->phi(),genBJetFromTop->mass(),
 		 genWJetFromTop_lead->pt(),genWJetFromTop_lead->eta(),genWJetFromTop_lead->phi(),genWJetFromTop_lead->mass(),
 		 genWJetFromTop_sublead->pt(),genWJetFromTop_sublead->eta(),genWJetFromTop_sublead->phi(),genWJetFromTop_sublead->mass()); */
-  
+
 
   if ( (genBJetFromTop     && genWJetFromTop_lead     && genWJetFromTop_sublead     && genTopP4.pt()     > 200.) ) {
     cutFlowTable_2lss_1tau_HTTv2.update("genTop passes pT > 200 GeV");
@@ -398,8 +401,8 @@ CheckGenHTTv2JetMatching(int kGenMode, const GenParticle **genParticle, //Partic
 		sPrint += Form("gen_W2: \t pt: %6.1f,  eta: %5.2f, phi: %5.2f, m: %g\n",
 			       genVar[kGenTopWj2].pt(),genVar[kGenTopWj2].eta(),genVar[kGenTopWj2].phi(),genVar[kGenTopWj2].mass());
 		*/
-      
-		
+
+
 		for (int i1=0; i1 < 3; i1++) {
 		  for (int i2=0; i2 < 3; i2++) {
 		    if (i2==i1) continue;
@@ -441,7 +444,7 @@ CheckGenHTTv2JetMatching(int kGenMode, const GenParticle **genParticle, //Partic
 
 		      sPrint += Form("  combination: gen_b=subjet%i & gen_W1=subjet%i & gen_W2=subjet%i, \t dR: %f, %f, %f, tot %f, \t isGenMatched: %i, %i, %i (totalScore %i)\n",
 				     i1+1,i2+1,i3+1, dR_1,dR_2,dR_3, dR_tot,
-				     genMatchingTop[kGenMatchedBJet],genMatchingTop[kGenMatchedWJet1],genMatchingTop[kGenMatchedWJet2], 
+				     genMatchingTop[kGenMatchedBJet],genMatchingTop[kGenMatchedWJet1],genMatchingTop[kGenMatchedWJet2],
 				     kGenMatchingScore);
 		      if ( (kGenMatchingScore > 0) &&
 			   ( (kGenMatchingScore > kGenMatchingScoreMax) ||
@@ -1017,7 +1020,7 @@ int main(int argc, char* argv[])
   std::string branchName_genWBosons = cfg_analyze.getParameter<std::string>("branchName_genWBosons");
   std::string branchName_genWJets = cfg_analyze.getParameter<std::string>("branchName_genWJets");
   std::string branchName_genQuarkFromTop = cfg_analyze.getParameter<std::string>("branchName_genQuarkFromTop");
- 
+
   bool redoGenMatching = cfg_analyze.getParameter<bool>("redoGenMatching");
 
   std::string selEventsFileName_input = cfg_analyze.getParameter<std::string>("selEventsFileName_input");
@@ -1157,7 +1160,7 @@ int main(int argc, char* argv[])
   GenParticleReader* genWBosonReader = new GenParticleReader(branchName_genWBosons);
   GenParticleReader* genWJetReader = new GenParticleReader(branchName_genWJets);
   GenParticleReader* genQuarkFromTopReader = new GenParticleReader(branchName_genQuarkFromTop);
-  
+
   if ( isMC ) {
     inputTree->registerReader(genTopQuarkReader);
     inputTree->registerReader(genBJetReader);
@@ -1697,7 +1700,7 @@ int main(int argc, char* argv[])
     /*std::vector<GenParticle>*/ genWBosons = genWBosonReader->read();
     /*std::vector<GenParticle>*/ genWJets = genWJetReader->read();
     /*std::vector<GenParticle>*/ genQuarkFromTop = genQuarkFromTopReader->read();
-    
+
     if ( isDEBUG ) {
       dumpGenParticles("genTopQuark", genTopQuarks);
       dumpGenParticles("genBJet", genBJets);
@@ -1837,7 +1840,7 @@ int main(int argc, char* argv[])
     /*for ( std::vector<GenParticle>::const_iterator it1 = genQuarkFromTop.begin(); it1 != genQuarkFromTop.end(); ++it1 ) {
       for ( std::vector<GenParticle>::const_iterator it2 = it1 + 1;
       it2 != genQuarkFromTop.end(); ++it2 ) {*/
-	
+
 	double genDijetMass = (it1->p4() + it2->p4()).mass();
 	// CV: Matching the generator-level charge of the two quarks to the generator-level charge of the W boson is a bit cumbersome,
 	//     because charge of Particles is stored as integer in Ntuple,
@@ -2039,7 +2042,7 @@ int main(int argc, char* argv[])
       sPrint += Form("gen_W2: \t pt: %6.1f,  eta: %5.2f, phi: %5.2f, m: %g\n",
 		     genWJetFromTop_sublead->pt(),genWJetFromTop_sublead->eta(),genWJetFromTop_sublead->phi(),genWJetFromTop_sublead->mass());
 
-      
+
       std::map<int, Particle::LorentzVector> genVarsFromTop = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genWJets, kGenTop); // genWJets -> genQuarkFromTop
 
       sPrint += "\n\ngenTopInfo from isGenMatchedJetTripletVar()::\n";
@@ -2054,7 +2057,7 @@ int main(int argc, char* argv[])
 
       //if ((genVarsFromTop[kGenTopWj1]) != (genWJetFromTop_lead->p4())) sPrint += " ****** genWj1 different in two methos of fetching info *** \n";
       //if (genVarsFromTop[kGenTopWj2] != (genWJetFromTop_sublead->p4())) sPrint += " ****** genWj2 different in two methos of fetching info *** \n";
-      
+
 
 
       std::map<int, Particle::LorentzVector> genVarsFromTop_1 = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genQuarkFromTop, kGenTop); // genWJets -> genQuarkFromTop
@@ -2072,7 +2075,7 @@ int main(int argc, char* argv[])
       //if ((genVarsFromTop_1[kGenTopWj1]) != (genWJetFromTop_lead->p4())) sPrint += " ****** genWj1_1 different in two methos of fetching info *** \n";
       //if (genVarsFromTop_1[kGenTopWj2] != (genWJetFromTop_sublead->p4())) sPrint += " ****** genWj2_1 different in two methos of fetching info *** \n";
 
-     
+
     }
 
     if (genBJetFromAntiTop     && genWJetFromAntiTop_lead     && genWJetFromAntiTop_sublead && 0==1) {
@@ -2085,9 +2088,9 @@ int main(int argc, char* argv[])
 		     genWJetFromAntiTop_lead->pt(),genWJetFromAntiTop_lead->eta(),genWJetFromAntiTop_lead->phi(),genWJetFromAntiTop_lead->mass());
       sPrint += Form("gen_W2: \t pt: %6.1f,  eta: %5.2f, phi: %5.2f, m: %g\n",
 		     genWJetFromAntiTop_sublead->pt(),genWJetFromAntiTop_sublead->eta(),genWJetFromAntiTop_sublead->phi(),genWJetFromAntiTop_sublead->mass());
-      
+
       std::map<int, Particle::LorentzVector> genVarsFromAntiTop = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genWJets, kGenAntiTop); // genWJets -> genQuarkFromTop
-    
+
       sPrint += "\ngenAntiTopInfo from isGenMatchedJetTripletVar()::\n";
       sPrint += Form("gen_Top: \t pt: %6.1f,  eta: %5.2f, phi: %5.2f, m: %g\n",
 		     genVarsFromAntiTop[kGenTopVar].pt(),genVarsFromAntiTop[kGenTopVar].eta(),genVarsFromAntiTop[kGenTopVar].phi(),genVarsFromAntiTop[kGenTopVar].mass());
@@ -2100,10 +2103,10 @@ int main(int argc, char* argv[])
 
       //if ((genVarsFromAntiTop[kGenTopWj1]) != (genWJetFromAntiTop_lead->p4())) sPrint += " ****** genWj1 (Anti) different in two methos of fetching info *** \n";
       //if (genVarsFromAntiTop[kGenTopWj2] != (genWJetFromAntiTop_sublead->p4())) sPrint += " ****** genWj2 (Anti) different in two methos of fetching info *** \n";
-      
+
 
        std::map<int, Particle::LorentzVector> genVarsFromAntiTop_1 = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genQuarkFromTop, kGenAntiTop); // genWJets -> genQuarkFromTop
-    
+
       sPrint += "\ngenAntiTopInfo from isGenMatchedJetTripletVar_1()::\n";
       sPrint += Form("gen_Top: \t pt: %6.1f,  eta: %5.2f, phi: %5.2f, m: %g\n",
 		     genVarsFromAntiTop_1[kGenTopVar].pt(),genVarsFromAntiTop_1[kGenTopVar].eta(),genVarsFromAntiTop_1[kGenTopVar].phi(),genVarsFromAntiTop_1[kGenTopVar].mass());
@@ -2115,13 +2118,13 @@ int main(int argc, char* argv[])
 		     genVarsFromAntiTop_1[kGenTopWj2].pt(),genVarsFromAntiTop_1[kGenTopWj2].eta(),genVarsFromAntiTop_1[kGenTopWj2].phi(),genVarsFromAntiTop_1[kGenTopWj2].mass());
 
       //if ((genVarsFromAntiTop_1[kGenTopWj1]) != (genWJetFromAntiTop_lead->p4())) sPrint += " ****** genWj1 (Anti) different in two methos of fetching info *** \n";
-      //if (genVarsFromAntiTop_1[kGenTopWj2] != (genWJetFromAntiTop_sublead->p4())) sPrint += " ****** genWj2 (Anti) different in two methos of fetching info *** \n";     
+      //if (genVarsFromAntiTop_1[kGenTopWj2] != (genWJetFromAntiTop_sublead->p4())) sPrint += " ****** genWj2 (Anti) different in two methos of fetching info *** \n";
     }
 
- 
-    
-   
-    
+
+
+
+
     //Particle::LorentzVector *genParticle = new Particle::LorentzVector[4];
     const GenParticle **genParticle = new const GenParticle*[4];
     if (genBJetFromTop     && genWJetFromTop_lead     && genWJetFromTop_sublead) {
