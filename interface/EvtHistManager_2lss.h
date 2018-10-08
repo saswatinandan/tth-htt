@@ -36,7 +36,17 @@ class EvtHistManager_2lss
                  double mvaOutput_2lss_ttbar,
                  double mvaDiscr_2lss,
                  double mvaOutput_Hj_tagger,
-                 double mvaOutput_Hjj_tagger);
+                 double mvaOutput_Hjj_tagger,
+                 //
+                 double mva_AK12_basic,
+                 double mva_Boosted_AK12_basic,
+                 double mva_Boosted_AK12,
+                 double mva_Boosted_AK12_noISO,
+                 double mva_Boosted_AK8,
+                 double mva_Boosted_AK8_noISO,
+                 double mva_Updated,
+                 double mva_oldVar
+               );
 
   const TH1 *
   getHistogram_EventCounter() const;
@@ -66,6 +76,16 @@ class EvtHistManager_2lss
   TH1 * histogram_mvaOutput_Hjj_tagger_;
 
   TH1 * histogram_EventCounter_;
+
+  TH1 * histogram_mva_AK12_basic_;
+  TH1 * histogram_mva_Boosted_AK12_basic_;
+  TH1 * histogram_mva_Boosted_AK12_;
+  TH1 * histogram_mva_Boosted_AK12_noISO_;
+  TH1 * histogram_mva_Boosted_AK8_;
+  TH1 * histogram_mva_Boosted_AK8_noISO_;
+  TH1 * histogram_mva_Updated_;
+  TH1 * histogram_mva_oldVar_;
+
 };
 
 #endif
