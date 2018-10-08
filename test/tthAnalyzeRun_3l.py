@@ -39,7 +39,7 @@ systematics_label = args.systematics
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = args.files_per_job
+files_per_job     = 3 #args.files_per_job
 use_home          = args.use_home
 
 # Use the arguments
@@ -67,6 +67,8 @@ elif mode == "forBDTtraining":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2016_BDT import samples_2016 as samples
   elif era == "2017":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017_BDT import samples_2017 as samples
+    hadTau_selection         = "dR03mvaLoose"
+    hadTau_selection_relaxed = "dR03mvaVLoose"
   elif era == "2018":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2018_BDT import samples_2018 as samples
   else:
@@ -168,6 +170,9 @@ if __name__ == '__main__':
     hlt_filter                            = hlt_filter,
     use_home                              = use_home,
   )
+
+  if mode == "forBDTtraining" :
+    analysis.set_BDT_training() # hadTau_selection_relaxed
 
   job_statistics = analysis.create()
   for job_type, num_jobs in job_statistics.items():

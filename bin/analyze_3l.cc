@@ -86,6 +86,7 @@
 #include "tthAnalysis/HiggsToTauTau/interface/HadTopTagger.h" // HadTopTagger
 #include "tthAnalysis/HiggsToTauTau/interface/HadTopTagger_boosted.h" // HadTopTagger_boosted
 #include "tthAnalysis/HiggsToTauTau/interface/HadTopTagger_semi_boosted.h" // HadTopTagger_semi_boosted
+#include "tthAnalysis/HiggsToTauTau/interface/HadTopTagger_semi_boosted_AK8.h" // HadTopTagger_semi_boosted
 #include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions.h" // isGenMatchedJetTriplet
 #include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // isGenMatchedJetTriplet tags
 #include "tthAnalysis/HiggsToTauTau/interface/HadTopKinFit.h" // HadTopKinFit
@@ -453,6 +454,8 @@ int main(int argc, char* argv[])
   inputTree -> registerReader(jetReader);
   RecoJetCollectionGenMatcher jetGenMatcher;
   RecoJetCollectionCleaner jetCleaner(0.4, isDEBUG);
+  RecoJetCollectionCleaner jetCleaner_large8(0.8, isDEBUG);
+  RecoJetCollectionCleaner jetCleaner_large12(1.2, isDEBUG);
   RecoJetCollectionSelector jetSelector(era, -1, isDEBUG);
   RecoJetCollectionSelectorBtagLoose jetSelectorBtagLoose(era, -1, isDEBUG);
   RecoJetCollectionSelectorBtagMedium jetSelectorBtagMedium(era, -1, isDEBUG);
@@ -512,6 +515,7 @@ int main(int argc, char* argv[])
   HadTopTagger* hadTopTagger = new HadTopTagger();
   HadTopTagger_boosted* hadTopTagger_boosted = new HadTopTagger_boosted();
   HadTopTagger_semi_boosted* hadTopTagger_semi_boosted = new HadTopTagger_semi_boosted();
+  HadTopTagger_semi_boosted_AK8* hadTopTagger_semi_boosted_fromAK8 = new HadTopTagger_semi_boosted_AK8();
 
   std::string mvaFileName_Hj_tagger = "tthAnalysis/HiggsToTauTau/data/Hj_deepcsv_BDTG_2017.weights.xml";
   std::vector<std::string> mvaInputVariables_Hj_tagger = {
@@ -825,7 +829,7 @@ int main(int argc, char* argv[])
       "mvaOutput_3l_ttV", "mvaOutput_3l_ttbar", "mvaDiscr_3l",
       "mbb_loose", "mbb_medium",
       "dr_lss", "dr_los1", "dr_los2",
-      "mvaOutput_Hj_tagger", "mvaOutput_Hjj_tagger",
+      "mvaOutput_Hj_tagger", "mvaOutput_Hjj_tagger", "mvaOutput_Hj_tagger_fromCSVsort4th",
       /// Xanda: add the other 3l BDT variables
       "minDR_HTTv2_lep",
       "minDR_AK12_lep", //"minDR_AK12_lep",
@@ -838,6 +842,8 @@ int main(int argc, char* argv[])
       "HadTop_pt_multilep",
       "HadTop_pt_CSVsort3rd", "HadTop_pt_highestCSV",
       "HadTop_pt_CSVsort3rd_WithKinFit", "HadTop_pt_highestCSV_WithKinFit",
+      "HTT_semi_boosted_fromAK8", "genTopPt_semi_boosted_fromAK8", "HadTop_pt_semi_boosted_fromAK8", "minDR_AK8_lep", "AK8_without_subjets",
+      "W_pt_semi_boosted_fromAK8", "b_pt_semi_boosted_fromAK8",
       "genTopPt_multilep",
       "genTopPt_CSVsort3rd", "genTopPt_highestCSV",
       "genTopPt_CSVsort3rd_WithKinFit", "genTopPt_highestCSV_WithKinFit",
@@ -846,13 +852,13 @@ int main(int argc, char* argv[])
       "HTT_boosted", "genTopPt_boosted", "HadTop_pt_boosted",
       "HTT_boosted_WithKinFit", "genTopPt_boosted_WithKinFit", "HadTop_pt_boosted_WithKinFit",
       "HTT_semi_boosted", "genTopPt_semi_boosted", "HadTop_pt_semi_boosted",
-      "HTT_semi_boosted_WithKinFit", "genTopPt_semi_boosted_WithKinFit", "HadTop_pt_semi_boosted_WithKinFit"
+      "HTT_semi_boosted_WithKinFit", "genTopPt_semi_boosted_WithKinFit", "HadTop_pt_semi_boosted_WithKinFit", "DR_W_b_gen_AK12", "DR_W_b_gen_AK8"
     );
     bdt_filler -> register_variable<int_type>(
       "nJet", "nBJetLoose", "nBJetMedium",
       "lep1_isTight", "lep2_isTight", "lep3_isTight",
-      "nHTTv2", "nElectron", "nMuon",
-      "N_jetAK12", "N_jetAK8", "hadtruth_semi_boosted", "hadtruth", "hadtruth_boosted",
+      "nHTTv2", "nElectron", "nMuon", "sumLeptonCharge",
+      "N_jetAK12", "N_jetAK8", "hadtruth_semi_boosted", "hadtruth", "hadtruth_boosted", "hadtruth_semi_boosted_fromAK8",
       ////
       "bWj1Wj2_isGenMatchedWithKinFit", "bWj1Wj2_isGenMatched_IHEP",
       "bWj1Wj2_isGenMatched_CSVsort3rd", "bWj1Wj2_isGenMatched_highestCSV",
@@ -860,7 +866,12 @@ int main(int argc, char* argv[])
       /////
       "bWj1Wj2_isGenMatched_boosted",
       "bWj1Wj2_isGenMatched_boosted_WithKinFit",
-      "bWj1Wj2_isGenMatched_semi_boosted", "bWj1Wj2_isGenMatched_semi_boosted_WithKinFit"
+      "bWj1Wj2_isGenMatched_semi_boosted", "bWj1Wj2_isGenMatched_semi_boosted_WithKinFit",
+      "bWj1Wj2_isGenMatched_semi_boosted_fromAK8",
+      "cleanedJets_fromAK12", "cleanedJets_fromAK8",
+      "resolved_and_semi", "boosted_and_semi",
+      "resolved_and_semi_AK8", "boosted_and_semi_AK8",
+      "resolved_and_boosted"
     );
     bdt_filler -> bookTree(fs);
   }
@@ -1259,7 +1270,9 @@ int main(int argc, char* argv[])
 //--- cleaned RecoJet collection from AK12 as well
     // -- to make the semi-boosted tagger but keep b-tag ordering consistent in cat2
     std::vector<const RecoJet*> cleanedJets_fromAK12;
-    cleanedJets_fromAK12 = jetCleaner(selJets, jet_ptrsAK12);
+    cleanedJets_fromAK12 = jetCleaner_large12(selJets, jet_ptrsAK12);
+    std::vector<const RecoJet*> cleanedJets_fromAK8;
+    cleanedJets_fromAK8 = jetCleaner_large8(selJets, jet_ptrsAK12);
     //else cleanedJets = jetCleaner(selJets, jet_ptrsAK8);
 
 //--- build collections of generator level particles (after some cuts are applied, to safe computing time)
@@ -1767,6 +1780,12 @@ if (calculate_matching) {
   genVar = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genQuarkFromTop, kGenTop);
   genVarAnti = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genQuarkFromTop, kGenAntiTop);
 }
+// add overlaps semi-boosted resolved / semi-boosted and boosted / ...
+bool resolved_and_semi = false;
+bool boosted_and_semi = false;
+bool resolved_and_semi_AK8 = false;
+bool boosted_and_semi_AK8 = false;
+bool resolved_and_boosted = false;
 
 // resolved HTT
 double max_mvaOutput_HTT_2016 = 0.;
@@ -1791,6 +1810,9 @@ double max_mvaOutput_HTT_CSVsort3rd = 0.;
 bool max_truth_HTT_CSVsort3rd = false;
 double HadTop_pt_CSVsort3rd = 0.;
 double genTopPt_CSVsort3rd = 0.;
+double b_pt_CSVsort3rd_1 = 0.1;
+double Wj1_pt_CSVsort3rd_1 = 0.1;
+double Wj2_pt_CSVsort3rd_1 = 0.1;
 
 double max_mvaOutput_HTT_highestCSV = 0.;
 bool max_truth_HTT_highestCSV = false;
@@ -1849,9 +1871,9 @@ if ( bdtResult.at(kXGB_CSVsort3rd) > max_mvaOutput_HTT_CSVsort3rd ) {
   max_mvaOutput_HTT_CSVsort3rd = bdtResult.at(kXGB_CSVsort3rd);
   HadTop_pt_CSVsort3rd = HadTop_pt;
   genTopPt_CSVsort3rd = genTopPt_teste;
-  //Wj1_pt_CSVsort3rd_1 = (*selWJet1)->pt();
-  //Wj2_pt_CSVsort3rd_1 = (*selWJet2)->pt();
-  //b_pt_CSVsort3rd_1   = (*selBJet)->pt();
+  Wj1_pt_CSVsort3rd_1 = (*selWJet1)->pt();
+  Wj2_pt_CSVsort3rd_1 = (*selWJet2)->pt();
+  b_pt_CSVsort3rd_1   = (*selBJet)->pt();
 }
 
 if ( bdtResult.at(kXGB_CSVsort3rd_withKinFit) > max_mvaOutput_HTT_highestCSV_WithKinFit ) {
@@ -1989,6 +2011,10 @@ if ( bdtResult.at(kXGB_boosted_no_kinFit) > HTT_boosted ) {
 //<< sel_HTTv2.size() << " "
 //<< std::endl;
 
+// to test feseability of semi-boosted fatJet-jet isolation
+double DR_W_b_gen_AK12 = 0.;
+double DR_W_b_gen_AK8 = 0.;
+
 // -- semi-boosted hTT
 double HTT_semi_boosted = 0.;
 bool bWj1Wj2_isGenMatched_semi_boosted = false;
@@ -2076,6 +2102,12 @@ for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12.beg
       //W_pt_semi_boosted_1 = (*jetIter)->pt() ;
     }
 
+    if (calculate_matching) {
+      if (deltaR(genVar[kGenTopW],(*jetIter)->p4()) < deltaR(genVarAnti[kGenTopW],(*jetIter)->p4()) ) {
+        if ( DR_W_b_gen_AK12 > 0. && deltaR(genVar[kGenTopB], genVar[kGenTopW]) < DR_W_b_gen_AK12) DR_W_b_gen_AK12 = deltaR(genVar[kGenTopB], genVar[kGenTopW]);
+      } else if ( DR_W_b_gen_AK12 > 0. && deltaR(genVarAnti[kGenTopB], genVarAnti[kGenTopW]) < DR_W_b_gen_AK12) DR_W_b_gen_AK12 = deltaR(genVarAnti[kGenTopB], genVarAnti[kGenTopW]);
+    }
+
     if ( bdtResult.at(kXGB_semi_boosted_with_kinFit) > HTT_semi_boosted_WithKinFit ) {
       bWj1Wj2_isGenMatched_semi_boosted_WithKinFit = isGenMatched;
       HTT_semi_boosted_WithKinFit = bdtResult.at(kXGB_semi_boosted_with_kinFit);
@@ -2084,12 +2116,61 @@ for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12.beg
     }
   }
 }
+if (genTopPt_CSVsort3rd == genTopPt_semi_boosted)  resolved_and_semi = true;
+if (genTopPt_semi_boosted == genTopPt_boosted)  boosted_and_semi = true;
 //std::cout << "semi-boosted HTT " << HTT_semi_boosted << " "
 //<< HTT_semi_boosted_WithKinFit  << " "
 //<< minDR_AK12_L << " "
 //<< minDR_AK12_lep << " "
 //<< DR_AK12_tau << " "
 //<< std::endl;
+
+// -- semi-boosted hTT -- AK8
+double HTT_semi_boosted_fromAK8 = 0.;
+bool bWj1Wj2_isGenMatched_semi_boosted_fromAK8 = false;
+double genTopPt_semi_boosted_fromAK8 = 0.;
+double HadTop_pt_semi_boosted_fromAK8 = 0.;
+double W_pt_semi_boosted_fromAK8 = 0.;
+double b_pt_semi_boosted_fromAK8 = 0.;
+double AK8_without_subjets = false;
+
+bool hadtruth_semi_boosted_fromAK8 = false;
+double minDR_AK8_lep = -1.;
+for ( std::vector<const RecoJet*>::const_iterator selBJet = cleanedJets_fromAK8.begin(); selBJet != cleanedJets_fromAK8.end(); ++selBJet )  { // cleanedJets.size()
+for ( std::vector<const RecoJetAK8*>::const_iterator jetIter = jet_ptrsAK8.begin();
+      jetIter != jet_ptrsAK8.end(); ++jetIter ) {
+    if ( !((*jetIter)->subJet1() && (*jetIter)->subJet2()) )
+      {AK8_without_subjets = true; continue;}
+    bool isGenMatched = false;
+    double genTopPt_teste = 0.;
+    double HadTop_pt = ((*jetIter)->p4() + (*selBJet)->p4()).pt();
+    //bool fatjet_isGenMatched = false;
+    const std::map<int, double> bdtResult = (*hadTopTagger_semi_boosted_fromAK8)(**jetIter, **selBJet, calculate_matching, isGenMatched, genTopPt_teste, genVar, genVarAnti);
+    if (isGenMatched) {hadtruth_semi_boosted_fromAK8 = true;}
+
+    if ( bdtResult.at(kXGB_semi_boosted_AK8_no_kinFit) > HTT_semi_boosted_fromAK8 ) {
+      bWj1Wj2_isGenMatched_semi_boosted_fromAK8 = isGenMatched;
+      HTT_semi_boosted_fromAK8 = bdtResult.at(kXGB_semi_boosted_AK8_no_kinFit);
+      HadTop_pt_semi_boosted_fromAK8 = HadTop_pt;
+      genTopPt_semi_boosted_fromAK8 = genTopPt_teste;
+      minDR_AK8_lep = std::min(
+        deltaR(selLepton_lead->p4(), (*jetIter)->p4()),
+        deltaR(selLepton_sublead->p4(), (*jetIter)->p4())
+      );
+      b_pt_semi_boosted_fromAK8 = (*selBJet)->pt() ;
+      W_pt_semi_boosted_fromAK8 = (*jetIter)->pt() ;
+    }
+
+    if (calculate_matching) {
+      if (deltaR(genVar[kGenTopW],(*jetIter)->p4()) < deltaR(genVarAnti[kGenTopW],(*jetIter)->p4()) ) {
+        if ( DR_W_b_gen_AK8 > 0. && deltaR(genVar[kGenTopB], genVar[kGenTopW]) < DR_W_b_gen_AK8) DR_W_b_gen_AK8 = deltaR(genVar[kGenTopB], genVar[kGenTopW]);
+      } else if ( DR_W_b_gen_AK8 > 0. && deltaR(genVarAnti[kGenTopB], genVarAnti[kGenTopW]) < DR_W_b_gen_AK8) DR_W_b_gen_AK8 = deltaR(genVarAnti[kGenTopB], genVarAnti[kGenTopW]);
+    }
+
+  }
+}
+if (genTopPt_2016 == genTopPt_semi_boosted_fromAK8)  resolved_and_semi_AK8 = true;
+if (genTopPt_semi_boosted_fromAK8 == genTopPt_boosted)  boosted_and_semi_AK8 = true;
 
 // Wj1_pt_multilep_1,  Wj2_pt_multilep_1, b_pt_multilep_1
 std::map<std::string, double> mvaInputs_Hj_tagger;
@@ -2104,19 +2185,16 @@ mvaInputs_Hj_tagger, mva_Hj_tagger,
   if ( mvaOutput > mvaOutput_Hj_tagger ) mvaOutput_Hj_tagger = mvaOutput;
 }
 
-//std::map<std::string, double> mvaInputs_Hj_tagger_noClean;
-//double mvaOutput_Hj_tagger_noClean = 0.;
-/*
+//std::map<std::string, double> mvaOutput_Hj_tagger_fromCSVsort4th;
+double mvaOutput_Hj_tagger_fromCSVsort4th = 0.;
 for ( std::vector<const RecoJet*>::const_iterator selJet = selJets.begin();
 selJet != selJets.end(); ++selJet ) {
-  //if ((*selJet)->pt()==positionJet1 || (*selJet)->pt()==positionJet2 || (*selJet)->pt()==positionJet3) continue;
+  if ((*selJet)->pt()==Wj1_pt_CSVsort3rd_1 || (*selJet)->pt()==Wj2_pt_CSVsort3rd_1 || (*selJet)->pt()==b_pt_CSVsort3rd_1) continue;
   double mvaOutput = comp_mvaOutput_Hj_tagger(
-    *selJet, fakeableLeptons,
-mvaInputs_Hj_tagger_noClean, mva_Hj_tagger,
+    *selJet, fakeableLeptons, mvaInputs_Hj_tagger, mva_Hj_tagger,
     eventInfo);
-  if ( mvaOutput > mvaOutput_Hj_tagger_noClean ) mvaOutput_Hj_tagger_noClean = mvaOutput;
+  if ( mvaOutput > mvaOutput_Hj_tagger_fromCSVsort4th ) mvaOutput_Hj_tagger_fromCSVsort4th = mvaOutput;
 }
-*/
 
 //std::map<std::string, double> mvaInputs_Hjj_tagger;
 double mvaOutput_Hjj_tagger = 0.;
@@ -2344,8 +2422,9 @@ if ( mvaOutput > mvaOutput_Hjj_tagger ) mvaOutput_Hjj_tagger = mvaOutput;
 
       bdt_filler -> operator()({ eventInfo.run, eventInfo.lumi, eventInfo.event })
           ("lep1_pt",             selLepton_lead -> pt())
-          ("nElectron",                      selElectrons.size())
-          ("nMuon",                          selMuons.size())
+          ("nElectron",           selElectrons.size())
+          ("sumLeptonCharge",     sumLeptonCharge)
+          ("nMuon",               selMuons.size())
           ("lep1_conePt",         lep1_conePt)
           ("lep1_eta",            selLepton_lead -> eta())
           ("lep1_tth_mva",        selLepton_lead -> mvaRawTTH())
@@ -2455,12 +2534,32 @@ if ( mvaOutput > mvaOutput_Hjj_tagger ) mvaOutput_Hjj_tagger = mvaOutput;
           ("AK12_lead_pt",                  jet_ptrsAK12.size() > 0 ? jet_ptrsAK12[0]->pt() : -1 )
           ("minDR_AK12_lep",                minDR_AK12_lep)
           //("minDR_AK12_2_lep",                minDR_AK12_2_lep)
+          ("cleanedJets_fromAK12",       cleanedJets_fromAK12.size())
+
+          ("HTT_semi_boosted_fromAK8",                     HTT_semi_boosted_fromAK8)
+          ("bWj1Wj2_isGenMatched_semi_boosted_fromAK8",    bWj1Wj2_isGenMatched_semi_boosted_fromAK8)
+          ("genTopPt_semi_boosted_fromAK8",            genTopPt_semi_boosted_fromAK8)
+          ("HadTop_pt_semi_boosted_fromAK8",           HadTop_pt_semi_boosted_fromAK8)
 
           ("N_jetAK8",     jet_ptrsAK8.size())
+          ("cleanedJets_fromAK8",       cleanedJets_fromAK8.size())
+          ("W_pt_semi_boosted_fromAK8",           W_pt_semi_boosted_fromAK8)
+          ("b_pt_semi_boosted_fromAK8",           b_pt_semi_boosted_fromAK8)
+          ("AK8_without_subjets",        AK8_without_subjets)
+          ("minDR_AK8_lep",                minDR_AK8_lep)
+          ("resolved_and_semi_AK8",     resolved_and_semi_AK8)
+          ("boosted_and_semi_AK8",      boosted_and_semi_AK8)
+          ("hadtruth_semi_boosted_fromAK8", hadtruth_semi_boosted_fromAK8)
+          ("DR_W_b_gen_AK12", DR_W_b_gen_AK12)
+          ("DR_W_b_gen_AK8", DR_W_b_gen_AK8)
 
+          ("resolved_and_semi",         resolved_and_semi)
+          ("boosted_and_semi",          boosted_and_semi)
+          ("resolved_and_boosted",      resolved_and_boosted)
 
           ("mvaOutput_Hj_tagger",    mvaOutput_Hj_tagger)
           ("mvaOutput_Hjj_tagger",   mvaOutput_Hjj_tagger)
+          ("mvaOutput_Hj_tagger_fromCSVsort4th", mvaOutput_Hj_tagger_fromCSVsort4th)
         .fill()
       ;
     }

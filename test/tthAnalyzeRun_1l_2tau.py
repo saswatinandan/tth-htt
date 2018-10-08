@@ -43,7 +43,7 @@ use_preselected   = args.use_preselected
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = args.files_per_job
+files_per_job     = 3 #args.files_per_job
 use_home          = args.use_home
 lep_mva_wp        = args.lep_mva_wp
 
