@@ -16,7 +16,7 @@ parser.add_modes(mode_choices)
 parser.add_sys(sys_choices)
 parser.add_rle_select()
 parser.add_nonnominal()
-parser.add_tau_id_wp()
+parser.add_tau_id_wp() # 'dR03mvaLoose'
 parser.add_hlt_filter()
 parser.add_files_per_job()
 parser.add_use_home()
@@ -41,7 +41,7 @@ systematics_label = args.systematics
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = args.files_per_job
+files_per_job     = 3 # args.files_per_job
 use_home          = args.use_home
 lep_mva_wp        = args.lep_mva_wp
 
@@ -203,6 +203,14 @@ if __name__ == '__main__':
       "mvaDiscr_0l_2tau_HTT"     : {},
       "mTauTauVis"               : {},
       "mTauTau"                  : {},
+      "mva_oldVar"               : {},
+      "mva_Updated"              : {},
+      "mva_Boosted_AK8_noISO"    : {},
+      "mva_Boosted_AK8"          : {},
+      "mva_Boosted_AK12_noISO"   : {},
+      "mva_Boosted_AK12"         : {},
+      "mva_Boosted_AK12_basic"   : {},
+      "mva_Boosted_AK8_basic"    : {},
     },
     select_rle_output                     = True,
     dry_run                               = dry_run,
