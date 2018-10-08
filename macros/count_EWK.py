@@ -108,6 +108,9 @@ for key in  sources.keys() :
         histo = tfile.Get(tree_base+genbase+"/EventCounter")
         counter += histo.Integral()
         nev += histo.GetEntries()
+      if key == "DY_M50" :
+        print (mom + file, counter)
     print (key, len(sources[key][0]), counter, nev)
     countall += counter
+
 print ("total", countall)

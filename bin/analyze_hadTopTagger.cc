@@ -121,7 +121,7 @@ const int hadTauSelection_antiElectron = -1; // not applied
 const int hadTauSelection_antiMuon = -1; // not applied
 
 enum { kGen_bWj1Wj2, kGen_bWj1, kGen_bWj2, kGen_Wj1Wj2, kGen_b, kGen_Wj1, kGen_Wj2, kGen_none };
-bool inAK12 = true;
+bool inAK12 = false;
 bool loopB = true;
 bool cleanLep = true;
 bool selInJets = true;
@@ -344,7 +344,7 @@ int main(int argc, char* argv[])
   RecoJetCollectionSelector jetSelector(era);
   RecoJetCollectionSelectorBtagLoose jetSelectorBtagLoose(era);
   RecoJetCollectionSelectorBtagMedium jetSelectorBtagMedium(era);
-  RecoJetCollectionCleaner jetCleaner(0.6, isDEBUG); //to clean against AK12
+  RecoJetCollectionCleaner jetCleaner(0.8, isDEBUG); //to clean against AK12
   RecoJetCollectionCleaner jetCleanerLep(0.2, isDEBUG); //to clean against leptons and hadronic taus
 
   RecoJetReaderHTTv2* jetReaderHTTv2 = new RecoJetReaderHTTv2(era, branchName_jetsHTTv2, branchName_subjetsHTTv2);

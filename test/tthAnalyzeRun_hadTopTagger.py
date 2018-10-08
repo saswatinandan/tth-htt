@@ -23,12 +23,12 @@ auto_exec          = args.auto_exec
 check_output_files = not args.not_check_input_files
 debug              = args.debug
 sample_filter      = args.filter
-num_parallel_jobs  = 10 #args.num_parallel_jobs
+num_parallel_jobs  = args.num_parallel_jobs
 running_method     = args.running_method
 
 # Additional arguments
 tau_id_wp     = args.tau_id_wp
-files_per_job = args.files_per_job
+files_per_job = 4 #args.files_per_job
 use_home      = args.use_home
 
 # Use the arguments
