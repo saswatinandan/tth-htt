@@ -132,15 +132,7 @@ RecoJetSelectorHTTv2::operator()(const RecoJetHTTv2 & jet) const
   ;
   if(debug_)
   {
-    std::cout << jet.pt()     << " > " << min_pt_     << std::endl;
-    std::cout << jet.absEta() << " < " << max_absEta_ << std::endl;
-    //jet.subJet1()->IDPassed()  > subJet1_min_jetId_ &&
-    //jet.subJet2()->IDPassed()  > subJet2_min_jetId_ &&
-    //jet.subJet3()->IDPassed()  > subJet3_min_jetId_ &&
-    std::cout << subjet_pt1  << " > " << subJet1_min_pt_ << std::endl;
-    std::cout << subjet_pt2  << " > " << subJet2_min_pt_ << std::endl;
-    std::cout << subjet_pt3  << " > " << subJet3_min_pt_ << std::endl;
-    std::cout << "<RecoJetSelector::operator()>:\n jet: " << jet << " "
+    std::cout << "<RecoJetSelectorHTTv2::operator()>:\n jet: " << jet << " "
                  "(" << (passes ? "passes" : "fails") << ")\n"
     ;
   }

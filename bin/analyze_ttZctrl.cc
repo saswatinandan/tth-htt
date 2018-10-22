@@ -1045,7 +1045,6 @@ int main(int argc, char* argv[])
       -1., -1., -1., -1., -1., -1.,
       -1., -1., -1., 1.);
     preselHistManager->evtYield_->fillHistograms(eventInfo, 1.);
-
 //--- apply final event selection
     // require exactly two leptons passing tight selection criteria of final event selection
     if ( !(selLeptons.size() >= 3) ) {
@@ -1076,10 +1075,7 @@ int main(int argc, char* argv[])
     double leptonSF_weight = 1.;
     if ( isMC ) {
       evtWeight *= evtWeight_inclusive;
-      for ( std::vector<const RecoJet*>::const_iterator jet = selJets.begin();
-	    jet != selJets.end(); ++jet ) {
-	btagWeight *= (*jet)->BtagWeight();
-      }
+      btagWeight = get_BtagWeight(selJets);
       evtWeight *= btagWeight;
       if ( isDEBUG ) {
 	std::cout << "lumiScale = " << lumiScale << std::endl;
@@ -1359,10 +1355,44 @@ int main(int argc, char* argv[])
     const double MT_met_lep1    = comp_MT_met_lep1(selLepton_lead->cone_p4(), met.pt(), met.phi());
     const double avg_dr_jet     = comp_avg_dr_jet(selJets);
     const double lep1_conePt    = comp_lep1_conePt(*selLepton_lead);
-    //const double lep2_conePt    = comp_lep2_conePt(*selLepton_sublead);
+    const double lep2_conePt    = comp_lep2_conePt(*selLepton_sublead);
     const double lep3_conePt    = selLepton_third ? comp_lep3_conePt(*selLepton_third) : -1.;
-    //const double minMET400      = std::min(met.pt(), 400.);
+    const double minMET400      = std::min(met.pt(), 400.);
 
+//--- compute output of BDTs used to discriminate ttH vs. ttV and ttH vs. ttbar
+//    in 2lss_1tau category of ttH multilepton analysis
+    std::map<std::string, double> mvaInputs_2lss = {
+      { "max(abs(LepGood_eta[iF_Recl[0]]),abs(LepGood_eta[iF_Recl[1]]))", max_lep_eta                   },
+      { "MT_met_lep1",                                                    mT_lep1                       },
+      { "nJet25_Recl",                                                    nJet25_Recl                   },
+      { "mindr_lep1_jet",                                                 std::min(10., mindr_lep1_jet) },
+      { "mindr_lep2_jet",                                                 std::min(10., mindr_lep2_jet) },
+      { "LepGood_conePt[iF_Recl[0]]",                                     lep1_conePt                   },
+      { "LepGood_conePt[iF_Recl[1]]",                                     lep2_conePt                   },
+      { "min(met_pt,400)",                                                minMET400                     },
+      { "avg_dr_jet",                                                     avg_dr_jet                    },
+    };
+
+    check_mvaInputs(mvaInputs_2lss, eventInfo);
+
+    double mvaOutput_2lss_ttV = 1.;//mva_2lss_ttV(mvaInputs_2lss);
+    double mvaOutput_2lss_ttbar = 1.;//mva_2lss_ttbar(mvaInputs_2lss);
+
+//--- compute integer discriminant based on both BDT outputs,
+//    as defined in Table 16 () of AN-2015/321 (AN-2016/211) for analysis of 2015 (2016) data
+    /*
+    Double_t mvaDiscr_2lss = -1;
+    if(era == kEra_2016 || era == kEra_2017)
+    {
+      if      ( mvaOutput_2lss_ttbar > +0.4 && mvaOutput_2lss_ttV >  +0.4 ) mvaDiscr_2lss = 7.;
+      else if ( mvaOutput_2lss_ttbar > +0.4 && mvaOutput_2lss_ttV >  +0.1 ) mvaDiscr_2lss = 6.;
+      else if ( mvaOutput_2lss_ttbar > +0.4 && mvaOutput_2lss_ttV <= +0.1 ) mvaDiscr_2lss = 5.;
+      else if ( mvaOutput_2lss_ttbar > +0.1 && mvaOutput_2lss_ttV >  +0.3 ) mvaDiscr_2lss = 4.;
+      else if ( mvaOutput_2lss_ttbar > +0.1 && mvaOutput_2lss_ttV <= +0.3 ) mvaDiscr_2lss = 3.;
+      else if ( mvaOutput_2lss_ttbar > -0.2                               ) mvaDiscr_2lss = 2.;
+      else                                                                  mvaDiscr_2lss = 1.;
+    } else assert(0);
+    */
 
 //--- compute output of BDTs used to discriminate ttH vs. ttV and ttH vs. ttbar
 //    in 3l category of ttH multilepton analysis
@@ -1370,8 +1400,8 @@ int main(int argc, char* argv[])
     double mvaOutput_3l_ttbar = -1.;
     if(selLepton_third)
     {
-      std::map<std::string, double> mvaInputs_3l = {
-        { "max(abs(LepGood_eta[iLepFO_Recl[0]]),abs(LepGood_eta[iLepFO_Recl[1]]))", max_lep_eta    },
+      mvaInputs_3l = std::map<std::string, double>({
+        { "max(abs(LepGood_eta[iF_Recl[0]]),abs(LepGood_eta[iF_Recl[1]]))", max_lep_eta    },
         { "MT_met_lep1",                                                    MT_met_lep1    },
         { "nJet25_Recl",                                                    nJet25_Recl    },
         { "mindr_lep1_jet",                                                 mindr_lep1_jet },
@@ -1380,7 +1410,7 @@ int main(int argc, char* argv[])
         { "LepGood_conePt[iLepFO_Recl[2]]",                                     lep3_conePt    },
         { "avg_dr_jet",                                                     avg_dr_jet     },
         { "mhtJet25_Recl",                                                  mht_p4.pt()    },
-      };
+      });
       check_mvaInputs(mvaInputs_3l, eventInfo);
 
       mvaOutput_3l_ttV = mva_3l_ttV(mvaInputs_3l);
@@ -1489,7 +1519,6 @@ int main(int argc, char* argv[])
       const double mbb_loose      = selBJets_loose.size() > 1 ? (selBJets_loose[0]->p4() + selBJets_loose[1]->p4()).mass() : -1000;
       const double min_dr_lep_jet = std::min(mindr_lep1_jet, mindr_lep2_jet);
       const double mindr_lep3_jet = selLepton_third ? comp_mindr_lep3_jet(*selLepton_sublead, selJets) : -1.;
-      const double btagWeight     = get_BtagWeight(selJets);
 
       snm->read(eventInfo);
       snm->read(selLeptons);

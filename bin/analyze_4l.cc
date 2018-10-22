@@ -227,7 +227,6 @@ int main(int argc, char* argv[])
   const std::string syncNtuple_output = syncNtuple_cfg.getParameter<std::string>("output");
   const bool sync_requireGenMatching = syncNtuple_cfg.getParameter<bool>("requireGenMatching");
   const bool do_sync = ! syncNtuple_tree.empty() && ! syncNtuple_output.empty();
-  std::cout << "<analyze_4l 7>:" << std::endl;
 
   const edm::ParameterSet additionalEvtWeight = cfg_analyze.getParameter<edm::ParameterSet>("evtWeight");
   const bool applyAdditionalEvtWeight = additionalEvtWeight.getParameter<bool>("apply");
@@ -265,7 +264,6 @@ int main(int argc, char* argv[])
   cfg_dataToMCcorrectionInterface.addParameter<int>("hadTauSelection_antiElectron", -1);
   cfg_dataToMCcorrectionInterface.addParameter<int>("hadTauSelection_antiMuon", -1);
   cfg_dataToMCcorrectionInterface.addParameter<std::string>("central_or_shift", central_or_shift);
-  std::cout << "<analyze_4l 10>:" << std::endl;
   Data_to_MC_CorrectionInterface_Base * dataToMCcorrectionInterface = nullptr;
   switch(era)
   {
@@ -1444,6 +1442,8 @@ int main(int argc, char* argv[])
   }
       }
     }
+    cutFlowTable.update("signal region veto", evtWeight);
+    cutFlowHistManager->fillHistograms("signal region veto", evtWeight);
 
 //--- fill histograms with events passing final selection
     selHistManagerType* selHistManager = selHistManagers[idxSelLepton_genMatch];

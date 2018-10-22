@@ -108,8 +108,11 @@
 #include <numeric> // iota
 
 #include <iostream>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+#pragma GCC diagnostic pop
 using namespace boost::python;
 
 typedef math::PtEtaPhiMLorentzVector LV;
@@ -350,17 +353,17 @@ int main(int argc, char* argv[])
   RecoJetReaderHTTv2* jetReaderHTTv2 = new RecoJetReaderHTTv2(era, branchName_jetsHTTv2, branchName_subjetsHTTv2);
   inputTree -> registerReader(jetReaderHTTv2);
   RecoJetCollectionSelectorHTTv2 jetSelectorHTTv2(era);
-  RecoJetHTTv2CollectionCleaner jetCleanerHTTv2(0.75, isDEBUG); //to clean against leptons and hadronic taus
+  RecoJetCollectionCleanerHTTv2 jetCleanerHTTv2(0.75, isDEBUG); //to clean against leptons and hadronic taus
 
   RecoJetReaderAK12* jetReaderAK12 = new RecoJetReaderAK12(era, branchName_jetsAK12, branchName_subjetsAK12);
   inputTree -> registerReader(jetReaderAK12);
   RecoJetCollectionSelectorAK12 jetSelectorAK12(era);
-  RecoJetAK12CollectionCleaner jetCleanerAK12(0.6, isDEBUG); //to clean against leptons and hadronic taus
+  RecoJetCollectionCleanerAK12 jetCleanerAK12(0.6, isDEBUG); //to clean against leptons and hadronic taus
 
   RecoJetReaderAK8* jetReaderAK8 = new RecoJetReaderAK8(era, branchName_jetsAK8, branchName_subjetsAK8);
   inputTree -> registerReader(jetReaderAK8);
   RecoJetCollectionSelectorAK8 jetSelectorAK8(era);
-  RecoJetAK8CollectionCleaner jetCleanerAK8(0.4, isDEBUG); //to clean against leptons and hadronic taus
+  RecoJetCollectionCleanerAK8 jetCleanerAK8(0.4, isDEBUG); //to clean against leptons and hadronic taus
 
 //--- declare generator level information
   GenJetReader* genJetReader = 0;
@@ -1328,8 +1331,8 @@ int main(int argc, char* argv[])
                   //std::cout<<"btag position = "<< btag_order[bjetCandidate] <<std::endl;
 
                   // debug gen-matching
-                  std::map<int, Particle::LorentzVector> genVar = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genWJets, kGenTop);
-                  std::map<int, Particle::LorentzVector> genVarAnti = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genWJets, kGenAntiTop);
+                  genVar = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genWJets, kGenTop);
+                  genVarAnti = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genWJets, kGenAntiTop);
                   double minT = deltaR(selBJet, genVar[kGenTopB]) + std::min(deltaR(selWJet1, genVar[kGenTopWj1]),deltaR(selWJet1, genVar[kGenTopWj2])) + std::min(deltaR(selWJet2, genVar[kGenTopWj2]),deltaR(selWJet2, genVar[kGenTopWj1]));
                   double minAntiT = deltaR(selBJet, genVarAnti[kGenTopB]) + std::min(deltaR(selWJet1, genVarAnti[kGenTopWj1]),deltaR(selWJet1, genVarAnti[kGenTopWj2])) + std::min(deltaR(selWJet2, genVarAnti[kGenTopWj2]),deltaR(selWJet2, genVarAnti[kGenTopWj1]));
                   if ( minT < minAntiT ){

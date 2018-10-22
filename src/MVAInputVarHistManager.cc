@@ -55,7 +55,6 @@ MVAInputVarHistManager::MVAInputVarHistManager(const edm::ParameterSet & cfg)
   binningOptions_["LepGood_conePt[iLepFO_Recl[2]]"] = new binningOptionType("LepGood_conePt[iLepFO_Recl[2]]", 40,  0.,  200.);
   binningOptions_["leptonPairCharge"]           = new binningOptionType("leptonPairCharge",            5, -2.5,  +2.5);
   binningOptions_["max(abs(LepGood_eta[iF_Recl[0]]),abs(LepGood_eta[iF_Recl[1]]))"] = new binningOptionType("max(abs(LepGood_eta[iF_Recl[0]]),abs(LepGood_eta[iF_Recl[1]]))", 50, -2.5, +2.5);
-  binningOptions_["max(abs(LepGood_eta[iLepFO_Recl[0]]),abs(LepGood_eta[iLepFO_Recl[1]]))"] = new binningOptionType("max(abs(LepGood_eta[iLepFO_Recl[0]]),abs(LepGood_eta[iLepFO_Recl[1]]))", 50, -2.5, +2.5);
   binningOptions_["tau2_eta"]                   = new binningOptionType("tau2_eta",                   50, -2.5, +2.5);
   binningOptions_["max_lep_eta"]                = new binningOptionType("max_lep_eta",                50, -2.5,  +2.5);
   binningOptions_["memOutput_LR"]               = new binningOptionType("memOutput_LR",               20,  0.,    1.);
@@ -119,6 +118,7 @@ MVAInputVarHistManager::MVAInputVarHistManager(const edm::ParameterSet & cfg)
   binningOptions_["TMath::Abs(tau1_eta)"]       = new binningOptionType("TMath::Abs(tau1_eta)",       50,  0.,   +2.5);
   binningOptions_["TMath::Abs(tau2_eta)"]       = new binningOptionType("TMath::Abs(tau2_eta)",       50,  0.,   +2.5);
   binningOptions_["TMath::Max(TMath::Abs(lep1_eta),TMath::Abs(lep2_eta))"] = new binningOptionType("TMath::Max(TMath::Abs(lep1_eta),TMath::Abs(lep2_eta))", 50, 0., +2.5);
+  binningOptions_["max(abs(LepGood_eta[iLepFO_Recl[0]]),abs(LepGood_eta[iLepFO_Recl[1]]))"] = new binningOptionType("max(abs(LepGood_eta[iLepFO_Recl[0]]),abs(LepGood_eta[iLepFO_Recl[1]]))", 50, 0., +2.5);
   binningOptions_["mvaOutput_hadTopTaggerWithKinFit"]                      = new binningOptionType("mvaOutput_hadTopTaggerWithKinFit",                      50, -1., 1.);
 }
 

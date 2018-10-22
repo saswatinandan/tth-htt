@@ -382,6 +382,9 @@ class analyzeConfig_4l(analyzeConfig):
                 self.outputFile_hadd_stage1[key_hadd_stage1] = os.path.join(self.dirs[DKEY_HIST], "histograms_harvested_stage1_%s_%s_%s_%s.root" % \
                   (self.channel, process_name, lepton_selection_and_frWeight, chargeSumSelection))
 
+                if self.isBDTtraining:
+                  self.targets.append(self.outputFile_hadd_stage1[key_hadd_stage1])
+
             if self.isBDTtraining or self.do_sync:
               continue
 
@@ -550,7 +553,7 @@ class analyzeConfig_4l(analyzeConfig):
               (self.channel, lepton_selection_and_frWeight, chargeSumSelection)),
             'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgrounds_%s_conversions_%s_%s.log" % \
               (self.channel, lepton_selection_and_frWeight, chargeSumSelection)),
-            'categories' : getHistogramDirList(lepton_selection, lepton_frWeight, chargeSumSelection, self.subcategories),
+            'categories' : [ getHistogramDir(lepton_selection, lepton_frWeight, chargeSumSelection) ],
             'processes_input' : processes_input,
             'process_output' : "conversions"
           }

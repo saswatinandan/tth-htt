@@ -241,7 +241,7 @@ if __name__ == '__main__':
     rle_select                            = rle_select,
     use_nonnominal                        = use_nonnominal,
     hlt_filter                            = hlt_filter,
-    use_home                              = use_home
+    use_home                              = use_home,
   )
 
   if mode == "forBDTtraining" :
