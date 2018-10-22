@@ -138,10 +138,10 @@ namespace
 {
   const RecoSubjetAK12* getSubjet(const std::vector<RecoSubjetAK12>& subjets, int idx)
   {
-    if ( idx == -1 ) return nullptr;
+    if ( idx == -1 || subjets.size() == 0) return nullptr;
     else if (idx >= 0 && idx < (int)subjets.size() ) return &subjets[idx];
     else throw cmsException("<getSubjet>:")
-      << "Invalid subjet index = " << idx << ", given number of subjets = " << subjets.size() << " !!\n";
+      << "Invalid subjet index AK12 = " << idx << ", given number of subjets = " << subjets.size() << " !!\n";
   }
 }
 
