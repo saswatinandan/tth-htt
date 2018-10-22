@@ -122,10 +122,10 @@ namespace
 {
   const RecoSubjetAK8* getSubjet(const std::vector<RecoSubjetAK8>& subjets, int idx)
   {
-    if ( idx == -1 ) return nullptr;
+    if ( idx == -1 || subjets.size() == 0 ) return nullptr;
     else if (idx >= 0 && idx < (int)subjets.size() ) return &subjets[idx];
     else throw cmsException("<getSubjet>:")
-      << "Invalid subjet index = " << idx << ", given number of subjets = " << subjets.size() << " !!\n";
+      << "Invalid subjet index AK8 = " << idx << ", given number of subjets = " << subjets.size() << " !!\n";
   }
 }
 
@@ -165,7 +165,7 @@ RecoJetReaderAK8::read() const
 	gInstance->jet_tau2_[idxJet],
 	gInstance->jet_tau3_[idxJet],
 	gInstance->jet_tau4_[idxJet],
-	gInstance->jet_jetId_[idxJet],  
+	gInstance->jet_jetId_[idxJet],
         static_cast<Int_t>(idxJet)
       });
     } // idxJet
