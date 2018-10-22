@@ -32,6 +32,15 @@ EvtHistManager_3l::bookHistograms(TFileDirectory & dir)
   histogram_mvaOutput_3l_ttbar_ = book1D(dir, "mvaOutput_3l_ttbar", "mvaOutput_3l_ttbar", 40, -1., +1.);
   histogram_mvaDiscr_3l_        = book1D(dir, "mvaDiscr_3l",        "mvaDiscr_3l",         5,  0.5, 5.5);
 
+  histogram_mva_Boosted_AK12_basic_    = book1D(dir, "mva_Boosted_AK12_basic",    "mva_Boosted_AK12_basic",     100, 0.,  +1.0);
+  histogram_mva_Boosted_AK12_          = book1D(dir, "mva_Boosted_AK12",    "mva_Boosted_AK12",     100, 0.,  +1.0);
+  histogram_mva_AK12_                  = book1D(dir, "mva_AK12",    "mva_AK12",     100, 0.,  +1.0);
+  histogram_mva_Boosted_AK12_noISO_    = book1D(dir, "mva_Boosted_AK12_noISO",    "mva_Boosted_AK12_noISO",     100, 0.,  +1.0);
+  histogram_mva_Boosted_AK8_           = book1D(dir, "mva_Boosted_AK8",    "mva_Boosted_AK8",     100, 0.,  +1.0);
+  histogram_mva_Boosted_AK8_noISO_      = book1D(dir, "mva_Boosted_AK8_noISO",    "mva_Boosted_AK8_noISO",     100, 0.,  +1.0);
+  histogram_mva_Updated_    = book1D(dir, "mva_Updated",    "mva_Updated",     100, 0.,  +1.0);
+  histogram_mva_oldVar_     = book1D(dir, "mva_oldVar",    "mva_oldVar",     100, 0.,  +1.0);
+
   histogram_EventCounter_ = book1D(dir, "EventCounter", "EventCounter", 1, -0.5, +0.5);
 }
 
@@ -45,6 +54,9 @@ EvtHistManager_3l::fillHistograms(int numElectrons,
                                   double mvaOutput_3l_ttV,
                                   double mvaOutput_3l_ttbar,
                                   double mvaDiscr_3l,
+                                  double mva_Boosted_AK12_basic, double mva_Boosted_AK12, double mva_AK12, double mva_Boosted_AK12_noISO,
+                                  double mva_Boosted_AK8, double mva_Boosted_AK8_noISO,
+                                  double mva_Updated, double mva_oldVar,
                                   double evtWeight)
 {
   const double evtWeightErr = 0.;
@@ -62,6 +74,16 @@ EvtHistManager_3l::fillHistograms(int numElectrons,
   fillWithOverFlow(histogram_mvaOutput_3l_ttV_,   mvaOutput_3l_ttV,   evtWeight, evtWeightErr);
   fillWithOverFlow(histogram_mvaOutput_3l_ttbar_, mvaOutput_3l_ttbar, evtWeight, evtWeightErr);
   fillWithOverFlow(histogram_mvaDiscr_3l_,        mvaDiscr_3l,        evtWeight, evtWeightErr);
+
+
+  fillWithOverFlow(histogram_mva_Boosted_AK12_basic_,    mva_Boosted_AK12_basic,    evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_mva_Boosted_AK12_,          mva_Boosted_AK12,        evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_mva_AK12_,                  mva_AK12,      evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_mva_Boosted_AK12_noISO_,    mva_Boosted_AK12_noISO,         evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_mva_Boosted_AK8_,           mva_Boosted_AK8,    evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_mva_Boosted_AK8_noISO_,     mva_Boosted_AK8_noISO,        evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_mva_Updated_,               mva_Updated,      evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_mva_oldVar_,                mva_oldVar,         evtWeight, evtWeightErr);
 
   fillWithOverFlow(histogram_EventCounter_, 0., evtWeight, evtWeightErr);
 }

@@ -33,6 +33,9 @@ class EvtHistManager_3l
                  double mvaOutput_3l_ttV,
                  double mvaOutput_3l_ttbar,
                  double mvaDiscr_3l,
+                 double mva_Boosted_AK12_basic, double mva_Boosted_AK12, double mva_AK12, double mva_Boosted_AK12_noISO,
+                 double mva_Boosted_AK8, double mva_Boosted_AK8_noISO,
+                 double mva_Updated, double mva_oldVar,
                  double evtWeight);
 
   const TH1 *
@@ -56,6 +59,15 @@ class EvtHistManager_3l
   TH1 * histogram_mvaOutput_3l_ttV_;
   TH1 * histogram_mvaOutput_3l_ttbar_;
   TH1 * histogram_mvaDiscr_3l_;
+
+  TH1 * histogram_mva_Boosted_AK12_basic_;
+  TH1 * histogram_mva_Boosted_AK12_;
+  TH1 * histogram_mva_AK12_;
+  TH1 * histogram_mva_Boosted_AK12_noISO_;
+  TH1 * histogram_mva_Boosted_AK8_;
+  TH1 * histogram_mva_Boosted_AK8_noISO_;
+  TH1 * histogram_mva_Updated_;
+  TH1 * histogram_mva_oldVar_;
 
   TH1 * histogram_EventCounter_;
 };
