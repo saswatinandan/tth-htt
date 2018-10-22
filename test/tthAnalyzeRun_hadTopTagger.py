@@ -59,7 +59,10 @@ if __name__ == '__main__':
     outputDir          = os.path.join("/hdfs/local", getpass.getuser(), "ttHAnalysis", era, version),
     executable_analyze = "analyze_hadTopTagger",
     cfgFile_analyze    = "analyze_hadTopTagger_cfg.py",
+<<<<<<< HEAD
     channel            = "hadTopTagger",
+=======
+>>>>>>> 0ca785f392d4e2dc178637e1860fac5727cde6b6
     samples            = samples,
     hadTau_selection   = hadTau_selection,
     max_files_per_job  = files_per_job,
@@ -69,8 +72,11 @@ if __name__ == '__main__':
     check_output_files = check_output_files,
     running_method     = running_method,
     num_parallel_jobs  = num_parallel_jobs,
+<<<<<<< HEAD
     histograms_to_fit  = [],
     triggers           = [],
+=======
+>>>>>>> 0ca785f392d4e2dc178637e1860fac5727cde6b6
     dry_run            = dry_run,
     isDebug            = debug,
     use_home           = use_home,

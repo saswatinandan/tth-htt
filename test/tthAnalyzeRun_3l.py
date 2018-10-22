@@ -39,7 +39,7 @@ systematics_label = args.systematics
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = 3 #args.files_per_job
+files_per_job     = args.files_per_job
 use_home          = args.use_home
 
 # Use the arguments
@@ -159,6 +159,14 @@ if __name__ == '__main__':
       "EventCounter" : {},
       "numJets"      : {},
       "mvaDiscr_3l"  : {},
+      "mva_Boosted_AK12_basic"  : {},
+      "mva_Boosted_AK12"   : {},
+      "mva_AK12"  : {},
+      "mva_Boosted_AK12_noISO"  : {},
+      "mva_Boosted_AK8"  : {},
+      "mva_Boosted_AK8_noISO"  : {},
+      "mva_Updated"   : {},
+      "mva_oldVar"  : {},
     },
     select_rle_output                     = True,
     select_root_output                    = False,

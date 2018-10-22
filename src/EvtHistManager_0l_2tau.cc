@@ -41,6 +41,8 @@ EvtHistManager_0l_2tau::bookHistograms(TFileDirectory & dir)
   histogram_mva_Boosted_AK12_basic_ = book1D(dir, "mva_Boosted_AK12_basic", "mva_Boosted_AK12_basic", 100, 0., 1.);
   histogram_mva_Boosted_AK8_basic_ = book1D(dir, "mva_Boosted_AK8_basic", "mva_Boosted_AK8_basic", 100, 0., 1.);
 
+  histogram_mvaOutput_0l_2tau_HTT_sum_dy_ = book1D(dir, "mvaOutput_0l_2tau_HTT_sum_dy", "mvaOutput_0l_2tau_HTT_sum_dy", 20, 0., 1.);
+
   histogram_mTauTauVis_ = book1D(dir, "mTauTauVis", "mTauTauVis", 40, 0., 200.);
   histogram_mTauTau_    = book1D(dir, "mTauTau",    "mTauTau",    30, 0., 300.);
 
@@ -66,6 +68,7 @@ EvtHistManager_0l_2tau::fillHistograms(int numElectrons,
                double mva_Boosted_AK12_noISO, double mva_Boosted_AK12,
                double mva_Boosted_AK12_basic, double mva_Boosted_AK8_basic,
                //
+               double mvaOutput_0l_2tau_HTT_sum_dy,
                                        double mTauTauVis,
                                        double mTauTau,
                                        double evtWeight)
@@ -97,6 +100,7 @@ EvtHistManager_0l_2tau::fillHistograms(int numElectrons,
   fillWithOverFlow(histogram_mva_Boosted_AK12_, mva_Boosted_AK12, evtWeight, evtWeightErr);
   fillWithOverFlow(histogram_mva_Boosted_AK12_basic_, mva_Boosted_AK12_basic, evtWeight, evtWeightErr);
   fillWithOverFlow(histogram_mva_Boosted_AK8_basic_, mva_Boosted_AK8_basic, evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_mvaOutput_0l_2tau_HTT_sum_dy_, mvaOutput_0l_2tau_HTT_sum_dy, evtWeight, evtWeightErr);
 
   fillWithOverFlow(histogram_mTauTauVis_, mTauTauVis, evtWeight, evtWeightErr);
   fillWithOverFlow(histogram_mTauTau_,    mTauTau,    evtWeight, evtWeightErr);

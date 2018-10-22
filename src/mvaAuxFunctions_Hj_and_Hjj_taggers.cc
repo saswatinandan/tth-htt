@@ -29,7 +29,6 @@ double comp_mvaOutput_Hj_tagger(const RecoJet* jet,
   mvaInputs_Hj_tagger["max(Jet25_qg,0.)"] = std::max(0., jet->QGDiscr());
   mvaInputs_Hj_tagger["Jet25_lepdrmax"] = dRmax_lepton;
   mvaInputs_Hj_tagger["Jet25_pt"] = jet->pt();
-  // "Jet25_lepdrmin", "Jet25_bDiscriminator", "Jet25_qg", "Jet25_lepdrmax", "Jet25_pt"
 
   check_mvaInputs(mvaInputs_Hj_tagger, eventInfo);
 

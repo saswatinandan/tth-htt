@@ -85,9 +85,9 @@ class analyzeConfig_2lss(analyzeConfig):
         "2lss_ee_neg", "2lss_ee_pos",
         "2lss_em_bl_neg", "2lss_em_bl_pos", "2lss_em_bt_neg", "2lss_em_bt_pos",
         "2lss_mm_bl_neg", "2lss_mm_bl_pos", "2lss_mm_bt_neg", "2lss_mm_bt_pos",
-        "2lss_1J", "2lss_ee_neg_0J", "2lss_ee_pos_0J",
-        "2lss_em_bl_neg_0J", "2lss_em_bl_pos_0J", "2lss_em_bt_neg_0J", "2lss_em_bt_pos_0J",
-        "2lss_mm_bl_neg_0J", "2lss_mm_bl_pos_0J", "2lss_mm_bt_neg_0J", "2lss_mm_bt_pos_0J"
+        #"2lss_1J", "2lss_ee_neg_0J", "2lss_ee_pos_0J",
+        #"2lss_em_bl_neg_0J", "2lss_em_bl_pos_0J", "2lss_em_bt_neg_0J", "2lss_em_bt_pos_0J",
+        #"2lss_mm_bl_neg_0J", "2lss_mm_bl_pos_0J", "2lss_mm_bt_neg_0J", "2lss_mm_bt_pos_0J"
         ],
       samples                   = samples,
       central_or_shifts         = central_or_shifts,
@@ -317,7 +317,7 @@ class analyzeConfig_2lss(analyzeConfig):
       hadTauVeto_selection = "|".join([ hadTauVeto_selection, self.hadTauVeto_selection_part2 ])
 
       if lepton_selection == "forBDTtraining":
-        electron_selection = "Loose" # "Tight" 
+        electron_selection = "Loose" # "Tight"
         muon_selection =  "Loose" # "Tight"
       elif lepton_selection == "Fakeable_mcClosure_e":
         electron_selection = "Fakeable"
@@ -459,6 +459,9 @@ class analyzeConfig_2lss(analyzeConfig):
                 self.inputFiles_hadd_stage1[key_hadd_stage1].append(self.jobOptions_analyze[key_analyze_job]['histogramFile'])
                 self.outputFile_hadd_stage1[key_hadd_stage1] = os.path.join(self.dirs[DKEY_HIST], "histograms_harvested_stage1_%s_%s_%s_%s.root" % \
                    (self.channel, process_name, lepton_selection_and_frWeight, lepton_charge_selection))
+
+                if self.isBDTtraining:
+                  self.targets.append(self.outputFile_hadd_stage1[key_hadd_stage1])
 
               if self.isBDTtraining or self.do_sync:
                 continue
