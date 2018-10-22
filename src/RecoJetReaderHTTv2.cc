@@ -63,7 +63,7 @@ RecoJetReaderHTTv2::~RecoJetReaderHTTv2()
     delete[] gInstance->jet_ptForRoptCalc_;
     delete[] gInstance->jet_tau1_;
     delete[] gInstance->jet_tau2_;
-    delete[] gInstance->jet_tau3_;    
+    delete[] gInstance->jet_tau3_;
     instances_[branchName_obj_] = nullptr;
   }
 }
@@ -137,7 +137,7 @@ namespace
     if ( idx == -1 ) return nullptr;
     else if (idx >= 0 && idx < (int)subjets.size() ) return &subjets[idx];
     else throw cmsException("<getSubjet>:")
-      << "Invalid subjet index = " << idx << ", given number of subjets = " << subjets.size() << " !!\n";
+      << "Invalid subjet index HTTv2 = " << idx << ", given number of subjets = " << subjets.size() << " !!\n";
   }
 }
 
@@ -179,9 +179,9 @@ RecoJetReaderHTTv2::read() const
         gInstance->jet_Ropt_[idxJet],
         gInstance->jet_RoptCalc_[idxJet],
 	gInstance->jet_ptForRoptCalc_[idxJet],
-	gInstance->jet_tau1_[idxJet],  
-	gInstance->jet_tau2_[idxJet],  
-	gInstance->jet_tau3_[idxJet],  
+	gInstance->jet_tau1_[idxJet],
+	gInstance->jet_tau2_[idxJet],
+	gInstance->jet_tau3_[idxJet],
         static_cast<Int_t>(idxJet)
       });
     } // idxJet
