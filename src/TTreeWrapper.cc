@@ -170,7 +170,9 @@ TTreeWrapper::hasNextEvent()
     }
 
     // save the total number of events in this file
-    currentMaxEvents_ = currentTreePtr_ -> GetEntries();
+    const long long currentMaxEvents = currentTreePtr_ -> GetEntries();
+    std::cout << "The file " << fileNames_[currentFileIdx_] << " has " << currentMaxEvents << " entries\n";
+    currentMaxEvents_ = currentMaxEvents;
     cumulativeMaxEventCount_ += currentMaxEvents_;
   }
 

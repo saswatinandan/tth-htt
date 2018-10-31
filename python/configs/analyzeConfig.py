@@ -1,5 +1,5 @@
 from tthAnalysis.HiggsToTauTau.jobTools import create_if_not_exists, run_cmd, generate_file_ids, get_log_version, record_software_state
-from tthAnalysis.HiggsToTauTau.analysisTools import initDict, getKey, create_cfg, createFile
+from tthAnalysis.HiggsToTauTau.analysisTools import initDict, getKey, create_cfg, createFile, is_dymc_reweighting
 from tthAnalysis.HiggsToTauTau.analysisTools import createMakefile as tools_createMakefile
 from tthAnalysis.HiggsToTauTau.sbatchManagerTools import createScript_sbatch as tools_createScript_sbatch
 from tthAnalysis.HiggsToTauTau.sbatchManagerTools import createScript_sbatch_hadd as tools_createScript_sbatch_hadd
@@ -162,9 +162,25 @@ class analyzeConfig(object):
             samples[dbs_key]['nof_events'] = copy.deepcopy(nof_events)
 
         self.samples = copy.deepcopy(samples)
+        for sample_key, sample_info in self.samples.items():
+          if sample_key == 'sum_events': continue
+          sample_info["dbs_name"] = sample_key
 
         self.lep_mva_wp = lep_mva_wp
         self.central_or_shifts = central_or_shifts
+        if not 'central' in self.central_or_shifts:
+            logging.warning('Running with systematic uncertainties, but without central value, is not supported --> adding central value.')
+            self.central_or_shifts = [ 'central' ]
+            self.central_or_shifts.extend(central_or_shifts)
+        #------------------------------------------------------------------------
+        # CV: make sure that 'central' is always first entry in self.central_or_shifts
+        #    (logic for building dependencies between analysis, 'hadd', and 'addBackgrounds' jobs in derived classes may abort with KeyError otherwise)
+        if len(self.central_or_shifts) > 1:
+            temp = [ 'central' ]
+            self.central_or_shifts.remove('central')
+            temp.extend(self.central_or_shifts)
+            self.central_or_shifts = temp
+        #------------------------------------------------------------------------
         self.max_files_per_job = max_files_per_job
         self.max_num_jobs = 100000
         self.era = era
@@ -540,6 +556,8 @@ class analyzeConfig(object):
           jobOptions['isMC'] = is_mc
         if 'apply_genWeight' not in jobOptions:
           jobOptions['apply_genWeight'] = sample_info["genWeight"] if is_mc else False
+        if 'apply_DYMCReweighting' not in jobOptions:
+          jobOptions['apply_DYMCReweighting'] = is_dymc_reweighting(sample_info["dbs_name"])
         if 'lumiScale' not in jobOptions:
           nof_events = -1
           if is_mc:
@@ -595,6 +613,7 @@ class analyzeConfig(object):
             'apply_hadTauGenMatching',
             'applyFakeRateWeights',
             'apply_genWeight',
+            'apply_DYMCReweighting',
             'selEventsFileName_output',
             'fillGenEvtHistograms',
             'selectBDT',

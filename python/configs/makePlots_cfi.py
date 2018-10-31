@@ -50,6 +50,16 @@ process.makePlots = cms.PSet(
             xAxisTitle = cms.string("Run Period"),
             yAxisTitle = cms.string("Events / 1 fb^{-1}")
         ),
+        cms.PSet(
+            histogramName = cms.string('sel/met/$PROCESS/met_pt'),
+            xAxisTitle = cms.string('MET [GeV]'),
+            yAxisTitle = cms.string('dN/dMET [1/GeV]')
+        ),
+        cms.PSet(
+            histogramName=cms.string('sel/met/$PROCESS/mht_pt'),
+            xAxisTitle=cms.string('MHT [GeV]'),
+            yAxisTitle=cms.string('dN/dMHT [1/GeV]')
+        ),
     ),
 
     nuisanceParameters = cms.PSet(
@@ -82,6 +92,12 @@ process.makePlots = cms.PSet(
         )
     ),
     showUncertainty = cms.bool(False),
+
+    legendTextSize = cms.double(0.050),
+    legendPosX = cms.double(0.700),
+    legendPosY = cms.double(0.510),
+    legendSizeX = cms.double(0.230),
+    legendSizeY = cms.double(0.420),
 
     labelOnTop = cms.string("CMS Preliminary; ttH, H #rightarrow #tau#tau; %1.1f fb^{-1} at #sqrt{s} = 13 TeV"),
     intLumiData = cms.double(0.), # in units of fb^-1

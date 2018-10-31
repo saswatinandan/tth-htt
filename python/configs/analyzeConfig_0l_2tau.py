@@ -2,7 +2,7 @@ import logging
 
 from tthAnalysis.HiggsToTauTau.configs.analyzeConfig import *
 from tthAnalysis.HiggsToTauTau.jobTools import create_if_not_exists
-from tthAnalysis.HiggsToTauTau.analysisTools import initDict, getKey, create_cfg, createFile, generateInputFileList
+from tthAnalysis.HiggsToTauTau.analysisTools import initDict, getKey, create_cfg, createFile, generateInputFileList, is_dymc_reweighting
 
 def get_hadTau_selection_and_frWeight(hadTau_selection, hadTau_frWeight):
   hadTau_selection_and_frWeight = hadTau_selection
@@ -161,6 +161,13 @@ class analyzeConfig_0l_2tau(analyzeConfig):
     self.select_rle_output = select_rle_output
     self.hlt_filter = hlt_filter
 
+    self.categories = [
+      "0l_2tau", "0l_2tau_0bM_0j", "0l_2tau_1bM_0j", "0l_2tau_2bM_0j",
+      "0l_2tau_0bM_1j", "0l_2tau_1bM_1j", "0l_2tau_2bM_1j",
+      "0l_2tau_0bM_2j", "0l_2tau_1bM_2j", "0l_2tau_2bM_2j"
+      ]  ## N.B.: Inclusive category in a member of this list
+    self.category_inclusive = "0l_2tau"
+
   def set_BDT_training(self, hadTau_selection_relaxed):
     """Run analysis with loose selection criteria for hadronic taus,
        for the purpose of preparing event list files for BDT training.
@@ -307,6 +314,8 @@ class analyzeConfig_0l_2tau(analyzeConfig):
                 if central_or_shift in systematics.LHE().ttW and sample_category != "TTW":
                   continue
                 if central_or_shift in systematics.LHE().ttZ and sample_category != "TTZ":
+                  continue
+                if central_or_shift in systematics.DYMCReweighting and not is_dymc_reweighting(sample_name):
                   continue
 
                 logging.info(" ... for '%s' and systematic uncertainty option '%s'" % (hadTau_selection_and_frWeight, central_or_shift))
@@ -616,9 +625,9 @@ class analyzeConfig_0l_2tau(analyzeConfig):
         key_hadd_stage2 = getKey(get_hadTau_selection_and_frWeight("Tight", "disabled"), "SS")
         self.jobOptions_prep_dcard[key_prep_dcard_job] = {
           'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2],
-          'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "prepareDatacards_%s_SS_%s_cfg.py" % (self.channel, histogramToFit)),
-          'datacardFile' : os.path.join(self.dirs[DKEY_DCRD], "prepareDatacards_%s_SS_%s.root" % (self.channel, histogramToFit)),
-          'histogramDir' : self.histogramDir_prep_dcard_SS,
+          'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "prepareDatacards_%s_%s_%s_cfg.py" % (self.channel, category, histogramToFit)),
+          'datacardFile' : os.path.join(self.dirs[DKEY_DCRD], "prepareDatacards_%s_%s_%s.root" % (self.channel, category, histogramToFit)),
+          'histogramDir' : getHistogramDir(category, "Tight", "disabled", "OS"),
           'histogramToFit' : histogramToFit,
           'category' : self.subcategories,
           'makeSubDir' : makeSubDir,
@@ -681,7 +690,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
       'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2],
       'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s_cfg.py" % self.channel),
       'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s.png" % self.channel),
-      'histogramDir' : self.histogramDir_prep_dcard,
+      'histogramDir' : getHistogramDir(self.category_inclusive, "Tight", "disabled", "OS"),
       'label' : "0l+2#tau_{h}",
       'make_plots_backgrounds' : self.make_plots_backgrounds
     }
@@ -694,7 +703,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
         'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2],
         'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s_SS_cfg.py" % self.channel),
         'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s_SS.png" % self.channel),
-        'histogramDir' : self.histogramDir_prep_dcard_SS,
+        'histogramDir' : getHistogramDir(self.category_inclusive, "Tight", "disabled", "SS"),
         'label' : "0l+2#tau_{h} SS",
         'make_plots_backgrounds' : self.make_plots_backgrounds
       }

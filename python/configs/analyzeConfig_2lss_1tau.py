@@ -3,7 +3,7 @@ import re
 
 from tthAnalysis.HiggsToTauTau.configs.analyzeConfig import *
 from tthAnalysis.HiggsToTauTau.jobTools import create_if_not_exists
-from tthAnalysis.HiggsToTauTau.analysisTools import initDict, getKey, create_cfg, createFile, generateInputFileList
+from tthAnalysis.HiggsToTauTau.analysisTools import initDict, getKey, create_cfg, createFile, generateInputFileList, is_dymc_reweighting
 
 #self.subcategories = ["2lss_1tau"]
 
@@ -457,6 +457,8 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
                   if central_or_shift in systematics.LHE().ttW and sample_category != "TTW":
                     continue
                   if central_or_shift in systematics.LHE().ttZ and sample_category != "TTZ":
+                    continue
+                  if central_or_shift in systematics.DYMCReweighting and not is_dymc_reweighting(sample_name):
                     continue
 
                   logging.info(" ... for '%s' and systematic uncertainty option '%s'" % (lepton_and_hadTau_selection_and_frWeight, central_or_shift))
