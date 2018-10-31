@@ -80,8 +80,9 @@ class analyzeConfig_3l(analyzeConfig):
       channel                   = "3l",
       subcategories             = [
         "3l",
-        "3l_0tau_bl_neg", "3l_0tau_bl_pos", "3l_0tau_bt_neg", "3l_0tau_bt_pos" #,
-        #"3l_0tau_bl_neg_0J", "3l_0tau_bl_pos_0J", "3l_0tau_bt_neg_0J", "3l_0tau_bt_pos_0J", "3l_0tau_1J"
+        "3l_0tau_bl_neg", "3l_0tau_bl_pos", "3l_0tau_bt_neg", "3l_0tau_bt_pos" ,
+       "3l_0tau_bl_neg_0J", "3l_0tau_bl_pos_0J", "3l_0tau_bt_neg_0J",
+       "3l_0tau_bt_pos_0J", "3l_0tau_1pHTTv2", "3l_0tau_1pAK8"
         ],
       samples                   = samples,
       central_or_shifts         = central_or_shifts,
@@ -146,7 +147,7 @@ class analyzeConfig_3l(analyzeConfig):
     self.nonfake_backgrounds = [ "TT", "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW", "VH" ]
 
     self.cfgFile_analyze = os.path.join(self.template_dir, cfgFile_analyze)
-    self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [  "fakes_data", "fakes_mc" ] # + [ "conversions", "fakes_data", "fakes_mc" ] ## Xanda: missing /hdfs/local/acaan/ttHAnalysis/2017/3l_0tau_datacards_categories_2018August25/histograms/3l/addBackgrounds_3l_conversions_ttHJetToNonbb_M125_amcatnlo_signal_Fakeable_wFakeRateWeights_SS.root discpver why
+    self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [  "conversions", "fakes_data", "fakes_mc" ] # + [ "conversions", "fakes_data", "fakes_mc" ] ## Xanda: missing /hdfs/local/acaan/ttHAnalysis/2017/3l_0tau_datacards_categories_2018August25/histograms/3l/addBackgrounds_3l_conversions_ttHJetToNonbb_M125_amcatnlo_signal_Fakeable_wFakeRateWeights_SS.root discpver why
     #self.histogramDir_prep_dcard = "3l_OS_Tight"
     #self.histogramDir_prep_dcard_SS = "3l_SS_Tight"
     histogramDir_prep_dcard_local = []

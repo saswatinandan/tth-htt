@@ -39,7 +39,8 @@ systematics_label = args.systematics
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = 3 #args.files_per_job
+files_per_job     = 5 #args.files_per_job
+#files_per_job     = args.files_per_job
 use_home          = args.use_home
 
 # Use the arguments

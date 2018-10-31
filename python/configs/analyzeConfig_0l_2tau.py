@@ -79,7 +79,12 @@ class analyzeConfig_0l_2tau(analyzeConfig):
       outputDir          = outputDir,
       executable_analyze = executable_analyze,
       channel            = "0l_2tau",
-      subcategories      = ["0l_2tau", "0l_2tau_bloose", "0l_2tau_btight", "0l_2tau_1Jp"],
+      subcategories      = [
+      "0l_2tau",
+      "0l_2tau_bloose", "0l_2tau_btight", "0l_2tau_1pHTTv2", "0l_2tau_1pAK8",
+      "0l_2tau_bloose_0HTTv2", "0l_2tau_btight_0HTTv2"
+      #"0l_2tau_1Jp"
+      ],
       samples            = samples,
       lep_mva_wp         = lep_mva_wp,
       central_or_shifts  = central_or_shifts,

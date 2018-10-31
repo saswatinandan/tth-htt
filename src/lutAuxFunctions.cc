@@ -57,7 +57,7 @@ openFile(const LocalFileInPath & fileName)
 }
 
 /**
- * @brief Load one-dimensional histogram (TH1) from ROOT file 
+ * @brief Load one-dimensional histogram (TH1) from ROOT file
  * @param fileName:      name of ROOT file
  * @param histogramName: name of the histogram
  * @return pointer to TH1 object
@@ -76,7 +76,7 @@ loadTH1(TFile * inputFile,
 }
 
 /**
- * @brief Load two-dimensional histogram (TH2) from ROOT file 
+ * @brief Load two-dimensional histogram (TH2) from ROOT file
  * @param fileName:      name of ROOT file
  * @param histogramName: name of the histogram
  * @return pointer to TH2 object
@@ -95,7 +95,7 @@ loadTH2(TFile * inputFile,
 }
 
 /**
- * @brief Load graph (TGraph) from ROOT file 
+ * @brief Load graph (TGraph) from ROOT file
  * @param fileName:  name of ROOT file;
  * @param graphName: name of the graph
  * @return pointer to TGraph object
@@ -114,7 +114,7 @@ loadTGraph(TFile * inputFile,
 }
 
 /**
- * @brief Load function (TF1) from ROOT file 
+ * @brief Load function (TF1) from ROOT file
  * @param fileName:     name of ROOT file
  * @param functionName: name of the function
  * @return pointer to TF1 object
@@ -126,7 +126,7 @@ loadTF1(TFile * inputFile,
   TF1 * function = dynamic_cast<TF1 *>(inputFile->Get(functionName.data()));
   if (! function)
   {
-    throw cms::Exception("loadTF1") 
+    throw cms::Exception("loadTF1")
       << " Failed to load TF1 = " << functionName.data() << " from file = " << inputFile->GetName();
   }
   return function;
@@ -396,7 +396,7 @@ lutWrapperTH1::lutWrapperTH1(std::map<std::string, TFile *> & inputFiles,
 {
   if(yAction_ == kLimit || yAction_ == kLimit_and_Cut )
     throw cmsException(__func__, __LINE__)
-      << " Configuration parameter 'yAction' = " << yAction << " not supported for objects of class lutWrapperTH1 !!\n";  
+      << " Configuration parameter 'yAction' = " << yAction << " not supported for objects of class lutWrapperTH1 !!\n";
   lut_ = loadTH1(inputFile_, lutName_);
 }
 
@@ -532,7 +532,7 @@ lutWrapperCrystalBall::lutWrapperCrystalBall(const std::string & lutName,
 {
   if(yAction_ == kLimit || yAction_ == kLimit_and_Cut )
     throw cmsException(__func__, __LINE__)
-      << " Configuration parameter 'yAction' = " << yAction << " not supported for objects of class lutWrapperCrystalBall !!\n";  
+      << " Configuration parameter 'yAction' = " << yAction << " not supported for objects of class lutWrapperCrystalBall !!\n";
 }
 
 double

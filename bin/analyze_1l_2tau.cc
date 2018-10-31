@@ -103,6 +103,7 @@
 
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorAK12.h" // RecoJetSelectorAK12
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorAK8.h" // RecoJetSelectorAK8
+#include "tthAnalysis/HiggsToTauTau/interface/ParticleCollectionCleanerSubJets.h" // RecoJetCollectionCleanerAK8SubJets
 
 #include "tthAnalysis/HiggsToTauTau/interface/GenParticle.h" // GenParticle
 #include "tthAnalysis/HiggsToTauTau/interface/GenParticleReader.h" // GenParticleReader
@@ -350,8 +351,8 @@ int main(int argc, char* argv[])
   std::string branchName_jets = cfg_analyze.getParameter<std::string>("branchName_jets");
   std::string branchName_jetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_jetsHTTv2");
   std::string branchName_subjetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_subjetsHTTv2");
-  std::string branchName_jetsAK12 = cfg_analyze.getParameter<std::string>("branchName_jetsAK12");
-  std::string branchName_subjetsAK12 = cfg_analyze.getParameter<std::string>("branchName_subjetsAK12");
+  //std::string branchName_jetsAK12 = cfg_analyze.getParameter<std::string>("branchName_jetsAK12");
+  //std::string branchName_subjetsAK12 = cfg_analyze.getParameter<std::string>("branchName_subjetsAK12");
   std::string branchName_jetsAK8 = cfg_analyze.getParameter<std::string>("branchName_jetsAK8");
   std::string branchName_subjetsAK8 = cfg_analyze.getParameter<std::string>("branchName_subjetsAK8");
   std::string branchName_met = cfg_analyze.getParameter<std::string>("branchName_met");
@@ -479,16 +480,20 @@ int main(int argc, char* argv[])
   inputTree -> registerReader(jetReaderHTTv2);
   RecoJetCollectionSelectorHTTv2 jetSelectorHTTv2(era, 1, isDEBUG);
   RecoJetCollectionCleanerHTTv2 jetCleanerHTTv2(1.5, isDEBUG); //to clean against leptons and hadronic taus #
+  RecoJetCollectionCleanerHTTv2SubJets jetCleanerHTTv2SubJets(0.4, isDEBUG); //to clean against leptons and hadronic taus
 
+  /*
   RecoJetReaderAK12* jetReaderAK12 = new RecoJetReaderAK12(era, branchName_jetsAK12, branchName_subjetsAK12);
   inputTree -> registerReader(jetReaderAK12);
   RecoJetCollectionSelectorAK12 jetSelectorAK12(era);
   RecoJetCollectionCleanerAK12 jetCleanerAK12(1.2, isDEBUG); //to clean against leptons and hadronic taus
+  */
 
   RecoJetReaderAK8* jetReaderAK8 = new RecoJetReaderAK8(era, branchName_jetsAK8, branchName_subjetsAK8);
   inputTree -> registerReader(jetReaderAK8);
   RecoJetCollectionSelectorAK8 jetSelectorAK8(era);
   RecoJetCollectionCleanerAK8 jetCleanerAK8(0.8, isDEBUG); //to clean against leptons and hadronic taus
+  RecoJetCollectionCleanerAK8SubJets jetCleanerAK8SubJets(0.4, isDEBUG); //to clean against leptons and hadronic taus
 
   RecoJetReader* jetReader = new RecoJetReader(era, isMC, branchName_jets, readGenObjects);
   jetReader->setPtMass_central_or_shift(jetPt_option);
@@ -497,7 +502,7 @@ int main(int argc, char* argv[])
   RecoJetCollectionGenMatcher jetGenMatcher;
   RecoJetCollectionCleaner jetCleaner(0.4, isDEBUG);
   RecoJetCollectionCleaner jetCleaner_large8(0.8, isDEBUG);
-  RecoJetCollectionCleaner jetCleaner_large12(1.2, isDEBUG);
+  //RecoJetCollectionCleaner jetCleaner_large12(1.2, isDEBUG);
   RecoJetCollectionSelector jetSelector(era, -1, isDEBUG);
   RecoJetCollectionSelectorBtagLoose jetSelectorBtagLoose(era, -1, isDEBUG);
   RecoJetCollectionSelectorBtagMedium jetSelectorBtagMedium(era, -1, isDEBUG);
@@ -556,7 +561,7 @@ int main(int argc, char* argv[])
   //--- initialize hadronic top tagger BDT
   HadTopTagger* hadTopTagger = new HadTopTagger();
   HadTopTagger_boosted* hadTopTagger_boosted = new HadTopTagger_boosted();
-  HadTopTagger_semi_boosted* hadTopTagger_semi_boosted = new HadTopTagger_semi_boosted();
+  //HadTopTagger_semi_boosted* hadTopTagger_semi_boosted = new HadTopTagger_semi_boosted();
   HadTopTagger_semi_boosted_AK8* hadTopTagger_semi_boosted_fromAK8 = new HadTopTagger_semi_boosted_AK8();
 
   // -- initialize eventlevel BDTs
@@ -920,7 +925,8 @@ int main(int argc, char* argv[])
       "HTT_boosted", "genTopPt_HTT_boosted", "HadTop_pt_HTT_boosted",
       "HTT_boosted_WithKinFit", "genTopPt_HTT_boosted_WithKinFit", "HadTop_pt_HTT_boosted_WithKinFit",
       "HTT_semi_boosted", "genTopPt_HTT_semi_boosted", "HadTop_pt_HTT_semi_boosted",
-      "HTT_semi_boosted_WithKinFit", "genTopPt_HTT_semi_boosted_WithKinFit", "HadTop_pt_HTT_semi_boosted_WithKinFit", "DR_W_b_gen_AK12", "DR_W_b_gen_AK8"
+      "HTT_semi_boosted_WithKinFit", "genTopPt_HTT_semi_boosted_WithKinFit", "HadTop_pt_HTT_semi_boosted_WithKinFit", "DR_W_b_gen_AK12", "DR_W_b_gen_AK8",
+      "minDR_AK8subjets_lep", "minDR_HTTv2subjets_lep"
     );
     bdt_filler -> register_variable<int_type>(
       "nJet", "nBJetLoose", "nBJetMedium", "nHTTv2", "nElectron", "nMuon",
@@ -932,7 +938,8 @@ int main(int argc, char* argv[])
       "bWj1Wj2_isGenMatched_boosted", "bWj1Wj2_isGenMatched_boosted_WithKinFit",
       "bWj1Wj2_isGenMatched_semi_boosted", "bWj1Wj2_isGenMatched_semi_boosted_WithKinFit",
       "bWj1Wj2_isGenMatched_semi_boosted_fromAK8",
-      "cleanedJets_fromAK12", "cleanedJets_fromAK8",
+      //"cleanedJets_fromAK12",
+      "cleanedJets_fromAK8",
       "resolved_and_semi", "boosted_and_semi",
       "resolved_and_semi_AK8", "boosted_and_semi_AK8",
       "resolved_and_boosted"
@@ -1252,23 +1259,25 @@ int main(int argc, char* argv[])
     //--- build collections of jets reconstructed by hep-top-tagger (HTTv2) algorithm
     std::vector<RecoJetHTTv2> jetsHTTv2 = jetReaderHTTv2->read();
     std::vector<const RecoJetHTTv2*> jet_ptrsHTTv2raw = convert_to_ptrs(jetsHTTv2);
-    std::vector<const RecoJetHTTv2*> cleanedJetsHTTv2 = jetCleanerHTTv2(jet_ptrsHTTv2raw, selMuons, selElectrons, selHadTaus);
-    std::vector<const RecoJetHTTv2*> jet_ptrsHTTv2rawSel = jetSelectorHTTv2(jet_ptrsHTTv2raw, isHigherPt);
+    std::vector<const RecoJetHTTv2*> cleanedJetsHTTv2 = jetCleanerHTTv2SubJets(jet_ptrsHTTv2raw, selMuons, selElectrons, selHadTaus);
+    //std::vector<const RecoJetHTTv2*> jet_ptrsHTTv2rawSel = jetSelectorHTTv2(jet_ptrsHTTv2raw, isHigherPt);
     std::vector<const RecoJetHTTv2*> sel_HTTv2 =  jetSelectorHTTv2(cleanedJetsHTTv2, isHigherPt);
     if (sel_HTTv2.size() > 0) contHTTv2_clean_0++;
 
 //--- build collections of jets reconstructed by anti-kT algorithm with dR=1.2 (AK12)
+    /*
     std::vector<RecoJetAK12> jetsAK12 = jetReaderAK12->read();
     std::vector<const RecoJetAK12*> jet_ptrsAK12raw = convert_to_ptrs(jetsAK12);
     std::vector<const RecoJetAK12*> jet_ptrsAK12;
     std::vector<const RecoJetAK12*> cleanedJetsAK12 = jetCleanerAK12(jet_ptrsAK12raw, selMuons, selElectrons, selHadTaus);
     jet_ptrsAK12 = jetSelectorAK12(cleanedJetsAK12, isHigherPt);
     //std::cout << "after load ak12"  << std::endl;
+    */
 //--- build collections of jets reconstructed by anti-kT algorithm with dR=0.8 (AK8)
     std::vector<RecoJetAK8> jetsAK8 = jetReaderAK8->read();
     std::vector<const RecoJetAK8*> jet_ptrsAK8raw = convert_to_ptrs(jetsAK8);
     std::vector<const RecoJetAK8*> jet_ptrsAK8;
-    std::vector<const RecoJetAK8*> cleanedJetsAK8 = jetCleanerAK8(jet_ptrsAK8raw, selMuons, selElectrons, selHadTaus);
+    std::vector<const RecoJetAK8*> cleanedJetsAK8 = jetCleanerAK8SubJets(jet_ptrsAK8raw, selMuons, selElectrons, selHadTaus);
     jet_ptrsAK8 = jetSelectorAK8(cleanedJetsAK8, isHigherPt);
     //std::cout << "after load ak8"  << std::endl;
 
@@ -1287,10 +1296,10 @@ int main(int argc, char* argv[])
 
 //--- cleaned RecoJet collection from AK12 as well
     // -- to make the semi-boosted tagger but keep b-tag ordering consistent in cat2
-    std::vector<const RecoJet*> cleanedJets_fromAK12;
-    cleanedJets_fromAK12 = jetCleaner_large12(selJets, jet_ptrsAK12);
+    //std::vector<const RecoJet*> cleanedJets_fromAK12;
+    //cleanedJets_fromAK12 = jetCleaner_large12(selJets, jet_ptrsAK12);
     std::vector<const RecoJet*> cleanedJets_fromAK8;
-    cleanedJets_fromAK8 = jetCleaner_large8(selJets, jet_ptrsAK12);
+    cleanedJets_fromAK8 = jetCleaner_large8(selJets, jet_ptrsAK8);
 
 //--- build collections of generator level particles (after some cuts are applied, to safe computing time)
     if ( isMC && redoGenMatching && !fillGenEvtHistograms ) {
@@ -1990,6 +1999,7 @@ bool hadtruth_boosted = false;
 double minDR_HTTv2_lep = -1.;
 double minDR_HTTv2_L = -1.;
 double DR_HTTv2_tau = -1.;
+double minDR_HTTv2subjets_lep = -1.;
 for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin();
   jetIter != sel_HTTv2.end(); ++jetIter ) {
     bool isGenMatched = false;
@@ -2014,6 +2024,23 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
         deltaR(selLepton->p4(), (*jetIter)->p4())
       );
       DR_HTTv2_tau = deltaR(selHadTau_OS->p4(), (*jetIter)->p4());
+      minDR_HTTv2subjets_lep =
+      std::min(
+      std::min(
+      std::min(
+        deltaR(selHadTau_lead->p4(), (*jetIter)->subJet1()->p4()),
+        deltaR(selHadTau_sublead->p4(), (*jetIter)->subJet1()->p4())
+      ),
+      std::min(
+        deltaR(selHadTau_lead->p4(), (*jetIter)->subJet2()->p4()),
+        deltaR(selHadTau_sublead->p4(), (*jetIter)->subJet2()->p4())
+      )
+     ),
+     std::min(
+       deltaR(selHadTau_lead->p4(), (*jetIter)->subJet3()->p4()),
+       deltaR(selHadTau_sublead->p4(), (*jetIter)->subJet3()->p4())
+     )
+     );
     }
 
     if ( bdtResult.at(kXGB_boosted_with_kinFit) > HTT_boosted_WithKinFit ) {
@@ -2052,6 +2079,7 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
   double minDR_AK12_lep = -1.;
   double minDR_AK12_L = -1.;
   double DR_AK12_tau = -1.;
+  /*
   //for (auto i: btag_order) std::cout << i << " ";
   for ( std::vector<const RecoJet*>::const_iterator selBJet = cleanedJets_fromAK12.begin(); selBJet != cleanedJets_fromAK12.end(); ++selBJet )  { // cleanedJets.size()
     for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12.begin();
@@ -2096,6 +2124,7 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
 
       }
     }
+    */
     //std::cout << "semi-boosted HTT " << HTT_semi_boosted << " "
     //<< HTT_semi_boosted_WithKinFit  << " "
     //<< minDR_AK12_L << " "
@@ -2111,7 +2140,7 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
     double W_pt_semi_boosted_fromAK8 = 0.;
     double b_pt_semi_boosted_fromAK8 = 0.;
     double AK8_without_subjets = false;
-
+    double minDR_AK8subjets_lep = -1.;
     bool hadtruth_semi_boosted_fromAK8 = false;
     double minDR_AK8_lep = -1.;
     for ( std::vector<const RecoJet*>::const_iterator selBJet = cleanedJets_fromAK8.begin(); selBJet != cleanedJets_fromAK8.end(); ++selBJet )  { // cleanedJets.size()
@@ -2137,6 +2166,18 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
           );
           b_pt_semi_boosted_fromAK8 = (*selBJet)->pt() ;
           W_pt_semi_boosted_fromAK8 = (*jetIter)->pt() ;
+
+          minDR_AK8subjets_lep =
+          std::min(
+          std::min(
+            deltaR(selHadTau_lead->p4(), (*jetIter)->subJet1()->p4()),
+            deltaR(selHadTau_sublead->p4(), (*jetIter)->subJet1()->p4())
+          ),
+          std::min(
+            deltaR(selHadTau_lead->p4(), (*jetIter)->subJet2()->p4()),
+            deltaR(selHadTau_sublead->p4(), (*jetIter)->subJet2()->p4())
+          )
+         );
         }
 
         if (calculate_matching) {
@@ -2305,7 +2346,7 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
     selHistManager->weights_->fillHistograms("fakeRate", weight_fakeRate);
 
     //std::cout<< " make categories "<<std::endl;
-    if ( jet_ptrsHTTv2rawSel.size() > 0 ) contHTTv2_noclean++;
+    //if ( jet_ptrsHTTv2rawSel.size() > 0 ) contHTTv2_noclean++;
     if ( sel_HTTv2.size() > 0 ) contHTTv2_clean++;
     std::string category;
     if      ( sel_HTTv2.size() > 0 ) category = "1l_2tau_1Jp";
@@ -2510,14 +2551,14 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
           ("genTopPt_HTT_semi_boosted_WithKinFit",         genTopPt_semi_boosted_WithKinFit)
           ("HadTop_pt_HTT_semi_boosted_WithKinFit",        HadTop_pt_HTT_semi_boosted_WithKinFit)
 
-          ("N_jetAK12",     jet_ptrsAK12.size())
-          ("AK12_lead_pt",                  jet_ptrsAK12.size() > 0 ? jet_ptrsAK12[0]->pt() : -1 )
-          ("AK12_lead_mass",                jet_ptrsAK12.size() > 0 ? jet_ptrsAK12[0]->p4().mass() : -1 )
+          ("N_jetAK12",     0) //jet_ptrsAK12.size())
+          ("AK12_lead_pt",                 0)// jet_ptrsAK12.size() > 0 ? jet_ptrsAK12[0]->pt() : -1 )
+          ("AK12_lead_mass",               0) // jet_ptrsAK12.size() > 0 ? jet_ptrsAK12[0]->p4().mass() : -1 )
           ("minDR_AK12_L",                  minDR_AK12_L)
           ("minDR_AK12_lep",                minDR_AK12_lep)
           ("DR_AK12_tau",                   DR_AK12_tau )
 
-          ("cleanedJets_fromAK12",       cleanedJets_fromAK12.size())
+          //("cleanedJets_fromAK12",       cleanedJets_fromAK12.size())
 
           ("HTT_semi_boosted_fromAK8",                     HTT_semi_boosted_fromAK8)
           ("bWj1Wj2_isGenMatched_semi_boosted_fromAK8",    bWj1Wj2_isGenMatched_semi_boosted_fromAK8)
@@ -2535,6 +2576,9 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
           ("hadtruth_semi_boosted_fromAK8", hadtruth_semi_boosted_fromAK8)
           ("DR_W_b_gen_AK12", DR_W_b_gen_AK12)
           ("DR_W_b_gen_AK8", DR_W_b_gen_AK8)
+
+          ("minDR_AK8subjets_lep",         minDR_AK8subjets_lep)
+          ("minDR_HTTv2subjets_lep",         minDR_HTTv2subjets_lep)
 
           ("resolved_and_semi",         resolved_and_semi)
           ("boosted_and_semi",          boosted_and_semi)
