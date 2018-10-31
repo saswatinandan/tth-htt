@@ -82,12 +82,13 @@ class analyzeConfig_2lss(analyzeConfig):
       channel                   = "2lss",
       subcategories             = [
         "2lss",
-        "2lss_ee_neg", "2lss_ee_pos",
-        "2lss_em_bl_neg", "2lss_em_bl_pos", "2lss_em_bt_neg", "2lss_em_bt_pos",
-        "2lss_mm_bl_neg", "2lss_mm_bl_pos", "2lss_mm_bt_neg", "2lss_mm_bt_pos",
-        #"2lss_1J", "2lss_ee_neg_0J", "2lss_ee_pos_0J",
-        #"2lss_em_bl_neg_0J", "2lss_em_bl_pos_0J", "2lss_em_bt_neg_0J", "2lss_em_bt_pos_0J",
-        #"2lss_mm_bl_neg_0J", "2lss_mm_bl_pos_0J", "2lss_mm_bt_neg_0J", "2lss_mm_bt_pos_0J"
+        "2lss_0tau_ee_neg", "2lss_0tau_ee_pos",
+        "2lss_0tau_em_bl_neg", "2lss_0tau_em_bl_pos", "2lss_0tau_em_bt_neg", "2lss_0tau_em_bt_pos",
+        "2lss_0tau_mm_bl_neg", "2lss_0tau_mm_bl_pos", "2lss_0tau_mm_bt_neg", "2lss_0tau_mm_bt_pos",
+        ############
+        "2lss_0tau_1pHTTv2", "2lss_0tau_1pAK8", "2lss_0tau_ee_neg_0J", "2lss_0tau_ee_pos_0J",
+        "2lss_0tau_em_bl_neg_0J", "2lss_0tau_em_bl_pos_0J", "2lss_0tau_em_bt_neg_0J", "2lss_0tau_em_bt_pos_0J",
+        "2lss_0tau_mm_bl_neg_0J", "2lss_0tau_mm_bl_pos_0J", "2lss_0tau_mm_bt_neg_0J", "2lss_0tau_mm_bt_pos_0J"
         ],
       samples                   = samples,
       central_or_shifts         = central_or_shifts,
@@ -152,7 +153,7 @@ class analyzeConfig_2lss(analyzeConfig):
     self.nonfake_backgrounds = [ "TT", "TTW", "TTWW", "TTZ", "EWK", "Rares", "tHq", "tHW", "VH" ]
 
     self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [ "conversions", "fakes_data", "fakes_mc", "flips_data" ]
-    self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "conversions", "fakes_data", "flips_data" ]
+    #self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "conversions", "fakes_data", "flips_data" ]
 
     self.cfgFile_analyze = os.path.join(self.template_dir, cfgFile_analyze)
     self.inputFiles_hadd_stage1_6 = []
@@ -168,8 +169,8 @@ class analyzeConfig_2lss(analyzeConfig):
         histogramDir_prep_dcard_OS_local+=[self.subcategories[cc]+"_OS_Tight"]
     self.histogramDir_prep_dcard = histogramDir_prep_dcard_local
     self.histogramDir_prep_dcard_OS = histogramDir_prep_dcard_OS_local
-    self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_2lss_cfg.py")
-    self.cfgFile_make_plots_mcClosure = os.path.join(self.template_dir, "makePlots_mcClosure_2lss_cfg.py") #TODO
+    #self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_2lss_cfg.py")
+    #self.cfgFile_make_plots_mcClosure = os.path.join(self.template_dir, "makePlots_mcClosure_2lss_cfg.py") #TODO
 
     self.select_rle_output = select_rle_output
     self.rle_select = rle_select
@@ -782,6 +783,7 @@ class analyzeConfig_2lss(analyzeConfig):
         })
       self.createCfg_add_syst_fakerate(self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job])
 
+      """
       logging.info("Creating configuration files to run 'makePlots'")
       key_makePlots_job = getKey("SS")
       key_hadd_stage2 = getKey(get_lepton_selection_and_frWeight("Tight", "disabled"), "SS")
@@ -823,6 +825,7 @@ class analyzeConfig_2lss(analyzeConfig):
           'histogramDir_sideband' : self.histogramDir_prep_dcard.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights")
         }
         self.createCfg_makePlots_mcClosure(self.jobOptions_make_plots[key_makePlots_job])
+    """
 
     if self.is_sbatch:
       logging.info("Creating script for submitting '%s' jobs to batch system" % self.executable_analyze)
@@ -831,7 +834,7 @@ class analyzeConfig_2lss(analyzeConfig):
       logging.info("Creating script for submitting '%s' jobs to batch system" % self.executable_addBackgrounds)
       self.sbatchFile_addBackgrounds = os.path.join(self.dirs[DKEY_SCRIPTS], "sbatch_addBackgrounds_%s.py" % self.channel)
       self.createScript_sbatch(self.executable_addBackgrounds, self.sbatchFile_addBackgrounds, self.jobOptions_addBackgrounds)
-      self.sbatchFile_addBackgrounds_sum = os.path.join(self.dirs[DKEY_SCRIPTS], "sbatch_addBackgrounds_%s.py" % self.channel)
+      self.sbatchFile_addBackgrounds_sum = os.path.join(self.dirs[DKEY_SCRIPTS], "sbatch_addBackgrounds_sum_%s.py" % self.channel)
       self.createScript_sbatch(self.executable_addBackgrounds, self.sbatchFile_addBackgrounds_sum, self.jobOptions_addBackgrounds_sum)
       logging.info("Creating script for submitting '%s' jobs to batch system" % self.executable_addFakes)
       self.sbatchFile_addFakes = os.path.join(self.dirs[DKEY_SCRIPTS], "sbatch_addFakes_%s.py" % self.channel)
@@ -848,7 +851,7 @@ class analyzeConfig_2lss(analyzeConfig):
     self.addToMakefile_hadd_stage2(lines_makefile)
     self.addToMakefile_prep_dcard(lines_makefile)
     self.addToMakefile_add_syst_fakerate(lines_makefile)
-    self.addToMakefile_make_plots(lines_makefile)
+    #self.addToMakefile_make_plots(lines_makefile)
     self.createMakefile(lines_makefile)
 
     logging.info("Done")

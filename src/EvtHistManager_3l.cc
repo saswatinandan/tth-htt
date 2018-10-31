@@ -30,7 +30,7 @@ EvtHistManager_3l::bookHistograms(TFileDirectory & dir)
 
   histogram_mvaOutput_3l_ttV_   = book1D(dir, "mvaOutput_3l_ttV",   "mvaOutput_3l_ttV",   40, -1., +1.);
   histogram_mvaOutput_3l_ttbar_ = book1D(dir, "mvaOutput_3l_ttbar", "mvaOutput_3l_ttbar", 40, -1., +1.);
-  histogram_mvaDiscr_3l_        = book1D(dir, "mvaDiscr_3l",        "mvaDiscr_3l",         5,  0.5, 5.5);
+  histogram_mvaDiscr_3l_        = book1D(dir, "mvaDiscr_3l",        "mvaDiscr_3l",         6,  -0.5, 5.5);
 
   histogram_mva_Boosted_AK12_basic_    = book1D(dir, "mva_Boosted_AK12_basic",    "mva_Boosted_AK12_basic",     100, 0.,  +1.0);
   histogram_mva_Boosted_AK12_          = book1D(dir, "mva_Boosted_AK12",    "mva_Boosted_AK12",     100, 0.,  +1.0);

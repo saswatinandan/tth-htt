@@ -10,6 +10,9 @@
 #include <TBenchmark.h> // TBenchmark
 #include <TString.h> // TString, Form
 #include <TError.h> // gErrorAbortLevel, kError
+#include <TMatrixD.h> // TMatrixD
+#include <TMath.h> // TMath::
+#include <TH2.h> // TH2
 
 #include "tthAnalysis/HiggsToTauTau/interface/RecoLepton.h" // RecoLepton
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJet.h" // RecoJet
@@ -104,7 +107,7 @@
 
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorAK12.h" // RecoJetSelectorAK12
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorAK8.h" // RecoJetSelectorAK8
-
+#include "tthAnalysis/HiggsToTauTau/interface/ParticleCollectionCleanerSubJets.h" // RecoJetCollectionCleanerAK8SubJets
 #include <boost/math/special_functions/sign.hpp> // boost::math::sign()
 
 #include <iostream> // std::cerr, std::fixed
@@ -328,8 +331,8 @@ int main(int argc, char* argv[])
   std::string branchName_jets = cfg_analyze.getParameter<std::string>("branchName_jets");
   std::string branchName_jetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_jetsHTTv2");
   std::string branchName_subjetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_subjetsHTTv2");
-  std::string branchName_jetsAK12 = cfg_analyze.getParameter<std::string>("branchName_jetsAK12");
-  std::string branchName_subjetsAK12 = cfg_analyze.getParameter<std::string>("branchName_subjetsAK12");
+  //std::string branchName_jetsAK12 = cfg_analyze.getParameter<std::string>("branchName_jetsAK12");
+  //std::string branchName_subjetsAK12 = cfg_analyze.getParameter<std::string>("branchName_subjetsAK12");
   std::string branchName_jetsAK8 = cfg_analyze.getParameter<std::string>("branchName_jetsAK8");
   std::string branchName_subjetsAK8 = cfg_analyze.getParameter<std::string>("branchName_subjetsAK8");
   std::string branchName_met = cfg_analyze.getParameter<std::string>("branchName_met");
@@ -437,17 +440,19 @@ int main(int argc, char* argv[])
   RecoJetReaderHTTv2* jetReaderHTTv2 = new RecoJetReaderHTTv2(era, branchName_jetsHTTv2, branchName_subjetsHTTv2);
   inputTree -> registerReader(jetReaderHTTv2);
   RecoJetCollectionSelectorHTTv2 jetSelectorHTTv2(era);
-  RecoJetCollectionCleanerHTTv2 jetCleanerHTTv2(0.01, isDEBUG); //to clean against leptons and hadronic taus
+  RecoJetCollectionCleanerHTTv2SubJets jetCleanerHTTv2(0.4, isDEBUG); //jetCleanerHTTv2(0.01, isDEBUG); //to clean against leptons and hadronic taus
 
+  /*
   RecoJetReaderAK12* jetReaderAK12 = new RecoJetReaderAK12(era, branchName_jetsAK12, branchName_subjetsAK12);
   inputTree -> registerReader(jetReaderAK12);
   RecoJetCollectionSelectorAK12 jetSelectorAK12(era);
   RecoJetCollectionCleanerAK12 jetCleanerAK12(0.01, isDEBUG); //to clean against leptons and hadronic taus
+  */
 
   RecoJetReaderAK8* jetReaderAK8 = new RecoJetReaderAK8(era, branchName_jetsAK8, branchName_subjetsAK8);
   inputTree -> registerReader(jetReaderAK8);
   RecoJetCollectionSelectorAK8 jetSelectorAK8(era);
-  RecoJetCollectionCleanerAK8 jetCleanerAK8(0.01, isDEBUG); //to clean against leptons and hadronic taus
+  RecoJetCollectionCleanerAK8SubJets jetCleanerAK8(0.4, isDEBUG); //to clean against leptons and hadronic taus
 
   RecoJetReader* jetReader = new RecoJetReader(era, isMC, branchName_jets, readGenObjects);
   jetReader->setPtMass_central_or_shift(jetPt_option);
@@ -557,17 +562,11 @@ int main(int argc, char* argv[])
   //mvaInputVariables_3l_ttbar.push_back("avg_dr_jet");
   TMVAInterface mva_3l_ttbar(mvaFileName_3l_ttbar, mvaInputVariables_3l_ttbar, { "iLepFO_Recl[0]", "iLepFO_Recl[1]", "iLepFO_Recl[2]" });
   std::map<std::string, double> mvaInputs_3l;
+  //2D map for ttbar vs ttV
+  const LocalFileInPath mapFileName_fip("tthAnalysis/HiggsToTauTau/data/multilep_BDTs_2018/binning_3l.root");
+  TFile * fmap = TFile::Open(mapFileName_fip.fullPath().c_str(), "read");
+  TH2F * hTargetBinning = static_cast<TH2F *>(fmap->Get("hTargetBinning"));
 
-/*
-data/evtLevel_2018March/
-data/evtLevel_2018March/
-data/evtLevel_2018March/
-data/evtLevel_2018March
-data/evtLevel_2018March/
-data/evtLevel_2018March/
-data/evtLevel_2018March/
-data/evtLevel_2018March/
-*/
 
 // BDT with boosted stuff
 std::string mvaFileName_XGB_oldVar = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/3l_0tau/3l_0tau_XGB_oldVar_evtLevelSUM_TTH_9Var.pkl";
@@ -701,10 +700,10 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     MVAInputVarHistManager* mvaInputVariables_3l_;
     EvtHistManager_3l* evt_;
     std::map<std::string, EvtHistManager_3l*> evt_in_categories_;
-    //std::map<std::string, EvtHistManager_3l*> evt_in_categoriesFat_;
+    std::map<std::string, EvtHistManager_3l*> evt_in_categoriesFat_;
     std::map<std::string, EvtHistManager_3l*> evt_in_decayModes_;
     std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_and_decayModes_; // key = category, decayMode
-    //std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categoriesFat_and_decayModes_; // key = category, decayMode
+    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categoriesFat_and_decayModes_; // key = category, decayMode
     EvtYieldHistManager* evtYield_;
     WeightHistManager* weights_;
   };
@@ -713,9 +712,9 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
   vstring categories = {
     "3l_0tau_bl_neg", "3l_0tau_bl_pos", "3l_0tau_bt_neg", "3l_0tau_bt_pos"
   };
-  //vstring categoriesFat = {
-  //  "3l_0tau_bl_neg_0J", "3l_0tau_bl_pos_0J", "3l_0tau_bt_neg_0J", "3l_0tau_bt_pos_0J", "3l_0tau_1J"
-  //};
+  vstring categoriesFat = {
+    "3l_0tau_bl_neg_0J", "3l_0tau_bl_pos_0J", "3l_0tau_bt_neg_0J", "3l_0tau_bt_pos_0J", "3l_0tau_1pHTTv2", "3l_0tau_1pAK8"
+  };
 
   for ( std::vector<leptonGenMatchEntry>::const_iterator leptonGenMatch_definition = leptonGenMatch_definitions.begin();
 	leptonGenMatch_definition != leptonGenMatch_definitions.end(); ++leptonGenMatch_definition ) {
@@ -828,7 +827,6 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
       selHistManager->evt_in_categories_[*category]->bookHistograms(fs);
     }
-    /*
     for ( vstring::const_iterator category = categoriesFat.begin();
 	  category != categoriesFat.end(); ++category ) {
       TString histogramDir_category = histogramDir.data();
@@ -837,7 +835,6 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
       selHistManager->evt_in_categoriesFat_[*category]->bookHistograms(fs);
     }
-    */
     const vstring decayModes_evt = eventInfo.getDecayModes();
     if(isSignal)
     {
@@ -866,7 +863,6 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
           ));
 	  selHistManager -> evt_in_categories_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
 	}
-  /*
   for ( vstring::const_iterator category = categoriesFat.begin();
 	      category != categoriesFat.end(); ++category ) {
 	  TString histogramDir_category = histogramDir.data();
@@ -879,7 +875,6 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
           ));
 	  selHistManager -> evt_in_categoriesFat_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
 	}
-  */
 
       }
     }
@@ -1028,6 +1023,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     }
     ++analyzedEntries;
     //if ( analyzedEntries > 50000 ) break;
+    //std::cout << "analyzedEntries = " << analyzedEntries << std::endl;
     histogram_analyzedEntries->Fill(0.);
 
     if (run_lumi_eventSelector && !(*run_lumi_eventSelector)(eventInfo))
@@ -1335,29 +1331,29 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
       printCollection("selLeptons", selLeptons);
       printCollection("selHadTaus", selHadTaus);
     }
-
 //--- build collections of jets reconstructed by hep-top-tagger (HTTv2) algorithm
     std::vector<RecoJetHTTv2> jetsHTTv2 = jetReaderHTTv2->read();
     std::vector<const RecoJetHTTv2*> jet_ptrsHTTv2raw = convert_to_ptrs(jetsHTTv2);
-    std::vector<const RecoJetHTTv2*> cleanedJetsHTTv2 = jetCleanerHTTv2(jet_ptrsHTTv2raw, selMuons, selElectrons, selHadTaus);
+    std::vector<const RecoJetHTTv2*> cleanedJetsHTTv2 = jetCleanerHTTv2(jet_ptrsHTTv2raw, selMuons, selElectrons);
     std::vector<const RecoJetHTTv2*> jet_ptrsHTTv2rawSel = jetSelectorHTTv2(jet_ptrsHTTv2raw, isHigherPt);
     std::vector<const RecoJetHTTv2*> sel_HTTv2           =  jetSelectorHTTv2(cleanedJetsHTTv2, isHigherPt);
    //std::cout << "after load HTTv2"  << std::endl;
 
+    /*
 //--- build collections of jets reconstructed by anti-kT algorithm with dR=1.2 (AK12)
     std::vector<RecoJetAK12> jetsAK12 = jetReaderAK12->read();
     std::vector<const RecoJetAK12*> jet_ptrsAK12raw1 = convert_to_ptrs(jetsAK12);
     std::vector<const RecoJetAK12*> jet_ptrsAK12raw = jetSelectorAK12(jet_ptrsAK12raw1, isHigherPt);
     std::vector<const RecoJetAK12*> jet_ptrsAK12 = jetCleanerAK12(jet_ptrsAK12raw, fakeableMuons, fakeableElectrons, selHadTaus);
     //std::cout << "after load ak12"  << std::endl;
+    */
 
 //--- build collections of jets reconstructed by anti-kT algorithm with dR=0.8 (AK8)
     std::vector<RecoJetAK8> jetsAK8 = jetReaderAK8->read();
     std::vector<const RecoJetAK8*> jet_ptrsAK8raw1 = convert_to_ptrs(jetsAK8);
     std::vector<const RecoJetAK8*> jet_ptrsAK8raw = jetSelectorAK8(jet_ptrsAK8raw1, isHigherPt);;
-    std::vector<const RecoJetAK8*> jet_ptrsAK8 = jetCleanerAK8(jet_ptrsAK8raw, fakeableMuons, fakeableElectrons, selHadTaus);
+    std::vector<const RecoJetAK8*> jet_ptrsAK8 = jetCleanerAK8(jet_ptrsAK8raw, selLeptons, selElectrons);
     //std::cout << "after load ak8"  << std::endl;
-
 //--- build collections of jets and select subset of jets passing b-tagging criteria
     std::vector<RecoJet> jets = jetReader->read();
     std::vector<const RecoJet*> jet_ptrs = convert_to_ptrs(jets);
@@ -1372,11 +1368,13 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     }
 
 //--- cleaned RecoJet collection from AK12 as well
+    /*
     // -- to make the semi-boosted tagger but keep b-tag ordering consistent in cat2
     std::vector<const RecoJet*> cleanedJets_fromAK12;
     cleanedJets_fromAK12 = jetCleaner_large12(selJets, jet_ptrsAK12);
+    */
     std::vector<const RecoJet*> cleanedJets_fromAK8;
-    cleanedJets_fromAK8 = jetCleaner_large8(selJets, jet_ptrsAK12);
+    cleanedJets_fromAK8 = jetCleaner_large8(selJets, jet_ptrsAK8);
     //else cleanedJets = jetCleaner(selJets, jet_ptrsAK8);
 
 //--- build collections of generator level particles (after some cuts are applied, to safe computing time)
@@ -2111,6 +2109,7 @@ double HadTop_pt_semi_boosted_WithKinFit = 0.;
 bool hadtruth_semi_boosted = false;
 double minDR_AK12_lep = -1.;
 
+/*
 //for (auto i: btag_order) std::cout << i << " ";
 for ( std::vector<const RecoJet*>::const_iterator selBJet = cleanedJets_fromAK12.begin(); selBJet != cleanedJets_fromAK12.end(); ++selBJet )  { // cleanedJets.size()
 for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12.begin();
@@ -2143,7 +2142,8 @@ for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12.beg
   }
 }
 if (genTopPt_CSVsort3rd == genTopPt_semi_boosted)  resolved_and_semi = true;
-if (genTopPt_semi_boosted == genTopPt_boosted)  boosted_and_semi = true;
+if (genTopPt_semi_boosted == genTopPt_boosted)  boosted_and_semi = true
+*/
 //std::cout << "semi-boosted HTT " << HTT_semi_boosted << " "
 //<< HTT_semi_boosted_WithKinFit  << " "
 //<< minDR_AK12_L << " "
@@ -2151,13 +2151,13 @@ if (genTopPt_semi_boosted == genTopPt_boosted)  boosted_and_semi = true;
 //<< DR_AK12_tau << " "
 //<< std::endl;
 
-double HTT_semi_boosted_noISO = 0.;
+//double HTT_semi_boosted_noISO = 0.;
 //bool bWj1Wj2_isGenMatched_semi_boosted = false;
 //double genTopPt_semi_boosted_noISO = 0.;
-double HadTop_pt_semi_boosted_noISO = 0.;
+//double HadTop_pt_semi_boosted_noISO = 0.;
 //bool hadtruth_semi_boosted = false;
-double minDR_AK12_lep_noISO = -1.;
-
+//double minDR_AK12_lep_noISO = -1.;
+/*
 //for (auto i: btag_order) std::cout << i << " ";
 for ( std::vector<const RecoJet*>::const_iterator selBJet = cleanedJets_fromAK12.begin(); selBJet != cleanedJets_fromAK12.end(); ++selBJet )  { // cleanedJets.size()
 for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12raw.begin();
@@ -2183,6 +2183,7 @@ for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12raw.
 
   }
 }
+*/
 
 // -- semi-boosted hTT -- AK8
 double HTT_semi_boosted_fromAK8 = 0.;
@@ -2322,7 +2323,11 @@ selJet != selJets.end(); ++selJet ) {
 
     double mvaOutput_3l_ttV = mva_3l_ttV(mvaInputs_3l);
     double mvaOutput_3l_ttbar = mva_3l_ttbar(mvaInputs_3l);
+    int ibin = hTargetBinning->FindBin(mvaOutput_3l_ttbar, mvaOutput_3l_ttV);
+    Double_t mvaDiscr_3l = hTargetBinning->GetBinContent(ibin);
+    //std::cout << "mvaDiscr_3l = " << mvaDiscr_3l << std::endl;
 
+    /*
 //--- compute integer discriminant based on both BDT outputs,
 //    as defined in Table 16 (10) of AN-2015/321 (AN-2016/211) for analysis of 2015 (2016) data
     Double_t mvaDiscr_3l = -1;
@@ -2334,9 +2339,11 @@ selJet != selJets.end(); ++selJet ) {
       else if ( mvaOutput_3l_ttbar > -0.30 && mvaOutput_3l_ttV <= +0.25 ) mvaDiscr_3l = 2.;
       else                                                                mvaDiscr_3l = 1.;
     } else assert(0);
+    */
 
     // BDT with boosted stuff
     //mvaInputs_XGB_Boosted_AK12_basic
+    /*
     mvaInputs_XGB_Boosted_AK12_basic["lep1_conePt"] = lep1_conePt;
     mvaInputs_XGB_Boosted_AK12_basic["lep2_conePt"] = lep2_conePt;
     mvaInputs_XGB_Boosted_AK12_basic["lep3_conePt"] = lep3_conePt;
@@ -2358,10 +2365,12 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_Boosted_AK12_basic["ptmiss"] = met.pt();
     mvaInputs_XGB_Boosted_AK12_basic["sumLeptonCharge"] = sumLeptonCharge;
     mvaInputs_XGB_Boosted_AK12_basic["N_jetAK12"] = jet_ptrsAK12.size();
-    double mva_Boosted_AK12_basic = mva_XGB_Boosted_AK12_basic(mvaInputs_XGB_Boosted_AK12_basic);
+    */
+    double mva_Boosted_AK12_basic = 1.0; //mva_XGB_Boosted_AK12_basic(mvaInputs_XGB_Boosted_AK12_basic);
     //std::cout<<" mva_Boosted_AK12_basic "<<mva_Boosted_AK12_basic<<std::endl;
 
     // mvaInputs_XGB_Boosted_AK12
+    /*
     mvaInputs_XGB_Boosted_AK12["lep1_conePt"] = lep1_conePt;
     mvaInputs_XGB_Boosted_AK12["lep2_conePt"] = lep2_conePt;
     mvaInputs_XGB_Boosted_AK12["lep3_conePt"] = lep3_conePt;
@@ -2384,10 +2393,12 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_Boosted_AK12["sumLeptonCharge"] = sumLeptonCharge;
     mvaInputs_XGB_Boosted_AK12["HTT_semi_boosted"] = HTT_semi_boosted;
     mvaInputs_XGB_Boosted_AK12["HTT_boosted"] = HTT_boosted;
-    double mva_Boosted_AK12 = mva_XGB_Boosted_AK12(mvaInputs_XGB_Boosted_AK12);
+    */
+    double mva_Boosted_AK12 = 1.0; // mva_XGB_Boosted_AK12(mvaInputs_XGB_Boosted_AK12);
     //std::cout<<" mva_Boosted_AK12 "<<mva_Boosted_AK12<<std::endl;
 
     // mvaInputs_XGB_AK12
+    /*
     mvaInputs_XGB_AK12["lep1_conePt"] = lep1_conePt;
     mvaInputs_XGB_AK12["lep2_conePt"] = lep2_conePt;
     mvaInputs_XGB_AK12["lep3_conePt"] = lep3_conePt;
@@ -2410,10 +2421,12 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_AK12["sumLeptonCharge"] = sumLeptonCharge;
     mvaInputs_XGB_AK12["resolved_and_semi"] = resolved_and_semi;
     mvaInputs_XGB_AK12["HTT_semi_boosted"] = HTT_semi_boosted;
-    double mva_AK12 = mva_XGB_AK12(mvaInputs_XGB_AK12);
+    */
+    double mva_AK12 = 1.0; // mva_XGB_AK12(mvaInputs_XGB_AK12);
     //std::cout<<" mva_AK12 "<<mva_AK12<<std::endl;
 
     // mvaInputs_XGB_Boosted_AK12_noISO
+    /*
     mvaInputs_XGB_Boosted_AK12_noISO["lep1_conePt"] = lep1_conePt;
     mvaInputs_XGB_Boosted_AK12_noISO["lep2_conePt"] = lep2_conePt;
     mvaInputs_XGB_Boosted_AK12_noISO["lep3_conePt"] = lep3_conePt;
@@ -2437,7 +2450,8 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_Boosted_AK12_noISO["minDR_AK12_lep"] = minDR_AK12_lep_noISO;
     mvaInputs_XGB_Boosted_AK12_noISO["HTT_semi_boosted"] = HTT_semi_boosted_noISO;
     mvaInputs_XGB_Boosted_AK12_noISO["HadTop_pt_semi_boosted"] = HadTop_pt_semi_boosted_noISO;
-    double mva_Boosted_AK12_noISO = mva_XGB_Boosted_AK12_noISO(mvaInputs_XGB_Boosted_AK12_noISO);
+    */
+    double mva_Boosted_AK12_noISO = 1.0; // mva_XGB_Boosted_AK12_noISO(mvaInputs_XGB_Boosted_AK12_noISO);
     //std::cout<<" mva_Boosted_AK12_noISO "<<mva_Boosted_AK12_noISO<<std::endl;
 
     //mvaInputs_XGB_Boosted_AK8
@@ -2536,9 +2550,9 @@ selJet != selJets.end(); ++selJet ) {
     if      ( sumLeptonCharge < 0 ) category += "_neg";
     else if ( sumLeptonCharge > 0 ) category += "_pos";
 
-    /*
     std::string categoryFat = "3l_0tau";
-    if      ( sel_HTTv2.size() > 0 ) categoryFat += "_1J";
+    if      ( sel_HTTv2.size() > 0 ) categoryFat += "_1pHTTv2";
+    else if ( jet_ptrsAK8.size() > 0 ) categoryFat += "_1pAK8";
     else {
       if ( selBJets_medium.size() >= 2 ) categoryFat += "_bt";
       else categoryFat += "_bl";
@@ -2546,7 +2560,6 @@ selJet != selJets.end(); ++selJet ) {
       else if ( sumLeptonCharge > 0 ) categoryFat += "_pos";
       categoryFat += "_0J";
     }
-    */
     //std::cout<<category<<" "<<categoryFat<<std::endl;
 
     selHistManagerType* selHistManager = selHistManagers[idxSelLepton_genMatch];
@@ -2592,7 +2605,6 @@ selJet != selJets.end(); ++selJet ) {
       mva_Updated, mva_oldVar,
       evtWeight);
     }
-    /*
     EvtHistManager_3l* selHistManager_evt_categoryFat = selHistManager->evt_in_categoriesFat_[categoryFat];
     if ( selHistManager_evt_categoryFat ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
       selHistManager_evt_categoryFat->fillHistograms(
@@ -2604,7 +2616,6 @@ selJet != selJets.end(); ++selJet ) {
       mva_Updated, mva_oldVar,
       evtWeight);
     }
-    */
     if(isSignal)
     {
       const std::string decayModeStr = eventInfo.getDecayModeString();
@@ -2643,7 +2654,6 @@ selJet != selJets.end(); ++selJet ) {
 	    evtWeight
 	  );
 	}
-  /*
   EvtHistManager_3l* selHistManager_evt_categoryFat_and_decayModes_ = selHistManager->evt_in_categoriesFat_and_decayModes_[categoryFat][decayModeStr];
 	if ( selHistManager_evt_categoryFat_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
           selHistManager_evt_categoryFat_and_decayModes_->fillHistograms(
@@ -2662,7 +2672,6 @@ selJet != selJets.end(); ++selJet ) {
 	    evtWeight
 	  );
 	}
-  */
       }
     }
     selHistManager->evtYield_->fillHistograms(eventInfo, evtWeight);
@@ -2816,11 +2825,14 @@ selJet != selJets.end(); ++selJet ) {
           ("genTopPt_semi_boosted_WithKinFit",         genTopPt_semi_boosted_WithKinFit)
           ("HadTop_pt_semi_boosted_WithKinFit",        HadTop_pt_semi_boosted_WithKinFit)
 
-          ("N_jetAK12",     jet_ptrsAK12.size())
-          ("AK12_lead_pt",                  jet_ptrsAK12.size() > 0 ? jet_ptrsAK12[0]->pt() : -1 )
+          //("N_jetAK12",     jet_ptrsAK12.size())
+          //("AK12_lead_pt",                  jet_ptrsAK12.size() > 0 ? jet_ptrsAK12[0]->pt() : -1 )
+          ("N_jetAK12",            0 )
+          ("AK12_lead_pt",        -1.)
           ("minDR_AK12_lep",                minDR_AK12_lep)
           //("minDR_AK12_2_lep",                minDR_AK12_2_lep)
-          ("cleanedJets_fromAK12",       cleanedJets_fromAK12.size())
+          //("cleanedJets_fromAK12",       cleanedJets_fromAK12.size())
+          ("cleanedJets_fromAK12",       0)
 
           ("HTT_semi_boosted_fromAK8",                     HTT_semi_boosted_fromAK8)
           ("bWj1Wj2_isGenMatched_semi_boosted_fromAK8",    bWj1Wj2_isGenMatched_semi_boosted_fromAK8)

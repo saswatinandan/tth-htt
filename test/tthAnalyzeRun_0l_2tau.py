@@ -41,7 +41,7 @@ systematics_label = args.systematics
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = 1 # args.files_per_job
+files_per_job     = 10 #args.files_per_job
 use_home          = args.use_home
 lep_mva_wp        = args.lep_mva_wp
 
@@ -106,6 +106,7 @@ elif mode == "forBDTtraining":
         sample_info["use_it"] = False
       elif sample_info["process_name_specific"] in dy_samples:
         sample_info["use_it"] = True # [*]
+      if sample_info["type"] == "data" : sample_info["use_it"] = False
 
     hadTau_selection         = "dR03mvaLoose"
     hadTau_selection_relaxed = "dR03mvaVLoose"
