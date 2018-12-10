@@ -77,7 +77,7 @@ class analyzeConfig_2los_1tau(analyzeConfig):
       subcategories             = ["2los_1tau", "2eos_1tau_btight_0J", "2eos_1tau_bloose_0J",
       "2muos_1tau_btight_0J", "2muos_1tau_bloose_0J",
       "1mu1eos_1tau_btight_0J", "1mu1eos_1tau_bloose_0J",
-      "2los_1tau_1Jp"],
+      "2los_1tau_1pHTTv2", "2los_1tau_1pAK8"],
       samples                   = samples,
       lep_mva_wp                = lep_mva_wp,
       central_or_shifts         = central_or_shifts,
