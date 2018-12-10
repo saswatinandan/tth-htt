@@ -39,7 +39,7 @@ mode              = args.mode
 systematics_label = args.systematics
 use_preselected   = args.use_preselected
 hlt_filter        = args.hlt_filter
-files_per_job     = 5 #args.files_per_job
+files_per_job     = args.files_per_job
 use_home          = args.use_home
 lep_mva_wp        = args.lep_mva_wp
 
@@ -158,6 +158,8 @@ if __name__ == '__main__':
       "mvaDiscr_2los_1tau"        : {},
       "mTauTauVis"                : {},
       "mvaOutput_2los_1tau_evtLevelSUM_TTH_19Var"  : {},
+      "mvaOutput_XGB_Updated"    : {},
+      "mvaOutput_XGB_Boosted_AK8" : {}
     },
     select_rle_output         = True,
     dry_run                   = dry_run,
