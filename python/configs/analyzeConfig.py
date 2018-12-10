@@ -170,8 +170,7 @@ class analyzeConfig(object):
         self.central_or_shifts = central_or_shifts
         if not 'central' in self.central_or_shifts:
             logging.warning('Running with systematic uncertainties, but without central value, is not supported --> adding central value.')
-            self.central_or_shifts = [ 'central' ]
-            self.central_or_shifts.extend(central_or_shifts)
+            self.central_or_shifts.append('central')
         #------------------------------------------------------------------------
         # CV: make sure that 'central' is always first entry in self.central_or_shifts
         #    (logic for building dependencies between analysis, 'hadd', and 'addBackgrounds' jobs in derived classes may abort with KeyError otherwise)
@@ -213,6 +212,7 @@ class analyzeConfig(object):
         self.isDebug = isDebug
         self.triggers = triggers
         self.triggerTable = Triggers(self.era)
+        self.do_sync = do_sync
 
         samples_to_stitch = []
         if self.era == '2016':
@@ -227,95 +227,107 @@ class analyzeConfig(object):
         else:
           raise ValueError('Invalid era: %s' % self.era)
 
-        # create temporary LUT
-        samples_lut = {}
-        for sample_key, sample_entry in self.samples.items():
-          if sample_key == 'sum_events': continue
-          process_name = sample_entry['process_name_specific']
-          assert(process_name not in samples_lut)
-          samples_lut[process_name] = sample_key
+        # we do not need to stitch anything when running the analysis on the sync Ntuple
+        self.stitching_args = {}
+        if not self.do_sync:
+          # create temporary LUT
+          samples_lut = {}
+          for sample_key, sample_entry in self.samples.items():
+            if sample_key == 'sum_events': continue
+            process_name = sample_entry['process_name_specific']
+            assert(process_name not in samples_lut)
+            samples_lut[process_name] = sample_key
 
-        # loop over the list of binned samples to determine the coverage of phase spaces
-        for samples_to_stitch_entry in samples_to_stitch:
-          # loop over the inclusive samples
-          inclusive_samples = []
-          for inclusive_sample in samples_to_stitch_entry['inclusive']['samples']:
-            assert(inclusive_sample in samples_lut)
-            if not self.samples[samples_lut[inclusive_sample]]['use_it']:
-              logging.warning('Sample {} not enabled'.format(inclusive_sample))
-              continue
-            inclusive_samples.append(inclusive_sample)
+          # loop over the list of binned samples to determine the coverage of phase spaces
+          for samples_to_stitch_entry in samples_to_stitch:
+            # loop over the inclusive samples
+            inclusive_samples = []
+            for inclusive_sample in samples_to_stitch_entry['inclusive']['samples']:
+              assert(inclusive_sample in samples_lut)
+              if not self.samples[samples_lut[inclusive_sample]]['use_it']:
+                logging.warning('Sample {} not enabled'.format(inclusive_sample))
+                continue
+              inclusive_samples.append(inclusive_sample)
 
-          # loop over the binned samples
-          all_present = { key : True for key in samples_to_stitch_entry.keys() if key != 'inclusive' }
-          for binning_key in all_present:
-            for binned_samples in samples_to_stitch_entry[binning_key]:
-              for binned_sample in binned_samples['samples']:
-                # if at least one sample is not enabled, disable all other samples that
-                # are binned by the same variable
-                assert(binned_sample in samples_lut)
-                if not self.samples[samples_lut[binned_sample]]['use_it']:
-                  logging.warning('Sample %s not used' % binned_sample)
-                all_present[binning_key] &= self.samples[samples_lut[binned_sample]]['use_it']
-          for binning_key in all_present:
-            if not all_present[binning_key]:
-              logging.info(
-                'Disabling %s-binned samples that are complementary to: %s' % (
-                  binning_key, ', '.join(inclusive_samples)
-                )
-              )
+            # loop over the binned samples
+            all_present = { key : True for key in samples_to_stitch_entry.keys() if key != 'inclusive' }
+            for binning_key in all_present:
               for binned_samples in samples_to_stitch_entry[binning_key]:
                 for binned_sample in binned_samples['samples']:
-                  logging.warning('Disabling sample %s' % binned_sample)
-                  self.samples[samples_lut[binned_sample]]['use_it'] = False
-              del samples_to_stitch_entry[binning_key]
+                  # if at least one sample is not enabled, disable all other samples that
+                  # are binned by the same variable
+                  assert(binned_sample in samples_lut)
+                  if not self.samples[samples_lut[binned_sample]]['use_it']:
+                    logging.warning('Sample %s not used' % binned_sample)
+                  all_present[binning_key] &= self.samples[samples_lut[binned_sample]]['use_it']
+            for binning_key in all_present:
+              if not all_present[binning_key]:
+                logging.info(
+                  'Disabling %s-binned samples that are complementary to: %s' % (
+                    binning_key, ', '.join(inclusive_samples)
+                  )
+                )
+                for binned_samples in samples_to_stitch_entry[binning_key]:
+                  for binned_sample in binned_samples['samples']:
+                    logging.warning('Disabling sample %s' % binned_sample)
+                    self.samples[samples_lut[binned_sample]]['use_it'] = False
+                del samples_to_stitch_entry[binning_key]
 
-        # construct the list of arguments that need to be propagated to the config files
-        # these parameters specify how to access additional weights at the analysis level such
-        # that the phase space is modelled accurately
-        self.stitching_args = {}
-        for samples_to_stitch_entry in samples_to_stitch:
-          binning_vars = [var for var in samples_to_stitch_entry if var != 'inclusive']
-          histogram_path = ''
-          branch_name_xaxis = ''
-          branch_name_yaxis = ''
-          if len(binning_vars) == 0:
-            # only inclusive sample is being used
-            continue
-          elif len(binning_vars) == 1:
-            histogram_path = binning_vars[0]
-            branch_name_xaxis = binning_vars[0]
-          elif len(binning_vars) == 2:
-            histogram_path = '%s_v_%s' % (binning_vars[0], binning_vars[1])
-            branch_name_xaxis = binning_vars[0]
-            branch_name_yaxis = binning_vars[1]
-          else:
-            raise ValueError(
-              'More than 2 variables by which the samples are binned: %s' % ', '.join(binning_vars)
-            )
-          assert(histogram_path != '' and branch_name_xaxis != '')
-          # loop over the inclusive samples:
-          for inclusive_sample in samples_to_stitch_entry['inclusive']['samples']:
-            assert(inclusive_sample not in self.stitching_args)
-            self.stitching_args[inclusive_sample] = {
-              'histogram_path'    : '%s/%s' % (inclusive_sample, histogram_path),
-              'branch_name_xaxis' : branch_name_xaxis,
-              'branch_name_yaxis' : branch_name_yaxis,
-              'branch_type_xaxis' : get_branch_type(branch_name_xaxis),
-              'branch_type_yaxis' : get_branch_type(branch_name_yaxis),
-            }
-          # loop over the binned samples
-          for binning_key in binning_vars:
-            for binned_samples in samples_to_stitch_entry[binning_key]:
-              for binned_sample in binned_samples['samples']:
-                assert(binned_sample not in self.stitching_args)
-                self.stitching_args[binned_sample] = {
-                  'histogram_path'    : '%s/%s' % (binned_sample, histogram_path),
-                  'branch_name_xaxis' : branch_name_xaxis,
-                  'branch_name_yaxis' : branch_name_yaxis,
-                  'branch_type_xaxis' : get_branch_type(branch_name_xaxis),
-                  'branch_type_yaxis' : get_branch_type(branch_name_yaxis),
-                }
+          # construct the list of arguments that need to be propagated to the config files
+          # these parameters specify how to access additional weights at the analysis level such
+          # that the phase space is modelled accurately
+          for samples_to_stitch_entry in samples_to_stitch:
+            binning_vars = [var for var in samples_to_stitch_entry if var != 'inclusive']
+            histogram_path = ''
+            branch_name_xaxis = ''
+            branch_name_yaxis = ''
+            if len(binning_vars) == 0:
+              # only inclusive sample is being used
+              continue
+            elif len(binning_vars) == 1:
+              histogram_path = binning_vars[0]
+              branch_name_xaxis = binning_vars[0]
+            elif len(binning_vars) == 2:
+              histogram_path = '%s_v_%s' % (binning_vars[0], binning_vars[1])
+              branch_name_xaxis = binning_vars[0]
+              branch_name_yaxis = binning_vars[1]
+            else:
+              raise ValueError(
+                'More than 2 variables by which the samples are binned: %s' % ', '.join(binning_vars)
+              )
+            assert(histogram_path != '' and branch_name_xaxis != '')
+            # loop over the inclusive samples:
+            inclusive_samples_disabled = False
+            for inclusive_sample in samples_to_stitch_entry['inclusive']['samples']:
+              assert(inclusive_sample not in self.stitching_args)
+              if not self.samples[samples_lut[inclusive_sample]]['use_it']:
+                inclusive_samples_disabled = True
+              self.stitching_args[inclusive_sample] = {
+                'histogram_path'    : '%s/%s' % (inclusive_sample, histogram_path),
+                'branch_name_xaxis' : branch_name_xaxis,
+                'branch_name_yaxis' : branch_name_yaxis,
+                'branch_type_xaxis' : get_branch_type(branch_name_xaxis),
+                'branch_type_yaxis' : get_branch_type(branch_name_yaxis),
+              }
+
+            if inclusive_samples_disabled:
+              if len(binning_vars) == 2:
+                histogram_path += "_wo_inclusive"
+              else:
+                # inclusive sample not used => no need for stitching weights
+                continue
+            # loop over the binned samples
+            for binning_key in binning_vars:
+              for binned_samples in samples_to_stitch_entry[binning_key]:
+                for binned_sample in binned_samples['samples']:
+                  assert(binned_sample not in self.stitching_args)
+                  self.stitching_args[binned_sample] = {
+                    'histogram_path'    : '%s/%s' % (binned_sample, histogram_path),
+                    'branch_name_xaxis' : branch_name_xaxis,
+                    'branch_name_yaxis' : branch_name_yaxis,
+                    'branch_type_xaxis' : get_branch_type(branch_name_xaxis),
+                    'branch_type_yaxis' : get_branch_type(branch_name_yaxis),
+                  }
 
         self.workingDir = os.getcwd()
         logging.info("Working directory is: %s" % self.workingDir)
@@ -371,7 +383,6 @@ class analyzeConfig(object):
         self.rootOutputFiles = {}
         self.rootOutputAux = {}
 
-        self.do_sync = do_sync
         self.inputFiles_sync = {}
         self.outputFile_sync = {}
         if self.do_sync:
@@ -558,6 +569,10 @@ class analyzeConfig(object):
           jobOptions['apply_genWeight'] = sample_info["genWeight"] if is_mc else False
         if 'apply_DYMCReweighting' not in jobOptions:
           jobOptions['apply_DYMCReweighting'] = is_dymc_reweighting(sample_info["dbs_name"])
+        if 'apply_DYMCNormScaleFactors' not in jobOptions:
+          jobOptions['apply_DYMCNormScaleFactors'] =  is_dymc_reweighting(sample_info["dbs_name"])
+        if 'central_or_shift' not in jobOptions:
+          jobOptions['central_or_shift'] = 'central'
         if 'lumiScale' not in jobOptions:
           nof_events = -1
           if is_mc:
@@ -570,17 +585,45 @@ class analyzeConfig(object):
               nof_events = sample_info["nof_events"]['CountWeighted'][2] # PU weight down
               stitch_histogram_name = 'CountWeighted_2'
             elif central_or_shift in systematics.LHE().x1_up:
-              nof_events = sample_info["nof_events"]['CountWeightedLHEWeightScale'][5] # muR=1   muF=2
-              stitch_histogram_name = 'CountWeightedLHEWeightScale_5'
+              nof_lhe_scale_weights = len(sample_info["nof_events"]['CountWeightedLHEWeightScale'])
+              if nof_lhe_scale_weights == 9:
+                lhe_idx = 5
+              elif nof_lhe_scale_weights == 44:
+                lhe_idx = 24
+              else:
+                raise RuntimeError("Unexpected number of LHE scale weights: %d" % nof_lhe_scale_weights)
+              nof_events = sample_info["nof_events"]['CountWeightedLHEWeightScale'][lhe_idx] # muR=1   muF=2
+              stitch_histogram_name = 'CountWeightedLHEWeightScale_%d' % lhe_idx
             elif central_or_shift in systematics.LHE().y1_up:
-              nof_events = sample_info["nof_events"]['CountWeightedLHEWeightScale'][7] # muR=2   muF=1
-              stitch_histogram_name = 'CountWeightedLHEWeightScale_7'
+              nof_lhe_scale_weights = len(sample_info["nof_events"]['CountWeightedLHEWeightScale'])
+              if nof_lhe_scale_weights == 9:
+                lhe_idx = 7
+              elif nof_lhe_scale_weights == 44:
+                lhe_idx = 34
+              else:
+                raise RuntimeError("Unexpected number of LHE scale weights: %d" % nof_lhe_scale_weights)
+              nof_events = sample_info["nof_events"]['CountWeightedLHEWeightScale'][lhe_idx] # muR=2   muF=1
+              stitch_histogram_name = 'CountWeightedLHEWeightScale_%d' % lhe_idx
             elif central_or_shift in systematics.LHE().x1_down:
-              nof_events = sample_info["nof_events"]['CountWeightedLHEWeightScale'][3] # muR=1   muF=0.5
-              stitch_histogram_name = 'CountWeightedLHEWeightScale_3'
+              nof_lhe_scale_weights = len(sample_info["nof_events"]['CountWeightedLHEWeightScale'])
+              if nof_lhe_scale_weights == 9:
+                lhe_idx = 3
+              elif nof_lhe_scale_weights == 44:
+                lhe_idx = 15
+              else:
+                raise RuntimeError("Unexpected number of LHE scale weights: %d" % nof_lhe_scale_weights)
+              nof_events = sample_info["nof_events"]['CountWeightedLHEWeightScale'][lhe_idx] # muR=1   muF=0.5
+              stitch_histogram_name = 'CountWeightedLHEWeightScale_%d' % lhe_idx
             elif central_or_shift in systematics.LHE().y1_down:
-              nof_events = sample_info["nof_events"]['CountWeightedLHEWeightScale'][1] # muR=0.5 muF=1
-              stitch_histogram_name = 'CountWeightedLHEWeightScale_1'
+              nof_lhe_scale_weights = len(sample_info["nof_events"]['CountWeightedLHEWeightScale'])
+              if nof_lhe_scale_weights == 9:
+                lhe_idx = 1
+              elif nof_lhe_scale_weights == 44:
+                lhe_idx = 5
+              else:
+                raise RuntimeError("Unexpected number of LHE scale weights: %d" % nof_lhe_scale_weights)
+              nof_events = sample_info["nof_events"]['CountWeightedLHEWeightScale'][lhe_idx] # muR=0.5 muF=1
+              stitch_histogram_name = 'CountWeightedLHEWeightScale_%d' % lhe_idx
             else:
               nof_events = sample_info["nof_events"]['CountWeighted'][0] # PU weight central
               stitch_histogram_name = 'CountWeighted_0'
@@ -600,20 +643,20 @@ class analyzeConfig(object):
             'electronSelection',
             'muonSelection',
             'lep_mva_cut',
-            'lep_mLL_veto',
-            'e_dR_cleaning',
             'chargeSumSelection',
             'histogramDir',
             'lumiScale',
             'leptonChargeSelection',
             'hadTauChargeSelection',
             'hadTauSelection',
+            'apply_hadTauVeto',
             'hadTauSelection_veto',
             'apply_leptonGenMatching',
             'apply_hadTauGenMatching',
             'applyFakeRateWeights',
             'apply_genWeight',
             'apply_DYMCReweighting',
+            'apply_DYMCNormScaleFactors',
             'selEventsFileName_output',
             'fillGenEvtHistograms',
             'selectBDT',
@@ -646,15 +689,8 @@ class analyzeConfig(object):
         jobOptions_keys = jobOptions_local + additionalJobOptions
         max_option_len = max(map(len, [ key for key in jobOptions_keys if key in jobOptions ]))
 
-        if isHTT : lines = [
-            "# Filled in %s" % current_function_name,
-            "process.fwliteInput.fileNames = cms.vstring(%s)"  % jobOptions['ntupleFiles'],
-            "process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['histogramFile']),
-            "{}.{:<{len}} = cms.string('{}')".format        (process_string, 'era',                    self.era,     len = max_option_len),
-            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'redoGenMatching',       'False',       len = max_option_len),
-            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'isDEBUG',                self.isDebug, len = max_option_len),
-        ]
-        else : lines = [
+
+        if not isHTT and not self.do_sync : lines = [
             "# Filled in %s" % current_function_name,
             "process.fwliteInput.fileNames = cms.vstring(%s)"  % jobOptions['ntupleFiles'],
             "process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['histogramFile']),
@@ -663,6 +699,24 @@ class analyzeConfig(object):
             "{}.{:<{len}} = cms.bool({})".format            (process_string, 'isDEBUG',                self.isDebug, len = max_option_len),
             "{}.{:<{len}} = EvtYieldHistManager_{}".format  (process_string, 'cfgEvtYieldHistManager', self.era,     len = max_option_len),
             "{}.{:<{len}} = recommendedMEtFilters_{}".format(process_string, 'cfgMEtFilter',           self.era,     len = max_option_len),
+        ]
+        elif self.do_sync : lines = [
+            "# Filled in %s" % current_function_name,
+            "process.fwliteInput.fileNames = cms.vstring(%s)"  % jobOptions['ntupleFiles'],
+            "process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['histogramFile']),
+            "{}.{:<{len}} = cms.string('{}')".format        (process_string, 'era',                    self.era,     len = max_option_len),
+            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'redoGenMatching',       'True',       len = max_option_len),
+            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'isDEBUG',                self.isDebug, len = max_option_len),
+            "{}.{:<{len}} = EvtYieldHistManager_{}".format  (process_string, 'cfgEvtYieldHistManager', self.era,     len = max_option_len),
+            "{}.{:<{len}} = recommendedMEtFilters_{}".format(process_string, 'cfgMEtFilter',           self.era,     len = max_option_len),
+        ]
+        else : lines = [
+            "# Filled in %s" % current_function_name,
+            "process.fwliteInput.fileNames = cms.vstring(%s)"  % jobOptions['ntupleFiles'],
+            "process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['histogramFile']),
+            "{}.{:<{len}} = cms.string('{}')".format        (process_string, 'era',                    self.era,     len = max_option_len),
+            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'redoGenMatching',       'False',       len = max_option_len),
+            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'isDEBUG',                self.isDebug, len = max_option_len),
         ]
         for jobOptions_key in jobOptions_keys:
             if jobOptions_key not in jobOptions: continue # temporary?
@@ -1136,7 +1190,7 @@ class analyzeConfig(object):
                 lines_makefile.append("%s: %s" % (outputFiles[key], sbatchTarget))
                 lines_makefile.append("\t%s" % ":") # CV: null command
                 lines_makefile.append("")
-            elif self.do_sync and self.is_makefile:
+            elif self.is_makefile:
                 lines_makefile.append("%s: %s" % (outputFiles[key], " ".join(inputFiles[key])))
                 lines_makefile.append("\t%s %s" % ("rm -f", outputFiles[key]))
                 lines_makefile.append("\thadd -f %s %s" % (os.path.basename(outputFiles[key]), " ".join(inputFiles[key])))

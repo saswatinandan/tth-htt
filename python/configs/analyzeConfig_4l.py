@@ -315,7 +315,7 @@ class analyzeConfig_4l(analyzeConfig):
 
                 syncOutput = ''
                 syncTree = ''
-                syncRequireGenMatching = False
+                syncRequireGenMatching = True
                 if self.do_sync:
                   if chargeSumSelection != 'OS':
                     continue

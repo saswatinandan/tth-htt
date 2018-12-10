@@ -47,6 +47,7 @@
 #include "tthAnalysis/HiggsToTauTau/interface/RecoMuonCollectionSelectorLoose.h" // RecoMuonCollectionSelectorLoose
 #include "tthAnalysis/HiggsToTauTau/interface/RecoMuonCollectionSelectorFakeable.h" // RecoMuonCollectionSelectorFakeable
 #include "tthAnalysis/HiggsToTauTau/interface/RecoMuonCollectionSelectorTight.h" // RecoMuonCollectionSelectorTight
+#include "tthAnalysis/HiggsToTauTau/interface/RecoHadTauCollectionSelectorFakeable.h" // RecoHadTauCollectionSelectorFakeable
 #include "tthAnalysis/HiggsToTauTau/interface/RecoHadTauCollectionSelectorTight.h" // RecoHadTauCollectionSelectorTight
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelector.h" // RecoJetCollectionSelector
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorBtag.h" // RecoJetCollectionSelectorBtagLoose, RecoJetCollectionSelectorBtagMedium
@@ -196,8 +197,7 @@ int main(int argc, char* argv[])
   std::cout << "leptonGenMatch_definitions:" << std::endl;
   std::cout << leptonGenMatch_definitions;
 
-  TString hadTauSelection_string = "Tight|dR03mvaVTight";//cfg_analyze.getParameter<std::string>("hadTauSelection").data();
-  // Xanda: remove tau requirements
+  TString hadTauSelection_string = cfg_analyze.getParameter<std::string>("hadTauSelection_veto").data();
   TObjArray* hadTauSelection_parts = hadTauSelection_string.Tokenize("|");
   assert(hadTauSelection_parts->GetEntries() >= 1);
   std::string hadTauSelection_part2 = ( hadTauSelection_parts->GetEntries() == 2 ) ? (dynamic_cast<TObjString*>(hadTauSelection_parts->At(1)))->GetString().Data() : "";
@@ -370,6 +370,10 @@ int main(int argc, char* argv[])
   inputTree -> registerReader(hadTauReader);
   RecoHadTauCollectionGenMatcher hadTauGenMatcher;
   RecoHadTauCollectionCleaner hadTauCleaner(0.3);
+  RecoHadTauCollectionSelectorFakeable fakeableHadTauSelector(era, -1, isDEBUG);
+  fakeableHadTauSelector.set_if_looser(hadTauSelection_part2);
+  fakeableHadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
+  fakeableHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
   RecoHadTauCollectionSelectorTight hadTauSelector(era);
   if ( hadTauSelection_part2 != "" ) hadTauSelector.set(hadTauSelection_part2);
   hadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
@@ -665,6 +669,7 @@ int main(int argc, char* argv[])
   cutFlowTableType cutFlowTable;
   while(inputTree -> hasNextEvent() && (! run_lumi_eventSelector || (run_lumi_eventSelector && ! run_lumi_eventSelector -> areWeDone())))
   {
+    //if (!( eventInfo.event == 18170306)) continue; // :
     if(inputTree -> canReport(reportEvery))
     {
       std::cout << "processing Entry " << inputTree -> getCurrentMaxEventIdx()
@@ -912,12 +917,13 @@ int main(int argc, char* argv[])
     std::vector<RecoHadTau> hadTaus = hadTauReader->read();
     std::vector<const RecoHadTau*> hadTau_ptrs = convert_to_ptrs(hadTaus);
     std::vector<const RecoHadTau*> cleanedHadTaus = hadTauCleaner(hadTau_ptrs, preselMuons, preselElectrons);
+    std::vector<const RecoHadTau*> fakeableHadTaus = fakeableHadTauSelector(cleanedHadTaus, isHigherPt);
     std::vector<const RecoHadTau*> selHadTaus = hadTauSelector(cleanedHadTaus);
 
 //--- build collections of jets and select subset of jets passing b-tagging criteria
     std::vector<RecoJet> jets = jetReader->read();
     std::vector<const RecoJet*> jet_ptrs = convert_to_ptrs(jets);
-    std::vector<const RecoJet*> cleanedJets = jetCleaner(jet_ptrs, fakeableLeptons);
+    std::vector<const RecoJet*> cleanedJets = jetCleaner(jet_ptrs, fakeableLeptons, fakeableHadTaus);
     std::vector<const RecoJet*> selJets = jetSelector(cleanedJets);
     std::vector<const RecoJet*> selBJets_loose = jetSelectorBtagLoose(cleanedJets);
     std::vector<const RecoJet*> selBJets_medium = jetSelectorBtagMedium(cleanedJets);
@@ -1022,6 +1028,16 @@ int main(int argc, char* argv[])
       continue;
     }
     cutFlowTable.update(">= 2 loose b-jets || 1 medium b-jet (1)");
+
+    if ( selHadTaus.size() > 0 ) {
+      if ( run_lumi_eventSelector ) {
+    std::cout << "event " << eventInfo.str() << " FAILS selHadTaus veto." << std::endl;
+    printCollection("selHadTaus", selHadTaus);
+      }
+      continue;
+    }
+    cutFlowTable.update("sel tau veto");
+
 
 //--- compute MHT and linear MET discriminant (met_LD)
     RecoMEt met = metReader->read();
@@ -1274,6 +1290,8 @@ int main(int argc, char* argv[])
 
     bool isSFOS = false;
     double massSFOS = -1.;
+    double pt1 = -1.;
+    double pt2 = -1.;
     const RecoLepton* selLepton_extra = 0;
     for ( std::vector<const RecoLepton*>::const_iterator lepton1 = preselLeptonsFull.begin();
     lepton1 != preselLeptonsFull.end(); ++lepton1 ) {
@@ -1283,6 +1301,8 @@ int main(int argc, char* argv[])
 	  isSFOS = true;
 	  double mass = ((*lepton1)->p4() + (*lepton2)->p4()).mass();
 	  if ( std::fabs(mass - z_mass) < std::fabs(massSFOS - z_mass) ) {
+      pt1 = (*lepton1)->pt();
+      pt2 = (*lepton2)->pt();
 	    massSFOS = mass;
 	    if      ( !((*lepton1) == selLepton_lead    || (*lepton2) == selLepton_lead)    ) selLepton_extra = selLepton_lead;
 	    else if ( !((*lepton1) == selLepton_sublead || (*lepton2) == selLepton_sublead) ) selLepton_extra = selLepton_sublead;
@@ -1295,7 +1315,7 @@ int main(int argc, char* argv[])
     bool passesZbosonMassCut = isSFOS && std::fabs(massSFOS - z_mass) < z_window;
     if ( !passesZbosonMassCut ) {
       if ( run_lumi_eventSelector ) {
-    std::cout << "event " << eventInfo.str() << " FAILS Z-boson mass cut." << std::endl;
+    std::cout << "event " << eventInfo.str() << " FAILS Z-boson mass cut. " << isSFOS << " "<< std::fabs(massSFOS - z_mass) << " " << z_window << std::endl;
       }
       continue;
     }
@@ -1313,6 +1333,36 @@ int main(int argc, char* argv[])
       continue;
     }
     cutFlowTable.update("met LD", evtWeight);
+
+    bool failsHtoZZVeto = false;
+    for ( std::vector<const RecoLepton*>::const_iterator lepton1 = preselLeptonsFull.begin();
+    lepton1 != preselLeptonsFull.end(); ++lepton1 ) {
+      for ( std::vector<const RecoLepton*>::const_iterator lepton2 = lepton1 + 1;
+      lepton2 != preselLeptonsFull.end(); ++lepton2 ) {
+  if ( (*lepton1)->pdgId() == -(*lepton2)->pdgId() ) { // first pair of same flavor leptons of opposite charge
+    for ( std::vector<const RecoLepton*>::const_iterator lepton3 = preselLeptonsFull.begin();
+    lepton3 != preselLeptonsFull.end(); ++lepton3 ) {
+      if ( (*lepton3) == (*lepton1) || (*lepton3) == (*lepton2) ) continue;
+      for ( std::vector<const RecoLepton*>::const_iterator lepton4 = lepton3 + 1;
+      lepton4 != preselLeptonsFull.end(); ++lepton4 ) {
+        if ( (*lepton4) == (*lepton1) || (*lepton4) == (*lepton2) ) continue;
+        if ( (*lepton3)->pdgId() == -(*lepton4)->pdgId() ) { // second pair of same flavor leptons of opposite charge
+    double mass = ((*lepton1)->p4() + (*lepton2)->p4() + (*lepton3)->p4() + (*lepton4)->p4()).mass();
+    if ( mass < 140. ) failsHtoZZVeto = true;
+        }
+      }
+    }
+  }
+      }
+    }
+    if ( failsHtoZZVeto ) {
+      if ( run_lumi_eventSelector ) {
+    std::cout << "event " << eventInfo.str() << " FAILS H->ZZ*->4l veto." << std::endl;
+      }
+      continue;
+    }
+    cutFlowTable.update("H->ZZ*->4l veto", evtWeight);
+    //cutFlowHistManager->fillHistograms("H->ZZ*->4l veto", evtWeight);
 
     if ( apply_met_filters ) {
       if ( !metFilterSelector(metFilters) ) {
@@ -1453,7 +1503,7 @@ int main(int argc, char* argv[])
     selHistManager->evt_->fillHistograms(
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-      mvaOutput_3l_ttV, mvaOutput_3l_ttbar, mvaDiscr_3l,
+      mvaOutput_2lss_ttV, mvaOutput_2lss_ttbar, mvaDiscr_2lss,
       mvaOutput_3l_ttV, mvaOutput_3l_ttbar, mvaDiscr_3l,
       massSFOS, mT, sumLeptonCharge, evtWeight);
       EvtHistManager_ttZctrl* selHistManager_evt_category = selHistManager->evt_in_categories_[category];
@@ -1509,7 +1559,7 @@ int main(int argc, char* argv[])
     if(snm)
     {
       const bool isGenMatched = isMC &&
-        ((apply_leptonGenMatching && selLepton_genMatch.numGenMatchedJets_ == 0) || ! apply_leptonGenMatching)
+        ((apply_leptonGenMatching && selLepton_genMatch.numGenMatchedLeptons_ == 3) || ! apply_leptonGenMatching)
       ;
 
       const double dr_leps        = deltaR(selLepton_lead->p4(), selLepton_sublead->p4());
@@ -1647,6 +1697,20 @@ int main(int argc, char* argv[])
             << " selected = " << selectedEntries << " (weighted = " << selectedEntries_weighted << ")\n\n"
             << "cut-flow table" << std::endl;
   cutFlowTable.print(std::cout);
+  std::cout << std::endl;
+
+  std::cout << "sel. Entries by gen. matching:" << std::endl;
+  for ( std::vector<leptonGenMatchEntry>::const_iterator leptonGenMatch_definition = leptonGenMatch_definitions.begin();
+	leptonGenMatch_definition != leptonGenMatch_definitions.end(); ++leptonGenMatch_definition ) {
+
+    std::string process_and_genMatch = process_string;
+    if ( apply_leptonGenMatching ) process_and_genMatch += leptonGenMatch_definition->name_;
+
+    int idxLepton = leptonGenMatch_definition->idx_;
+
+    const TH1* histogram_EventCounter = selHistManagers[idxLepton]->evt_->getHistogram_EventCounter();
+    std::cout << " " << process_and_genMatch << " = " << histogram_EventCounter->GetEntries() << " (weighted = " << histogram_EventCounter->Integral() << ")" << std::endl;
+  }
   std::cout << std::endl;
 
   delete dataToMCcorrectionInterface;

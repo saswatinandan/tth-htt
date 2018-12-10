@@ -47,6 +47,7 @@
 #include "tthAnalysis/HiggsToTauTau/interface/RecoMuonCollectionSelectorLoose.h" // RecoMuonCollectionSelectorLoose
 #include "tthAnalysis/HiggsToTauTau/interface/RecoMuonCollectionSelectorFakeable.h" // RecoMuonCollectionSelectorFakeable
 #include "tthAnalysis/HiggsToTauTau/interface/RecoMuonCollectionSelectorTight.h" // RecoMuonCollectionSelectorTight
+#include "tthAnalysis/HiggsToTauTau/interface/RecoHadTauCollectionSelectorFakeable.h" // RecoHadTauCollectionSelectorFakeable
 #include "tthAnalysis/HiggsToTauTau/interface/RecoHadTauCollectionSelectorTight.h" // RecoHadTauCollectionSelectorTight
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelector.h" // RecoJetCollectionSelector
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorBtag.h" // RecoJetCollectionSelectorBtagLoose, RecoJetCollectionSelectorBtagMedium
@@ -185,7 +186,7 @@ int main(int argc, char* argv[])
   std::cout << "leptonGenMatch_definitions:" << std::endl;
   std::cout << leptonGenMatch_definitions;
 
-  TString hadTauSelection_string = cfg_analyze.getParameter<std::string>("hadTauSelection").data();
+  TString hadTauSelection_string = cfg_analyze.getParameter<std::string>("hadTauSelection_veto").data();
   TObjArray* hadTauSelection_parts = hadTauSelection_string.Tokenize("|");
   assert(hadTauSelection_parts->GetEntries() >= 1);
   std::string hadTauSelection_part2 = ( hadTauSelection_parts->GetEntries() == 2 ) ? (dynamic_cast<TObjString*>(hadTauSelection_parts->At(1)))->GetString().Data() : "";
@@ -217,6 +218,7 @@ int main(int argc, char* argv[])
   {
     eventWeightManager = new EvtWeightManager(additionalEvtWeight);
   }
+
   bool isDEBUG = cfg_analyze.getParameter<bool>("isDEBUG");
   if ( isDEBUG ) std::cout << "Warning: DEBUG mode enabled -> trigger selection will not be applied for data !!" << std::endl;
 
@@ -353,6 +355,10 @@ int main(int argc, char* argv[])
   inputTree -> registerReader(hadTauReader);
   RecoHadTauCollectionGenMatcher hadTauGenMatcher;
   RecoHadTauCollectionCleaner hadTauCleaner(0.3);
+  RecoHadTauCollectionSelectorFakeable fakeableHadTauSelector(era, -1, isDEBUG);
+  fakeableHadTauSelector.set_if_looser(hadTauSelection_part2);
+  fakeableHadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
+  fakeableHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
   RecoHadTauCollectionSelectorTight hadTauSelector(era);
   if ( hadTauSelection_part2 != "" ) hadTauSelector.set(hadTauSelection_part2);
   hadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
@@ -611,6 +617,7 @@ int main(int argc, char* argv[])
   cutFlowTableType cutFlowTable;
   while(inputTree -> hasNextEvent() && (! run_lumi_eventSelector || (run_lumi_eventSelector && ! run_lumi_eventSelector -> areWeDone())))
   {
+    //if (!( eventInfo.event == 16732188)) continue; // :
     if(inputTree -> canReport(reportEvery))
     {
       std::cout << "processing Entry " << inputTree -> getCurrentMaxEventIdx()
@@ -759,7 +766,7 @@ int main(int argc, char* argv[])
     std::vector<const RecoMuon*> preselMuons = preselMuonSelector(cleanedMuons, isHigherConePt);
     std::vector<const RecoMuon*> fakeableMuons = fakeableMuonSelector(preselMuons, isHigherConePt);
     std::vector<const RecoMuon*> tightMuons = tightMuonSelector(fakeableMuons, isHigherConePt);
-    if(isDEBUG || run_lumi_eventSelector)
+    if(isDEBUG ) // || run_lumi_eventSelector Xanda
     {
       printCollection("preselMuons",   preselMuons);
       printCollection("fakeableMuons", fakeableMuons);
@@ -772,7 +779,7 @@ int main(int argc, char* argv[])
     std::vector<const RecoElectron*> preselElectrons = preselElectronSelector(cleanedElectrons, isHigherConePt);
     std::vector<const RecoElectron*> fakeableElectrons = fakeableElectronSelector(preselElectrons, isHigherConePt);
     std::vector<const RecoElectron*> tightElectrons = tightElectronSelector(fakeableElectrons, isHigherConePt);
-    if(isDEBUG || run_lumi_eventSelector)
+    if(isDEBUG ) // || run_lumi_eventSelector Xanda
     {
       printCollection("preselElectrons",   preselElectrons);
       printCollection("fakeableElectrons", fakeableElectrons);
@@ -812,12 +819,13 @@ int main(int argc, char* argv[])
     std::vector<RecoHadTau> hadTaus = hadTauReader->read();
     std::vector<const RecoHadTau*> hadTau_ptrs = convert_to_ptrs(hadTaus);
     std::vector<const RecoHadTau*> cleanedHadTaus = hadTauCleaner(hadTau_ptrs, preselMuons, preselElectrons);
+    std::vector<const RecoHadTau*> fakeableHadTaus = fakeableHadTauSelector(cleanedHadTaus, isHigherPt);
     std::vector<const RecoHadTau*> selHadTaus = hadTauSelector(cleanedHadTaus);
 
 //--- build collections of jets and select subset of jets passing b-tagging criteria
     std::vector<RecoJet> jets = jetReader->read();
     std::vector<const RecoJet*> jet_ptrs = convert_to_ptrs(jets);
-    std::vector<const RecoJet*> cleanedJets = jetCleaner(jet_ptrs, fakeableLeptons);
+    std::vector<const RecoJet*> cleanedJets = jetCleaner(jet_ptrs, fakeableLeptonsFull, fakeableHadTaus);
     std::vector<const RecoJet*> selJets = jetSelector(cleanedJets);
     std::vector<const RecoJet*> selBJets_loose = jetSelectorBtagLoose(cleanedJets);
     std::vector<const RecoJet*> selBJets_medium = jetSelectorBtagMedium(cleanedJets);
@@ -869,7 +877,7 @@ int main(int argc, char* argv[])
     if ( !(preselLeptonsFull.size() >= 2) ) {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS preselLeptons selection." << std::endl;
-  printCollection("preselLeptons", preselLeptonsFull);
+  //printCollection("preselLeptons", preselLeptonsFull);
       }
       continue;
     }
@@ -1041,7 +1049,7 @@ int main(int argc, char* argv[])
     if ( !(tightLeptonsFull.size() <= 2) ) {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS tightLeptons selection." << std::endl;
-  printCollection("tightLeptonsFull", tightLeptonsFull);
+  //printCollection("tightLeptonsFull", tightLeptonsFull);
       }
       continue;
     }
@@ -1087,9 +1095,11 @@ int main(int argc, char* argv[])
     cutFlowTable.update("HLT filter matching", evtWeight);
 
     // apply requirement on jets (incl. b-tagged jets) on level of final event selection
+    //std::cout << "event " << eventInfo.str() << " selJets selection (2) -- " << selJets.size() << std::endl;
+    //printCollection("selJets", selJets);
     if ( !(selJets.size() == 3) ) {
       if ( run_lumi_eventSelector ) {
-        std::cout << "event " << eventInfo.str() << " FAILS selJets selection (2)." << std::endl;
+        std::cout << "event " << eventInfo.str() << " FAILS selJets selection (2) -- " << selJets.size() << std::endl;
         printCollection("selJets", selJets);
       }
       continue;
@@ -1225,6 +1235,7 @@ int main(int argc, char* argv[])
     cutFlowTable.update(Form("sel lepton-pair %s charge", leptonChargeSelection_string.data()), evtWeight);
 
     bool failsZbosonMassVeto = false;
+    /*
     for ( std::vector<const RecoLepton*>::const_iterator lepton1 = preselLeptonsFull.begin();
     lepton1 != preselLeptonsFull.end(); ++lepton1 ) {
       for ( std::vector<const RecoLepton*>::const_iterator lepton2 = lepton1 + 1;
@@ -1235,6 +1246,11 @@ int main(int argc, char* argv[])
 	}
       }
     }
+    */
+    // Sergio and Marco way
+    // Zee veto in 2lss categories <=> veto event if the two tight leptons are electrons with mZ-mee < 10
+    double mass = (selLepton_lead->p4() + selLepton_sublead->p4()).mass();
+    if ( selLepton_lead->is_electron() && selLepton_sublead->is_electron() && std::fabs(mass - z_mass) < z_window ) failsZbosonMassVeto = true;
     if ( failsZbosonMassVeto ) {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS Z-boson veto." << std::endl;
@@ -1275,7 +1291,7 @@ int main(int argc, char* argv[])
 	std::cout << "event " << eventInfo.str() << " FAILS overlap w/ the SR: "
 	             "# tight leptons = " << tightLeptons.size() << " >= 2\n"
         ;
-	printCollection("tightLeptons", tightLeptons);
+	//printCollection("tightLeptons", tightLeptons);
       }
       continue; // CV: avoid overlap with signal region
     }
@@ -1376,7 +1392,7 @@ int main(int argc, char* argv[])
     if(snm)
     {
       const bool isGenMatched = isMC &&
-        ((apply_leptonGenMatching && selLepton_genMatch.numGenMatchedJets_ == 0) || ! apply_leptonGenMatching)
+        ((apply_leptonGenMatching && selLepton_genMatch.numGenMatchedLeptons_ == 2) || ! apply_leptonGenMatching)
       ;
 
       const double dr_leps        = deltaR(selLepton_lead->p4(), selLepton_sublead->p4());

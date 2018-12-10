@@ -2,6 +2,7 @@
 
 #include "tthAnalysis/HiggsToTauTau/interface/analysisAuxFunctions.h" // isHigherPt()
 #include "tthAnalysis/HiggsToTauTau/interface/cmsException.h" // cmsException()
+#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // kGenTop...
 
 #include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // kGenTop...
 

@@ -184,6 +184,18 @@ getDYMCReweighting_option(const std::string & central_or_shift)
   int central_or_shift_int = kDYMCReweighting_central;
   if     (central_or_shift == "CMS_ttHl_DYMCReweightingUp"  ) central_or_shift_int = kDYMCReweighting_shiftUp;
   else if(central_or_shift == "CMS_ttHl_DYMCReweightingDown") central_or_shift_int = kDYMCReweighting_shiftDown;
+<<<<<<< HEAD
+=======
+  return central_or_shift_int;
+}
+
+int
+getDYMCNormScaleFactors_option(const std::string & central_or_shift)
+{
+  int central_or_shift_int = kDYMCNormScaleFactors_central;
+  if     (central_or_shift == "CMS_ttHl_DYMCNormScaleFactorsUp"   ) central_or_shift_int = kDYMCNormScaleFactors_shiftUp;
+  else if(central_or_shift == "CMS_ttHl_DYMCNormScaleFactorsDown" ) central_or_shift_int = kDYMCNormScaleFactors_shiftDown;
+>>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
   return central_or_shift_int;
 }
 

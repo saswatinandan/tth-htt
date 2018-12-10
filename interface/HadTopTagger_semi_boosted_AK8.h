@@ -51,6 +51,11 @@ protected:
 
   XGBInterface * mva_xgb_HTT_CSVsort3rd_AK8_;
   XGBInterface * mva_xgb_HTT_CSVsort3rd_AK8_withKinFit_;
+protected:
+
+  std::map<std::string, double> mvaInputsHTT_AK8;
+  std::vector<std::string>      mvaInputsHTT_AK8Sort;
+  TMVAInterface * mva_xgb_HTT_AK8_;
 
 };
 

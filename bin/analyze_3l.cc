@@ -411,7 +411,7 @@ int main(int argc, char* argv[])
   RecoMuonCollectionSelectorTight tightMuonSelector(era, -1, isDEBUG);
 
   RecoElectronReader* electronReader = new RecoElectronReader(era, branchName_electrons, readGenObjects);
-  electronReader->readUncorrected(useNonNominal);
+  //electronReader->readUncorrected(useNonNominal);
   inputTree -> registerReader(electronReader);
   RecoElectronCollectionGenMatcher electronGenMatcher;
   RecoElectronCollectionCleaner electronCleaner(0.05, isDEBUG);
@@ -573,7 +573,7 @@ std::string mvaFileName_XGB_oldVar = "tthAnalysis/HiggsToTauTau/data/evtLevel_20
 std::vector<std::string> mvaInputVariables_XGB_oldVar = {
   "lep1_conePt", "lep2_conePt",
   "mindr_lep1_jet", "mindr_lep2_jet", "mT_lep1", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort3rd", "Hj_tagger_fromCSVsort4th"
+  "nJet", "res-HTT_CSVsort4rd", "Hj_tagger_fromCSVsort4th"
 };
 XGBInterface mva_XGB_oldVar(mvaFileName_XGB_oldVar, mvaInputVariables_XGB_oldVar);
 std::map<std::string, double> mvaInputs_XGB_oldVar;
@@ -583,7 +583,7 @@ std::vector<std::string> mvaInputVariables_XGB_Updated = {
   "lep1_conePt", "lep2_conePt",
   "lep3_conePt", "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
   "mT_lep1", "mT_lep2", "mT_lep3", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd", "Hj_tagger_fromCSVsort4th",
+  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
   "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sumLeptonCharge"
 };
 XGBInterface mva_XGB_Updated(mvaFileName_XGB_Updated, mvaInputVariables_XGB_Updated);
@@ -594,7 +594,7 @@ std::vector<std::string> mvaInputVariables_XGB_Boosted_AK8_noISO = {
   "lep1_conePt", "lep2_conePt", "lep3_conePt",
   "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
   "mT_lep1", "mT_lep2", "mT_lep3", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd", "Hj_tagger_fromCSVsort4th",
+  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
   "min_lep_dr_os", "dr_lss",
   "nBJetMedium", "nElectron", "ptmiss", "sumLeptonCharge", "HTT_boosted", "HTT_semi_boosted_fromAK8"
 };
@@ -606,7 +606,7 @@ std::vector<std::string> mvaInputVariables_XGB_Boosted_AK8 = {
   "lep1_conePt", "lep2_conePt", "lep3_conePt",
   "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
   "mT_lep1", "mT_lep2", "mT_lep3", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd", "Hj_tagger_fromCSVsort4th",
+  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
   "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sumLeptonCharge",
   "HTT_boosted", "HTT_semi_boosted_fromAK8"
 };
@@ -618,7 +618,7 @@ std::vector<std::string> mvaInputVariables_XGB_Boosted_AK12_noISO = {
   "lep1_conePt", "lep2_conePt", "lep3_conePt",
   "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
   "mT_lep1", "mT_lep2", "mT_lep3", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd",
+  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
   "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sumLeptonCharge",
   "minDR_AK12_lep", "HTT_semi_boosted", "HadTop_pt_semi_boosted"
 };
@@ -630,7 +630,7 @@ std::vector<std::string> mvaInputVariables_XGB_Boosted_AK12 = {
   "lep1_conePt", "lep2_conePt", "lep3_conePt",
   "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
   "mT_lep1", "mT_lep2", "mT_lep3", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd", "Hj_tagger_fromCSVsort4th",
+  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
   "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sumLeptonCharge",
   "HTT_semi_boosted", "HTT_boosted"
 };
@@ -642,7 +642,7 @@ std::vector<std::string> mvaInputVariables_XGB_AK12 = {
   "lep1_conePt", "lep2_conePt", "lep3_conePt",
   "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
   "mT_lep1", "mT_lep2", "mT_lep3", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd", "Hj_tagger_fromCSVsort4th",
+  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
   "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sumLeptonCharge",
   "resolved_and_semi", "HTT_semi_boosted"
 };
@@ -654,7 +654,7 @@ std::vector<std::string> mvaInputVariables_XGB_Boosted_AK12_basic = {
   "lep1_conePt", "lep2_conePt", "lep3_conePt",
   "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
   "mT_lep1", "mT_lep2", "mT_lep3", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd", "Hj_tagger_fromCSVsort4th",
+  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
   "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sumLeptonCharge", "N_jetAK12"
 };
 XGBInterface mva_XGB_Boosted_AK12_basic(mvaFileName_XGB_Boosted_AK12_basic, mvaInputVariables_XGB_Boosted_AK12_basic);
@@ -936,18 +936,18 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
       "minDR_AK12_lep", //"minDR_AK12_lep",
       ///
       "res-HTT", "res-HTT_IHEP",
-      "res-HTT_CSVsort3rd", "res-HTT_highestCSV",
-      "res-HTT_CSVsort3rd_WithKinFit", "res-HTT_highestCSV_WithKinFit",
+      "res-HTT_CSVsort4rd", "res-HTT_highestCSV",
+      "res-HTT_CSVsort4rd_WithKinFit", "res-HTT_highestCSV_WithKinFit",
       "HTTv2_lead_pt", "AK12_lead_pt",
       "HadTop_pt",  "genTopPt",
       "HadTop_pt_multilep",
-      "HadTop_pt_CSVsort3rd", "HadTop_pt_highestCSV",
-      "HadTop_pt_CSVsort3rd_WithKinFit", "HadTop_pt_highestCSV_WithKinFit",
+      "HadTop_pt_CSVsort4rd", "HadTop_pt_highestCSV",
+      "HadTop_pt_CSVsort4rd_WithKinFit", "HadTop_pt_highestCSV_WithKinFit",
       "HTT_semi_boosted_fromAK8", "genTopPt_semi_boosted_fromAK8", "HadTop_pt_semi_boosted_fromAK8", "minDR_AK8_lep", //"AK8_without_subjets",
       "W_pt_semi_boosted_fromAK8", "b_pt_semi_boosted_fromAK8",
       "genTopPt_multilep",
-      "genTopPt_CSVsort3rd", "genTopPt_highestCSV",
-      "genTopPt_CSVsort3rd_WithKinFit", "genTopPt_highestCSV_WithKinFit",
+      "genTopPt_CSVsort4rd", "genTopPt_highestCSV",
+      "genTopPt_CSVsort4rd_WithKinFit", "genTopPt_highestCSV_WithKinFit",
       "HTTv2_lead_pt", "AK12_lead_pt",
       ////
       "HTT_boosted", "genTopPt_boosted", "HadTop_pt_boosted",
@@ -962,8 +962,8 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
       "N_jetAK12", "N_jetAK8", "hadtruth_semi_boosted", "hadtruth", "hadtruth_boosted", "hadtruth_semi_boosted_fromAK8",
       ////
       "bWj1Wj2_isGenMatchedWithKinFit", "bWj1Wj2_isGenMatched_IHEP",
-      "bWj1Wj2_isGenMatched_CSVsort3rd", "bWj1Wj2_isGenMatched_highestCSV",
-      "bWj1Wj2_isGenMatched_CSVsort3rd_WithKinFit", "bWj1Wj2_isGenMatched_highestCSV_WithKinFit",
+      "bWj1Wj2_isGenMatched_CSVsort4rd", "bWj1Wj2_isGenMatched_highestCSV",
+      "bWj1Wj2_isGenMatched_CSVsort4rd_WithKinFit", "bWj1Wj2_isGenMatched_highestCSV_WithKinFit",
       /////
       "bWj1Wj2_isGenMatched_boosted",
       "bWj1Wj2_isGenMatched_boosted_WithKinFit",
@@ -1271,9 +1271,9 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     std::vector<const RecoMuon*> tightMuons = tightMuonSelector(fakeableMuons, isHigherConePt);
     if(isDEBUG || run_lumi_eventSelector)
     {
-      printCollection("preselMuons",   preselMuons);
-      printCollection("fakeableMuons", fakeableMuons);
-      printCollection("tightMuons",    tightMuons);
+      //printCollection("preselMuons",   preselMuons);
+      //printCollection("fakeableMuons", fakeableMuons);
+      //printCollection("tightMuons",    tightMuons);
     }
 
     std::vector<RecoElectron> electrons = electronReader->read();
@@ -1284,9 +1284,9 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     std::vector<const RecoElectron*> tightElectrons = tightElectronSelector(fakeableElectrons, isHigherConePt);
     if(isDEBUG || run_lumi_eventSelector)
     {
-      printCollection("preselElectrons",   preselElectrons);
-      printCollection("fakeableElectrons", fakeableElectrons);
-      printCollection("tightElectrons",    tightElectrons);
+      //printCollection("preselElectrons",   preselElectrons);
+      //printCollection("fakeableElectrons", fakeableElectrons);
+      //printCollection("tightElectrons",    tightElectrons);
     }
 
     std::vector<const RecoLepton*> preselLeptonsFull = mergeLeptonCollections(preselElectrons, preselMuons, isHigherConePt);
@@ -1322,14 +1322,15 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     std::vector<RecoHadTau> hadTaus = hadTauReader->read();
     std::vector<const RecoHadTau*> hadTau_ptrs = convert_to_ptrs(hadTaus);
     std::vector<const RecoHadTau*> cleanedHadTaus = hadTauCleaner(hadTau_ptrs, preselMuons, preselElectrons);
+    std::vector<const RecoHadTau*> fakeableHadTaus = fakeableHadTauSelector(cleanedHadTaus, isHigherPt);
     std::vector<const RecoHadTau*> selHadTaus = tightHadTauSelector(cleanedHadTaus, isHigherPt);
 
     if(isDEBUG || run_lumi_eventSelector)
     {
-      printCollection("selMuons", selMuons);
-      printCollection("selElectrons", selElectrons);
-      printCollection("selLeptons", selLeptons);
-      printCollection("selHadTaus", selHadTaus);
+      //printCollection("selMuons", selMuons);
+      //printCollection("selElectrons", selElectrons);
+      //printCollection("selLeptons", selLeptons);
+      //printCollection("selHadTaus", selHadTaus);
     }
 //--- build collections of jets reconstructed by hep-top-tagger (HTTv2) algorithm
     std::vector<RecoJetHTTv2> jetsHTTv2 = jetReaderHTTv2->read();
@@ -1357,14 +1358,14 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
 //--- build collections of jets and select subset of jets passing b-tagging criteria
     std::vector<RecoJet> jets = jetReader->read();
     std::vector<const RecoJet*> jet_ptrs = convert_to_ptrs(jets);
-    std::vector<const RecoJet*> cleanedJets = jetCleaner(jet_ptrs, fakeableLeptons);
+    std::vector<const RecoJet*> cleanedJets = jetCleaner(jet_ptrs, fakeableLeptons, fakeableHadTaus);
     std::vector<const RecoJet*> selJets = jetSelector(cleanedJets, isHigherPt);
     std::vector<const RecoJet*> selBJets_loose = jetSelectorBtagLoose(cleanedJets, isHigherPt);
     std::vector<const RecoJet*> selBJets_medium = jetSelectorBtagMedium(cleanedJets, isHigherPt);
     if(isDEBUG || run_lumi_eventSelector)
     {
-      printCollection("uncleanedJets", jet_ptrs);
-      printCollection("selJets",       selJets);
+      //printCollection("uncleanedJets", jet_ptrs);
+      //printCollection("selJets",       selJets);
     }
 
 //--- cleaned RecoJet collection from AK12 as well
@@ -1424,7 +1425,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     if ( !(preselLeptonsFull.size() >= 3) ) {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS preselLeptons selection." << std::endl;
-  printCollection("preselLeptons", preselLeptonsFull);
+  //printCollection("preselLeptons", preselLeptonsFull);
       }
       continue;
     }
@@ -1464,8 +1465,8 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     // apply requirement on jets (incl. b-tagged jets) and hadronic taus on preselection level
     if ( !((int)selJets.size() >= minNumJets) ) {
       if ( run_lumi_eventSelector ) {
-    std::cout << "event " << eventInfo.str() << " FAILS selJets selection." << std::endl;
-  printCollection("selJets", selJets);
+    std::cout << "event " << eventInfo.str() << " FAILS selJets selection = " << (int)selJets.size() << std::endl;
+  //printCollection("selJets", selJets);
       }
       continue;
     }
@@ -1474,9 +1475,9 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     if ( !(selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) ) {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS selBJets selection." << std::endl;
-	printCollection("selJets", selJets);
-	printCollection("selBJets_loose", selBJets_loose);
-	printCollection("selBJets_medium", selBJets_medium);
+	//printCollection("selJets", selJets);
+	//printCollection("selBJets_loose", selBJets_loose);
+	//printCollection("selBJets_medium", selBJets_medium);
       }
       continue;
     }
@@ -1512,7 +1513,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     if ( !(selLeptons.size() >= 3) ) {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS selLeptons selection." << std::endl;
-	printCollection("selLeptons", selLeptons);
+	//printCollection("selLeptons", selLeptons);
 	//printCollection("preselLeptons", preselLeptons);
       }
       continue;
@@ -1532,7 +1533,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
       std::cout << "selLepton_genMatch = " << getLeptonGenMatch_string(leptonGenMatch_definitions, idxSelLepton_genMatch) << std::endl;
       if ( idxSelLepton_genMatch != kGen_3l0g0j ) {
 	std::cout << "--> CHECK!" << std::endl;
-	printCollection("selLeptons", selLeptons);
+	//printCollection("selLeptons", selLeptons);
       }
     }
 
@@ -1626,7 +1627,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     if ( !(tightLeptonsFull.size() <= 3) ) {
       if ( run_lumi_eventSelector ) {
         std::cout << "event " << eventInfo.str() << " FAILS tightLeptons selection.\n";
-        printCollection("tightLeptonsFull", tightLeptonsFull);
+        //printCollection("tightLeptonsFull", tightLeptonsFull);
       }
       continue;
     }
@@ -1684,8 +1685,8 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     // apply requirement on jets (incl. b-tagged jets) and hadronic taus on level of final event selection
     if ( !((int)selJets.size() >= minNumJets) ) {
       if ( run_lumi_eventSelector ) {
-    std::cout << "event " << eventInfo.str() << " FAILS selJets selection." << std::endl;
-	printCollection("selJets", selJets);
+    std::cout << "event " << eventInfo.str() << " FAILS selJets selection -- " << (int)selJets.size() << std::endl;
+	//printCollection("selJets", selJets);
       }
       continue;
     }
@@ -1694,9 +1695,9 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     if ( !(selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1)) {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS selBJets selection." << std::endl;
-	printCollection("selJets", selJets);
-	printCollection("selBJets_loose", selBJets_loose);
-	printCollection("selBJets_medium", selBJets_medium);
+	//printCollection("selJets", selJets);
+	//printCollection("selBJets_loose", selBJets_loose);
+	//printCollection("selBJets_medium", selBJets_medium);
       }
       continue;
     }
@@ -1706,7 +1707,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     if ( selHadTaus.size() > 0 ) {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS selHadTaus veto." << std::endl;
-	printCollection("selHadTaus", selHadTaus);
+	//printCollection("selHadTaus", selHadTaus);
       }
       continue;
     }
@@ -1867,7 +1868,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
 	std::cout << "event " << eventInfo.str() << " FAILS overlap w/ the SR: "
 	             "# tight leptons = " << tightLeptons.size() << " >= 3\n"
         ;
-	printCollection("tightLeptons", tightLeptons);
+	//printCollection("tightLeptons", tightLeptons);
       }
       continue; // CV: avoid overlap with signal region
     }
@@ -1905,23 +1906,23 @@ double b_pt_multilep_1 = 0.1;
 double Wj1_pt_multilep_1 = 0.1;
 double Wj2_pt_multilep_1 = 0.1;
 
-double max_mvaOutput_HTT_CSVsort3rd = 0.;
-bool max_truth_HTT_CSVsort3rd = false;
-double HadTop_pt_CSVsort3rd = 0.;
-double genTopPt_CSVsort3rd = 0.;
-double b_pt_CSVsort3rd_1 = 0.1;
-double Wj1_pt_CSVsort3rd_1 = 0.1;
-double Wj2_pt_CSVsort3rd_1 = 0.1;
+double max_mvaOutput_HTT_CSVsort4rd = 0.;
+bool max_truth_HTT_CSVsort4rd = false;
+double HadTop_pt_CSVsort4rd = 0.;
+double genTopPt_CSVsort4rd = 0.;
+double b_pt_CSVsort4rd_1 = 0.1;
+double Wj1_pt_CSVsort4rd_1 = 0.1;
+double Wj2_pt_CSVsort4rd_1 = 0.1;
 
 double max_mvaOutput_HTT_highestCSV = 0.;
 bool max_truth_HTT_highestCSV = false;
 double HadTop_pt_highestCSV = 0.;
 double genTopPt_highestCSV = 0.;
 
-double max_mvaOutput_HTT_CSVsort3rd_WithKinFit = 0.;
-bool max_truth_HTT_CSVsort3rd_WithKinFit = false;
-double HadTop_pt_CSVsort3rd_WithKinFit = 0.;
-double genTopPt_CSVsort3rd_WithKinFit = 0.;
+double max_mvaOutput_HTT_CSVsort4rd_WithKinFit = 0.;
+bool max_truth_HTT_CSVsort4rd_WithKinFit = false;
+double HadTop_pt_CSVsort4rd_WithKinFit = 0.;
+double genTopPt_CSVsort4rd_WithKinFit = 0.;
 
 double max_mvaOutput_HTT_highestCSV_WithKinFit = 0.;
 bool max_truth_HTT_highestCSV_WithKinFit = false;
@@ -1962,22 +1963,22 @@ if ( bdtResult.at(kXGB_with_kinFit) > max_mvaOutput_HTT_2016 ) { // HTT_2016
   HadTop_pt_2016 = HadTop_pt;
 }
 
-if ( bdtResult.at(kXGB_CSVsort3rd) > max_mvaOutput_HTT_CSVsort3rd ) {
-  max_truth_HTT_CSVsort3rd = isGenMatched;
-  max_mvaOutput_HTT_CSVsort3rd = bdtResult.at(kXGB_CSVsort3rd);
-  HadTop_pt_CSVsort3rd = HadTop_pt;
-  genTopPt_CSVsort3rd = genTopPt_teste;
-  Wj1_pt_CSVsort3rd_1 = (*selWJet1)->pt();
-  Wj2_pt_CSVsort3rd_1 = (*selWJet2)->pt();
-  b_pt_CSVsort3rd_1   = (*selBJet)->pt();
+if ( bdtResult.at(kXGB_CSVsort4rd) > max_mvaOutput_HTT_CSVsort4rd ) {
+  max_truth_HTT_CSVsort4rd = isGenMatched;
+  max_mvaOutput_HTT_CSVsort4rd = bdtResult.at(kXGB_CSVsort4rd);
+  HadTop_pt_CSVsort4rd = HadTop_pt;
+  genTopPt_CSVsort4rd = genTopPt_teste;
+  Wj1_pt_CSVsort4rd_1 = (*selWJet1)->pt();
+  Wj2_pt_CSVsort4rd_1 = (*selWJet2)->pt();
+  b_pt_CSVsort4rd_1   = (*selBJet)->pt();
 }
 
 /*
-if ( bdtResult.at(kXGB_CSVsort3rd_withKinFit) > max_mvaOutput_HTT_highestCSV_WithKinFit ) {
-  max_truth_HTT_CSVsort3rd_WithKinFit = isGenMatched;
-  max_mvaOutput_HTT_CSVsort3rd_WithKinFit = bdtResult.at(kXGB_CSVsort3rd_withKinFit);
-  HadTop_pt_CSVsort3rd_WithKinFit = HadTop_pt;
-  genTopPt_CSVsort3rd_WithKinFit = genTopPt_teste;
+if ( bdtResult.at(kXGB_CSVsort4rd_withKinFit) > max_mvaOutput_HTT_highestCSV_WithKinFit ) {
+  max_truth_HTT_CSVsort4rd_WithKinFit = isGenMatched;
+  max_mvaOutput_HTT_CSVsort4rd_WithKinFit = bdtResult.at(kXGB_CSVsort4rd_withKinFit);
+  HadTop_pt_CSVsort4rd_WithKinFit = HadTop_pt;
+  genTopPt_CSVsort4rd_WithKinFit = genTopPt_teste;
 }
 */
 
@@ -2141,7 +2142,7 @@ for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12.beg
 
   }
 }
-if (genTopPt_CSVsort3rd == genTopPt_semi_boosted)  resolved_and_semi = true;
+if (genTopPt_CSVsort4rd == genTopPt_semi_boosted)  resolved_and_semi = true;
 if (genTopPt_semi_boosted == genTopPt_boosted)  boosted_and_semi = true
 */
 //std::cout << "semi-boosted HTT " << HTT_semi_boosted << " "
@@ -2226,7 +2227,7 @@ for ( std::vector<const RecoJetAK8*>::const_iterator jetIter = jet_ptrsAK8.begin
 
   }
 }
-if (genTopPt_CSVsort3rd == genTopPt_semi_boosted_fromAK8)  resolved_and_semi_AK8 = true;
+if (genTopPt_CSVsort4rd == genTopPt_semi_boosted_fromAK8)  resolved_and_semi_AK8 = true;
 if (genTopPt_semi_boosted_fromAK8 == genTopPt_boosted)  boosted_and_semi_AK8 = true;
 
 double HTT_semi_boosted_fromAK8_noISO = 0.;
@@ -2269,7 +2270,7 @@ mvaInputs_Hj_tagger, mva_Hj_tagger,
 double Hj_tagger_fromCSVsort4th = 0.;
 for ( std::vector<const RecoJet*>::const_iterator selJet = selJets.begin();
 selJet != selJets.end(); ++selJet ) {
-  if ((*selJet)->pt()==Wj1_pt_CSVsort3rd_1 || (*selJet)->pt()==Wj2_pt_CSVsort3rd_1 || (*selJet)->pt()==b_pt_CSVsort3rd_1) continue;
+  if ((*selJet)->pt()==Wj1_pt_CSVsort4rd_1 || (*selJet)->pt()==Wj2_pt_CSVsort4rd_1 || (*selJet)->pt()==b_pt_CSVsort4rd_1) continue;
   double mvaOutput = comp_mvaOutput_Hj_tagger(
     *selJet, fakeableLeptons, mvaInputs_Hj_tagger, mva_Hj_tagger,
     eventInfo);
@@ -2355,8 +2356,8 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_Boosted_AK12_basic["mT_lep3"] = mT_lep3;
     mvaInputs_XGB_Boosted_AK12_basic["max_lep_eta"] = max_lep_eta;
     mvaInputs_XGB_Boosted_AK12_basic["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK12_basic["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK12_basic["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK12_basic["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK12_basic["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK12_basic["Hj_tagger_fromCSVsort4th"] = Hj_tagger_fromCSVsort4th;
     mvaInputs_XGB_Boosted_AK12_basic["min_lep_dr_os"] = std::min(dr_los1, dr_los2);
     mvaInputs_XGB_Boosted_AK12_basic["dr_lss"] = dr_lss;
@@ -2382,8 +2383,8 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_Boosted_AK12["mT_lep3"] = mT_lep3;
     mvaInputs_XGB_Boosted_AK12["max_lep_eta"] = max_lep_eta;
     mvaInputs_XGB_Boosted_AK12["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK12["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK12["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK12["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK12["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK12["Hj_tagger_fromCSVsort4th"] = Hj_tagger_fromCSVsort4th;
     mvaInputs_XGB_Boosted_AK12["min_lep_dr_os"] = std::min(dr_los1, dr_los2);
     mvaInputs_XGB_Boosted_AK12["dr_lss"] = dr_lss;
@@ -2410,8 +2411,8 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_AK12["mT_lep3"] = mT_lep3;
     mvaInputs_XGB_AK12["max_lep_eta"] = max_lep_eta;
     mvaInputs_XGB_AK12["nJet"] = selJets.size();
-    mvaInputs_XGB_AK12["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_AK12["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_AK12["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_AK12["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_AK12["Hj_tagger_fromCSVsort4th"] = Hj_tagger_fromCSVsort4th;
     mvaInputs_XGB_AK12["min_lep_dr_os"] = std::min(dr_los1, dr_los2);
     mvaInputs_XGB_AK12["dr_lss"] = dr_lss;
@@ -2438,8 +2439,8 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_Boosted_AK12_noISO["mT_lep3"] = mT_lep3;
     mvaInputs_XGB_Boosted_AK12_noISO["max_lep_eta"] = max_lep_eta;
     mvaInputs_XGB_Boosted_AK12_noISO["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK12_noISO["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK12_noISO["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK12_noISO["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK12_noISO["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK12_noISO["Hj_tagger_fromCSVsort4th"] = Hj_tagger_fromCSVsort4th;
     mvaInputs_XGB_Boosted_AK12_noISO["min_lep_dr_os"] = std::min(dr_los1, dr_los2);
     mvaInputs_XGB_Boosted_AK12_noISO["dr_lss"] = dr_lss;
@@ -2466,8 +2467,8 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_Boosted_AK8["mT_lep3"] = mT_lep3;
     mvaInputs_XGB_Boosted_AK8["max_lep_eta"] = max_lep_eta;
     mvaInputs_XGB_Boosted_AK8["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK8["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK8["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK8["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK8["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK8["Hj_tagger_fromCSVsort4th"] = Hj_tagger_fromCSVsort4th;
     mvaInputs_XGB_Boosted_AK8["min_lep_dr_os"] = std::min(dr_los1, dr_los2);
     mvaInputs_XGB_Boosted_AK8["dr_lss"] = dr_lss;
@@ -2492,8 +2493,8 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_Boosted_AK8_noISO["mT_lep3"] = mT_lep3;
     mvaInputs_XGB_Boosted_AK8_noISO["max_lep_eta"] = max_lep_eta;
     mvaInputs_XGB_Boosted_AK8_noISO["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK8_noISO["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK8_noISO["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK8_noISO["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK8_noISO["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK8_noISO["Hj_tagger_fromCSVsort4th"] = Hj_tagger_fromCSVsort4th;
     mvaInputs_XGB_Boosted_AK8_noISO["min_lep_dr_os"] = std::min(dr_los1, dr_los2);
     mvaInputs_XGB_Boosted_AK8_noISO["dr_lss"] = dr_lss;
@@ -2518,8 +2519,8 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_Updated["mT_lep3"] = mT_lep3;
     mvaInputs_XGB_Updated["max_lep_eta"] = max_lep_eta;
     mvaInputs_XGB_Updated["nJet"] = selJets.size();
-    mvaInputs_XGB_Updated["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Updated["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Updated["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Updated["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Updated["Hj_tagger_fromCSVsort4th"] = Hj_tagger_fromCSVsort4th;
     mvaInputs_XGB_Updated["min_lep_dr_os"] = std::min(dr_los1, dr_los2);
     mvaInputs_XGB_Updated["dr_lss"] = dr_lss;
@@ -2538,7 +2539,7 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_oldVar["mT_lep1"] = mT_lep1;
     mvaInputs_XGB_oldVar["max_lep_eta"] = max_lep_eta;
     mvaInputs_XGB_oldVar["nJet"] = selJets.size();
-    mvaInputs_XGB_oldVar["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
+    mvaInputs_XGB_oldVar["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
     mvaInputs_XGB_oldVar["Hj_tagger_fromCSVsort4th"] = Hj_tagger_fromCSVsort4th;
     double mva_oldVar = mva_XGB_oldVar(mvaInputs_XGB_oldVar);
     //std::cout<<" mva_oldVar "<<mva_oldVar<<std::endl;
@@ -2695,7 +2696,7 @@ selJet != selJets.end(); ++selJet ) {
     }
 
     const bool isGenMatched = isMC &&
-      ((apply_leptonGenMatching && selLepton_genMatch.numGenMatchedJets_ == 0) || ! apply_leptonGenMatching)
+      ((apply_leptonGenMatching && selLepton_genMatch.numGenMatchedLeptons_ == 3) || ! apply_leptonGenMatching)
     ;
 
     if ( bdt_filler ) {
@@ -2776,27 +2777,27 @@ selJet != selJets.end(); ++selJet ) {
 
           ("bWj1Wj2_isGenMatchedWithKinFit", max_truth_HTT_2016)
           ("bWj1Wj2_isGenMatched_IHEP",                    max_truth_multilep)
-          ("bWj1Wj2_isGenMatched_CSVsort3rd",              max_truth_HTT_CSVsort3rd)
+          ("bWj1Wj2_isGenMatched_CSVsort4rd",              max_truth_HTT_CSVsort4rd)
           ("bWj1Wj2_isGenMatched_highestCSV",              max_truth_HTT_highestCSV)
-          ("bWj1Wj2_isGenMatched_CSVsort3rd_WithKinFit",   max_truth_HTT_CSVsort3rd_WithKinFit)
+          ("bWj1Wj2_isGenMatched_CSVsort4rd_WithKinFit",   max_truth_HTT_CSVsort4rd_WithKinFit)
           ("bWj1Wj2_isGenMatched_highestCSV_WithKinFit",   max_truth_HTT_highestCSV_WithKinFit)
 
-          ("res-HTT_CSVsort3rd",                 max_mvaOutput_HTT_CSVsort3rd)
+          ("res-HTT_CSVsort4rd",                 max_mvaOutput_HTT_CSVsort4rd)
           ("res-HTT_highestCSV",                 max_mvaOutput_HTT_highestCSV)
-          ("res-HTT_CSVsort3rd_WithKinFit",      max_mvaOutput_HTT_CSVsort3rd_WithKinFit)
+          ("res-HTT_CSVsort4rd_WithKinFit",      max_mvaOutput_HTT_CSVsort4rd_WithKinFit)
           ("res-HTT_highestCSV_WithKinFit",      max_mvaOutput_HTT_highestCSV_WithKinFit)
           ("res-HTT_IHEP",                       max_mvaOutput_HTT_multilep)
 
           ("HadTop_pt_multilep",              HadTop_pt_multilep)
-          ("HadTop_pt_CSVsort3rd",            HadTop_pt_CSVsort3rd)
+          ("HadTop_pt_CSVsort4rd",            HadTop_pt_CSVsort4rd)
           ("HadTop_pt_highestCSV",            HadTop_pt_highestCSV)
-          ("HadTop_pt_CSVsort3rd_WithKinFit", HadTop_pt_CSVsort3rd_WithKinFit)
+          ("HadTop_pt_CSVsort4rd_WithKinFit", HadTop_pt_CSVsort4rd_WithKinFit)
           ("HadTop_pt_highestCSV_WithKinFit", HadTop_pt_highestCSV_WithKinFit)
 
           ("genTopPt_multilep",               genTopPt_multilep)
-          ("genTopPt_CSVsort3rd",             genTopPt_CSVsort3rd)
+          ("genTopPt_CSVsort4rd",             genTopPt_CSVsort4rd)
           ("genTopPt_highestCSV",             genTopPt_highestCSV)
-          ("genTopPt_CSVsort3rd_WithKinFit",  genTopPt_CSVsort3rd_WithKinFit)
+          ("genTopPt_CSVsort4rd_WithKinFit",  genTopPt_CSVsort4rd_WithKinFit)
           ("genTopPt_highestCSV_WithKinFit",  genTopPt_highestCSV_WithKinFit)
 
 

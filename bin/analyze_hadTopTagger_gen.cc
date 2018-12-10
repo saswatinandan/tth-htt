@@ -99,7 +99,8 @@
 #include "tthAnalysis/HiggsToTauTau/interface/HadTopTagger.h" // HadTopTagger
 #include "tthAnalysis/HiggsToTauTau/interface/TTreeWrapper.h" // TTreeWrapper
 #include "tthAnalysis/HiggsToTauTau/interface/EvtWeightManager.h" // EvtWeightManager
-
+#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // isGenMatchedJetTriplet tags
+#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_internal.h" // isGenMatchedJetTriplet
 #include <boost/math/special_functions/sign.hpp> // boost::math::sign()
 
 #include <iostream> // std::cerr, std::fixed
@@ -1075,7 +1076,7 @@ int main(int argc, char* argv[])
   RecoElectronReader* electronReader = new RecoElectronReader(era, branchName_electrons, readGenObjects);
   inputTree -> registerReader(electronReader);
   RecoElectronCollectionGenMatcher electronGenMatcher;
-  RecoElectronCollectionCleaner electronCleaner(0.05);
+  RecoElectronCollectionCleaner electronCleaner(0.3);
   RecoElectronCollectionSelectorLoose preselElectronSelector(era);
   RecoElectronCollectionSelectorFakeable fakeableElectronSelector(era);
   RecoElectronCollectionSelectorTight tightElectronSelector(era);

@@ -81,6 +81,10 @@ HadTopTagger::HadTopTagger(void)
     mvaFileNameHTT_highestCSV_withKinFit, mvaInputsHTTSort
   );
 
+  mva_xgb_HTT_CSVsort4rd_ = new TMVAInterface(
+    mvaFileNameHTT_CSVsort4rd, mvaInputsHTTSort
+  );
+  mva_xgb_HTT_CSVsort4rd_->enableBDTTransform();
 }
 
 HadTopTagger::~HadTopTagger()
@@ -215,6 +219,9 @@ HadTopTagger::operator()(const RecoJet & recBJet,
   //std::cout << " HTT_CSVsort3rd_withKinFit " << HTT_CSVsort3rd_withKinFit << std::endl;
   //std::cout << " HTT_highestCSV_withKinFit " << HTT_highestCSV_withKinFit << std::endl;
   //*/
+  const double HTT_CSVsort4rd = (*mva_xgb_HTT_CSVsort4rd_)(mvaInputsHTT);
+  result[kXGB_CSVsort4rd] = HTT_CSVsort4rd;
+  //std::cout << " HTT_CSVsort4rd " << HTT_CSVsort4rd << std::endl;
 
   if ( massCut && !(p4_bWj1Wj2.mass() > 75. && p4_bWj1Wj2.mass() < 275.)) {
     result[kXGB_multilep] = -1.;
@@ -250,11 +257,5 @@ HadTopTagger::operator()(const RecoJet & recBJet,
 const std::map<std::string, double> &
 HadTopTagger::mvaInputs() const
 {
-  return mvaInputsWithKinFit;
-}
-
-const HadTopKinFit *
-HadTopTagger::kinFit() const
-{
-  return kinFit_;
+  return mvaInputsHTT;
 }

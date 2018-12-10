@@ -102,11 +102,6 @@ HadTopTagger_semi_boosted_AK8::operator()(
   } // close gen matching
 
 
-  // (*jetIter)->msoftdrop()
-  //"massW_SD", "tau21W", "btagDisc_b",
-  // "m_Wj1Wj2_div_m_bWj1Wj2", "dR_Wj1Wj2", "m_bWj1Wj2", "pT_bWj1Wj2", "m_bWj2",
-  // "mass_Wj1", "pT_Wj2", "mass_Wj2", "pT_b", "mass_b",
-  // "kinFit_pT_b_o_pT_b", "kinFit_pT_Wj2_o_pT_Wj2", "nllKinFit"
   mvaInputsHTT_AK8["massW_SD"]           = jet_ptrsAK12.msoftdrop();
   mvaInputsHTT_AK8["tau21W"]           = jet_ptrsAK12.tau2()/jet_ptrsAK12.tau1();
   mvaInputsHTT_AK8["btagDisc_b"]         = b_jet_candidate.BtagCSV();
@@ -114,7 +109,6 @@ HadTopTagger_semi_boosted_AK8::operator()(
   mvaInputsHTT_AK8["dR_Wj1Wj2"]          = deltaR(recWJet1, recWJet2);
   mvaInputsHTT_AK8["m_bWj1Wj2"]          = (recWJet1 + recWJet2 + recBJet).mass();
   mvaInputsHTT_AK8["pT_bWj1Wj2"]          = (recWJet1 + recWJet2 + recBJet).pt();
-  //mvaInputsHTT_AK8["m_bWj2"]             = (recBJet + recWJet2).mass();
   mvaInputsHTT_AK8["mass_Wj1"]           = recWJet1.mass();
   mvaInputsHTT_AK8["pT_Wj2"]             = recWJet2.pt();
   mvaInputsHTT_AK8["mass_Wj2"]           = recWJet2.mass();
@@ -156,9 +150,3 @@ HadTopTagger_semi_boosted_AK8::mvaInputs() const
 {
   return mvaInputsHTT_AK8;
 }
-
-//const HadTopKinFit *
-//HadTopTagger_semi_boosted::kinFit() const
-//{
-//  return kinFit_;
-//}

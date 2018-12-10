@@ -1,4 +1,4 @@
-﻿#include "FWCore/ParameterSet/interface/ParameterSet.h" // edm::ParameterSet
+#include "FWCore/ParameterSet/interface/ParameterSet.h" // edm::ParameterSet
 #include "FWCore/PythonParameterSet/interface/MakeParameterSets.h" // edm::readPSetsFrom()
 #include "FWCore/Utilities/interface/Exception.h" // cms::Exception
 #include "PhysicsTools/FWLite/interface/TFileService.h" // fwlite::TFileService
@@ -53,6 +53,13 @@
 #include "tthAnalysis/HiggsToTauTau/interface/RecoHadTauCollectionSelectorTight.h" // RecoHadTauCollectionSelectorTight
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelector.h" // RecoJetCollectionSelector
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorBtag.h" // RecoJetCollectionSelectorBtagLoose, RecoJetCollectionSelectorBtagMedium
+#include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorHTTv2.h" // RecoJetSelectorHTTv2
+#include "tthAnalysis/HiggsToTauTau/interface/RecoJetHTTv2.h"
+#include "tthAnalysis/HiggsToTauTau/interface/RecoJetReaderHTTv2.h" // RecoJetReaderHTTv2
+#include "tthAnalysis/HiggsToTauTau/interface/RecoJetReaderAK8.h" // RecoJetReaderAK8
+#include "tthAnalysis/HiggsToTauTau/interface/JetHistManagerHTTv2.h" // JetHistManagerHTTv2
+#include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorAK8.h" // RecoJetSelectorAK8
+#include "tthAnalysis/HiggsToTauTau/interface/ParticleCollectionCleanerSubJets.h" // RecoJetCollectionCleanerAK8SubJets
 #include "tthAnalysis/HiggsToTauTau/interface/RunLumiEventSelector.h" // RunLumiEventSelector
 #include "tthAnalysis/HiggsToTauTau/interface/MEtFilterSelector.h" // MEtFilterSelector
 #include "tthAnalysis/HiggsToTauTau/interface/ElectronHistManager.h" // ElectronHistManager
@@ -80,6 +87,7 @@
 #include "tthAnalysis/HiggsToTauTau/interface/Data_to_MC_CorrectionInterface_2018.h"
 #include "tthAnalysis/HiggsToTauTau/interface/Data_to_MC_CorrectionInterface_0l_2tau_trigger.h" // Data_to_MC_CorrectionInterface_0l_2tau_trigger
 #include "tthAnalysis/HiggsToTauTau/interface/DYMCReweighting.h" // DYMCReweighting
+#include "tthAnalysis/HiggsToTauTau/interface/DYMCNormScaleFactors.h" // DYMCNormScaleFactors
 #include "tthAnalysis/HiggsToTauTau/interface/cutFlowTable.h" // cutFlowTableType
 #include "tthAnalysis/HiggsToTauTau/interface/NtupleFillerBDT.h" // NtupleFillerBDT
 #include "tthAnalysis/HiggsToTauTau/interface/HadTopTagger.h" // HadTopTagger
@@ -90,25 +98,21 @@
 #include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // isGenMatchedJetTriplet tags
 #include "tthAnalysis/HiggsToTauTau/interface/HadTopKinFit.h" // HadTopKinFit
 #include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions.h" // isGenMatchedJetTriplet
+#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // isGenMatchedJetTriplet tags
 #include "tthAnalysis/HiggsToTauTau/interface/TTreeWrapper.h" // TTreeWrapper
 #include "tthAnalysis/HiggsToTauTau/interface/SyncNtupleManager.h" // SyncNtupleManager
 #include "tthAnalysis/HiggsToTauTau/interface/hltFilter.h" // hltFilter()
 #include "tthAnalysis/HiggsToTauTau/interface/EvtWeightManager.h" // EvtWeightManager
-
 #include "tthAnalysis/HiggsToTauTau/interface/GenParticle.h" // GenParticle
 #include "tthAnalysis/HiggsToTauTau/interface/GenParticleReader.h" // GenParticleReader
-#include "TauAnalysis/ClassicSVfit/interface/ClassicSVfit.h"
-#include "TauAnalysis/ClassicSVfit/interface/MeasuredTauLepton.h"
+
+#include "TauAnalysis/ClassicSVfit/interface/ClassicSVfit.h" // ClassicSVfit
+#include "TauAnalysis/ClassicSVfit/interface/MeasuredTauLepton.h" // classic_svFit::MeasuredTauLepton
 #include "TauAnalysis/ClassicSVfit/interface/svFitHistogramAdapter.h"
 #include "TauAnalysis/ClassicSVfit/interface/svFitAuxFunctions.h"
 
-#include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorHTTv2.h" // RecoJetSelectorHTTv2
-#include "tthAnalysis/HiggsToTauTau/interface/RecoJetHTTv2.h"
-#include "tthAnalysis/HiggsToTauTau/interface/RecoJetReaderHTTv2.h" // RecoJetReaderHTTv2
-#include "tthAnalysis/HiggsToTauTau/interface/RecoJetReaderAK12.h" // RecoJetReaderAK12
-#include "tthAnalysis/HiggsToTauTau/interface/RecoJetReaderAK8.h" // RecoJetReaderAK8
 
-#include "tthAnalysis/HiggsToTauTau/interface/JetHistManagerHTTv2.h" // JetHistManagerHTTv2
+#include "tthAnalysis/HiggsToTauTau/interface/RecoJetReaderAK12.h" // RecoJetReaderAK12
 #include "tthAnalysis/HiggsToTauTau/interface/JetHistManagerAK12.h" // JetHistManagerAK12
 
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorAK12.h" // RecoJetSelectorAK12
@@ -217,6 +221,8 @@ int main(int argc, char* argv[])
   double lumiScale = ( process_string != "data_obs" ) ? cfg_analyze.getParameter<double>("lumiScale") : 1.;
   bool apply_genWeight = cfg_analyze.getParameter<bool>("apply_genWeight");
   bool apply_DYMCReweighting = cfg_analyze.getParameter<bool>("apply_DYMCReweighting");
+
+  bool apply_DYMCNormScaleFactors = cfg_analyze.getParameter<bool>("apply_DYMCNormScaleFactors");
   bool apply_hlt_filter = cfg_analyze.getParameter<bool>("apply_hlt_filter");
   bool apply_met_filters = cfg_analyze.getParameter<bool>("apply_met_filters");
   edm::ParameterSet cfgMEtFilter = cfg_analyze.getParameter<edm::ParameterSet>("cfgMEtFilter");
@@ -249,6 +255,7 @@ int main(int argc, char* argv[])
   const int jetBtagSF_option        = getBTagWeight_option     (central_or_shift);
   const PUsys puSys_option          = getPUsys_option          (central_or_shift);
   const int dyMCReweighting_option  = getDYMCReweighting_option(central_or_shift);
+  const int dyMCNormScaleFactors_option  = getDYMCNormScaleFactors_option(central_or_shift);
 
   const int met_option   = useNonNominal_jetmet ? kMEt_central_nonNominal : getMET_option(central_or_shift, isMC);
   const int jetPt_option = useNonNominal_jetmet ? kJet_central_nonNominal : getJet_option(central_or_shift, isMC);
@@ -268,6 +275,10 @@ int main(int argc, char* argv[])
   if(apply_DYMCReweighting)
   {
     dyReweighting = new DYMCReweighting(era, dyMCReweighting_option);
+  }
+  DYMCNormScaleFactors* dyNormScaleFactors = nullptr;
+  if ( apply_DYMCNormScaleFactors ) {
+    dyNormScaleFactors = new DYMCNormScaleFactors(era, dyMCNormScaleFactors_option);
   }
 
   edm::ParameterSet cfg_dataToMCcorrectionInterface;
@@ -321,6 +332,10 @@ int main(int argc, char* argv[])
   std::string branchName_jetsAK8 = cfg_analyze.getParameter<std::string>("branchName_jetsAK8");
   std::string branchName_subjetsAK8 = cfg_analyze.getParameter<std::string>("branchName_subjetsAK8");
   std::string branchName_met = cfg_analyze.getParameter<std::string>("branchName_met");
+  std::string branchName_jetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_jetsHTTv2");
+  std::string branchName_subjetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_subjetsHTTv2");
+  std::string branchName_jetsAK8 = cfg_analyze.getParameter<std::string>("branchName_jetsAK8");
+  std::string branchName_subjetsAK8 = cfg_analyze.getParameter<std::string>("branchName_subjetsAK8");
 
   std::string branchName_genLeptons = cfg_analyze.getParameter<std::string>("branchName_genLeptons");
   std::string branchName_genHadTaus = cfg_analyze.getParameter<std::string>("branchName_genHadTaus");
@@ -401,7 +416,7 @@ int main(int argc, char* argv[])
   electronReader->readUncorrected(useNonNominal);
   inputTree -> registerReader(electronReader);
   RecoElectronCollectionGenMatcher electronGenMatcher;
-  RecoElectronCollectionCleaner electronCleaner(0.05, isDEBUG);
+  RecoElectronCollectionCleaner electronCleaner(0.3, isDEBUG);
   RecoElectronCollectionSelectorLoose preselElectronSelector(era, -1, isDEBUG);
   RecoElectronCollectionSelectorFakeable fakeableElectronSelector(era, -1, isDEBUG);
   fakeableElectronSelector.disable_offline_e_trigger_cuts();
@@ -454,13 +469,25 @@ int main(int argc, char* argv[])
   RecoJetCollectionGenMatcher jetGenMatcher;
   RecoJetCollectionCleaner jetCleaner(0.4, isDEBUG);
   RecoJetCollectionCleaner jetCleaner_large8(0.8, isDEBUG);
-  RecoJetCollectionCleaner jetCleaner_large12(1.2, isDEBUG);
+
   RecoJetCollectionSelector jetSelector(era, -1, isDEBUG);
   RecoJetCollectionSelectorBtagLoose jetSelectorBtagLoose(era, -1, isDEBUG);
   RecoJetCollectionSelectorBtagMedium jetSelectorBtagMedium(era, -1, isDEBUG);
 
+  RecoJetReaderHTTv2* jetReaderHTTv2 = new RecoJetReaderHTTv2(era, branchName_jetsHTTv2, branchName_subjetsHTTv2);
+  inputTree -> registerReader(jetReaderHTTv2);
+  RecoJetCollectionSelectorHTTv2 jetSelectorHTTv2(era);
+  RecoJetCollectionCleanerHTTv2 jetCleanerHTTv2(1.5, isDEBUG); //to clean against leptons and hadronic taus
+  RecoJetCollectionCleanerHTTv2SubJets jetCleanerHTTv2SubJets(0.4, isDEBUG); //to clean against leptons and hadronic taus
+
+  RecoJetReaderAK8* jetReaderAK8 = new RecoJetReaderAK8(era, branchName_jetsAK8, branchName_subjetsAK8);
+  inputTree -> registerReader(jetReaderAK8);
+  RecoJetCollectionSelectorAK8 jetSelectorAK8(era);
+  RecoJetCollectionCleanerAK8 jetCleanerAK8(0.8, isDEBUG); //to clean against leptons and hadronic taus
+  RecoJetCollectionCleanerAK8SubJets jetCleanerAK8SubJets(0.4, isDEBUG); //to clean against leptons and hadronic taus
+
   GenParticleReader* genTauLeptonReader = nullptr;
-  if ( isMC && apply_DYMCReweighting ) {
+  if ( isMC && (apply_DYMCReweighting || apply_DYMCNormScaleFactors)) {
     genTauLeptonReader = new GenParticleReader(branchName_genTauLeptons);
     inputTree->registerReader(genTauLeptonReader);
   }
@@ -547,6 +574,7 @@ int main(int argc, char* argv[])
   std::map<std::string, double> mvaInputs_ttbar;
 
   //--- initialize XGBs used to discriminate ttH vs. ttbar
+  // Arun training
   std::string xgbFileName_0l_2tau_ttbar = "tthAnalysis/HiggsToTauTau/data/0l_2tau_XGB_HTTWithKinFitReduced_evtLevelTT_TTH_19Var.pkl";
   //--- initialize XGBs used to discriminate ttH vs. ttV
   std::string xgbFileName_0l_2tau_ttv = "tthAnalysis/HiggsToTauTau/data/0l_2tau_XGB_HTTWithKinFitReduced_evtLevelTTV_TTH_16Var.pkl";
@@ -586,7 +614,7 @@ int main(int argc, char* argv[])
     "tau1_pt", "tau2_pt", "tau1_eta", "tau2_eta",
     "htmiss", "dr_taus", "mT_tau1", "mT_tau2", "mTauTauVis", "mTauTau", "nJet",
     "nBJetLoose", "nBJetMedium",
-    "res-HTT_CSVsort3rd_2", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd_2", "HadTop_pt_CSVsort3rd"
+    "res-HTT_CSVsort4rd_2", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd_2", "HadTop_pt_CSVsort4rd"
   };
   XGBInterface mva_XGB_oldVar(mvaFileName_XGB_oldVar, mvaInputVariables_XGB_oldVar);
   std::map<std::string, double> mvaInputs_XGB_oldVar;
@@ -597,86 +625,24 @@ int main(int argc, char* argv[])
     "avg_dr_jet", "ptmiss", "tau1_pt", "tau2_pt", "tau1_eta", "tau2_eta",
     "dr_taus", "mT_tau1", "mT_tau2", "mTauTauVis", "mTauTau", "nJet",
     "nBJetLoose", "nBJetMedium",
-    "res-HTT_CSVsort3rd_2", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd_2", "HadTop_pt_CSVsort3rd"
+    "res-HTT_CSVsort4rd_2", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd_2", "HadTop_pt_CSVsort4rd"
   };
-  XGBInterface mva_XGB_Updated(mvaFileName_XGB_Updated, mvaInputVariables_XGB_Updated);
+  TMVAInterface mva_XGB_Updated(mvaFileName_XGB_Updated, mvaInputVariables_XGB_Updated);
+  mva_XGB_Updated.enableBDTTransform();
   std::map<std::string, double> mvaInputs_XGB_Updated;
 
-  std::string mvaFileName_XGB_Boosted_AK8_noISO = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/0l_2tau/0l_2tau_XGB_Boosted_AK8_noISO_evtLevelSUM_TTH_25Var.pkl";
-  std::vector<std::string> mvaInputVariables_XGB_Boosted_AK8_noISO = {
-    "mindr_tau1_jet", "mindr_tau2_jet",
-    "avg_dr_jet", "ptmiss", "tau1_pt", "tau2_pt", "tau1_eta", "tau2_eta",
-    "dr_taus", "mT_tau1", "mT_tau2", "mTauTauVis", "mTauTau", "nJet",
-    "nBJetLoose", "nBJetMedium",
-    "res-HTT_CSVsort3rd_2", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd",
-    "resolved_and_semi_AK8", "boosted_and_semi_AK8", "minDR_HTTv2_lep", "minDR_AK8_lep", "HTT_boosted", "HTT_semi_boosted_fromAK8"
-  };
-  XGBInterface mva_XGB_Boosted_AK8_noISO(mvaFileName_XGB_Boosted_AK8_noISO, mvaInputVariables_XGB_Boosted_AK8_noISO);
-  std::map<std::string, double> mvaInputs_XGB_Boosted_AK8_noISO;
-
-  std::string mvaFileName_XGB_Boosted_AK8 = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/0l_2tau/0l_2tau_XGB_Boosted_AK8_evtLevelSUM_TTH_25Var.pkl";
-  /*
+  std::string mvaFileName_XGB_Boosted_AK8 = "tthAnalysis/HiggsToTauTau/data/BDTs_2017MC_postPAS/0l_2tau_XGB_Boosted_AK8_evtLevelSUM_TTH_25Var.xml";
   std::vector<std::string> mvaInputVariables_XGB_Boosted_AK8 = {
     "mindr_tau1_jet", "mindr_tau2_jet",
     "avg_dr_jet", "ptmiss", "tau1_pt", "tau2_pt", "tau1_eta", "tau2_eta",
-    "mT_tau1", "mT_tau2", "mTauTauVis", "mTauTau", "nJet",
+    "dr_taus", "mT_tau1", "mT_tau2", "mTauTauVis", "mTauTau", "nJet",
     "nBJetLoose", "nBJetMedium",
-    "res-HTT_CSVsort3rd_2", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd",
-    "resolved_and_semi_AK8", "boosted_and_semi_AK8", "minDR_HTTv2_lep", "HTT_boosted", "HTT_semi_boosted_fromAK8"
+    "res-HTT_CSVsort4rd_2", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+    "resolved_and_semi_AK8", "boosted_and_semi_AK8", "minDR_HTTv2_lep", "minDR_AK8_lep", "HTT_boosted", "HTT_semi_boosted_fromAK8"
   };
-  */
-  XGBInterface mva_XGB_Boosted_AK8(mvaFileName_XGB_Boosted_AK8, mvaInputVariables_XGB_Boosted_AK8_noISO);
+  TMVAInterface mva_XGB_Boosted_AK8(mvaFileName_XGB_Boosted_AK8, mvaInputVariables_XGB_Boosted_AK8);
+  mva_XGB_Boosted_AK8.enableBDTTransform();
   std::map<std::string, double> mvaInputs_XGB_Boosted_AK8;
-
-  /*
-  std::string mvaFileName_XGB_Boosted_AK12_noISO = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/0l_2tau/0l_2tau_XGB_Boosted_AK12_noISO_evtLevelSUM_TTH_24Var.pkl";
-  std::vector<std::string> mvaInputVariables_XGB_Boosted_AK12_noISO = {
-    "mindr_tau1_jet", "mindr_tau2_jet",
-    "avg_dr_jet", "ptmiss", "tau1_pt", "tau2_pt", "tau1_eta", "tau2_eta",
-    "dr_taus", "mT_tau1", "mT_tau2", "mTauTauVis", "mTauTau", "nJet",
-    "nBJetLoose", "nBJetMedium",
-    "res-HTT_CSVsort3rd_2", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd",
-    "resolved_and_semi", "minDR_HTTv2_lep", "minDR_AK12_lep", "HTT_boosted", "HTT_semi_boosted"
-  };
-  XGBInterface mva_XGB_Boosted_AK12_noISO(mvaFileName_XGB_Boosted_AK12_noISO, mvaInputVariables_XGB_Boosted_AK12_noISO);
-  std::map<std::string, double> mvaInputs_XGB_Boosted_AK12_noISO;
-
-  std::string mvaFileName_XGB_Boosted_AK12 = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/0l_2tau/0l_2tau_XGB_Boosted_AK12_evtLevelSUM_TTH_24Var.pkl";
-  std::vector<std::string> mvaInputVariables_XGB_Boosted_AK12 = {
-    "mindr_tau1_jet", "mindr_tau2_jet",
-    "avg_dr_jet", "ptmiss", "tau1_pt", "tau2_pt", "tau1_eta", "tau2_eta",
-    "dr_taus", "mT_tau1", "mT_tau2", "mTauTauVis", "mTauTau", "nJet",
-    "nBJetLoose", "nBJetMedium",
-    "res-HTT_CSVsort3rd_2", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd",
-    "resolved_and_semi", "minDR_HTTv2_lep", "minDR_AK12_lep", "HTT_boosted", "HTT_semi_boosted"
-  };
-  XGBInterface mva_XGB_Boosted_AK12(mvaFileName_XGB_Boosted_AK12, mvaInputVariables_XGB_Boosted_AK12);
-  std::map<std::string, double> mvaInputs_XGB_Boosted_AK12;
-
-  std::string mvaFileName_XGB_Boosted_AK12_basic = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/0l_2tau/0l_2tau_XGB_Boosted_AK12_basic_evtLevelSUM_TTH_22Var.pkl";
-  std::vector<std::string> mvaInputVariables_XGB_Boosted_AK12_basic = {
-    "mindr_tau1_jet", "mindr_tau2_jet",
-    "avg_dr_jet", "ptmiss", "tau1_pt", "tau2_pt", "tau1_eta", "tau2_eta",
-    "dr_taus", "mT_tau1", "mT_tau2", "mTauTauVis", "mTauTau", "nJet",
-    "nBJetLoose", "nBJetMedium",
-    "res-HTT_CSVsort3rd_2", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd",
-    "N_jetAK12", "nHTTv2", "AK12_lead_pt"
-  };
-  XGBInterface mva_XGB_Boosted_AK12_basic(mvaFileName_XGB_Boosted_AK12_basic, mvaInputVariables_XGB_Boosted_AK12_basic);
-  std::map<std::string, double> mvaInputs_XGB_Boosted_AK12_basic;
-  */
-
-  std::string mvaFileName_XGB_Boosted_AK8_basic = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/0l_2tau/0l_2tau_XGB_Boosted_AK8_basic_evtLevelSUM_TTH_22Var.pkl";
-  std::vector<std::string> mvaInputVariables_XGB_Boosted_AK8_basic = {
-    "mindr_tau1_jet", "mindr_tau2_jet",
-    "avg_dr_jet", "ptmiss", "tau1_pt", "tau2_pt", "tau1_eta", "tau2_eta",
-    "dr_taus", "mT_tau1", "mT_tau2", "mTauTauVis", "mTauTau", "nJet",
-    "nBJetLoose", "nBJetMedium",
-    "res-HTT_CSVsort3rd_2", "res-HTT_CSVsort3rd", "HadTop_pt_CSVsort3rd_2", "HadTop_pt_CSVsort3rd",
-    "N_jetAK8", "nHTTv2"
-  };
-  XGBInterface mva_XGB_Boosted_AK8_basic(mvaFileName_XGB_Boosted_AK8_basic, mvaInputVariables_XGB_Boosted_AK8_basic);
-  std::map<std::string, double> mvaInputs_XGB_Boosted_AK8_basic;
 
 //--- open output file containing run:lumi:event numbers of events passing final event selection criteria
   std::ostream* selEventsFile = ( selEventsFileName_output != "" ) ? new std::ofstream(selEventsFileName_output.data(), std::ios::out) : 0;
@@ -956,26 +922,26 @@ int main(int argc, char* argv[])
       "minDR_HTTv2subjets_lep_noISO", "minDR_AK12subjets_lep_noISO", "minDR_AK8subjets_lep_noISO",
       ///
       "res-HTT", "res-HTT_IHEP",
-      "res-HTT_CSVsort3rd", "res-HTT_highestCSV",
-      "res-HTT_CSVsort3rd_WithKinFit", "res-HTT_highestCSV_WithKinFit",
+      "res-HTT_CSVsort4rd", "res-HTT_highestCSV",
+      "res-HTT_CSVsort4rd_WithKinFit", "res-HTT_highestCSV_WithKinFit",
       "HTTv2_lead_pt", "AK12_lead_pt",
       "HadTop_pt",  "genTopPt",
       "HadTop_pt_multilep",
-      "HadTop_pt_CSVsort3rd", "HadTop_pt_highestCSV",
-      "HadTop_pt_CSVsort3rd_WithKinFit", "HadTop_pt_highestCSV_WithKinFit",
+      "HadTop_pt_CSVsort4rd", "HadTop_pt_highestCSV",
+      "HadTop_pt_CSVsort4rd_WithKinFit", "HadTop_pt_highestCSV_WithKinFit",
       "genTopPt_multilep",
-      "genTopPt_CSVsort3rd", "genTopPt_highestCSV",
-      "genTopPt_CSVsort3rd_WithKinFit", "genTopPt_highestCSV_WithKinFit",
+      "genTopPt_CSVsort4rd", "genTopPt_highestCSV",
+      "genTopPt_CSVsort4rd_WithKinFit", "genTopPt_highestCSV_WithKinFit",
       "res-HTT_2", "res-HTT_IHEP_2",
-      "res-HTT_CSVsort3rd_2", "res-HTT_highestCSV_2",
-      "res-HTT_CSVsort3rd_WithKinFit_2", "res-HTT_highestCSV_WithKinFit_2",
+      "res-HTT_CSVsort4rd_2", "res-HTT_highestCSV_2",
+      "res-HTT_CSVsort4rd_WithKinFit_2", "res-HTT_highestCSV_WithKinFit_2",
       "HadTop_pt_2",  "genTopPt_2",
       "HadTop_pt_multilep_2",
-      "HadTop_pt_CSVsort3rd_2", "HadTop_pt_highestCSV_2",
-      "HadTop_pt_CSVsort3rd_WithKinFit_2", "HadTop_pt_highestCSV_WithKinFit_2",
+      "HadTop_pt_CSVsort4rd_2", "HadTop_pt_highestCSV_2",
+      "HadTop_pt_CSVsort4rd_WithKinFit_2", "HadTop_pt_highestCSV_WithKinFit_2",
       "genTopPt_multilep_2",
-      "genTopPt_CSVsort3rd_2", "genTopPt_highestCSV_2",
-      "genTopPt_CSVsort3rd_WithKinFit_2", "genTopPt_highestCSV_WithKinFit_2",
+      "genTopPt_CSVsort4rd_2", "genTopPt_highestCSV_2",
+      "genTopPt_CSVsort4rd_WithKinFit_2", "genTopPt_highestCSV_WithKinFit_2",
       ////
       "HTT_boosted", "genTopPt_boosted", "HadTop_pt_boosted",
       "HTT_semi_boosted", "genTopPt_semi_boosted", "HadTop_pt_semi_boosted",
@@ -994,11 +960,11 @@ int main(int argc, char* argv[])
       "hadtruth", "hadtruth_2", "hadtruth_boosted", "hadtruth_semi_boosted", "hadtruth_semi_boosted_fromAK8",
       ////
       "bWj1Wj2_isGenMatchedWithKinFit", "bWj1Wj2_isGenMatched_IHEP",
-      "bWj1Wj2_isGenMatched_CSVsort3rd", "bWj1Wj2_isGenMatched_highestCSV",
-      "bWj1Wj2_isGenMatched_CSVsort3rd_WithKinFit", "bWj1Wj2_isGenMatched_highestCSV_WithKinFit",
+      "bWj1Wj2_isGenMatched_CSVsort4rd", "bWj1Wj2_isGenMatched_highestCSV",
+      "bWj1Wj2_isGenMatched_CSVsort4rd_WithKinFit", "bWj1Wj2_isGenMatched_highestCSV_WithKinFit",
       "bWj1Wj2_isGenMatchedWithKinFit_2", "bWj1Wj2_isGenMatched_IHEP_2",
-      "bWj1Wj2_isGenMatched_CSVsort3rd_2", "bWj1Wj2_isGenMatched_highestCSV_2",
-      "bWj1Wj2_isGenMatched_CSVsort3rd_WithKinFit_2", "bWj1Wj2_isGenMatched_highestCSV_WithKinFit_2",
+      "bWj1Wj2_isGenMatched_CSVsort4rd_2", "bWj1Wj2_isGenMatched_highestCSV_2",
+      "bWj1Wj2_isGenMatched_CSVsort4rd_WithKinFit_2", "bWj1Wj2_isGenMatched_highestCSV_WithKinFit_2",
       /////
       "bWj1Wj2_isGenMatched_boosted",
       "bWj1Wj2_isGenMatched_semi_boosted",
@@ -1108,7 +1074,7 @@ int main(int argc, char* argv[])
     }
 
     std::vector<GenParticle> genTauLeptons;
-    if(isMC && apply_DYMCReweighting)
+    if(isMC && (apply_DYMCReweighting || apply_DYMCNormScaleFactors))
     {
       genTauLeptons = genTauLeptonReader->read();
     }
@@ -1359,12 +1325,12 @@ int main(int argc, char* argv[])
     preselHistManager->BJets_medium_->fillHistograms(selBJets_medium, 1.);
     preselHistManager->met_->fillHistograms(met, mht_p4, met_LD, 1.);
     preselHistManager->metFilters_->fillHistograms(metFilters, 1.);
-    preselHistManager->evt_->fillHistograms(preselElectrons.size(), preselMuons.size(), selHadTaus.size(),
+    preselHistManager->evt_->fillHistograms(
+      preselElectrons.size(), preselMuons.size(), preselHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       -1., 0., 0., 0., 0., 0.,
-      0., 0.,0., 0.,0., 0.,0., 0.,-1.,
       mTauTauVis_presel, -1.,
-      -1., -1., -1., -1., -1., 1.);
+      -1., -1., -1., -1., -1., -1., -1., 1.);
     preselHistManager->evtYield_->fillHistograms(eventInfo, 1.);
 
 //--- apply final event selection
@@ -1384,6 +1350,7 @@ int main(int argc, char* argv[])
     double evtWeight = 1.;
     double btagWeight = 1.;
     if ( isMC ) {
+      if ( apply_DYMCNormScaleFactors ) evtWeight_inclusive *= dyNormScaleFactors->getWeight(genTauLeptons, selJets.size(), selBJets_loose.size(), selBJets_medium.size());
       evtWeight *= evtWeight_inclusive;
       btagWeight = get_BtagWeight(selJets);
       evtWeight *= btagWeight;
@@ -1510,7 +1477,7 @@ int main(int argc, char* argv[])
 
     double mTauTauVis = (selHadTau_lead->p4() + selHadTau_sublead->p4()).mass();
 
-    // apply requirement on jets (incl. b-tagged jets) and hadronic taus on level of final event selection
+    // apply requirement on jets (incl. b-tagged jets) on level of final event selection
     if ( !(selJets.size() >= 4) ) continue;
     cutFlowTable.update(">= 4 jets", evtWeight);
     cutFlowHistManager->fillHistograms(">= 4 jets", evtWeight);
@@ -1552,7 +1519,7 @@ int main(int argc, char* argv[])
     {
       if(run_lumi_eventSelector || isDEBUG)
       {
-        std::cout << "event " << eventInfo.str() << " FAILS OS tau selection\n";
+        std::cout << "event " << eventInfo.str() << " FAILS OS tau-pair selection\n";
       }
       continue;
     }
@@ -1560,7 +1527,7 @@ int main(int argc, char* argv[])
     {
       if(run_lumi_eventSelector || isDEBUG)
       {
-        std::cout << "event " << eventInfo.str() << " FAILS SS tau selection\n";
+        std::cout << "event " << eventInfo.str() << " FAILS SS tau-pair selection\n";
       }
       continue;
     }
@@ -1577,8 +1544,6 @@ int main(int argc, char* argv[])
     }
     cutFlowTable.update("MEt filters", evtWeight);
     cutFlowHistManager->fillHistograms("MEt filters", evtWeight);
-
-    //--- compute output of hadronic top tagger BDT
 
     bool failsSignalRegionVeto = false;
     if ( isMCClosure_t ) {
@@ -1644,15 +1609,15 @@ int main(int argc, char* argv[])
     double HadTop_pt_multilep_2 = 0.;
     double genTopPt_multilep_2 = 0.;
 
-    double max_mvaOutput_HTT_CSVsort3rd = 0.;
-    bool max_truth_HTT_CSVsort3rd = false;
-    double HadTop_pt_CSVsort3rd = 0.;
-    double HadTop_eta_CSVsort3rd = 0.;
-    double genTopPt_CSVsort3rd = 0.;
-    double max_mvaOutput_HTT_CSVsort3rd_2 = 0.;
-    bool max_truth_HTT_CSVsort3rd_2 = false;
-    double HadTop_pt_CSVsort3rd_2 = 0.;
-    double genTopPt_CSVsort3rd_2 = 0.;
+    double max_mvaOutput_HTT_CSVsort4rd = 0.;
+    bool max_truth_HTT_CSVsort4rd = false;
+    double HadTop_pt_CSVsort4rd = 0.;
+    double HadTop_eta_CSVsort4rd = 0.;
+    double genTopPt_CSVsort4rd = 0.;
+    double max_mvaOutput_HTT_CSVsort4rd_2 = 0.;
+    bool max_truth_HTT_CSVsort4rd_2 = false;
+    double HadTop_pt_CSVsort4rd_2 = 0.;
+    double genTopPt_CSVsort4rd_2 = 0.;
 
     double max_mvaOutput_HTT_highestCSV = 0.;
     bool max_truth_HTT_highestCSV = false;
@@ -1663,14 +1628,14 @@ int main(int argc, char* argv[])
     double HadTop_pt_highestCSV_2 = 0.;
     double genTopPt_highestCSV_2 = 0.;
 
-    double max_mvaOutput_HTT_CSVsort3rd_WithKinFit = 0.;
-    bool max_truth_HTT_CSVsort3rd_WithKinFit = false;
-    double HadTop_pt_CSVsort3rd_WithKinFit = 0.;
-    double genTopPt_CSVsort3rd_WithKinFit = 0.;
-    double max_mvaOutput_HTT_CSVsort3rd_WithKinFit_2 = 0.;
-    bool max_truth_HTT_CSVsort3rd_WithKinFit_2 = false;
-    double HadTop_pt_CSVsort3rd_WithKinFit_2 = 0.;
-    double genTopPt_CSVsort3rd_WithKinFit_2 = 0.;
+    double max_mvaOutput_HTT_CSVsort4rd_WithKinFit = 0.;
+    bool max_truth_HTT_CSVsort4rd_WithKinFit = false;
+    double HadTop_pt_CSVsort4rd_WithKinFit = 0.;
+    double genTopPt_CSVsort4rd_WithKinFit = 0.;
+    double max_mvaOutput_HTT_CSVsort4rd_WithKinFit_2 = 0.;
+    bool max_truth_HTT_CSVsort4rd_WithKinFit_2 = false;
+    double HadTop_pt_CSVsort4rd_WithKinFit_2 = 0.;
+    double genTopPt_CSVsort4rd_WithKinFit_2 = 0.;
 
     double max_mvaOutput_HTT_highestCSV_WithKinFit = 0.;
     bool max_truth_HTT_highestCSV_WithKinFit = false;
@@ -1698,82 +1663,27 @@ int main(int argc, char* argv[])
     // save genpt of all options
     double HadTop_pt = ((*selBJet)->p4() + (*selWJet1)->p4() + (*selWJet2)->p4()).pt();
 
-    //std::cout << "resolved HTT testing " << max_mvaOutput_HTT_2016 << " "
-    //<< max_mvaOutput_HTT_2016_2 << "  === "
-    //<<  bdtResult.at(kXGB_with_kinFit) << " "
-    //<< std::endl;
-    //std::cout << "            pts \n " <<
-    //Wj1_pt_1 << " " <<  Wj2_pt_1 << " " << b_pt_1 << " \n" <<
-    //Wj1_pt_2 << " " <<  Wj2_pt_2  << " " << b_pt_2  << " \n" <<
-    //Wj1_pt_med << " " <<  Wj2_pt_med  << " " <<  b_pt_med  << " --- " <<
-    //(*selWJet1)->pt() << " " << (*selWJet2)->pt() << " " << (*selBJet)->pt()
-    //<< std::endl;
-
-    if ( bdtResult.at(kXGB_with_kinFit) > max_mvaOutput_HTT_2016 ) { // HTT_2016
-      max_truth_HTT_2016 = isGenMatched;
-      max_mvaOutput_HTT_2016 = bdtResult.at(kXGB_with_kinFit);
-      genTopPt_2016 = genTopPt_teste;
-      HadTop_pt_2016 = HadTop_pt;
-      //HadTop1_eta_2016 = std::fabs(((*selBJet)->p4() + (*selWJet1)->p4() + (*selWJet2)->p4()).eta());
+    if ( bdtResult.at(kXGB_CSVsort4rd) > max_mvaOutput_HTT_CSVsort4rd ) {
+      max_truth_HTT_CSVsort4rd = isGenMatched;
+      max_mvaOutput_HTT_CSVsort4rd = bdtResult.at(kXGB_CSVsort4rd);
+      HadTop_pt_CSVsort4rd = HadTop_pt;
+      genTopPt_CSVsort4rd = genTopPt_teste;
+      HadTop_eta_CSVsort4rd = std::fabs(((*selBJet)->p4() + (*selWJet1)->p4() + (*selWJet2)->p4()).eta());
       Wj1_pt_1 = (*selWJet1)->pt();
       Wj2_pt_1 = (*selWJet2)->pt();
       b_pt_1   = (*selBJet)->pt();
     }
 
-    if ( bdtResult.at(kXGB_CSVsort3rd) > max_mvaOutput_HTT_CSVsort3rd ) {
-      max_truth_HTT_CSVsort3rd = isGenMatched;
-      max_mvaOutput_HTT_CSVsort3rd = bdtResult.at(kXGB_CSVsort3rd);
-      HadTop_pt_CSVsort3rd = HadTop_pt;
-      genTopPt_CSVsort3rd = genTopPt_teste;
-      HadTop_eta_CSVsort3rd = std::fabs(((*selBJet)->p4() + (*selWJet1)->p4() + (*selWJet2)->p4()).eta());
-      //Wj1_pt_CSVsort3rd_1 = (*selWJet1)->pt();
-      //Wj2_pt_CSVsort3rd_1 = (*selWJet2)->pt();
-      //b_pt_CSVsort3rd_1   = (*selBJet)->pt();
+    if ( bdtResult.at(kXGB_CSVsort4rd) > max_mvaOutput_HTT_CSVsort4rd ) {
+      max_truth_HTT_CSVsort4rd = isGenMatched;
+      max_mvaOutput_HTT_CSVsort4rd = bdtResult.at(kXGB_CSVsort4rd);
+      HadTop_pt_CSVsort4rd = HadTop_pt;
+      genTopPt_CSVsort4rd = genTopPt_teste;
+      HadTop_eta_CSVsort4rd = std::fabs(((*selBJet)->p4() + (*selWJet1)->p4() + (*selWJet2)->p4()).eta());
+      //Wj1_pt_CSVsort4rd_1 = (*selWJet1)->pt();
+      //Wj2_pt_CSVsort4rd_1 = (*selWJet2)->pt();
+      //b_pt_CSVsort4rd_1   = (*selBJet)->pt();
     }
-    /*
-    if ( bdtResult.at(kXGB_CSVsort3rd_withKinFit) > max_mvaOutput_HTT_highestCSV_WithKinFit ) {
-      max_truth_HTT_CSVsort3rd_WithKinFit = isGenMatched;
-      max_mvaOutput_HTT_CSVsort3rd_WithKinFit = bdtResult.at(kXGB_CSVsort3rd_withKinFit);
-      HadTop_pt_CSVsort3rd_WithKinFit = HadTop_pt;
-      genTopPt_CSVsort3rd_WithKinFit = genTopPt_teste;
-      //Wj1_pt_CSVsort3rd_WithKinFit_1 = (*selWJet1)->pt();
-      //Wj2_pt_CSVsort3rd_WithKinFit_1 = (*selWJet2)->pt();
-      //b_pt_CSVsort3rd_WithKinFit_1   = (*selBJet)->pt();
-    }
-
-    if ((*selBJet)->BtagCSV() > (*selWJet1)->BtagCSV() && (*selBJet)->BtagCSV() > (*selWJet2)->BtagCSV() ) {
-
-      if ( bdtResult.at(kXGB_highestCSV) > max_mvaOutput_HTT_highestCSV ) {
-        max_truth_HTT_highestCSV = isGenMatched;
-        max_mvaOutput_HTT_highestCSV = bdtResult.at(kXGB_highestCSV);
-        HadTop_pt_highestCSV = HadTop_pt;
-        genTopPt_highestCSV = genTopPt_teste;
-        //Wj1_pt_highestCSV_1 = (*selWJet1)->pt();
-        //Wj2_pt_highestCSV_1 = (*selWJet2)->pt();
-        //b_pt_highestCSV_1   = (*selBJet)->pt();
-      }
-
-      if ( bdtResult.at(kXGB_highestCSV_withKinFit) > max_mvaOutput_HTT_highestCSV_WithKinFit ) {
-        max_truth_HTT_highestCSV_WithKinFit = isGenMatched;
-        max_mvaOutput_HTT_highestCSV_WithKinFit = bdtResult.at(kXGB_highestCSV_withKinFit);
-        HadTop_pt_highestCSV_WithKinFit = HadTop_pt;
-        genTopPt_highestCSV_WithKinFit = genTopPt_teste;
-        //Wj1_pt_highestCSV_WithKinFit_1 = (*selWJet1)->pt();
-        //Wj2_pt_highestCSV_WithKinFit_1 = (*selWJet2)->pt();
-        //b_pt_highestCSV_WithKinFit_1   = (*selBJet)->pt();
-      }
-
-      if ( bdtResult.at(kXGB_multilep) > max_mvaOutput_HTT_multilep ) {
-        max_truth_multilep = isGenMatched;
-        max_mvaOutput_HTT_multilep = bdtResult.at(kXGB_multilep);
-        HadTop_pt_multilep = HadTop_pt;
-        genTopPt_multilep = genTopPt_teste;
-        //Wj1_pt_multilep_1 = (*selWJet1)->pt();
-        //Wj2_pt_multilep_1 = (*selWJet2)->pt();
-        //b_pt_multilep_1   = (*selBJet)->pt();
-      }
-    } // close if b candidate is the highest btagged one
-    */
 
     }
       }
@@ -1822,75 +1732,26 @@ int main(int argc, char* argv[])
       //b_pt_2   = (*selBJet)->pt();
     }
 
-    if ( bdtResult.at(kXGB_CSVsort3rd) > max_mvaOutput_HTT_CSVsort3rd_2 ) {
-      max_truth_HTT_CSVsort3rd_2 = isGenMatched;
-      max_mvaOutput_HTT_CSVsort3rd_2 = bdtResult.at(kXGB_CSVsort3rd);
-      HadTop_pt_CSVsort3rd_2 = HadTop_pt;
-      genTopPt_CSVsort3rd_2 = genTopPt_teste;
-      //Wj1_pt_CSVsort3rd_2 = (*selWJet1)->pt();
-      //Wj2_pt_CSVsort3rd_2 = (*selWJet2)->pt();
-      //b_pt_CSVsort3rd_2   = (*selBJet)->pt();
+    if ( bdtResult.at(kXGB_CSVsort4rd) > max_mvaOutput_HTT_CSVsort4rd_2 ) {
+      max_truth_HTT_CSVsort4rd_2 = isGenMatched;
+      max_mvaOutput_HTT_CSVsort4rd_2 = bdtResult.at(kXGB_CSVsort4rd);
+      HadTop_pt_CSVsort4rd_2 = HadTop_pt;
+      genTopPt_CSVsort4rd_2 = genTopPt_teste;
+      //Wj1_pt_CSVsort4rd_2 = (*selWJet1)->pt();
+      //Wj2_pt_CSVsort4rd_2 = (*selWJet2)->pt();
+      //b_pt_CSVsort4rd_2   = (*selBJet)->pt();
     }
-
-    /*
-    if ( bdtResult.at(kXGB_CSVsort3rd_withKinFit) > max_mvaOutput_HTT_highestCSV_WithKinFit_2 ) {
-      max_truth_HTT_CSVsort3rd_WithKinFit_2 = isGenMatched;
-      max_mvaOutput_HTT_CSVsort3rd_WithKinFit_2 = bdtResult.at(kXGB_CSVsort3rd_withKinFit);
-      HadTop_pt_CSVsort3rd_WithKinFit_2 = HadTop_pt;
-      genTopPt_CSVsort3rd_WithKinFit_2 = genTopPt_teste;
-      //Wj1_pt_CSVsort3rd_WithKinFit_2 = (*selWJet1)->pt();
-      //Wj2_pt_CSVsort3rd_WithKinFit_2 = (*selWJet2)->pt();
-      //b_pt_CSVsort3rd_WithKinFit_2   = (*selBJet)->pt();
-    }
-    */
-    /*
-    if ((*selBJet)->BtagCSV() > (*selWJet1)->BtagCSV() && (*selBJet)->BtagCSV() > (*selWJet2)->BtagCSV() ) {
-
-
-      if ( bdtResult.at(kXGB_highestCSV) > max_mvaOutput_HTT_highestCSV_2 ) {
-        max_truth_HTT_highestCSV_2 = isGenMatched;
-        max_mvaOutput_HTT_highestCSV_2 = bdtResult.at(kXGB_highestCSV);
-        HadTop_pt_highestCSV_2 = HadTop_pt;
-        genTopPt_highestCSV_2 = genTopPt_teste;
-        //Wj1_pt_highestCSV_2 = (*selWJet1)->pt();
-        //Wj2_pt_highestCSV_2 = (*selWJet2)->pt();
-        //b_pt_highestCSV_2   = (*selBJet)->pt();
-      }
-
-      if ( bdtResult.at(kXGB_highestCSV_withKinFit) > max_mvaOutput_HTT_highestCSV_WithKinFit_2 ) {
-        max_truth_HTT_highestCSV_WithKinFit_2 = isGenMatched;
-        max_mvaOutput_HTT_highestCSV_WithKinFit_2 = bdtResult.at(kXGB_highestCSV_withKinFit);
-        HadTop_pt_highestCSV_WithKinFit_2 = HadTop_pt;
-        genTopPt_highestCSV_WithKinFit_2 = genTopPt_teste;
-        //Wj1_pt_highestCSV_WithKinFit_2 = (*selWJet1)->pt();
-        //Wj2_pt_highestCSV_WithKinFit_2 = (*selWJet2)->pt();
-        //b_pt_highestCSV_WithKinFit_2   = (*selBJet)->pt();
-      }
-
-      if ( bdtResult.at(kXGB_multilep) > max_mvaOutput_HTT_multilep_2 ) {
-        max_truth_multilep_2 = isGenMatched;
-        max_mvaOutput_HTT_multilep_2 = bdtResult.at(kXGB_multilep);
-        HadTop_pt_multilep_2 = HadTop_pt;
-        genTopPt_multilep_2 = genTopPt_teste;
-        //Wj1_pt_multilep_2 = (*selWJet1)->pt();
-        //Wj2_pt_multilep_2 = (*selWJet2)->pt();
-        //b_pt_multilep_2   = (*selBJet)->pt();
-      }
-    } // close if b candidate is the highest btagged one
-    */
 
     }
         }
       } // close loop on jetS
     } // close if 6 jets
 
-
     //--- boosted hTT
     double HTT_boosted = 0.;
     bool bWj1Wj2_isGenMatched_boosted = false;
     double genTopPt_boosted = 0.;
     double HadTop_pt_boosted = 0.;
-
     bool hadtruth_boosted = false;
     double minDR_HTTv2_lep = -1.;
     double minDR_HTTv2subjets_lep = -1.;
@@ -1899,8 +1760,6 @@ int main(int argc, char* argv[])
     jetIter != sel_HTTv2.end(); ++jetIter ) {
     bool isGenMatched = false;
     double genTopPt_teste = 0.;
-    //double HadTop_pt = (*jetIter)->pt();
-    //bool fatjet_isGenMatched = false;
     const std::map<int, double> bdtResult = (*hadTopTagger_boosted)(**jetIter, calculate_matching, isGenMatched, genTopPt_teste, genVar, genVarAnti);
     if (isGenMatched) {hadtruth_boosted = true;}
 
@@ -2013,61 +1872,6 @@ int main(int argc, char* argv[])
     bool hadtruth_semi_boosted = false;
     double minDR_AK12_lep = -1.;
     double minDR_AK12subjets_lep = -1.;
-    /*
-    for ( std::vector<const RecoJet*>::const_iterator selBJet = cleanedJets_fromAK12.begin(); selBJet != cleanedJets_fromAK12.end(); ++selBJet )  {
-    for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12.begin();
-          jetIter != jet_ptrsAK12.end(); ++jetIter ) {
-        if ( !((*jetIter)->subJet1() && (*jetIter)->subJet2()) )
-          { AK12_without_subjets = true; continue; }
-        bool isGenMatched = false;
-        double genTopPt_teste = 0.;
-        double HadTop_pt = ((*jetIter)->p4() + (*selBJet)->p4()).pt();
-        //bool fatjet_isGenMatched = false;
-        const std::map<int, double> bdtResult = (*hadTopTagger_semi_boosted)(**jetIter, **selBJet, calculate_matching, isGenMatched, genTopPt_teste, genVar, genVarAnti);
-        if (isGenMatched) {hadtruth_semi_boosted = true;}
-
-        if ( bdtResult.at(kXGB_semi_boosted_no_kinFit) > HTT_semi_boosted ) {
-          bWj1Wj2_isGenMatched_semi_boosted = isGenMatched;
-          HTT_semi_boosted = bdtResult.at(kXGB_semi_boosted_no_kinFit);
-          HadTop_pt_semi_boosted = HadTop_pt;
-          genTopPt_semi_boosted = genTopPt_teste;
-          minDR_AK12_lep = std::min(
-            deltaR(selHadTau_lead->p4(), (*jetIter)->p4()),
-            deltaR(selHadTau_sublead->p4(), (*jetIter)->p4())
-          );
-          b_pt_semi_boosted = (*selBJet)->pt() ;
-          W_pt_semi_boosted = (*jetIter)->pt() ;
-          minDR_AK12subjets_lep =
-          std::min(
-          std::min(
-            deltaR(selHadTau_lead->p4(), (*jetIter)->subJet1()->p4()),
-            deltaR(selHadTau_sublead->p4(), (*jetIter)->subJet1()->p4())
-          ),
-          std::min(
-            deltaR(selHadTau_lead->p4(), (*jetIter)->subJet2()->p4()),
-            deltaR(selHadTau_sublead->p4(), (*jetIter)->subJet2()->p4())
-          )
-         );
-        }
-
-        if (calculate_matching) {
-          if (deltaR(genVar[kGenTopW],(*jetIter)->p4()) < deltaR(genVarAnti[kGenTopW],(*jetIter)->p4()) ) {
-            if ( DR_W_b_gen_AK12 > 0. && deltaR(genVar[kGenTopB], genVar[kGenTopW]) < DR_W_b_gen_AK12) DR_W_b_gen_AK12 = deltaR(genVar[kGenTopB], genVar[kGenTopW]);
-          } else if ( DR_W_b_gen_AK12 > 0. && deltaR(genVarAnti[kGenTopB], genVarAnti[kGenTopW]) < DR_W_b_gen_AK12) DR_W_b_gen_AK12 = deltaR(genVarAnti[kGenTopB], genVarAnti[kGenTopW]);
-        }
-
-      }
-    }
-    if (genTopPt_2016 == genTopPt_semi_boosted)  resolved_and_semi = true;
-    if (genTopPt_semi_boosted == genTopPt_boosted)  boosted_and_semi = true;
-    */
-    //std::cout << "semi-boosted HTT " << HTT_semi_boosted << " "
-    //<< HTT_semi_boosted_WithKinFit  << " "
-    //<< minDR_AK12_L << " "
-    //<< minDR_AK12_lep << " "
-    //<< DR_AK12_tau << " "
-    //<< std::endl;
-
     double HTT_semi_boosted_noISO = 0.;
     bool bWj1Wj2_isGenMatched_semi_boosted_noISO = false;
     //double genTopPt_semi_boosted_noISO = 0.;
@@ -2075,50 +1879,6 @@ int main(int argc, char* argv[])
     //bool hadtruth_semi_boosted_noISO = false;
     double minDR_AK12_lep_noISO = -1.;
     double minDR_AK12subjets_lep_noISO = -1.;
-    /*
-    for ( std::vector<const RecoJet*>::const_iterator selBJet = cleanedJets_fromAK12.begin(); selBJet != cleanedJets_fromAK12.end(); ++selBJet )  { // cleanedJets.size()
-    for ( std::vector<const RecoJetAK12*>::const_iterator jetIter = jet_ptrsAK12raw.begin();
-          jetIter != jet_ptrsAK12raw.end(); ++jetIter ) {
-        if ( !((*jetIter)->subJet1() && (*jetIter)->subJet2()) ) continue;
-
-       //if (minDR_AK12subjets_lep_noISO < 0.4) continue;
-
-        bool isGenMatched = false;
-        double genTopPt_teste = 0.;
-        //double HadTop_pt = ((*jetIter)->p4() + (*selBJet)->p4()).pt();
-        //bool fatjet_isGenMatched = false;
-        const std::map<int, double> bdtResult = (*hadTopTagger_semi_boosted)(**jetIter, **selBJet, calculate_matching, isGenMatched, genTopPt_teste, genVar, genVarAnti);
-        //if (isGenMatched) {hadtruth_semi_boosted = true;}
-
-        if ( bdtResult.at(kXGB_semi_boosted_no_kinFit) > HTT_semi_boosted_noISO ) {
-          bWj1Wj2_isGenMatched_semi_boosted_noISO = isGenMatched;
-          HTT_semi_boosted_noISO = bdtResult.at(kXGB_semi_boosted_no_kinFit);
-          //HadTop_pt_semi_boosted_noISO = HadTop_pt;
-          genTopPt_semi_boosted_noISO = genTopPt_teste;
-
-          minDR_AK12_lep_noISO = std::min(
-            deltaR(selHadTau_lead->p4(), (*jetIter)->p4()),
-            deltaR(selHadTau_sublead->p4(), (*jetIter)->p4())
-          );
-
-          minDR_AK12subjets_lep_noISO =
-          std::min(
-          std::min(
-            deltaR(selHadTau_lead->p4(), (*jetIter)->subJet1()->p4()),
-            deltaR(selHadTau_sublead->p4(), (*jetIter)->subJet1()->p4())
-          ),
-          std::min(
-            deltaR(selHadTau_lead->p4(), (*jetIter)->subJet2()->p4()),
-            deltaR(selHadTau_sublead->p4(), (*jetIter)->subJet2()->p4())
-          )
-         );
-
-        }
-
-      }
-    }
-    if (genTopPt_2016 == genTopPt_semi_boosted_noISO)  resolved_and_semi_noISO = true;
-    */
 
     // -- semi-boosted hTT -- AK8
     double HTT_semi_boosted_fromAK8 = 0.;
@@ -2141,7 +1901,6 @@ int main(int argc, char* argv[])
         bool isGenMatched = false;
         double genTopPt_teste = 0.;
         double HadTop_pt = ((*jetIter)->p4() + (*selBJet)->p4()).pt();
-        //bool fatjet_isGenMatched = false;
         const std::map<int, double> bdtResult = (*hadTopTagger_semi_boosted_fromAK8)(**jetIter, **selBJet, calculate_matching, isGenMatched, genTopPt_teste, genVar, genVarAnti);
         if (isGenMatched) {hadtruth_semi_boosted_fromAK8 = true;}
 
@@ -2260,6 +2019,9 @@ int main(int argc, char* argv[])
     double pZetaVis  = comp_pZetaVis(selHadTau_lead -> p4(), selHadTau_sublead -> p4());
     double pZetaComb = comp_pZetaComb(selHadTau_lead -> p4(), selHadTau_sublead -> p4(), met.p4().px(), met.p4().py());
 
+    //compute di-b-jet mass
+    const double mbb             = selBJets_medium.size() > 1 ? (selBJets_medium[0]->p4() + selBJets_medium[1]->p4()).mass() : -1.;
+    const double mbb_loose       = selBJets_loose.size() > 1 ? (selBJets_loose[0]->p4() + selBJets_loose[1]->p4()).mass() : -1.;
 //--- compute output of BDTs used to discriminate ttH vs. ttbar trained by Arun for 1l_2tau category
     mvaInputs_ttbar["nJet"]                 = selJets.size();
     mvaInputs_ttbar["nBJetLoose"]           = selBJets_loose.size();
@@ -2298,11 +2060,11 @@ int main(int argc, char* argv[])
     xgbInputs_ttbar["mT_tau2"]              = comp_MT_met_hadTau2(*selHadTau_sublead, met.pt(), met.phi());
     xgbInputs_ttbar["mTauTauVis"]           = mTauTauVis;
     xgbInputs_ttbar["mTauTau"]           = mTauTau;
-    xgbInputs_ttbar["HTT_wKinFit_top1"]     = max_mvaOutput_HTT_CSVsort3rd;
-    xgbInputs_ttbar["HadTop1_pt"]           = HadTop_pt_CSVsort3rd;
-    xgbInputs_ttbar["HadTop1_eta"]          = HadTop_eta_CSVsort3rd;
-    xgbInputs_ttbar["HTT_wKinFit_top2"]     = max_mvaOutput_HTT_CSVsort3rd_2;
-    xgbInputs_ttbar["HadTop2_pt"]           = HadTop_pt_CSVsort3rd_2;
+    xgbInputs_ttbar["HTT_wKinFit_top1"]     = max_mvaOutput_HTT_CSVsort4rd;
+    xgbInputs_ttbar["HadTop1_pt"]           = HadTop_pt_CSVsort4rd;
+    xgbInputs_ttbar["HadTop1_eta"]          = std::fabs(HadTop_eta_CSVsort4rd);
+    xgbInputs_ttbar["HTT_wKinFit_top2"]     = max_mvaOutput_HTT_CSVsort4rd_2;
+    xgbInputs_ttbar["HadTop2_pt"]           = HadTop_pt_CSVsort4rd;
     xgbInputs_ttbar["nJet"]                 = selJets.size();
     double mvaOutput_0l_2tau_HTT_tt = xgb_0l_2tau_ttbar(xgbInputs_ttbar);
     double mvaOutput_0l_2tau_HTT_sum = xgb_0l_2tau_sum(xgbInputs_ttbar);
@@ -2321,8 +2083,8 @@ int main(int argc, char* argv[])
     xgbInputs_ttv["mT_tau2"]              = comp_MT_met_hadTau2(*selHadTau_sublead, met.pt(), met.phi());
     xgbInputs_ttv["mTauTauVis"]           = mTauTauVis;
     xgbInputs_ttv["mTauTau"]           = mTauTau;
-    xgbInputs_ttv["HTT_wKinFit_top1"]     = max_mvaOutput_HTT_CSVsort3rd;
-    xgbInputs_ttv["HTT_wKinFit_top2"]     = max_mvaOutput_HTT_CSVsort3rd_2;
+    xgbInputs_ttv["HTT_wKinFit_top1"]     = max_mvaOutput_HTT_CSVsort4rd;
+    xgbInputs_ttv["HTT_wKinFit_top2"]     = max_mvaOutput_HTT_CSVsort4rd_2;
     xgbInputs_ttv["nJet"]                 = selJets.size();
     double mvaOutput_0l_2tau_HTT_ttv = xgb_0l_2tau_ttv(xgbInputs_ttv);
 
@@ -2348,10 +2110,10 @@ int main(int argc, char* argv[])
     mvaInputs_XGB_Boosted_AK8_basic["nJet"] = selJets.size();
     mvaInputs_XGB_Boosted_AK8_basic["nBJetLoose"] = selBJets_loose.size();
     mvaInputs_XGB_Boosted_AK8_basic["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK8_basic["res-HTT_CSVsort3rd_2"] = max_mvaOutput_HTT_CSVsort3rd_2;
-    mvaInputs_XGB_Boosted_AK8_basic["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK8_basic["HadTop_pt_CSVsort3rd_2"] = HadTop_pt_CSVsort3rd_2;
-    mvaInputs_XGB_Boosted_AK8_basic["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK8_basic["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
+    mvaInputs_XGB_Boosted_AK8_basic["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK8_basic["HadTop_pt_CSVsort4rd_2"] = HadTop_pt_CSVsort4rd_2;
+    mvaInputs_XGB_Boosted_AK8_basic["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK8_basic["N_jetAK8"] = jet_ptrsAK8.size();
     mvaInputs_XGB_Boosted_AK8_basic["nHTTv2"] = sel_HTTv2.size();
     double mva_Boosted_AK8_basic = mva_XGB_Boosted_AK8_basic(mvaInputs_XGB_Boosted_AK8_basic);
@@ -2375,9 +2137,9 @@ int main(int argc, char* argv[])
     mvaInputs_XGB_Boosted_AK12_basic["nJet"] = selJets.size();
     mvaInputs_XGB_Boosted_AK12_basic["nBJetLoose"] = selBJets_loose.size();
     mvaInputs_XGB_Boosted_AK12_basic["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK12_basic["res-HTT_CSVsort3rd_2"] = max_mvaOutput_HTT_CSVsort3rd_2;
-    mvaInputs_XGB_Boosted_AK12_basic["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK12_basic["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK12_basic["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
+    mvaInputs_XGB_Boosted_AK12_basic["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK12_basic["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK12_basic["N_jetAK12"] = jet_ptrsAK12.size();
     mvaInputs_XGB_Boosted_AK12_basic["nHTTv2"] = sel_HTTv2.size();
     mvaInputs_XGB_Boosted_AK12_basic["AK12_lead_pt"] = jet_ptrsAK12.size() > 0 ? jet_ptrsAK12[0]->pt() : -1 ;
@@ -2403,9 +2165,9 @@ int main(int argc, char* argv[])
     mvaInputs_XGB_Boosted_AK12["nJet"] = selJets.size();
     mvaInputs_XGB_Boosted_AK12["nBJetLoose"] = selBJets_loose.size();
     mvaInputs_XGB_Boosted_AK12["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK12["res-HTT_CSVsort3rd_2"] = max_mvaOutput_HTT_CSVsort3rd_2;
-    mvaInputs_XGB_Boosted_AK12["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK12["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK12["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
+    mvaInputs_XGB_Boosted_AK12["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK12["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK12["resolved_and_semi"] = resolved_and_semi;
     mvaInputs_XGB_Boosted_AK12["minDR_HTTv2_lep"] = minDR_HTTv2_lep;
     mvaInputs_XGB_Boosted_AK12["minDR_AK12_lep"] = minDR_AK12_lep;
@@ -2433,9 +2195,9 @@ int main(int argc, char* argv[])
     mvaInputs_XGB_Boosted_AK12_noISO["nJet"] = selJets.size();
     mvaInputs_XGB_Boosted_AK12_noISO["nBJetLoose"] = selBJets_loose.size();
     mvaInputs_XGB_Boosted_AK12_noISO["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK12_noISO["res-HTT_CSVsort3rd_2"] = max_mvaOutput_HTT_CSVsort3rd_2;
-    mvaInputs_XGB_Boosted_AK12_noISO["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK12_noISO["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK12_noISO["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
+    mvaInputs_XGB_Boosted_AK12_noISO["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK12_noISO["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK12_noISO["resolved_and_semi"] = resolved_and_semi_noISO;
     mvaInputs_XGB_Boosted_AK12_noISO["minDR_HTTv2_lep"] = minDR_HTTv2_lep_noISO;
     mvaInputs_XGB_Boosted_AK12_noISO["minDR_AK12_lep"] = minDR_AK12_lep_noISO;
@@ -2462,9 +2224,9 @@ int main(int argc, char* argv[])
     mvaInputs_XGB_Boosted_AK8_noISO["nJet"] = selJets.size();
     mvaInputs_XGB_Boosted_AK8_noISO["nBJetLoose"] = selBJets_loose.size();
     mvaInputs_XGB_Boosted_AK8_noISO["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK8_noISO["res-HTT_CSVsort3rd_2"] = max_mvaOutput_HTT_CSVsort3rd_2;
-    mvaInputs_XGB_Boosted_AK8_noISO["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK8_noISO["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK8_noISO["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
+    mvaInputs_XGB_Boosted_AK8_noISO["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK8_noISO["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK8_noISO["resolved_and_semi_AK8"] = resolved_and_semi_AK8_noISO;
     mvaInputs_XGB_Boosted_AK8_noISO["boosted_and_semi_AK8"] = boosted_and_semi_AK8_noISO;
     mvaInputs_XGB_Boosted_AK8_noISO["minDR_HTTv2_lep"] = minDR_HTTv2_lep_noISO;
@@ -2492,9 +2254,9 @@ int main(int argc, char* argv[])
     mvaInputs_XGB_Boosted_AK8["nJet"] = selJets.size();
     mvaInputs_XGB_Boosted_AK8["nBJetLoose"] = selBJets_loose.size();
     mvaInputs_XGB_Boosted_AK8["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK8["res-HTT_CSVsort3rd_2"] = max_mvaOutput_HTT_CSVsort3rd_2;
-    mvaInputs_XGB_Boosted_AK8["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Boosted_AK8["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Boosted_AK8["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
+    mvaInputs_XGB_Boosted_AK8["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK8["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     mvaInputs_XGB_Boosted_AK8["resolved_and_semi_AK8"] = resolved_and_semi_AK8;
     mvaInputs_XGB_Boosted_AK8["boosted_and_semi_AK8"] = boosted_and_semi_AK8;
     mvaInputs_XGB_Boosted_AK8["minDR_HTTv2_lep"] = minDR_HTTv2_lep;
@@ -2521,10 +2283,10 @@ int main(int argc, char* argv[])
     mvaInputs_XGB_Updated["nJet"] = selJets.size();
     mvaInputs_XGB_Updated["nBJetLoose"] = selBJets_loose.size();
     mvaInputs_XGB_Updated["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Updated["res-HTT_CSVsort3rd_2"] = max_mvaOutput_HTT_CSVsort3rd_2;
-    mvaInputs_XGB_Updated["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_Updated["HadTop_pt_CSVsort3rd_2"] = HadTop_pt_CSVsort3rd_2;
-    mvaInputs_XGB_Updated["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_Updated["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
+    mvaInputs_XGB_Updated["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Updated["HadTop_pt_CSVsort4rd_2"] = HadTop_pt_CSVsort4rd_2;
+    mvaInputs_XGB_Updated["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     double mva_Updated = mva_XGB_Updated(mvaInputs_XGB_Updated);
     //std::cout<<" mva_Updated "<<mva_Updated<<std::endl;
 
@@ -2546,10 +2308,10 @@ int main(int argc, char* argv[])
     mvaInputs_XGB_oldVar["nJet"] = selJets.size();
     mvaInputs_XGB_oldVar["nBJetLoose"] = selBJets_loose.size();
     mvaInputs_XGB_oldVar["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_oldVar["res-HTT_CSVsort3rd_2"] = max_mvaOutput_HTT_CSVsort3rd_2;
-    mvaInputs_XGB_oldVar["res-HTT_CSVsort3rd"] = max_mvaOutput_HTT_CSVsort3rd;
-    mvaInputs_XGB_oldVar["HadTop_pt_CSVsort3rd_2"] = HadTop_pt_CSVsort3rd_2;
-    mvaInputs_XGB_oldVar["HadTop_pt_CSVsort3rd"] = HadTop_pt_CSVsort3rd;
+    mvaInputs_XGB_oldVar["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
+    mvaInputs_XGB_oldVar["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_oldVar["HadTop_pt_CSVsort4rd_2"] = HadTop_pt_CSVsort4rd_2;
+    mvaInputs_XGB_oldVar["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     double mva_oldVar = mva_XGB_oldVar(mvaInputs_XGB_oldVar);
     //std::cout<<" mva_oldVar "<<mva_oldVar<<std::endl;
 
@@ -2569,11 +2331,11 @@ int main(int argc, char* argv[])
     xgbInputs_dy["mT_tau2"]              = comp_MT_met_hadTau2(*selHadTau_sublead, met.pt(), met.phi());
     xgbInputs_dy["mTauTauVis"]           = mTauTauVis;
     xgbInputs_dy["mTauTau"]           = mTauTau;
-    xgbInputs_dy["HTT_wKinFit_top1"]     = max_mvaOutput_HTT_CSVsort3rd;
-    xgbInputs_dy["HadTop1_pt"]           = HadTop_pt_CSVsort3rd_2;
-    xgbInputs_dy["HadTop1_eta"]          = HadTop_eta_CSVsort3rd;
-    xgbInputs_dy["HTT_wKinFit_top2"]     = max_mvaOutput_HTT_CSVsort3rd_2;
-    xgbInputs_dy["HadTop2_pt"]           = HadTop_pt_CSVsort3rd_2;
+    xgbInputs_dy["HTT_wKinFit_top1"]     = max_mvaOutput_HTT_CSVsort4rd;
+    xgbInputs_dy["HadTop1_pt"]           = HadTop_pt_CSVsort4rd;
+    xgbInputs_dy["HadTop1_eta"]          = std::fabs(HadTop_eta_CSVsort4rd);
+    xgbInputs_dy["HTT_wKinFit_top2"]     = max_mvaOutput_HTT_CSVsort4rd_2;
+    xgbInputs_dy["HadTop2_pt"]           = HadTop_pt_CSVsort4rd;
     xgbInputs_dy["nJet"]                 = selJets.size();
     xgbInputs_dy["nBJetLoose"]           = selBJets_loose.size();
     xgbInputs_dy["nBJetMedium"]          = selBJets_medium.size();
@@ -2630,6 +2392,7 @@ int main(int argc, char* argv[])
 	  mvaOutput_0l_2tau_HTT_tt,
 	  mvaOutput_0l_2tau_HTT_ttv,
 	  mvaOutput_0l_2tau_HTT_sum,
+	  mvaOutput_0l_2tau_HTT_sum_dy,
 	  mvaDiscr_0l_2tau_HTT,
           //
           mva_oldVar, mva_Updated,
@@ -2645,6 +2408,8 @@ int main(int argc, char* argv[])
 	  pZetaComb,
 	  mT_tau1,
 	  mT_tau2,
+	  mbb,
+          mbb_loose,
 	  evtWeight
         );
         selHistManager->evt_in_categories_in_decayModes_[category+decayModeStr]->fillHistograms(
@@ -2814,52 +2579,52 @@ int main(int argc, char* argv[])
 
           ("bWj1Wj2_isGenMatchedWithKinFit", max_truth_HTT_2016)
           ("bWj1Wj2_isGenMatched_IHEP",                    max_truth_multilep)
-          ("bWj1Wj2_isGenMatched_CSVsort3rd",              max_truth_HTT_CSVsort3rd)
+          ("bWj1Wj2_isGenMatched_CSVsort4rd",              max_truth_HTT_CSVsort4rd)
           ("bWj1Wj2_isGenMatched_highestCSV",              max_truth_HTT_highestCSV)
-          ("bWj1Wj2_isGenMatched_CSVsort3rd_WithKinFit",   max_truth_HTT_CSVsort3rd_WithKinFit)
+          ("bWj1Wj2_isGenMatched_CSVsort4rd_WithKinFit",   max_truth_HTT_CSVsort4rd_WithKinFit)
           ("bWj1Wj2_isGenMatched_highestCSV_WithKinFit",   max_truth_HTT_highestCSV_WithKinFit)
 
           ("bWj1Wj2_isGenMatchedWithKinFit_2", max_truth_HTT_2016_2)
           ("bWj1Wj2_isGenMatched_IHEP_2",                    max_truth_multilep_2)
-          ("bWj1Wj2_isGenMatched_CSVsort3rd_2",              max_truth_HTT_CSVsort3rd_2)
+          ("bWj1Wj2_isGenMatched_CSVsort4rd_2",              max_truth_HTT_CSVsort4rd_2)
           ("bWj1Wj2_isGenMatched_highestCSV_2",              max_truth_HTT_highestCSV_2)
-          ("bWj1Wj2_isGenMatched_CSVsort3rd_WithKinFit_2",   max_truth_HTT_CSVsort3rd_WithKinFit_2)
+          ("bWj1Wj2_isGenMatched_CSVsort4rd_WithKinFit_2",   max_truth_HTT_CSVsort4rd_WithKinFit_2)
           ("bWj1Wj2_isGenMatched_highestCSV_WithKinFit_2",   max_truth_HTT_highestCSV_WithKinFit_2)
 
-          ("res-HTT_CSVsort3rd",                 max_mvaOutput_HTT_CSVsort3rd)
+          ("res-HTT_CSVsort4rd",                 max_mvaOutput_HTT_CSVsort4rd)
           ("res-HTT_highestCSV",                 max_mvaOutput_HTT_highestCSV)
-          ("res-HTT_CSVsort3rd_WithKinFit",      max_mvaOutput_HTT_CSVsort3rd_WithKinFit)
+          ("res-HTT_CSVsort4rd_WithKinFit",      max_mvaOutput_HTT_CSVsort4rd_WithKinFit)
           ("res-HTT_highestCSV_WithKinFit",      max_mvaOutput_HTT_highestCSV_WithKinFit)
           ("res-HTT_IHEP",                       max_mvaOutput_HTT_multilep)
 
-          ("res-HTT_CSVsort3rd_2",                 max_mvaOutput_HTT_CSVsort3rd_2)
+          ("res-HTT_CSVsort4rd_2",                 max_mvaOutput_HTT_CSVsort4rd_2)
           ("res-HTT_highestCSV_2",                 max_mvaOutput_HTT_highestCSV_2)
-          ("res-HTT_CSVsort3rd_WithKinFit_2",      max_mvaOutput_HTT_CSVsort3rd_WithKinFit_2)
+          ("res-HTT_CSVsort4rd_WithKinFit_2",      max_mvaOutput_HTT_CSVsort4rd_WithKinFit_2)
           ("res-HTT_highestCSV_WithKinFit_2",      max_mvaOutput_HTT_highestCSV_WithKinFit_2)
           ("res-HTT_IHEP_2",                       max_mvaOutput_HTT_multilep_2)
 
           ("HadTop_pt_multilep",              HadTop_pt_multilep)
-          ("HadTop_pt_CSVsort3rd",            HadTop_pt_CSVsort3rd)
+          ("HadTop_pt_CSVsort4rd",            HadTop_pt_CSVsort4rd)
           ("HadTop_pt_highestCSV",            HadTop_pt_highestCSV)
-          ("HadTop_pt_CSVsort3rd_WithKinFit", HadTop_pt_CSVsort3rd_WithKinFit)
+          ("HadTop_pt_CSVsort4rd_WithKinFit", HadTop_pt_CSVsort4rd_WithKinFit)
           ("HadTop_pt_highestCSV_WithKinFit", HadTop_pt_highestCSV_WithKinFit)
 
           ("HadTop_pt_multilep_2",              HadTop_pt_multilep_2)
-          ("HadTop_pt_CSVsort3rd_2",            HadTop_pt_CSVsort3rd_2)
+          ("HadTop_pt_CSVsort4rd_2",            HadTop_pt_CSVsort4rd_2)
           ("HadTop_pt_highestCSV_2",            HadTop_pt_highestCSV_2)
-          ("HadTop_pt_CSVsort3rd_WithKinFit_2", HadTop_pt_CSVsort3rd_WithKinFit_2)
+          ("HadTop_pt_CSVsort4rd_WithKinFit_2", HadTop_pt_CSVsort4rd_WithKinFit_2)
           ("HadTop_pt_highestCSV_WithKinFit_2", HadTop_pt_highestCSV_WithKinFit_2)
 
           ("genTopPt_multilep",               genTopPt_multilep)
-          ("genTopPt_CSVsort3rd",             genTopPt_CSVsort3rd)
+          ("genTopPt_CSVsort4rd",             genTopPt_CSVsort4rd)
           ("genTopPt_highestCSV",             genTopPt_highestCSV)
-          ("genTopPt_CSVsort3rd_WithKinFit",  genTopPt_CSVsort3rd_WithKinFit)
+          ("genTopPt_CSVsort4rd_WithKinFit",  genTopPt_CSVsort4rd_WithKinFit)
           ("genTopPt_highestCSV_WithKinFit",  genTopPt_highestCSV_WithKinFit)
 
           ("genTopPt_multilep_2",               genTopPt_multilep_2)
-          ("genTopPt_CSVsort3rd_2",             genTopPt_CSVsort3rd_2)
+          ("genTopPt_CSVsort4rd_2",             genTopPt_CSVsort4rd_2)
           ("genTopPt_highestCSV_2",             genTopPt_highestCSV_2)
-          ("genTopPt_CSVsort3rd_WithKinFit_2",  genTopPt_CSVsort3rd_WithKinFit_2)
+          ("genTopPt_CSVsort4rd_WithKinFit_2",  genTopPt_CSVsort4rd_WithKinFit_2)
           ("genTopPt_highestCSV_WithKinFit_2",  genTopPt_highestCSV_WithKinFit_2)
 
           ("hadtruth_boosted",               hadtruth_boosted)
@@ -2946,8 +2711,8 @@ int main(int argc, char* argv[])
     {
       const double avg_dr_jet      = comp_avg_dr_jet(selJets);
       const double max_dr_jet      = comp_max_dr_jet(selJets);
-      const double mbb             = selBJets_medium.size() > 1 ? (selBJets_medium[0]->p4() + selBJets_medium[1]->p4()).mass() : -1.;
-      const double mbb_loose       = selBJets_loose.size() > 1 ? (selBJets_loose[0]->p4() + selBJets_loose[1]->p4()).mass() : -1.;
+      //const double mbb             = selBJets_medium.size() > 1 ? (selBJets_medium[0]->p4() + selBJets_medium[1]->p4()).mass() : -1.;
+      //const double mbb_loose       = selBJets_loose.size() > 1 ? (selBJets_loose[0]->p4() + selBJets_loose[1]->p4()).mass() : -1.;
       const double mindr_tau1_jet  = std::min(10., comp_mindr_hadTau1_jet(*selHadTau_lead, selJets));
       const double mindr_tau2_jet  = std::min(10., comp_mindr_hadTau2_jet(*selHadTau_sublead, selJets));
       const double min_dr_tau_jet  = std::min(mindr_tau1_jet, mindr_tau2_jet);

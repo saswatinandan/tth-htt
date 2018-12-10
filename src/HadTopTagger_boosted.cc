@@ -106,12 +106,6 @@ HadTopTagger_boosted::operator()(
     //fatjet_isGenMatched = (genMatchingTop[kGenMatchedFatJet] || genMatchingAntiTop[kGenMatchedFatJet]);
   } // close gen matching
 
-  //"tau32Top", "btagDisc_b",
-  //"m_Wj1Wj2_div_m_bWj1Wj2", "pT_Wj1Wj2", "dR_Wj1Wj2", "m_bWj1Wj2", "pT_bWj1Wj2", "m_bWj2",
-  //"mass_Wj1", "pT_Wj2", "mass_Wj2",
-  //"pT_b", "mass_b",
-  //"kinFit_pT_b_o_pT_b", "kinFit_pT_Wj2_o_pT_Wj2", "nllKinFit"
-  //std::cout << "boosted HTT_highestCSV " << " " << kinFit_->nll()<< std::endl;
   mvaInputsHTT["tau32Top"]           = jet_HTTv2.tau3()/jet_HTTv2.tau2();
   mvaInputsHTT["btagDisc_b"]         = recSubJet[btag_order[0]]->BtagCSV();
   mvaInputsHTT["m_Wj1Wj2_div_m_bWj1Wj2"]  = m_Wj1Wj2/m_bWj1Wj2;
@@ -128,29 +122,6 @@ HadTopTagger_boosted::operator()(
   const double HTT_highestCSV = (*mva_xgb_HTT_highestCSV_)(mvaInputsHTT);
   result[kXGB_boosted_no_kinFit] = HTT_highestCSV;
   //std::cout << "boosted HTT_highestCSV " << HTT_highestCSV << " " << jet_HTTv2.tau3()/jet_HTTv2.tau2() << std::endl;
-
-  /*
-  // "kinFit_pT_b_o_pT_b", "kinFit_pT_Wj2_o_pT_Wj2", "nllKinFit"
-  mvaInputsHTT_withKinFit["tau32Top"]           = jet_HTTv2.tau3()/jet_HTTv2.tau2();
-  mvaInputsHTT_withKinFit["btagDisc_b"]         = recSubJet[btag_order[0]]->BtagCSV();
-  mvaInputsHTT_withKinFit["m_Wj1Wj2_div_m_bWj1Wj2"]  = m_Wj1Wj2/m_bWj1Wj2;
-  mvaInputsHTT_withKinFit["pT_Wj1Wj2"]          = (recWJet1 + recWJet2).pt();
-  mvaInputsHTT_withKinFit["dR_Wj1Wj2"]          = deltaR(recWJet1,recWJet2);
-  mvaInputsHTT_withKinFit["m_bWj1Wj2"]          = jet_HTTv2.p4().mass();
-  mvaInputsHTT_withKinFit["pT_bWj1Wj2"]          = jet_HTTv2.p4().pt();
-  mvaInputsHTT_withKinFit["m_bWj2"]             = (recBJet + recWJet2).mass();
-  mvaInputsHTT_withKinFit["mass_Wj1"]           = recWJet1.mass();
-  mvaInputsHTT_withKinFit["pT_Wj2"]             = recWJet2.pt();
-  mvaInputsHTT_withKinFit["mass_Wj2"]           = recWJet2.mass();
-  mvaInputsHTT_withKinFit["pT_b"]               = recBJet.pt();
-  mvaInputsHTT_withKinFit["mass_b"]             = recBJet.mass();
-  mvaInputsHTT_withKinFit["nllKinFit"]          = kinFit_->nll();
-  mvaInputsHTT_withKinFit["kinFit_pT_b_o_pT_b"] =  kinFit_->fittedBJet().pt() / recBJet.pt();
-  mvaInputsHTT_withKinFit["kinFit_pT_Wj2_o_pT_Wj2"] =  kinFit_->fittedWJet2().pt() / recWJet2.pt();
-  const double HTT_highestCSV_withKinFit = (*mva_xgb_HTT_highestCSV_withKinFit_)(mvaInputsHTT_withKinFit);
-  result[kXGB_boosted_with_kinFit] = HTT_highestCSV_withKinFit;
-  //std::cout << "boosted HTT_highestCSV_withKinFit " << HTT_highestCSV_withKinFit << " " << kinFit_->nll() << std::endl;
-  */
   result[kXGB_boosted_with_kinFit] = 0.;
 
   return result;

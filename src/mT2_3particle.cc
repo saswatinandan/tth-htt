@@ -25,11 +25,22 @@ mT2_3particle::~mT2_3particle()
 }
 
 void mT2_3particle::operator()(double a1Px, double a1Py, double a1Mass,
+<<<<<<< HEAD
 			       double a2Px, double a2Py, double a2Mass,
 			       double b1Px, double b1Py, double b1Mass,
 			       double b2Px, double b2Py, double b2Mass,
 			       double cSumPx, double cSumPy, double cMass)
 {
+=======
+                               double a2Px, double a2Py, double a2Mass,
+                               double b1Px, double b1Py, double b1Mass,
+                               double b2Px, double b2Py, double b2Mass,
+                               double cSumPx, double cSumPy, double cMass)
+{
+  const auto currentIgnoreLevel = gErrorIgnoreLevel;
+  gErrorIgnoreLevel = kWarning;
+
+>>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
   double cSumPt = TMath::Sqrt(cSumPx*cSumPx + cSumPy*cSumPy);
   double log_cSumPt_over_2 = TMath::Log(0.5*TMath::Max(1., cSumPt));
 
@@ -65,6 +76,8 @@ void mT2_3particle::operator()(double a1Px, double a1Py, double a1Mass,
       min_step_ = iStep;
     }
   }
+
+  gErrorIgnoreLevel = currentIgnoreLevel;
 }
 
 double mT2_3particle::get_min_mT2() const

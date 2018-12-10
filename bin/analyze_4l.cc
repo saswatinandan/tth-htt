@@ -362,7 +362,7 @@ int main(int argc, char* argv[])
   RecoMuonCollectionSelectorTight tightMuonSelector(era, -1, isDEBUG);
 
   RecoElectronReader* electronReader = new RecoElectronReader(era, branchName_electrons, readGenObjects);
-  electronReader->readUncorrected(useNonNominal);
+  //electronReader->readUncorrected(useNonNominal);
   inputTree -> registerReader(electronReader);
   RecoElectronCollectionGenMatcher electronGenMatcher;
   RecoElectronCollectionCleaner electronCleaner(0.05, isDEBUG);
@@ -556,8 +556,8 @@ int main(int argc, char* argv[])
       Form("%s/sel/evtYield", histogramDir.data()), central_or_shift);
     cfg_EvtYieldHistManager_sel.addParameter<edm::ParameterSet>("runPeriods", cfg_EvtYieldHistManager);
     cfg_EvtYieldHistManager_sel.addParameter<bool>("isMC", isMC);
-    preselHistManager->evtYield_ = new EvtYieldHistManager(cfg_EvtYieldHistManager_sel);
-    preselHistManager->evtYield_->bookHistograms(fs);
+    selHistManager->evtYield_ = new EvtYieldHistManager(cfg_EvtYieldHistManager_sel);
+    selHistManager->evtYield_->bookHistograms(fs);
     selHistManager->weights_ = new WeightHistManager(makeHistManager_cfg(process_and_genMatch,
       Form("%s/sel/weights", histogramDir.data()), central_or_shift));
     selHistManager->weights_->bookHistograms(fs, { "genWeight", "pileupWeight", "triggerWeight", "data_to_MC_correction", "fakeRate" });
@@ -1506,7 +1506,7 @@ int main(int argc, char* argv[])
     }
 
     const bool isGenMatched = isMC &&
-      ((apply_leptonGenMatching && selLepton_genMatch.numGenMatchedJets_ == 0) || ! apply_leptonGenMatching)
+      ((apply_leptonGenMatching && selLepton_genMatch.numGenMatchedLeptons_ == 4) || ! apply_leptonGenMatching)
     ;
 
     if ( bdt_filler ) {

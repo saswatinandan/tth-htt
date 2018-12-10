@@ -57,6 +57,10 @@ process.analyze_0l_2tau = cms.PSet(
     lumiScale = cms.double(1.),
     apply_genWeight = cms.bool(True),
     apply_DYMCReweighting = cms.bool(False),
+<<<<<<< HEAD
+=======
+    apply_DYMCNormScaleFactors = cms.bool(False),
+>>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
     apply_hlt_filter = cms.bool(False),
     apply_met_filters = cms.bool(True),
     cfgMEtFilter = cms.PSet(),
@@ -70,8 +74,11 @@ process.analyze_0l_2tau = cms.PSet(
     branchName_jets = cms.string('Jet'),
     branchName_jetsHTTv2 = cms.string('HTTV2'),
     branchName_subjetsHTTv2 = cms.string('HTTV2Subjets'),
+<<<<<<< HEAD
     branchName_jetsAK12 = cms.string('FatJetAK12'),
     branchName_subjetsAK12 = cms.string('SubJetAK12'),
+=======
+>>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
     branchName_jetsAK8 = cms.string('FatJet'),
     branchName_subjetsAK8 = cms.string('SubJet'),
     branchName_met = cms.string('MET'),

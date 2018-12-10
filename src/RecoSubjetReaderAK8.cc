@@ -12,8 +12,10 @@ RecoSubjetReaderAK8::RecoSubjetReaderAK8(int era)
 {}
 
 RecoSubjetReaderAK8::RecoSubjetReaderAK8(int era,
-					 const std::string & branchName_obj)
+                                         const std::string & branchName_obj,
+                                         bool readBtagCSV)
   : era_(era)
+  , readBtagCSV_(readBtagCSV)
   , max_nJets_(88)
   , branchName_num_(Form("n%s", branchName_obj.data()))
   , branchName_obj_(branchName_obj)
@@ -88,7 +90,10 @@ RecoSubjetReaderAK8::setBranchAddresses(TTree * tree)
     bai.setBranchAddress(jet_eta_, branchName_eta_);
     bai.setBranchAddress(jet_phi_, branchName_phi_);
     bai.setBranchAddress(jet_mass_, branchName_mass_);
-    bai.setBranchAddress(jet_BtagCSV_, branchName_BtagCSV_);
+    if(readBtagCSV_)
+    {
+      bai.setBranchAddress(jet_BtagCSV_, branchName_BtagCSV_);
+    } 
   }
 }
 
@@ -116,9 +121,9 @@ RecoSubjetReaderAK8::read() const
           gInstance->jet_pt_[idxJet],
           gInstance->jet_eta_[idxJet],
           gInstance->jet_phi_[idxJet],
-	  gInstance->jet_mass_[idxJet]
+          gInstance->jet_mass_[idxJet]
         },
-	gInstance->jet_BtagCSV_[idxJet],    
+        ( readBtagCSV_ ) ? gInstance->jet_BtagCSV_[idxJet] : -1.,
         static_cast<Int_t>(idxJet)
       });
     } // idxJet

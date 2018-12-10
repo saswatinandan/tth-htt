@@ -60,7 +60,7 @@ process.analyze_WZctrl = cms.PSet(
     muonSelection = cms.string(''),
     apply_leptonGenMatching = cms.bool(True),
 
-    hadTauSelection = cms.string(''),
+    hadTauSelection_veto = cms.string(''),
 
     applyFakeRateWeights = cms.string(""),
         leptonFakeRateWeight = cms.PSet(
@@ -77,7 +77,7 @@ process.analyze_WZctrl = cms.PSet(
     apply_genWeight = cms.bool(True),
     apply_DYMCReweighting = cms.bool(False),
     apply_hlt_filter = cms.bool(False),
-    apply_met_filters = cms.bool(True),
+    apply_met_filters = cms.bool(False),
     cfgMEtFilter = cms.PSet(),
 
     fillGenEvtHistograms = cms.bool(False),

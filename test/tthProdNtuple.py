@@ -7,12 +7,12 @@ from tthAnalysis.HiggsToTauTau.runConfig import tthAnalyzeParser, filter_samples
 
 # E.g.: ./tthProdNtuple.py -v 2017Dec13 -m all -e 2017 -p
 
-mode_choices = [ 'all', 'all_except_forBDTtraining', 'forBDTtraining', 'sync', 'leptonFR_sync', 'hh', 'hh_bbww' ]
+mode_choices = [ 'all', 'all_except_forBDTtraining', 'forBDTtraining', 'sync', 'leptonFR_sync', 'hh', 'hh_bbww', 'hh_bkg' ]
 
 parser = tthAnalyzeParser()
 parser.add_modes(mode_choices)
 parser.add_nonnominal()
-parser.add_tau_id_wp('dR03mvaVVLoose')
+parser.add_tau_id_wp('dR03mvaVVLoose&dR05mvaVVLoose')
 parser.add_files_per_job(10)
 parser.add_use_home(False)
 parser.add_argument('-p', '--enable-preselection',
@@ -179,7 +179,7 @@ else:
 if 'sum_events' in samples:
   del samples['sum_events']
 for sample_name, sample_entry in samples.items():
-  if mode == "all":
+  if mode == 'all' or mode == 'hh_bkg':
     sample_entry['use_it'] = True
   elif mode == 'forBDTtraining':
     sample_entry['use_it'] = not sample_entry['use_it']
