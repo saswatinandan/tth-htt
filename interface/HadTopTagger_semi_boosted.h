@@ -49,8 +49,8 @@ protected:
   std::map<std::string, double> mvaInputsHTT_withKinFit;
   std::vector<std::string>      mvaInputsHTTSort_withKinFit;
 
-  XGBInterface * mva_xgb_HTT_CSVsort3rd_;
-  XGBInterface * mva_xgb_HTT_CSVsort3rd_withKinFit_;
+  XGBInterface * mva_xgb_HTT_CSVsort4rd_;
+  XGBInterface * mva_xgb_HTT_CSVsort4rd_withKinFit_;
 
 };
 

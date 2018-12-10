@@ -25,18 +25,12 @@ mT2_2particle::~mT2_2particle()
 }
 
 void mT2_2particle::operator()(double b1Px, double b1Py, double b1Mass,
-<<<<<<< HEAD
-			       double b2Px, double b2Py, double b2Mass,
-			       double cSumPx, double cSumPy, double cMass)
-{
-=======
                                double b2Px, double b2Py, double b2Mass,
                                double cSumPx, double cSumPy, double cMass)
 {
   const auto currentIgnoreLevel = gErrorIgnoreLevel;
   gErrorIgnoreLevel = kWarning;
 
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
   double cSumPt = TMath::Sqrt(cSumPx*cSumPx + cSumPy*cSumPy);
   double log_cSumPt_over_2 = TMath::Log(0.5*TMath::Max(1., cSumPt));
 

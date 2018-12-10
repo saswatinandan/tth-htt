@@ -476,17 +476,6 @@ int main(int argc, char* argv[])
   RecoJetCollectionSelectorBtagLoose jetSelectorBtagLoose(era);
   RecoJetCollectionSelectorBtagMedium jetSelectorBtagMedium(era);
 
-  RecoJetReaderHTTv2* jetReaderHTTv2 = new RecoJetReaderHTTv2(era, branchName_jetsHTTv2, branchName_subjetsHTTv2);
-  inputTree -> registerReader(jetReaderHTTv2);
-  RecoJetCollectionSelectorHTTv2 jetSelectorHTTv2(era);
-  RecoJetCollectionCleanerHTTv2SubJets jetCleanerHTTv2SubJets(0.4, isDEBUG); //to clean against leptons and hadronic taus
-
-  RecoJetReaderAK8* jetReaderAK8 = new RecoJetReaderAK8(era, branchName_jetsAK8, branchName_subjetsAK8);
-  inputTree -> registerReader(jetReaderAK8);
-  RecoJetCollectionSelectorAK8 jetSelectorAK8(era);
-  RecoJetCollectionCleanerAK8SubJets jetCleanerAK8SubJets(0.4, isDEBUG); //to clean against leptons and hadronic taus
-
-
 //--- declare missing transverse energy
   RecoMEtReader* metReader = new RecoMEtReader(era, isMC, branchName_met);
   metReader->setMEt_central_or_shift(met_option);
@@ -1887,14 +1876,6 @@ int main(int argc, char* argv[])
     double HadTop_pt_multilep = 0.;
     double genTopPt_multilep = 0.;
 
-    double max_mvaOutput_HTT_CSVsort4rd = 0.;
-    bool max_truth_HTT_CSVsort4rd = false;
-    double HadTop_pt_CSVsort4rd = 0.;
-    double genTopPt_CSVsort4rd = 0.;
-    double b_pt_CSVsort4rd_1 = 0.1;
-    double Wj1_pt_CSVsort4rd_1 = 0.1;
-    double Wj2_pt_CSVsort4rd_1 = 0.1;
-
     double max_mvaOutput_HTT_highestCSV = 0.;
     bool max_truth_HTT_highestCSV = false;
     double HadTop_pt_highestCSV = 0.;
@@ -1910,14 +1891,10 @@ int main(int argc, char* argv[])
     double HadTop_pt_highestCSV_WithKinFit = 0.;
     double genTopPt_highestCSV_WithKinFit = 0.;
 
-    bool hadtruth = false;
     Particle::LorentzVector unfittedHadTopP4, fittedHadTopP4;
     bool massCut = true; // wheather apply calculating the HTT
 
     // resolved HTT
-    bool resolved_and_semi_AK8 = false;
-    bool boosted_and_semi_AK8 = false;
-    bool resolved_and_boosted = false;
 
     double max_mvaOutput_HTT_CSVsort4rd = 0.;
     bool max_truth_HTT_CSVsort4rd = false;

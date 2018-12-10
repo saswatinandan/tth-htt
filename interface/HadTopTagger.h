@@ -10,7 +10,7 @@ class XGBInterface;
 
 enum {
   kXGB_with_kinFit, kXGB_multilep,
-  kXGB_CSVsort3rd, kXGB_CSVsort3rd_withKinFit,
+  kXGB_CSVsort4rd, kXGB_CSVsort4rd_withKinFit,
   kXGB_highestCSV, kXGB_highestCSV_withKinFit
 };
 
@@ -55,8 +55,8 @@ protected:
   std::map<std::string, double> mvaInputsHTT_withKinFit;
   std::vector<std::string>      mvaInputsHTT_withKinFitSort;
 
-  XGBInterface * mva_xgb_HTT_CSVsort3rd_;
-  XGBInterface * mva_xgb_HTT_CSVsort3rd_withKinFit_;
+  XGBInterface * mva_xgb_HTT_CSVsort4rd_;
+  XGBInterface * mva_xgb_HTT_CSVsort4rd_withKinFit_;
   XGBInterface * mva_xgb_HTT_highestCSV_;
   XGBInterface * mva_xgb_HTT_highestCSV_withKinFit_;
 

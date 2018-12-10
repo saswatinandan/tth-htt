@@ -11,23 +11,23 @@
 
 
 HadTopTagger_semi_boosted::HadTopTagger_semi_boosted(void)
-  : mva_xgb_HTT_CSVsort3rd_(nullptr)
-  , mva_xgb_HTT_CSVsort3rd_withKinFit_(nullptr)
+  : mva_xgb_HTT_CSVsort4rd_(nullptr)
+  , mva_xgb_HTT_CSVsort4rd_withKinFit_(nullptr)
 {
 
-  //std::string mvaFileNameHTT_CSVsort3rd = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_4_lr_0o03_btagSort3rd_nvar13_cat_2.pkl";
-  //std::string mvaFileNameHTT_CSVsort3rd_withKinFit = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_4_lr_0o03_btagSort3rd_nvar16_cat_2_withKinFit_sel_5.pkl";
+  //std::string mvaFileNameHTT_CSVsort4rd = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_4_lr_0o03_btagSort3rd_nvar13_cat_2.pkl";
+  //std::string mvaFileNameHTT_CSVsort4rd_withKinFit = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_4_lr_0o03_btagSort3rd_nvar16_cat_2_withKinFit_sel_5.pkl";
 
-  std::string mvaFileNameHTT_CSVsort3rd = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/no_mass_cut_on_new/HTT_HadTopTagger_2017_final_nomasscut_XGB_ntrees_2500_deph_4_lr_0o03_btagSort3rd_nvar13_cat_2.pkl";
-  std::string mvaFileNameHTT_CSVsort3rd_withKinFit = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/no_mass_cut_on_new/HTT_HadTopTagger_2017_final_nomasscut_XGB_ntrees_2500_deph_4_lr_0o03_btagSort3rd_nvar16_cat_2_withKinFit_sel_9.pkl";
+  std::string mvaFileNameHTT_CSVsort4rd = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/no_mass_cut_on_new/HTT_HadTopTagger_2017_final_nomasscut_XGB_ntrees_2500_deph_4_lr_0o03_btagSort3rd_nvar13_cat_2.pkl";
+  std::string mvaFileNameHTT_CSVsort4rd_withKinFit = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/no_mass_cut_on_new/HTT_HadTopTagger_2017_final_nomasscut_XGB_ntrees_2500_deph_4_lr_0o03_btagSort3rd_nvar16_cat_2_withKinFit_sel_9.pkl";
 
   mvaInputsHTTSort =  {
     "massW_SD", "tau21W", "btagDisc_b",
     "m_Wj1Wj2_div_m_bWj1Wj2", "dR_Wj1Wj2", "m_bWj1Wj2", "pT_bWj1Wj2", "m_bWj2",
     "mass_Wj1", "pT_Wj2", "mass_Wj2", "pT_b", "mass_b"
   };
-  mva_xgb_HTT_CSVsort3rd_ = new XGBInterface(
-    mvaFileNameHTT_CSVsort3rd, mvaInputsHTTSort
+  mva_xgb_HTT_CSVsort4rd_ = new XGBInterface(
+    mvaFileNameHTT_CSVsort4rd, mvaInputsHTTSort
   );
 
   mvaInputsHTTSort_withKinFit =  {
@@ -36,8 +36,8 @@ HadTopTagger_semi_boosted::HadTopTagger_semi_boosted(void)
     "mass_Wj1", "pT_Wj2", "mass_Wj2", "pT_b", "mass_b",
     "kinFit_pT_b_o_pT_b", "kinFit_pT_Wj2_o_pT_Wj2", "nllKinFit"
   };
-  mva_xgb_HTT_CSVsort3rd_withKinFit_ = new XGBInterface(
-    mvaFileNameHTT_CSVsort3rd_withKinFit, mvaInputsHTTSort_withKinFit
+  mva_xgb_HTT_CSVsort4rd_withKinFit_ = new XGBInterface(
+    mvaFileNameHTT_CSVsort4rd_withKinFit, mvaInputsHTTSort_withKinFit
   );
 
 }
@@ -45,8 +45,8 @@ HadTopTagger_semi_boosted::HadTopTagger_semi_boosted(void)
 HadTopTagger_semi_boosted::~HadTopTagger_semi_boosted()
 {
   //delete kinFit_;
-  delete mva_xgb_HTT_CSVsort3rd_;
-  delete mva_xgb_HTT_CSVsort3rd_withKinFit_;
+  delete mva_xgb_HTT_CSVsort4rd_;
+  delete mva_xgb_HTT_CSVsort4rd_withKinFit_;
 }
 
 std::map<int, double>
@@ -120,9 +120,9 @@ HadTopTagger_semi_boosted::operator()(
   mvaInputsHTT["mass_Wj2"]           = recWJet2.mass();
   mvaInputsHTT["pT_b"]               = recBJet.pt();
   mvaInputsHTT["mass_b"]             = recBJet.mass();
-  const double HTT_CSVsort3rd = (*mva_xgb_HTT_CSVsort3rd_)(mvaInputsHTT);
-  result[kXGB_semi_boosted_no_kinFit] = HTT_CSVsort3rd;
-  //std::cout << "semi-boosted HTT_CSVsort3rd " << HTT_CSVsort3rd << jet_ptrsAK12.tau2()/jet_ptrsAK12.tau1() << std::endl;
+  const double HTT_CSVsort4rd = (*mva_xgb_HTT_CSVsort4rd_)(mvaInputsHTT);
+  result[kXGB_semi_boosted_no_kinFit] = HTT_CSVsort4rd;
+  //std::cout << "semi-boosted HTT_CSVsort4rd " << HTT_CSVsort4rd << jet_ptrsAK12.tau2()/jet_ptrsAK12.tau1() << std::endl;
 
   /*
   // "kinFit_pT_b_o_pT_b", "kinFit_pT_Wj2_o_pT_Wj2", "nllKinFit"
@@ -142,9 +142,9 @@ HadTopTagger_semi_boosted::operator()(
   mvaInputsHTT_withKinFit["nllKinFit"]          = kinFit_->nll();
   mvaInputsHTT_withKinFit["kinFit_pT_b_o_pT_b"] =  kinFit_->fittedBJet().pt() / recBJet.pt();
   mvaInputsHTT_withKinFit["kinFit_pT_Wj2_o_pT_Wj2"] =  kinFit_->fittedWJet2().pt() / recWJet2.pt();
-  const double HTT_CSVsort3rd_withKinFit = (*mva_xgb_HTT_CSVsort3rd_withKinFit_)(mvaInputsHTT_withKinFit);
-  result[kXGB_semi_boosted_with_kinFit] = HTT_CSVsort3rd_withKinFit;
-  //std::cout << "semi-boosted HTT_CSVsort3rd_withKinFit " << HTT_CSVsort3rd_withKinFit << kinFit_->nll() << std::endl;
+  const double HTT_CSVsort4rd_withKinFit = (*mva_xgb_HTT_CSVsort4rd_withKinFit_)(mvaInputsHTT_withKinFit);
+  result[kXGB_semi_boosted_with_kinFit] = HTT_CSVsort4rd_withKinFit;
+  //std::cout << "semi-boosted HTT_CSVsort4rd_withKinFit " << HTT_CSVsort4rd_withKinFit << kinFit_->nll() << std::endl;
   */
   result[kXGB_semi_boosted_with_kinFit] = 0.;
 

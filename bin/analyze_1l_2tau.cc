@@ -2454,9 +2454,6 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
           ("dr_HadTop_tau_SS",               deltaR(fittedHadTopP4, selHadTau_SS->p4()))
           ("hadtruth",                       hadtruth)
           ("genTopPt",                       genTopPt)
-          ("prob_fake_lepton",               lep_genLepPt > 0 ? 1.0 : prob_fake_lepton)
-          ("tau_fake_prob_lead",             tau1_genTauPt > 0 ? 1.0 : prob_fake_hadTau_lead)
-          ("tau_fake_prob_sublead",          tau2_genTauPt > 0 ? 1.0 : prob_fake_hadTau_sublead)
 
           ("nHTTv2",                         sel_HTTv2.size())
           ("HTTv2_lead_pt",                  sel_HTTv2.size() > 0 ? sel_HTTv2[0]->pt() : -1 )

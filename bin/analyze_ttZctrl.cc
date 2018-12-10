@@ -1290,8 +1290,6 @@ int main(int argc, char* argv[])
 
     bool isSFOS = false;
     double massSFOS = -1.;
-    double pt1 = -1.;
-    double pt2 = -1.;
     const RecoLepton* selLepton_extra = 0;
     for ( std::vector<const RecoLepton*>::const_iterator lepton1 = preselLeptonsFull.begin();
     lepton1 != preselLeptonsFull.end(); ++lepton1 ) {
@@ -1301,8 +1299,6 @@ int main(int argc, char* argv[])
 	  isSFOS = true;
 	  double mass = ((*lepton1)->p4() + (*lepton2)->p4()).mass();
 	  if ( std::fabs(mass - z_mass) < std::fabs(massSFOS - z_mass) ) {
-      pt1 = (*lepton1)->pt();
-      pt2 = (*lepton2)->pt();
 	    massSFOS = mass;
 	    if      ( !((*lepton1) == selLepton_lead    || (*lepton2) == selLepton_lead)    ) selLepton_extra = selLepton_lead;
 	    else if ( !((*lepton1) == selLepton_sublead || (*lepton2) == selLepton_sublead) ) selLepton_extra = selLepton_sublead;
@@ -1425,9 +1421,6 @@ int main(int argc, char* argv[])
 
     check_mvaInputs(mvaInputs_2lss, eventInfo);
 
-    double mvaOutput_2lss_ttV = 1.;//mva_2lss_ttV(mvaInputs_2lss);
-    double mvaOutput_2lss_ttbar = 1.;//mva_2lss_ttbar(mvaInputs_2lss);
-
 //--- compute integer discriminant based on both BDT outputs,
 //    as defined in Table 16 () of AN-2015/321 (AN-2016/211) for analysis of 2015 (2016) data
     /*
@@ -1503,7 +1496,7 @@ int main(int argc, char* argv[])
     selHistManager->evt_->fillHistograms(
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-      mvaOutput_2lss_ttV, mvaOutput_2lss_ttbar, mvaDiscr_2lss,
+      mvaOutput_3l_ttV, mvaOutput_3l_ttbar, mvaDiscr_3l,
       mvaOutput_3l_ttV, mvaOutput_3l_ttbar, mvaDiscr_3l,
       massSFOS, mT, sumLeptonCharge, evtWeight);
       EvtHistManager_ttZctrl* selHistManager_evt_category = selHistManager->evt_in_categories_[category];

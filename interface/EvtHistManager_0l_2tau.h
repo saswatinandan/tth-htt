@@ -28,7 +28,7 @@ public:
   void
   fillHistograms(int numElectrons,
                  int numMuons,
-		 int numHadTaus, 
+		 int numHadTaus,
                  int numJets,
                  int numBJets_loose,
                  int numBJets_medium,
@@ -40,15 +40,15 @@ public:
 		 float mvaDiscr_0l_2tau_HTT,
      //
      double mva_oldVar, double mva_Updated,
-     double mva_Boosted_AK8_noISO,  double mva_Boosted_AK8,
+     double mva_Boosted_AK8,
      double mva_Boosted_AK12_noISO, double mva_Boosted_AK12,
-     double mva_Boosted_AK12_basic, double mva_Boosted_AK8_basic,
+     double mva_Boosted_AK12_basic,
      //
 		 double mvaOutput_0l_2tau_HTT_sum_dy,
                  double mTauTauVis,
                  double mTauTau,
 		 double Pzeta, double PzetaVis, double PzetaComb,
-		 double mT_tau1, 
+		 double mT_tau1,
 		 double mT_tau2,
 		 double mbb,
 		 double mbb_loose,
@@ -81,18 +81,16 @@ private:
 
   TH1 * histogram_mva_oldVar_;
   TH1 * histogram_mva_Updated_;
-  TH1 * histogram_mva_Boosted_AK8_noISO_;
   TH1 * histogram_mva_Boosted_AK8_;
   TH1 * histogram_mva_Boosted_AK12_noISO_;
   TH1 * histogram_mva_Boosted_AK12_;
   TH1 * histogram_mva_Boosted_AK12_basic_;
-  TH1 * histogram_mva_Boosted_AK8_basic_;
 
 
   TH1 * histogram_mvaOutput_0l_2tau_HTT_sum_dy_;
 
   TH1 * histogram_mTauTauVis_;
-  TH1 * histogram_mTauTau_;  
+  TH1 * histogram_mTauTau_;
   TH1 * histogram_Pzeta_;
   TH1 * histogram_PzetaVis_;
   TH1 * histogram_PzetaMiss_;

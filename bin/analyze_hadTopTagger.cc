@@ -91,8 +91,6 @@
 #include "tthAnalysis/HiggsToTauTau/interface/TTreeWrapper.h" // TTreeWrapper
 #include "tthAnalysis/HiggsToTauTau/interface/HadTopTaggerFill.h" // HadTopTaggerFill
 #include "tthAnalysis/HiggsToTauTau/interface/EvtWeightManager.h" // EvtWeightManager
-#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // isGenMatchedJetTriplet tags
-#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_internal.h" // isGenMatchedJetTriplet
 
 #include <boost/range/algorithm/copy.hpp> // boost::copy()
 #include <boost/range/adaptor/map.hpp> // boost::adaptors::map_keys
@@ -164,7 +162,6 @@ int main(int argc, char* argv[])
   std::string era_string = cfg_analyze.getParameter<std::string>("era");
   const int era = get_era(era_string);
 
-<<<<<<< HEAD
   // read leptons and hadronic taus to do cleaning
   /*
   std::string leptonSelection_string = cfg_analyze.getParameter<std::string>("leptonSelection").data();
@@ -193,8 +190,6 @@ int main(int argc, char* argv[])
   //else throw cms::Exception("analyze_1l_2tau")
   //  << "Invalid Configuration parameter 'hadTauChargeSelection' = " << hadTauChargeSelection_string << " !!\n";
 
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
   bool isMC = cfg_analyze.getParameter<bool>("isMC");
   bool isMC_tH = ( process_string == "tHq" || process_string == "tHW" ) ? true : false;
   bool hasLHE = cfg_analyze.getParameter<bool>("hasLHE");
@@ -267,16 +262,11 @@ int main(int argc, char* argv[])
   EventInfo eventInfo(isSignal, isMC, isMC_tH);
   EventInfoReader eventInfoReader(&eventInfo);
   inputTree -> registerReader(&eventInfoReader);
-<<<<<<< HEAD
-  //const bool useNonNominal = false;//cfg_analyze.getParameter<bool>("useNonNominal");
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
 
   if(eventWeightManager)
   {
     inputTree->registerReader(eventWeightManager);
   }
-<<<<<<< HEAD
   /*
   edm::ParameterSet cfg_dataToMCcorrectionInterface;
   cfg_dataToMCcorrectionInterface.addParameter<std::string>("era", era_string);
@@ -288,7 +278,6 @@ int main(int argc, char* argv[])
   */
 
 //--- declare particle collections
-  const bool readGenObjects = false; //isMC && !redoGenMatching;
   /*
   RecoMuonReader* muonReader = new RecoMuonReader(era, branchName_muons, readGenObjects);
   std::cout << "Here before RecoMuonReader" << std::endl;
@@ -333,8 +322,6 @@ int main(int argc, char* argv[])
   tightHadTauSelector_sublead.set_min_antiElectron(hadTauSelection_antiElectron_sublead);
   tightHadTauSelector_sublead.set_min_antiMuon(hadTauSelection_antiMuon_sublead);
   */
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
 
   RecoJetReader* jetReader = new RecoJetReader(era, isMC, branchName_jets, readGenObjects);
   jetReader->setPtMass_central_or_shift(jetPt_option);
@@ -345,10 +332,7 @@ int main(int argc, char* argv[])
   RecoJetCollectionSelectorBtagLoose jetSelectorBtagLoose(era);
   RecoJetCollectionSelectorBtagMedium jetSelectorBtagMedium(era);
   RecoJetCollectionCleaner jetCleaner(0.8, isDEBUG); //to clean against AK12
-<<<<<<< HEAD
   RecoJetCollectionCleaner jetCleanerLep(0.2, isDEBUG); //to clean against leptons and hadronic taus
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
 
   RecoJetReaderHTTv2* jetReaderHTTv2 = new RecoJetReaderHTTv2(era, branchName_jetsHTTv2, branchName_subjetsHTTv2);
   inputTree -> registerReader(jetReaderHTTv2);
@@ -450,10 +434,6 @@ int main(int argc, char* argv[])
       "typeTop", "collectionSize", "bjet_tag_position", "bWj1Wj2_isGenMatched", "counter",
       "fatjet_isGenMatched", "b_isGenMatched", "Wj1_isGenMatched", "Wj2_isGenMatched",
       "nbjets", "nbjets_loose", "njets", "passJetSel"
-<<<<<<< HEAD
-      //"nlep", "ntau"
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
       //"b_isGenMatched", "Wj1_isGenMatched", "Wj2_isGenMatched",
       //"bWj1Wj2_isGenMatched"
     );
@@ -516,7 +496,6 @@ int main(int argc, char* argv[])
       continue;
     }
 
-<<<<<<< HEAD
     /*
     //--- build collections of electrons, muons and hadronic taus;
     //    resolve overlaps in order of priority: muon, electron,
@@ -569,20 +548,15 @@ int main(int argc, char* argv[])
     selHadTaus = pickFirstNobjects(selHadTaus, 2);
     */
 
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
     //std::cout << "before load jets"  << std::endl;
 //--- build collections of jets and select subset of jets passing b-tagging criteria
     std::vector<RecoJet> jets = jetReader->read();
     std::vector<const RecoJet*> jet_ptrs = convert_to_ptrs(jets);
     std::vector<const RecoJet*> selJets;
-<<<<<<< HEAD
     //if (cleanLep) {
     //  std::vector<const RecoJet*> cleanedJetsAK4 = jetCleanerLep(jet_ptrs, fakeableMuons, fakeableElectrons, preselHadTaus);
     //  selJets = jetSelector(cleanedJetsAK4, isHigherPt);
     //} else
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
     selJets = jetSelector(jet_ptrs, isHigherPt);
     std::vector<const RecoJet*> selBJets_loose = jetSelectorBtagLoose(selJets);
     std::vector<const RecoJet*> selBJets_medium = jetSelectorBtagMedium(selJets);
@@ -591,13 +565,10 @@ int main(int argc, char* argv[])
     std::vector<RecoJetHTTv2> jetsHTTv2 = jetReaderHTTv2->read();
     std::vector<const RecoJetHTTv2*> jet_ptrsHTTv2raw = convert_to_ptrs(jetsHTTv2);
     std::vector<const RecoJetHTTv2*> jet_ptrsHTTv2;
-<<<<<<< HEAD
     //if (cleanLep) {
     //  std::vector<const RecoJetHTTv2*> cleanedJetsHTTv2 = jetCleanerHTTv2(jet_ptrsHTTv2raw, fakeableMuons, fakeableElectrons, preselHadTaus);
     //  jet_ptrsHTTv2 =  jetSelectorHTTv2(cleanedJetsHTTv2, isHigherPt);
     //} else
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
     jet_ptrsHTTv2 =  jetSelectorHTTv2(jet_ptrsHTTv2raw, isHigherPt);
     //std::cout << "after load HTT "<< jet_ptrsHTTv2raw.size()<< " " <<  jet_ptrsHTTv2 .size() << std::endl;
     /*
@@ -605,13 +576,10 @@ int main(int argc, char* argv[])
     std::vector<RecoJetAK12> jetsAK12 = jetReaderAK12->read();
     std::vector<const RecoJetAK12*> jet_ptrsAK12raw = convert_to_ptrs(jetsAK12);
     std::vector<const RecoJetAK12*> jet_ptrsAK12;
-<<<<<<< HEAD
     //if (cleanLep) {
     //std::vector<const RecoJetAK12*> cleanedJetsAK12 = jetCleanerAK12(jet_ptrsAK12raw, fakeableMuons, fakeableElectrons, preselHadTaus);
     //jet_ptrsAK12 = jetSelectorAK12(cleanedJetsAK12, isHigherPt);
     //} else
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
     jet_ptrsAK12 = jetSelectorAK12(jet_ptrsAK12raw, isHigherPt);
     //std::cout << "after load ak12"  << std::endl;
     */
@@ -619,13 +587,10 @@ int main(int argc, char* argv[])
     std::vector<RecoJetAK8> jetsAK8 = jetReaderAK8->read();
     std::vector<const RecoJetAK8*> jet_ptrsAK8raw = convert_to_ptrs(jetsAK8);
     std::vector<const RecoJetAK8*> jet_ptrsAK8;
-<<<<<<< HEAD
     //if (cleanLep) {
     //  std::vector<const RecoJetAK8*> cleanedJetsAK8 = jetCleanerAK8(jet_ptrsAK8raw, fakeableMuons, fakeableElectrons, preselHadTaus);
     //  jet_ptrsAK8 = jetSelectorAK8(cleanedJetsAK8, isHigherPt);
     //} else
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
     jet_ptrsAK8 = jetSelectorAK8(jet_ptrsAK8raw , isHigherPt);
     //std::cout << "after load ak8"  << std::endl;
 
@@ -731,25 +696,19 @@ int main(int argc, char* argv[])
         genTopMassFromWj = (genVar[kGenTopWj1]+genVar[kGenTopWj2]+genVar[kGenTopB]).mass();
         genWMassFromWj = (genVar[kGenTopWj1]+genVar[kGenTopWj2]).mass();
         genWMass = genVar[kGenTopW].mass();
-<<<<<<< HEAD
         //std::cout<<" mass W/T  "<< genVar[kGenTop].mass() << " "<< (genVar[kGenTopW]+genVar[kGenTopB]).mass() << " (" << genVar[kGenTopW].mass() <<") " << " (" << genWMassFromWj <<") " <<std::endl;
         // Xanda: check why this verification does not flight
         if (genTopMassFromWj > 0 && ((genWMassFromWj > genVar[kGenTopW].mass() +50.) || (genWMassFromWj < genVar[kGenTopW].mass() -50.))) throw cms::Exception("analyze_hadTopTagger")
           <<"            mass W/T  "<< genVar[kGenTop].mass() << "                "<< (genVar[kGenTopW]+genVar[kGenTopB]).mass() << " " << genTopMassFromWj << "      (" << genVar[kGenTopW].mass() << ") " << " (" << genWMassFromWj << ") "<< genVar[kGenTopW].mass() << " ("  <<genWMassFromWj << ") " << genVar[kGenTopWj1].px() << " " << genQuarkFromTop.size() << " !!\n";
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
       } else if (genVarAnti[kGenTopWj1].px() > 0){
         genAntiTopMassFromW = (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass();
         genAntiTopMassFromWj = (genVarAnti[kGenTopWj1]+genVarAnti[kGenTopWj2]+genVarAnti[kGenTopB]).mass();
         genAntiWMassFromWj = (genVarAnti[kGenTopWj1]+genVarAnti[kGenTopWj2]).mass();
         genAntiWMass = genVarAnti[kGenTopW].mass();
-<<<<<<< HEAD
         //std::cout<<" mass anti W/T  "<< genVarAnti[kGenTop].mass() << " "<< (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass() << " (" << genVarAnti[kGenTopW].mass() <<") " << " (" << genAntiWMassFromWj <<") "  <<std::endl;
         // Xanda: check why this verification does not flight
         if (genAntiTopMassFromWj > 0 && ((genVarAnti[kGenTopW].mass() > genAntiWMassFromWj + 50.) || (genVarAnti[kGenTopW].mass() < genAntiWMassFromWj - 50.))) throw cms::Exception("analyze_hadTopTagger")
           <<"            mass anti W/T (anti) "<< genVarAnti[kGenTop].mass() << "                "<< (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass() << " " << genAntiTopMassFromWj << "      (" << genVarAnti[kGenTopW].mass() << ") " << " (" << genAntiWMassFromWj << ") "<< genVarAnti[kGenTopW].mass() << " ("  <<genAntiWMassFromWj << ") " << genVarAnti[kGenTopWj1].px() << " " << genQuarkFromTop.size() << " !!\n";
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
       }
     } else if (genQuarkFromTop.size() == 4) {
 
@@ -757,17 +716,13 @@ int main(int argc, char* argv[])
         genTopMassFromW = (genVar[kGenTopW]+genVar[kGenTopB]).mass();
         genTopMassFromWj = (genVar[kGenTopWj1]+genVar[kGenTopWj2]+genVar[kGenTopB]).mass();
         genWMassFromWj = (genVar[kGenTopWj1]+genVar[kGenTopWj2]).mass();
-<<<<<<< HEAD
         //std::cout<<" mass W/T  "<< genVar[kGenTop].mass() << " "<< (genVar[kGenTopW]+genVar[kGenTopB]).mass() << " (" << genVar[kGenTopW].mass() << ") " << " (" << genWMassFromWj << ") "  <<std::endl;
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
       }
 
       if ( genVarAnti[kGenTopWj1].px() > 0 ) {
         genAntiTopMassFromW = (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass();
         genAntiTopMassFromWj = (genVarAnti[kGenTopWj1]+genVarAnti[kGenTopWj2]+genVarAnti[kGenTopB]).mass();
         genAntiWMassFromWj = (genVarAnti[kGenTopWj1]+genVarAnti[kGenTopWj2]).mass();
-<<<<<<< HEAD
       //std::cout<<" mass anti W/T  "<< genVarAnti[kGenTop].mass() << " "<< (genVarAnti[kGenTopW]+genVarAnti[kGenTopB]).mass() << " (" << genVarAnti[kGenTopW].mass() << ") " << " (" << genAntiWMassFromWj << ") "<<std::endl;
       }
 
@@ -775,11 +730,6 @@ int main(int argc, char* argv[])
 
       //  mass anti W/T  171.5                171.697 137.421      (78.25)  (78.2831) 4 !!
 
-=======
-      }
-
-    }
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
 
     // to be used at analysis level
     int typeTop = -1; // 1 - FatTop; 2 - countFatAK8 ? countFatAK12; 3- countResolved;
@@ -874,11 +824,7 @@ int main(int argc, char* argv[])
             wj1_isGenMatched = (genMatchingTop[kGenMatchedWJet1] || genMatchingAntiTop[kGenMatchedWJet1]);
             wj2_isGenMatched = (genMatchingTop[kGenMatchedWJet2] || genMatchingAntiTop[kGenMatchedWJet2]);
             //if (b_isGenMatched) foundtruth = true; // if loop on subjets
-<<<<<<< HEAD
             if (isGenMatched) {hadtruth1++; cat1 = true;}//  foundtruth = true;}
-=======
-            if (isGenMatched) {hadtruth1++; cat1 = true; } // foundtruth = true;
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
           //}}} // end loop on subjets version 1
           //} // end loop on subjets version 2
           // debug gen-matching
@@ -1067,11 +1013,8 @@ int main(int argc, char* argv[])
             ("nbjets",  selBJets_medium.size())
             ("nbjets_loose",  selBJets_loose.size())
             ("njets",  selJets.size())
-<<<<<<< HEAD
             //("nlep",  selElectrons.size()+selMuons.size())
             //("ntau",  selHadTaus.size())
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
             ("passJetSel", passJetSel)
             ("HTTv2_area", HTTv2_area)
             ("HTTv2_Ropt", HTTv2_Ropt)
@@ -1241,11 +1184,6 @@ int main(int argc, char* argv[])
                 ("nbjets",  selBJets_medium.size())
                 ("nbjets_loose",  selBJets_loose.size())
                 ("njets",  selJets.size())
-<<<<<<< HEAD
-                //("nlep",  selElectrons.size()+selMuons.size())
-                //("ntau",  selHadTaus.size())
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
                 ("passJetSel", passJetSel)
                 ("HTTv2_area", HTTv2_area)
                 ("HTTv2_Ropt", HTTv2_Ropt)
@@ -1395,11 +1333,8 @@ int main(int argc, char* argv[])
                   ("nbjets",  selBJets_medium.size())
                   ("nbjets_loose",  selBJets_loose.size())
                   ("njets",  selJets.size())
-<<<<<<< HEAD
                   //("nlep",  selElectrons.size()+selMuons.size())
                   //("ntau",  selHadTaus.size())
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
                   ("passJetSel", passJetSel)
                   ("HTTv2_area", HTTv2_area)
                   ("HTTv2_Ropt", HTTv2_Ropt)
@@ -1563,11 +1498,8 @@ int main(int argc, char* argv[])
                   ("nbjets",  selBJets_medium.size())
                   ("nbjets_loose",  selBJets_loose.size())
                   ("njets",  selJets.size())
-<<<<<<< HEAD
                   //("nlep",  selElectrons.size()+selMuons.size())
                   //("ntau",  selHadTaus.size())
-=======
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
                   ("passJetSel", passJetSel)
                   ("HTTv2_area", HTTv2_area)
                   ("HTTv2_Ropt", HTTv2_Ropt)

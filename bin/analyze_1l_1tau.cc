@@ -873,10 +873,10 @@ int main(int argc, char* argv[])
       makeHistManager_cfg(process_string, Form("%s/sel/evtntuple", histogramDir.data()), central_or_shift)
     );
     bdt_filler->register_variable<float_type>(
-      "lep_pt", "lep_conePt", "lep_eta", "lep_tth_mva", "mindr_lep_jet", "mindr_tau_jet", 
+      "lep_pt", "lep_conePt", "lep_eta", "lep_tth_mva", "mindr_lep_jet", "mindr_tau_jet",
       "avg_dr_jet", "ptmiss", "mT_lep", "mT_tau", "htmiss", "tau_mva", "tau_pt",
       "tau_eta", "dr_lep_tau",
-      "costS", "mTauTauVis", "mTauTau", "Pzeta", "PzetaVis", "PzetaComb", 
+      "costS", "mTauTauVis", "mTauTau", "Pzeta", "PzetaVis", "PzetaComb",
       "res-HTT_CSVsort4rd", "res-HTT_CSVsort4rd_2",
       "HadTop_pt_CSVsort4rd", "HadTop_pt_CSVsort4rd_2",
       "genTopPt_CSVsort4rd", "genTopPt_CSVsort4rd_2",
@@ -884,7 +884,7 @@ int main(int argc, char* argv[])
       "HTT_semi_boosted_fromAK8", "genTopPt_semi_boosted_fromAK8", "HadTop_pt_semi_boosted_fromAK8",
       "minDR_HTTv2_lep", "minDR_AK8_lep",
       "minDR_HTTv2subjets_lep", "minDR_AK8subjets_lep",
-      "lumiScale", "genWeight", "evtWeight", 
+      "lumiScale", "genWeight", "evtWeight",
       "prob_fake_lepton", "prob_fake_hadTau"
     );
     bdt_filler->register_variable<int_type>(
@@ -895,7 +895,7 @@ int main(int argc, char* argv[])
       "bWj1Wj2_isGenMatched_CSVsort4rd", "bWj1Wj2_isGenMatched_CSVsort4rd_2",
       "hadtruth_boosted", "hadtruth_semi_boosted_fromAK8",
       "bWj1Wj2_isGenMatched_boosted", "bWj1Wj2_isGenMatched_semi_boosted_fromAK8",
-      "resolved_and_semi_AK8", "boosted_and_semi_AK8", "resolved_and_boosted"      
+      "resolved_and_semi_AK8", "boosted_and_semi_AK8", "resolved_and_boosted"
     );
     bdt_filler->bookTree(fs);
   }
@@ -1070,7 +1070,7 @@ int main(int argc, char* argv[])
         }
         continue;
       }
-      
+
       if ( era == kEra_2016 ) {
 	// CV: only needed for 2016 data-taking period,
 	//     as mu+tau (e+tau) cross trigger is stored in the same primary dataset as the single muon (single electron) trigger
@@ -1326,7 +1326,7 @@ int main(int argc, char* argv[])
       selBJets_loose.size(),
       selBJets_medium.size(),
       //-1., -1., -1., -1., -1.,
-      (preselLepton->p4() + preselHadTau->p4()).mass(), -1., 
+      (preselLepton->p4() + preselHadTau->p4()).mass(), -1.,
       -1., -1., -1., -1., -1.,
       -1., -1.,
       evtWeight_inclusive
@@ -1736,7 +1736,7 @@ int main(int argc, char* argv[])
     if ( &(*selWJet2) == &(*selWJet1) ) continue;
     bool isGenMatched = false;
     double genTopPt_teste = 0.;
-    const std::map<int, double> bdtResult = (*hadTopTagger)(**selBJet, **selWJet1, **selWJet2, calculate_matching, isGenMatched, genTopPt_teste, genVar, genVarAnti );
+    const std::map<int, double> bdtResult = (*hadTopTagger)(**selBJet, **selWJet1, **selWJet2, calculate_matching, isGenMatched, genTopPt_teste, genVar, genVarAnti, true );
     // genTopPt_teste is filled with the result of gen-matching
     if ( isGenMatched ) hadtruth = true;
     // save genpt of all options
@@ -1769,7 +1769,7 @@ int main(int argc, char* argv[])
     if ( &(*selWJet2) == &(*selWJet1) ) continue;
     bool isGenMatched = false;
     double genTopPt_teste = 0.;
-    const std::map<int, double> bdtResult = (*hadTopTagger)(**selBJet, **selWJet1, **selWJet2, calculate_matching, isGenMatched, genTopPt_teste, genVar, genVarAnti );
+    const std::map<int, double> bdtResult = (*hadTopTagger)(**selBJet, **selWJet1, **selWJet2, calculate_matching, isGenMatched, genTopPt_teste, genVar, genVarAnti, true );
     // genTopPt_teste is filled with the result of gen-matching
     if ( isGenMatched ) hadtruth_2 = true;
     // save genpt of all options
@@ -1895,7 +1895,7 @@ int main(int argc, char* argv[])
     std::vector<classic_svFit::MeasuredTauLepton> measuredTauLeptons;
     classic_svFit::MeasuredTauLepton::kDecayType leg1Type = classic_svFit::MeasuredTauLepton::kUndefinedDecayType;
     double leg1Mass = -1.;
-    if ( selLepton_type == kElectron ) { 
+    if ( selLepton_type == kElectron ) {
       leg1Type = classic_svFit::MeasuredTauLepton::kTauToElecDecay;
       leg1Mass = classic_svFit::electronMass;
     } else if ( selLepton_type == kMuon ) {
@@ -2200,10 +2200,10 @@ int main(int argc, char* argv[])
     if ( bdt_filler ) {
       bdt_filler->operator()({ eventInfo.run, eventInfo.lumi, eventInfo.event })
 	  ("lep_pt",                                    lep_pt)
-	  ("lep_conePt",                                lep_conePt) 
+	  ("lep_conePt",                                lep_conePt)
 	  ("lep_eta",                                   lep_eta)
 	  ("lep_tth_mva",                               lep_tth_mva)
-	  ("mindr_lep_jet",                             mindr_lep_jet) 
+	  ("mindr_lep_jet",                             mindr_lep_jet)
 	  ("mindr_tau_jet",                             mindr_tau_jet)
 	  ("avg_dr_jet",                                avg_dr_jet)
 	  ("ptmiss",                                    ptmiss)
@@ -2244,7 +2244,7 @@ int main(int argc, char* argv[])
 	  ("nJet",                                      selJets.size())
 	  ("nBJetLoose",                                selBJets_loose.size())
 	  ("nBJetMedium",                               selBJets_medium.size())
-	  ("charge_lep_tau",                            selLepton->charge() + selHadTau->charge()) 
+	  ("charge_lep_tau",                            selLepton->charge() + selHadTau->charge())
 	  ("nHTTv2",                                    sel_HTTv2.size())
 	  ("N_jetAK8",                                  jet_ptrsAK8.size())
 	  ("cleanedJets_fromAK8",                       cleanedJets_fromAK8.size())
@@ -2258,7 +2258,7 @@ int main(int argc, char* argv[])
 	  ("bWj1Wj2_isGenMatched_semi_boosted_fromAK8", bWj1Wj2_isGenMatched_semi_boosted_fromAK8)
 	  ("resolved_and_semi_AK8",                     resolved_and_semi_AK8)
 	  ("boosted_and_semi_AK8",                      boosted_and_semi_AK8)
-	  ("resolved_and_boosted",                      resolved_and_boosted)          
+	  ("resolved_and_boosted",                      resolved_and_boosted)
         .fill();
     }
 

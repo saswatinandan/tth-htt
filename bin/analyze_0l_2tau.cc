@@ -97,8 +97,6 @@
 #include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions.h" // isGenMatchedJetTriplet
 #include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // isGenMatchedJetTriplet tags
 #include "tthAnalysis/HiggsToTauTau/interface/HadTopKinFit.h" // HadTopKinFit
-#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions.h" // isGenMatchedJetTriplet
-#include "tthAnalysis/HiggsToTauTau/interface/hadTopTaggerAuxFunctions_geral.h" // isGenMatchedJetTriplet tags
 #include "tthAnalysis/HiggsToTauTau/interface/TTreeWrapper.h" // TTreeWrapper
 #include "tthAnalysis/HiggsToTauTau/interface/SyncNtupleManager.h" // SyncNtupleManager
 #include "tthAnalysis/HiggsToTauTau/interface/hltFilter.h" // hltFilter()
@@ -325,12 +323,6 @@ int main(int argc, char* argv[])
   std::string branchName_muons = cfg_analyze.getParameter<std::string>("branchName_muons");
   std::string branchName_hadTaus = cfg_analyze.getParameter<std::string>("branchName_hadTaus");
   std::string branchName_jets = cfg_analyze.getParameter<std::string>("branchName_jets");
-  std::string branchName_jetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_jetsHTTv2");
-  std::string branchName_subjetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_subjetsHTTv2");
-  //std::string branchName_jetsAK12 = cfg_analyze.getParameter<std::string>("branchName_jetsAK12");
-  //std::string branchName_subjetsAK12 = cfg_analyze.getParameter<std::string>("branchName_subjetsAK12");
-  std::string branchName_jetsAK8 = cfg_analyze.getParameter<std::string>("branchName_jetsAK8");
-  std::string branchName_subjetsAK8 = cfg_analyze.getParameter<std::string>("branchName_subjetsAK8");
   std::string branchName_met = cfg_analyze.getParameter<std::string>("branchName_met");
   std::string branchName_jetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_jetsHTTv2");
   std::string branchName_subjetsHTTv2 = cfg_analyze.getParameter<std::string>("branchName_subjetsHTTv2");
@@ -473,18 +465,6 @@ int main(int argc, char* argv[])
   RecoJetCollectionSelector jetSelector(era, -1, isDEBUG);
   RecoJetCollectionSelectorBtagLoose jetSelectorBtagLoose(era, -1, isDEBUG);
   RecoJetCollectionSelectorBtagMedium jetSelectorBtagMedium(era, -1, isDEBUG);
-
-  RecoJetReaderHTTv2* jetReaderHTTv2 = new RecoJetReaderHTTv2(era, branchName_jetsHTTv2, branchName_subjetsHTTv2);
-  inputTree -> registerReader(jetReaderHTTv2);
-  RecoJetCollectionSelectorHTTv2 jetSelectorHTTv2(era);
-  RecoJetCollectionCleanerHTTv2 jetCleanerHTTv2(1.5, isDEBUG); //to clean against leptons and hadronic taus
-  RecoJetCollectionCleanerHTTv2SubJets jetCleanerHTTv2SubJets(0.4, isDEBUG); //to clean against leptons and hadronic taus
-
-  RecoJetReaderAK8* jetReaderAK8 = new RecoJetReaderAK8(era, branchName_jetsAK8, branchName_subjetsAK8);
-  inputTree -> registerReader(jetReaderAK8);
-  RecoJetCollectionSelectorAK8 jetSelectorAK8(era);
-  RecoJetCollectionCleanerAK8 jetCleanerAK8(0.8, isDEBUG); //to clean against leptons and hadronic taus
-  RecoJetCollectionCleanerAK8SubJets jetCleanerAK8SubJets(0.4, isDEBUG); //to clean against leptons and hadronic taus
 
   GenParticleReader* genTauLeptonReader = nullptr;
   if ( isMC && (apply_DYMCReweighting || apply_DYMCNormScaleFactors)) {
@@ -1330,7 +1310,9 @@ int main(int argc, char* argv[])
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       -1., 0., 0., 0., 0., 0.,
       mTauTauVis_presel, -1.,
-      -1., -1., -1., -1., -1., -1., -1., 1.);
+      -1., -1., -1., -1., -1., -1.,
+      -1., -1., -1., -1., -1., -1., -1., -1., 1.
+    );
     preselHistManager->evtYield_->fillHistograms(eventInfo, 1.);
 
 //--- apply final event selection
@@ -2092,179 +2074,10 @@ int main(int argc, char* argv[])
     int ibin = hTargetBinning->FindBin(mvaOutput_0l_2tau_HTT_tt, mvaOutput_0l_2tau_HTT_ttv);
     float mvaDiscr_0l_2tau_HTT = hTargetBinning->GetBinContent(ibin);
 
-    // BDT with boosted stuff
-    //mvaInputs_XGB_Boosted_AK8_basic
-    mvaInputs_XGB_Boosted_AK8_basic["mindr_tau1_jet"] = TMath::Min(10., comp_mindr_hadTau1_jet(*selHadTau_lead, selJets));
-    mvaInputs_XGB_Boosted_AK8_basic["mindr_tau2_jet"] = TMath::Min(10., comp_mindr_hadTau2_jet(*selHadTau_sublead, selJets));
-    mvaInputs_XGB_Boosted_AK8_basic["avg_dr_jet"] = comp_avg_dr_jet(selJets);
-    mvaInputs_XGB_Boosted_AK8_basic["ptmiss"] = met.pt();
-    mvaInputs_XGB_Boosted_AK8_basic["tau1_pt"] = selHadTau_lead->pt();
-    mvaInputs_XGB_Boosted_AK8_basic["tau2_pt"] = selHadTau_sublead->pt();
-    mvaInputs_XGB_Boosted_AK8_basic["tau1_eta"] = selHadTau_lead->absEta();
-    mvaInputs_XGB_Boosted_AK8_basic["tau2_eta"] = selHadTau_sublead->absEta();
-    mvaInputs_XGB_Boosted_AK8_basic["dr_taus"] = deltaR(selHadTau_lead->p4(), selHadTau_sublead->p4());
-    mvaInputs_XGB_Boosted_AK8_basic["mT_tau1"] = comp_MT_met_hadTau1(*selHadTau_lead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK8_basic["mT_tau2"] = comp_MT_met_hadTau2(*selHadTau_sublead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK8_basic["mTauTauVis"] = mTauTauVis;
-    mvaInputs_XGB_Boosted_AK8_basic["mTauTau"] = mTauTau;
-    mvaInputs_XGB_Boosted_AK8_basic["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK8_basic["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_XGB_Boosted_AK8_basic["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK8_basic["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
-    mvaInputs_XGB_Boosted_AK8_basic["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK8_basic["HadTop_pt_CSVsort4rd_2"] = HadTop_pt_CSVsort4rd_2;
-    mvaInputs_XGB_Boosted_AK8_basic["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK8_basic["N_jetAK8"] = jet_ptrsAK8.size();
-    mvaInputs_XGB_Boosted_AK8_basic["nHTTv2"] = sel_HTTv2.size();
-    double mva_Boosted_AK8_basic = mva_XGB_Boosted_AK8_basic(mvaInputs_XGB_Boosted_AK8_basic);
-    //std::cout<<" mva_Boosted_AK8_basic "<<mva_Boosted_AK8_basic<<std::endl;
-
-    //mvaInputs_XGB_Boosted_AK12_basic
-    /*
-    mvaInputs_XGB_Boosted_AK12_basic["mindr_tau1_jet"] = TMath::Min(10., comp_mindr_hadTau1_jet(*selHadTau_lead, selJets));
-    mvaInputs_XGB_Boosted_AK12_basic["mindr_tau2_jet"] = TMath::Min(10., comp_mindr_hadTau2_jet(*selHadTau_sublead, selJets));
-    mvaInputs_XGB_Boosted_AK12_basic["avg_dr_jet"] = comp_avg_dr_jet(selJets);
-    mvaInputs_XGB_Boosted_AK12_basic["ptmiss"] = met.pt();
-    mvaInputs_XGB_Boosted_AK12_basic["tau1_pt"] = selHadTau_lead->pt();
-    mvaInputs_XGB_Boosted_AK12_basic["tau2_pt"] = selHadTau_sublead->pt();
-    mvaInputs_XGB_Boosted_AK12_basic["tau1_eta"] = selHadTau_lead->absEta();
-    mvaInputs_XGB_Boosted_AK12_basic["tau2_eta"] = selHadTau_sublead->absEta();
-    mvaInputs_XGB_Boosted_AK12_basic["dr_taus"] = deltaR(selHadTau_lead->p4(), selHadTau_sublead->p4());
-    mvaInputs_XGB_Boosted_AK12_basic["mT_tau1"] = comp_MT_met_hadTau1(*selHadTau_lead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK12_basic["mT_tau2"] = comp_MT_met_hadTau2(*selHadTau_sublead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK12_basic["mTauTauVis"] = mTauTauVis;
-    mvaInputs_XGB_Boosted_AK12_basic["mTauTau"] = mTauTau;
-    mvaInputs_XGB_Boosted_AK12_basic["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK12_basic["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_XGB_Boosted_AK12_basic["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK12_basic["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
-    mvaInputs_XGB_Boosted_AK12_basic["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK12_basic["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK12_basic["N_jetAK12"] = jet_ptrsAK12.size();
-    mvaInputs_XGB_Boosted_AK12_basic["nHTTv2"] = sel_HTTv2.size();
-    mvaInputs_XGB_Boosted_AK12_basic["AK12_lead_pt"] = jet_ptrsAK12.size() > 0 ? jet_ptrsAK12[0]->pt() : -1 ;
-    */
     double mva_Boosted_AK12_basic = 1.0; // mva_XGB_Boosted_AK12_basic(mvaInputs_XGB_Boosted_AK12_basic);
-    //std::cout<<" mva_Boosted_AK12_basic "<<mva_Boosted_AK12_basic<<std::endl;
-
-    // mvaInputs_XGB_Boosted_AK12
-    /*
-    mvaInputs_XGB_Boosted_AK12["mindr_tau1_jet"] = TMath::Min(10., comp_mindr_hadTau1_jet(*selHadTau_lead, selJets));
-    mvaInputs_XGB_Boosted_AK12["mindr_tau2_jet"] = TMath::Min(10., comp_mindr_hadTau2_jet(*selHadTau_sublead, selJets));
-    mvaInputs_XGB_Boosted_AK12["avg_dr_jet"] = comp_avg_dr_jet(selJets);
-    mvaInputs_XGB_Boosted_AK12["ptmiss"] = met.pt();
-    mvaInputs_XGB_Boosted_AK12["tau1_pt"] = selHadTau_lead->pt();
-    mvaInputs_XGB_Boosted_AK12["tau2_pt"] = selHadTau_sublead->pt();
-    mvaInputs_XGB_Boosted_AK12["tau1_eta"] = selHadTau_lead->absEta();
-    mvaInputs_XGB_Boosted_AK12["tau2_eta"] = selHadTau_sublead->absEta();
-    mvaInputs_XGB_Boosted_AK12["dr_taus"] = deltaR(selHadTau_lead->p4(), selHadTau_sublead->p4());
-    mvaInputs_XGB_Boosted_AK12["mT_tau1"] = comp_MT_met_hadTau1(*selHadTau_lead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK12["mT_tau2"] = comp_MT_met_hadTau2(*selHadTau_sublead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK12["mTauTauVis"] = mTauTauVis;
-    mvaInputs_XGB_Boosted_AK12["mTauTau"] = mTauTau;
-    mvaInputs_XGB_Boosted_AK12["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK12["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_XGB_Boosted_AK12["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK12["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
-    mvaInputs_XGB_Boosted_AK12["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK12["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK12["resolved_and_semi"] = resolved_and_semi;
-    mvaInputs_XGB_Boosted_AK12["minDR_HTTv2_lep"] = minDR_HTTv2_lep;
-    mvaInputs_XGB_Boosted_AK12["minDR_AK12_lep"] = minDR_AK12_lep;
-    mvaInputs_XGB_Boosted_AK12["HTT_boosted"] = HTT_boosted;
-    mvaInputs_XGB_Boosted_AK12["HTT_semi_boosted"] = HTT_semi_boosted;
-    */
     double mva_Boosted_AK12 = 1.0;// mva_XGB_Boosted_AK12(mvaInputs_XGB_Boosted_AK12);
-    //std::cout<<" mva_Boosted_AK12 "<<mva_Boosted_AK12<<std::endl;
-
-    // mvaInputs_XGB_Boosted_AK12_noISO
-    /*
-    mvaInputs_XGB_Boosted_AK12_noISO["mindr_tau1_jet"] = TMath::Min(10., comp_mindr_hadTau1_jet(*selHadTau_lead, selJets));
-    mvaInputs_XGB_Boosted_AK12_noISO["mindr_tau2_jet"] = TMath::Min(10., comp_mindr_hadTau2_jet(*selHadTau_sublead, selJets));
-    mvaInputs_XGB_Boosted_AK12_noISO["avg_dr_jet"] = comp_avg_dr_jet(selJets);
-    mvaInputs_XGB_Boosted_AK12_noISO["ptmiss"] = met.pt();
-    mvaInputs_XGB_Boosted_AK12_noISO["tau1_pt"] = selHadTau_lead->pt();
-    mvaInputs_XGB_Boosted_AK12_noISO["tau2_pt"] = selHadTau_sublead->pt();
-    mvaInputs_XGB_Boosted_AK12_noISO["tau1_eta"] = selHadTau_lead->absEta();
-    mvaInputs_XGB_Boosted_AK12_noISO["tau2_eta"] = selHadTau_sublead->absEta();
-    mvaInputs_XGB_Boosted_AK12_noISO["dr_taus"] = deltaR(selHadTau_lead->p4(), selHadTau_sublead->p4());
-    mvaInputs_XGB_Boosted_AK12_noISO["mT_tau1"] = comp_MT_met_hadTau1(*selHadTau_lead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK12_noISO["mT_tau2"] = comp_MT_met_hadTau2(*selHadTau_sublead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK12_noISO["mTauTauVis"] = mTauTauVis;
-    mvaInputs_XGB_Boosted_AK12_noISO["mTauTau"] = mTauTau;
-    mvaInputs_XGB_Boosted_AK12_noISO["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK12_noISO["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_XGB_Boosted_AK12_noISO["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK12_noISO["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
-    mvaInputs_XGB_Boosted_AK12_noISO["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK12_noISO["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK12_noISO["resolved_and_semi"] = resolved_and_semi_noISO;
-    mvaInputs_XGB_Boosted_AK12_noISO["minDR_HTTv2_lep"] = minDR_HTTv2_lep_noISO;
-    mvaInputs_XGB_Boosted_AK12_noISO["minDR_AK12_lep"] = minDR_AK12_lep_noISO;
-    mvaInputs_XGB_Boosted_AK12_noISO["HTT_boosted"] = HTT_boosted_noISO;
-    mvaInputs_XGB_Boosted_AK12_noISO["HTT_semi_boosted"] = HTT_semi_boosted_noISO;
-    */
     double mva_Boosted_AK12_noISO = 1.0; // mva_XGB_Boosted_AK12_noISO(mvaInputs_XGB_Boosted_AK12_noISO);
     //std::cout<<" mva_Boosted_AK12_noISO "<<mva_Boosted_AK12_noISO<<std::endl;
-
-    // mvaInputs_XGB_Boosted_AK8_noISO
-    mvaInputs_XGB_Boosted_AK8_noISO["mindr_tau1_jet"] = TMath::Min(10., comp_mindr_hadTau1_jet(*selHadTau_lead, selJets));
-    mvaInputs_XGB_Boosted_AK8_noISO["mindr_tau2_jet"] = TMath::Min(10., comp_mindr_hadTau2_jet(*selHadTau_sublead, selJets));
-    mvaInputs_XGB_Boosted_AK8_noISO["avg_dr_jet"] = comp_avg_dr_jet(selJets);
-    mvaInputs_XGB_Boosted_AK8_noISO["ptmiss"] = met.pt();
-    mvaInputs_XGB_Boosted_AK8_noISO["tau1_pt"] = selHadTau_lead->pt();
-    mvaInputs_XGB_Boosted_AK8_noISO["tau2_pt"] = selHadTau_sublead->pt();
-    mvaInputs_XGB_Boosted_AK8_noISO["tau1_eta"] = selHadTau_lead->absEta();
-    mvaInputs_XGB_Boosted_AK8_noISO["tau2_eta"] = selHadTau_sublead->absEta();
-    mvaInputs_XGB_Boosted_AK8_noISO["dr_taus"] = deltaR(selHadTau_lead->p4(), selHadTau_sublead->p4());
-    mvaInputs_XGB_Boosted_AK8_noISO["mT_tau1"] = comp_MT_met_hadTau1(*selHadTau_lead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK8_noISO["mT_tau2"] = comp_MT_met_hadTau2(*selHadTau_sublead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK8_noISO["mTauTauVis"] = mTauTauVis;
-    mvaInputs_XGB_Boosted_AK8_noISO["mTauTau"] = mTauTau;
-    mvaInputs_XGB_Boosted_AK8_noISO["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK8_noISO["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_XGB_Boosted_AK8_noISO["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK8_noISO["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
-    mvaInputs_XGB_Boosted_AK8_noISO["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK8_noISO["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK8_noISO["resolved_and_semi_AK8"] = resolved_and_semi_AK8_noISO;
-    mvaInputs_XGB_Boosted_AK8_noISO["boosted_and_semi_AK8"] = boosted_and_semi_AK8_noISO;
-    mvaInputs_XGB_Boosted_AK8_noISO["minDR_HTTv2_lep"] = minDR_HTTv2_lep_noISO;
-    mvaInputs_XGB_Boosted_AK8_noISO["minDR_AK8_lep"] = minDR_AK8_lep_noISO;
-    mvaInputs_XGB_Boosted_AK8_noISO["HTT_boosted"] = HTT_boosted_noISO;
-    mvaInputs_XGB_Boosted_AK8_noISO["HTT_semi_boosted_fromAK8"] = HTT_semi_boosted_fromAK8_noISO;
-    double mva_Boosted_AK8_noISO = mva_XGB_Boosted_AK8_noISO(mvaInputs_XGB_Boosted_AK8_noISO);
-    //std::cout<<" mva_Boosted_AK8_noISO "<<mva_Boosted_AK8_noISO<<std::endl;
-
-    //mvaInputs_XGB_Boosted_AK8
-    /*
-    mvaInputs_XGB_Boosted_AK8["mindr_tau1_jet"] = TMath::Min(10., comp_mindr_hadTau1_jet(*selHadTau_lead, selJets));
-    mvaInputs_XGB_Boosted_AK8["mindr_tau2_jet"] = TMath::Min(10., comp_mindr_hadTau2_jet(*selHadTau_sublead, selJets));
-    mvaInputs_XGB_Boosted_AK8["avg_dr_jet"] = comp_avg_dr_jet(selJets);
-    mvaInputs_XGB_Boosted_AK8["ptmiss"] = met.pt();
-    mvaInputs_XGB_Boosted_AK8["tau1_pt"] = selHadTau_lead->pt();
-    mvaInputs_XGB_Boosted_AK8["tau2_pt"] = selHadTau_sublead->pt();
-    mvaInputs_XGB_Boosted_AK8["tau1_eta"] = selHadTau_lead->absEta();
-    mvaInputs_XGB_Boosted_AK8["tau2_eta"] = selHadTau_sublead->absEta();
-    mvaInputs_XGB_Boosted_AK8["dr_taus"] = deltaR(selHadTau_lead->p4(), selHadTau_sublead->p4());
-    mvaInputs_XGB_Boosted_AK8["mT_tau1"] = comp_MT_met_hadTau1(*selHadTau_lead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK8["mT_tau2"] = comp_MT_met_hadTau2(*selHadTau_sublead, met.pt(), met.phi());
-    mvaInputs_XGB_Boosted_AK8["mTauTauVis"] = mTauTauVis;
-    mvaInputs_XGB_Boosted_AK8["mTauTau"] = mTauTau;
-    mvaInputs_XGB_Boosted_AK8["nJet"] = selJets.size();
-    mvaInputs_XGB_Boosted_AK8["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_XGB_Boosted_AK8["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_XGB_Boosted_AK8["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
-    mvaInputs_XGB_Boosted_AK8["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK8["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_XGB_Boosted_AK8["resolved_and_semi_AK8"] = resolved_and_semi_AK8;
-    mvaInputs_XGB_Boosted_AK8["boosted_and_semi_AK8"] = boosted_and_semi_AK8;
-    mvaInputs_XGB_Boosted_AK8["minDR_HTTv2_lep"] = minDR_HTTv2_lep;
-    mvaInputs_XGB_Boosted_AK8["HTT_boosted"] = HTT_boosted;
-    mvaInputs_XGB_Boosted_AK8["HTT_semi_boosted_fromAK8"] = HTT_semi_boosted_fromAK8;
-    */
-    double mva_Boosted_AK8 = mva_XGB_Boosted_AK8(mvaInputs_XGB_Boosted_AK8_noISO);
-    //std::cout<<" mva_Boosted_AK8 "<<mva_Boosted_AK8<<std::endl;
 
     // mvaInputs_XGB_Updated
     mvaInputs_XGB_Updated["mindr_tau1_jet"] = TMath::Min(10., comp_mindr_hadTau1_jet(*selHadTau_lead, selJets));
@@ -2289,6 +2102,35 @@ int main(int argc, char* argv[])
     mvaInputs_XGB_Updated["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
     double mva_Updated = mva_XGB_Updated(mvaInputs_XGB_Updated);
     //std::cout<<" mva_Updated "<<mva_Updated<<std::endl;
+
+    //mvaInputs_XGB_Boosted_AK8
+    mvaInputs_XGB_Boosted_AK8["mindr_tau1_jet"] = TMath::Min(10., comp_mindr_hadTau1_jet(*selHadTau_lead, selJets));
+    mvaInputs_XGB_Boosted_AK8["mindr_tau2_jet"] = TMath::Min(10., comp_mindr_hadTau2_jet(*selHadTau_sublead, selJets));
+    mvaInputs_XGB_Boosted_AK8["avg_dr_jet"] = comp_avg_dr_jet(selJets);
+    mvaInputs_XGB_Boosted_AK8["ptmiss"] = met.pt();
+    mvaInputs_XGB_Boosted_AK8["tau1_pt"] = selHadTau_lead->pt();
+    mvaInputs_XGB_Boosted_AK8["tau2_pt"] = selHadTau_sublead->pt();
+    mvaInputs_XGB_Boosted_AK8["tau1_eta"] = selHadTau_lead->absEta();
+    mvaInputs_XGB_Boosted_AK8["tau2_eta"] = selHadTau_sublead->absEta();
+    mvaInputs_XGB_Boosted_AK8["dr_taus"] = deltaR(selHadTau_lead->p4(), selHadTau_sublead->p4());
+    mvaInputs_XGB_Boosted_AK8["mT_tau1"] = comp_MT_met_hadTau1(*selHadTau_lead, met.pt(), met.phi());
+    mvaInputs_XGB_Boosted_AK8["mT_tau2"] = comp_MT_met_hadTau2(*selHadTau_sublead, met.pt(), met.phi());
+    mvaInputs_XGB_Boosted_AK8["mTauTauVis"] = mTauTauVis;
+    mvaInputs_XGB_Boosted_AK8["mTauTau"] = mTauTau;
+    mvaInputs_XGB_Boosted_AK8["nJet"] = selJets.size();
+    mvaInputs_XGB_Boosted_AK8["nBJetLoose"] = selBJets_loose.size();
+    mvaInputs_XGB_Boosted_AK8["nBJetMedium"] = selBJets_medium.size();
+    mvaInputs_XGB_Boosted_AK8["res-HTT_CSVsort4rd_2"] = max_mvaOutput_HTT_CSVsort4rd_2;
+    mvaInputs_XGB_Boosted_AK8["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK8["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
+    mvaInputs_XGB_Boosted_AK8["resolved_and_semi_AK8"] = resolved_and_semi_AK8;
+    mvaInputs_XGB_Boosted_AK8["boosted_and_semi_AK8"] = boosted_and_semi_AK8;
+    mvaInputs_XGB_Boosted_AK8["minDR_HTTv2_lep"] = minDR_HTTv2_lep;
+    mvaInputs_XGB_Boosted_AK8["minDR_AK8_lep"] = minDR_AK8_lep;
+    mvaInputs_XGB_Boosted_AK8["HTT_boosted"] = HTT_boosted;
+    mvaInputs_XGB_Boosted_AK8["HTT_semi_boosted_fromAK8"] = HTT_semi_boosted_fromAK8;
+    double mva_Boosted_AK8 = mva_XGB_Boosted_AK8(mvaInputs_XGB_Boosted_AK8);
+    //std::cout<<" mva_Boosted_AK8 "<<mva_Boosted_AK8<<std::endl;
 
     //mvaInputs_XGB_oldVar
     mvaInputs_XGB_oldVar["mindr_tau1_jet"] = TMath::Min(10., comp_mindr_hadTau1_jet(*selHadTau_lead, selJets));
@@ -2369,13 +2211,15 @@ int main(int argc, char* argv[])
       mvaOutput_0l_2tau_HTT_sum, mvaDiscr_0l_2tau_HTT,
       //
       mva_oldVar, mva_Updated,
-      mva_Boosted_AK8_noISO,  mva_Boosted_AK8,
+      mva_Boosted_AK8,
       mva_Boosted_AK12_noISO, mva_Boosted_AK12,
-      mva_Boosted_AK12_basic, mva_Boosted_AK8_basic,
+      mva_Boosted_AK12_basic,
       mvaOutput_0l_2tau_HTT_sum_dy,
       //
       mTauTauVis, mTauTau,
-      pZeta, pZetaVis, pZetaComb, mT_tau1, mT_tau2, evtWeight);
+      pZeta, pZetaVis, pZetaComb, mT_tau1, mT_tau2,
+      mbb, mbb_loose,
+      evtWeight);
     if ( isSignal ) {
       const std::string decayModeStr = eventInfo.getDecayModeString();
       if(! decayModeStr.empty())
@@ -2389,28 +2233,19 @@ int main(int argc, char* argv[])
           selBJets_medium.size(),
           sel_HTTv2.size(),
           mvaOutput_0l_2tau_ttbar,
-	  mvaOutput_0l_2tau_HTT_tt,
-	  mvaOutput_0l_2tau_HTT_ttv,
-	  mvaOutput_0l_2tau_HTT_sum,
-	  mvaOutput_0l_2tau_HTT_sum_dy,
-	  mvaDiscr_0l_2tau_HTT,
+          mvaOutput_0l_2tau_HTT_tt, mvaOutput_0l_2tau_HTT_ttv,
+          mvaOutput_0l_2tau_HTT_sum, mvaDiscr_0l_2tau_HTT,
           //
           mva_oldVar, mva_Updated,
-          mva_Boosted_AK8_noISO,  mva_Boosted_AK8,
+          mva_Boosted_AK8,
           mva_Boosted_AK12_noISO, mva_Boosted_AK12,
-          mva_Boosted_AK12_basic, mva_Boosted_AK8_basic,
+          mva_Boosted_AK12_basic,
           mvaOutput_0l_2tau_HTT_sum_dy,
           //
-          mTauTauVis,
-          mTauTau,
-          pZeta,
-	  pZetaVis,
-	  pZetaComb,
-	  mT_tau1,
-	  mT_tau2,
-	  mbb,
-          mbb_loose,
-	  evtWeight
+          mTauTauVis, mTauTau,
+          pZeta, pZetaVis, pZetaComb, mT_tau1, mT_tau2,
+          mbb, mbb_loose,
+          evtWeight
         );
         selHistManager->evt_in_categories_in_decayModes_[category+decayModeStr]->fillHistograms(
           preselElectrons.size(),
@@ -2421,25 +2256,19 @@ int main(int argc, char* argv[])
           selBJets_medium.size(),
           sel_HTTv2.size(),
           mvaOutput_0l_2tau_ttbar,
-          mvaOutput_0l_2tau_HTT_tt,
-      	  mvaOutput_0l_2tau_HTT_ttv,
-      	  mvaOutput_0l_2tau_HTT_sum,
-      	  mvaDiscr_0l_2tau_HTT,
+          mvaOutput_0l_2tau_HTT_tt, mvaOutput_0l_2tau_HTT_ttv,
+          mvaOutput_0l_2tau_HTT_sum, mvaDiscr_0l_2tau_HTT,
           //
           mva_oldVar, mva_Updated,
-          mva_Boosted_AK8_noISO,  mva_Boosted_AK8,
+          mva_Boosted_AK8,
           mva_Boosted_AK12_noISO, mva_Boosted_AK12,
-          mva_Boosted_AK12_basic, mva_Boosted_AK8_basic,
+          mva_Boosted_AK12_basic,
           mvaOutput_0l_2tau_HTT_sum_dy,
           //
-          mTauTauVis,
-          mTauTau,
-          pZeta,
-	  pZetaVis,
-	  pZetaComb,
-	  mT_tau1,
-	  mT_tau2,
-	  evtWeight);
+          mTauTauVis, mTauTau,
+          pZeta, pZetaVis, pZetaComb, mT_tau1, mT_tau2,
+          mbb, mbb_loose,
+          evtWeight);
           if ( sel_HTTv2.size() == 0 ) {
           selHistManager->evt_in_categories_in_decayModes_Fat_[category_fat+decayModeStr]->fillHistograms(
             preselElectrons.size(),
@@ -2450,25 +2279,19 @@ int main(int argc, char* argv[])
             selBJets_medium.size(),
             sel_HTTv2.size(),
             mvaOutput_0l_2tau_ttbar,
-            mvaOutput_0l_2tau_HTT_tt,
-        	  mvaOutput_0l_2tau_HTT_ttv,
-        	  mvaOutput_0l_2tau_HTT_sum,
-        	  mvaDiscr_0l_2tau_HTT,
+            mvaOutput_0l_2tau_HTT_tt, mvaOutput_0l_2tau_HTT_ttv,
+            mvaOutput_0l_2tau_HTT_sum, mvaDiscr_0l_2tau_HTT,
             //
             mva_oldVar, mva_Updated,
-            mva_Boosted_AK8_noISO,  mva_Boosted_AK8,
+            mva_Boosted_AK8,
             mva_Boosted_AK12_noISO, mva_Boosted_AK12,
-            mva_Boosted_AK12_basic, mva_Boosted_AK8_basic,
+            mva_Boosted_AK12_basic,
             mvaOutput_0l_2tau_HTT_sum_dy,
             //
-            mTauTauVis,
-            mTauTau,
-            pZeta,
-  	  pZetaVis,
-  	  pZetaComb,
-  	  mT_tau1,
-  	  mT_tau2,
-  	  evtWeight);}
+            mTauTauVis, mTauTau,
+            pZeta, pZetaVis, pZetaComb, mT_tau1, mT_tau2,
+            mbb, mbb_loose,
+            evtWeight);}
       }
     }
     selHistManager->evtYield_->fillHistograms(eventInfo, evtWeight);
@@ -2478,49 +2301,6 @@ int main(int argc, char* argv[])
     selHistManager->weights_->fillHistograms("triggerWeight", triggerWeight);
     selHistManager->weights_->fillHistograms("hadTauEff", weight_hadTauEff);
     selHistManager->weights_->fillHistograms("fakeRate", weight_fakeRate);
-
-
-    /*
-    std::string category;
-    if   ( selBJets_medium.size() >= 1 ) category = "0l_2tau_btight";
-    else                                 category = "0l_2tau_bloose";
-    selHistManager->hadTaus_in_categories_[category]->fillHistograms({ selHadTau_lead, selHadTau_sublead }, evtWeight);
-    selHistManager->leadHadTau_in_categories_[category]->fillHistograms({ selHadTau_lead }, evtWeight);
-    selHistManager->subleadHadTau_in_categories_[category]->fillHistograms({ selHadTau_sublead }, evtWeight);
-    selHistManager->evt_in_categories_[category]->fillHistograms(
-      preselElectrons.size(), preselMuons.size(), selHadTaus.size(),
-      selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-      sel_HTTv2.size(),
-      mvaOutput_0l_2tau_ttbar, mvaOutput_0l_2tau_HTT_tt, mvaOutput_0l_2tau_HTT_ttv,
-      mvaOutput_0l_2tau_HTT_sum, mvaDiscr_0l_2tau_HTT,
-      //
-      mva_oldVar, mva_Updated,
-      mva_Boosted_AK8_noISO,  mva_Boosted_AK8,
-      mva_Boosted_AK12_noISO, mva_Boosted_AK12,
-      mva_Boosted_AK12_basic, mva_Boosted_AK8_basic,
-      mvaOutput_0l_2tau_HTT_sum_dy,
-      //
-      mTauTauVis, mTauTau, evtWeight);
-      if ( sel_HTTv2.size() == 0 ) {
-      selHistManager->evt_in_categories_Fat_[category_fat]->fillHistograms(
-        preselElectrons.size(), preselMuons.size(), selHadTaus.size(),
-        selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-        sel_HTTv2.size(),
-        mvaOutput_0l_2tau_ttbar, mvaOutput_0l_2tau_HTT_tt, mvaOutput_0l_2tau_HTT_ttv,
-        mvaOutput_0l_2tau_HTT_sum, mvaDiscr_0l_2tau_HTT,
-        //
-        mva_oldVar, mva_Updated,
-        mva_Boosted_AK8_noISO,  mva_Boosted_AK8,
-        mva_Boosted_AK12_noISO, mva_Boosted_AK12,
-        mva_Boosted_AK12_basic, mva_Boosted_AK8_basic,
-        mvaOutput_0l_2tau_HTT_sum_dy,
-        //
-        mTauTauVis, mTauTau, evtWeight);
-      }
-      mvaOutput_0l_2tau_HTT_sum, mvaOutput_0l_2tau_HTT_sum_dy, mvaDiscr_0l_2tau_HTT,
-      mTauTauVis, mTauTau,
-      pZeta, pZetaVis, pZetaComb, mT_tau1, mT_tau2, evtWeight);
-    */
 
     if ( isMC ) {
       genEvtHistManager_afterCuts->fillHistograms(genElectrons, genMuons, genHadTaus, genPhotons, genJets, evtWeight_inclusive);

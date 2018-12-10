@@ -13,21 +13,21 @@ HadTopTagger::HadTopTagger(void)
   : kinFit_(new HadTopKinFit())
   , mva_hadTopTagger_xgb_withKinFit_(nullptr)
   , mva_hadTopTagger_xgb_HTT_multilep_(nullptr)
-  , mva_xgb_HTT_CSVsort3rd_(nullptr)
-  , mva_xgb_HTT_CSVsort3rd_withKinFit_(nullptr)
+  , mva_xgb_HTT_CSVsort4rd_(nullptr)
+  , mva_xgb_HTT_CSVsort4rd_withKinFit_(nullptr)
   , mva_xgb_HTT_highestCSV_(nullptr)
   , mva_xgb_HTT_highestCSV_withKinFit_(nullptr)
 {
 
   std::string mvaFileNameWithKinFit = "tthAnalysis/HiggsToTauTau/data/HadTopTagger_resolved_XGB_CSV_sort_withKinFit.xml";
   std::string mvaFileNameHTT_multilep = "tthAnalysis/HiggsToTauTau/data/multilep_BDTs_2018/resTop_xgb_csv_order_qgl.xml";
-  //std::string mvaFileNameHTT_CSVsort3rd = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_5_lr_0o03_btagSort3rd_nvar17_cat_3.pkl";
-  //std::string mvaFileNameHTT_CSVsort3rd_withKinFit = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_5_lr_0o03_btagSort3rd_nvar20_cat_3_withKinFit_sel_5.pkl";
+  //std::string mvaFileNameHTT_CSVsort4rd = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_5_lr_0o03_btagSort3rd_nvar17_cat_3.pkl";
+  //std::string mvaFileNameHTT_CSVsort4rd_withKinFit = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_5_lr_0o03_btagSort3rd_nvar20_cat_3_withKinFit_sel_5.pkl";
   //std::string mvaFileNameHTT_highestCSV = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_5_lr_0o010_btagHighest_nvar17_cat_3.pkl";
   //std::string mvaFileNameHTT_highestCSV_withKinFit = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/HTT_HadTopTagger_2017_boosted_final_XGB_ntrees_2500_deph_4_lr_0o010_btagHighest_nvar20_cat_3_withKinFit_sel_6.pkl";
 
-  std::string mvaFileNameHTT_CSVsort3rd = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/no_mass_cut_on_new/HTT_HadTopTagger_2017_final_nomasscut_XGB_ntrees_2500_deph_5_lr_0o03_btagSort3rd_nvar17_cat_3.pkl";
-  std::string mvaFileNameHTT_CSVsort3rd_withKinFit = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/no_mass_cut_on_new/HTT_HadTopTagger_2017_final_nomasscut_XGB_ntrees_2500_deph_5_lr_0o03_btagSort3rd_nvar20_cat_3_withKinFit_sel_9.pkl";
+  std::string mvaFileNameHTT_CSVsort4rd = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/no_mass_cut_on_new/HTT_HadTopTagger_2017_final_nomasscut_XGB_ntrees_2500_deph_5_lr_0o03_btagSort3rd_nvar17_cat_3.pkl";
+  std::string mvaFileNameHTT_CSVsort4rd_withKinFit = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/no_mass_cut_on_new/HTT_HadTopTagger_2017_final_nomasscut_XGB_ntrees_2500_deph_5_lr_0o03_btagSort3rd_nvar20_cat_3_withKinFit_sel_9.pkl";
   std::string mvaFileNameHTT_highestCSV = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/no_mass_cut_on_new/HTT_HadTopTagger_2017_final_nomasscut_XGB_ntrees_2500_deph_5_lr_0o010_btagHighest_nvar17_cat_3.pkl";
   std::string mvaFileNameHTT_highestCSV_withKinFit = "tthAnalysis/HiggsToTauTau/data/hadTopTagger_2018/no_mass_cut_on_new/HTT_HadTopTagger_2017_final_nomasscut_XGB_ntrees_2500_deph_4_lr_0o010_btagHighest_nvar20_cat_3_withKinFit_sel_8.pkl";
 
@@ -61,8 +61,8 @@ HadTopTagger::HadTopTagger(void)
     "m_Wj1Wj2_div_m_bWj1Wj2", "pT_Wj1Wj2", "dR_Wj1Wj2", "m_bWj1Wj2", "dR_bW", "m_bWj1", "m_bWj2",
     "mass_Wj1", "pT_Wj2", "mass_Wj2", "pT_b", "mass_b"
   };
-  mva_xgb_HTT_CSVsort3rd_ = new XGBInterface(
-    mvaFileNameHTT_CSVsort3rd, mvaInputsHTTSort
+  mva_xgb_HTT_CSVsort4rd_ = new XGBInterface(
+    mvaFileNameHTT_CSVsort4rd, mvaInputsHTTSort
   );
   mva_xgb_HTT_highestCSV_ = new XGBInterface(
     mvaFileNameHTT_highestCSV, mvaInputsHTTSort
@@ -74,17 +74,16 @@ HadTopTagger::HadTopTagger(void)
     "mass_Wj1", "pT_Wj2", "mass_Wj2", "pT_b", "mass_b",
     "kinFit_pT_b_o_pT_b", "kinFit_pT_Wj2_o_pT_Wj2", "nllKinFit"
   };
-  mva_xgb_HTT_CSVsort3rd_withKinFit_ = new XGBInterface(
-    mvaFileNameHTT_CSVsort3rd_withKinFit, mvaInputsHTTSort
+  mva_xgb_HTT_CSVsort4rd_withKinFit_ = new XGBInterface(
+    mvaFileNameHTT_CSVsort4rd_withKinFit, mvaInputsHTTSort
   );
   mva_xgb_HTT_highestCSV_withKinFit_ = new XGBInterface(
     mvaFileNameHTT_highestCSV_withKinFit, mvaInputsHTTSort
   );
 
-  mva_xgb_HTT_CSVsort4rd_ = new TMVAInterface(
+  mva_xgb_HTT_CSVsort4rd_ = new XGBInterface(
     mvaFileNameHTT_CSVsort4rd, mvaInputsHTTSort
   );
-  mva_xgb_HTT_CSVsort4rd_->enableBDTTransform();
 }
 
 HadTopTagger::~HadTopTagger()
@@ -92,8 +91,8 @@ HadTopTagger::~HadTopTagger()
   delete kinFit_;
   delete mva_hadTopTagger_xgb_withKinFit_;
   delete mva_hadTopTagger_xgb_HTT_multilep_;
-  delete mva_xgb_HTT_CSVsort3rd_;
-  delete mva_xgb_HTT_CSVsort3rd_withKinFit_;
+  delete mva_xgb_HTT_CSVsort4rd_;
+  delete mva_xgb_HTT_CSVsort4rd_withKinFit_;
   delete mva_xgb_HTT_highestCSV_;
   delete mva_xgb_HTT_highestCSV_withKinFit_;
 }
@@ -111,8 +110,8 @@ HadTopTagger::operator()(const RecoJet & recBJet,
   std::map<int, double> result = {
     { kXGB_with_kinFit,  0. },
     { kXGB_multilep,  -1. },
-    { kXGB_CSVsort3rd,  0. },
-    { kXGB_CSVsort3rd_withKinFit,  0. },
+    { kXGB_CSVsort4rd,  0. },
+    { kXGB_CSVsort4rd_withKinFit,  0. },
     { kXGB_highestCSV,  0. },
     { kXGB_highestCSV_withKinFit,  0. }
   };
@@ -156,9 +155,9 @@ HadTopTagger::operator()(const RecoJet & recBJet,
   /*
   if ( massCut && !(p4_bWj1Wj2.mass() > 75. && p4_bWj1Wj2.mass() < 275. && p4_Wj1Wj2.mass() < 150.)) {
     result[kXGB_multilep] = -1.;
-    result[kXGB_CSVsort3rd] = 0.;
+    result[kXGB_CSVsort4rd] = 0.;
     result[kXGB_highestCSV] = 0.;
-    result[kXGB_CSVsort3rd_withKinFit] = 0.;
+    result[kXGB_CSVsort4rd_withKinFit] = 0.;
     result[kXGB_highestCSV_withKinFit] = 0.;
     return result;
   }
@@ -183,11 +182,11 @@ HadTopTagger::operator()(const RecoJet & recBJet,
   mvaInputsHTT["mass_Wj2"]           = recWJet2.mass();
   mvaInputsHTT["pT_b"]               = recBJet.pt();
   mvaInputsHTT["mass_b"]             = recBJet.mass();
-  const double HTT_CSVsort3rd = (*mva_xgb_HTT_CSVsort3rd_)(mvaInputsHTT);
-  result[kXGB_CSVsort3rd] = HTT_CSVsort3rd;
+  const double HTT_CSVsort4rd = (*mva_xgb_HTT_CSVsort4rd_)(mvaInputsHTT);
+  result[kXGB_CSVsort4rd] = HTT_CSVsort4rd;
   const double HTT_highestCSV = (*mva_xgb_HTT_highestCSV_)(mvaInputsHTT);
   result[kXGB_highestCSV] = HTT_highestCSV;
-  //std::cout << " HTT_CSVsort3rd " << HTT_CSVsort3rd << std::endl;
+  //std::cout << " HTT_CSVsort4rd " << HTT_CSVsort4rd << std::endl;
   //std::cout << " HTT_highestCSV " << HTT_highestCSV << std::endl;
   //*/
 
@@ -212,15 +211,13 @@ HadTopTagger::operator()(const RecoJet & recBJet,
   mvaInputsHTT_withKinFit["nllKinFit"]          = kinFit_->nll();
   mvaInputsHTT_withKinFit["kinFit_pT_b_o_pT_b"] =  kinFit_->fittedBJet().pt() / recBJet.pt();
   mvaInputsHTT_withKinFit["kinFit_pT_Wj2_o_pT_Wj2"] =  kinFit_->fittedWJet2().pt() / recWJet2.pt();
-  const double HTT_CSVsort3rd_withKinFit = (*mva_xgb_HTT_CSVsort3rd_withKinFit_)(mvaInputsHTT_withKinFit);
-  result[kXGB_CSVsort3rd_withKinFit] = HTT_CSVsort3rd_withKinFit;
+  const double HTT_CSVsort4rd_withKinFit = (*mva_xgb_HTT_CSVsort4rd_withKinFit_)(mvaInputsHTT_withKinFit);
+  result[kXGB_CSVsort4rd_withKinFit] = HTT_CSVsort4rd_withKinFit;
   const double HTT_highestCSV_withKinFit = (*mva_xgb_HTT_highestCSV_withKinFit_)(mvaInputsHTT_withKinFit);
   result[kXGB_highestCSV_withKinFit] = HTT_highestCSV_withKinFit;
-  //std::cout << " HTT_CSVsort3rd_withKinFit " << HTT_CSVsort3rd_withKinFit << std::endl;
+  //std::cout << " HTT_CSVsort4rd_withKinFit " << HTT_CSVsort4rd_withKinFit << std::endl;
   //std::cout << " HTT_highestCSV_withKinFit " << HTT_highestCSV_withKinFit << std::endl;
   //*/
-  const double HTT_CSVsort4rd = (*mva_xgb_HTT_CSVsort4rd_)(mvaInputsHTT);
-  result[kXGB_CSVsort4rd] = HTT_CSVsort4rd;
   //std::cout << " HTT_CSVsort4rd " << HTT_CSVsort4rd << std::endl;
 
   if ( massCut && !(p4_bWj1Wj2.mass() > 75. && p4_bWj1Wj2.mass() < 275.)) {

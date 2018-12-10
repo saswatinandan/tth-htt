@@ -49,13 +49,8 @@ protected:
   std::map<std::string, double> mvaInputsHTT_AK8_withKinFit;
   std::vector<std::string>      mvaInputsHTT_AK8Sort_withKinFit;
 
-  XGBInterface * mva_xgb_HTT_CSVsort3rd_AK8_;
-  XGBInterface * mva_xgb_HTT_CSVsort3rd_AK8_withKinFit_;
-protected:
-
-  std::map<std::string, double> mvaInputsHTT_AK8;
-  std::vector<std::string>      mvaInputsHTT_AK8Sort;
-  TMVAInterface * mva_xgb_HTT_AK8_;
+  XGBInterface * mva_xgb_HTT_CSVsort4rd_AK8_;
+  XGBInterface * mva_xgb_HTT_CSVsort4rd_AK8_withKinFit_;
 
 };
 

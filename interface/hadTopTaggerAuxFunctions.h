@@ -3,18 +3,10 @@
 
 #include <TString.h> // TString, Form
 #include <boost/math/special_functions/sign.hpp> // boost::math::sign()
-<<<<<<< HEAD
 #include <map>
 
 
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJet.h" // RecoJet
-=======
-#include "tthAnalysis/HiggsToTauTau/interface/RecoJet.h" // RecoJet
-
-#include <map>
-
-TString stringTmp = "";
->>>>>>> f3a999660c033d320e6fd6b1ab80636133949293
 
 std::map<int, Particle::LorentzVector>
 isGenMatchedJetTripletVar(const std::vector<GenParticle> & genTopQuarks,
