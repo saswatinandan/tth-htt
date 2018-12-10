@@ -241,7 +241,7 @@ def get_rles(file_handle, tree_name):
   rles = set()
   for j in range(nentries):
     tree_handle.GetEntry(j)
-    rles.add(':'.join(map(lambda br: str(br[0]), [run_array, lumi_array, event_array])))
+    rles.add(':'.join(map(lambda br: str(br[0]).replace(".0",""), [run_array, lumi_array, event_array])))
   return rles
 
 def write_table_file(table, table_fn, write_csv):

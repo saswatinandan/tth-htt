@@ -172,6 +172,7 @@ class ParticleWrapper(object):
     }
     self.recordings = {} # data for plotting
     self.is_matched = False
+    print map(lambda branch_name: len(branch_name), self.branch_names)
     self.max_branch_name_len = max(map(lambda branch_name: len(branch_name), self.branch_names)) + 1
 
     self.selection_branches = [ 'isfakeablesel', 'ismvasel' ]
@@ -473,6 +474,7 @@ def get_array(tree_object, branch, maxlen = 1):
   '''
   # First we check if the TTree contains the TBranch (by comparing the names)
   branch_name = branch.GetName()
+  print branch_name
   branch_list = [ br for br in tree_object.GetListOfBranches() ]
   branch_list_filtered = list(filter(lambda br: br.GetName() == branch_name, branch_list))
 
@@ -558,8 +560,8 @@ def get_rles(tree, branches, event_branch_names_list):
   rles = collections.OrderedDict()
   for event_idx in range(nof_entries):
     tree.GetEntry(event_idx)
-    rle = ':'.join(map(lambda branch_name: str(branches[branch_name][0]), event_branch_names_list))
-    rles[rle] = event_idx
+    rle = ':'.join(map(lambda branch_name: str(branches[branch_name][0]).replace(".0",""), event_branch_names_list))
+    rles[rle] = int(event_idx)
   return rles
 
 def isinteger(x):
@@ -1104,6 +1106,52 @@ for rle in rle_loop:
 
 
   # Modify only between these long lines
+  ##################################################################################################
+  """
+  if (not evt.jet1.is_matched and (evt.jet1.ref.pt > 0 or evt.jet1.test.pt > 0 )) or (not evt.jet2.is_matched and (evt.jet2.ref.pt > 0 or evt.jet2.test.pt > 0 )) or (not evt.jet3.is_matched and (evt.jet3.ref.pt > 0 or evt.jet3.test.pt > 0 ))or (not evt.jet4.is_matched and (evt.jet4.ref.pt > 0 or evt.jet4.test.pt > 0 )):
+    print('RLE: %s' % rle)
+    evt.jet1.printVars(['pt', 'eta', 'phi', ])
+    evt.jet2.printVars(['pt', 'eta', 'phi'])
+    evt.jet3.printVars(['pt', 'eta', 'phi'])
+    evt.jet4.printVars(['pt', 'eta', 'phi'])
+    print (evt.jet4.diff.pt, evt.jet4.ref.pt, evt.jet4.test.pt)
+    #evt.tau1.printVars(['pt', 'eta', 'phi'])
+    #evt.tau2.printVars(['pt', 'eta', 'phi'])
+    #evt.mu1.printVars(['pt', 'eta', 'phi'])
+    #evt.mu2.printVars(['pt', 'eta', 'phi'])
+    #evt.ele1.printVars(['pt', 'eta', 'phi'])
+    #evt.ele2.printVars(['pt', 'eta', 'phi'])
+  """
+
+  if ( not evt.ele1.is_matched and evt.ele1.ref.isfakeablesel > 0 ) or (not evt.ele2.is_matched and evt.ele2.ref.isfakeablesel > 0 ) :
+    print('RLE: %s' % rle)
+    #evt.jet1.printVars(['pt', 'E', 'eta', 'phi'])
+    #evt.jet2.printVars(['pt', 'E', 'eta', 'phi'])
+    #evt.jet3.printVars(['pt', 'E', 'eta', 'phi'])
+    #evt.jet4.printVars(['pt', 'E', 'eta', 'phi'])
+    #evt.tau1.printVars(['pt', 'eta', 'phi'])
+    #evt.tau2.printVars(['pt', 'eta', 'phi'])
+    #evt.mu1.printVars(['pt', 'eta', 'phi'])
+    #evt.mu2.printVars(['pt', 'eta', 'phi'])
+    evt.ele1.printVars(['conept', 'eta', 'phi'])
+    evt.ele2.printVars(['conept', 'eta', 'phi'])
+
+  """
+  if ( not evt.mu1.is_matched and evt.mu1.ref.isfakeablesel > 0 ) or (not evt.mu2.is_matched and evt.mu2.ref.isfakeablesel > 0 ) :
+    print('RLE: %s' % rle)
+    #evt.jet1.printVars(['pt', 'E', 'eta', 'phi'])
+    #evt.jet2.printVars(['pt', 'E', 'eta', 'phi'])
+    #evt.jet3.printVars(['pt', 'E', 'eta', 'phi'])
+    #evt.jet4.printVars(['pt', 'E', 'eta', 'phi'])
+    #evt.tau1.printVars(['pt', 'eta', 'phi'])
+    #evt.tau2.printVars(['pt', 'eta', 'phi'])
+    evt.mu1.printVars(['conept', 'eta', 'phi'])
+    evt.mu2.printVars(['conept', 'eta', 'phi'])
+    #evt.ele1.printVars(['conept', 'eta', 'phi'])
+    #evt.ele2.printVars(['conept', 'eta', 'phi'])
+  """
+
+
   ##################################################################################################
   if not evt.mu1.is_matched:
     continue
