@@ -261,6 +261,7 @@ main(int argc,
     //if (!(eventInfo.run ==  1 && eventInfo.lumi ==  9909 &&  eventInfo.event == 16803200)) continue; // :
     //if (!( eventInfo.event ==  13863835)) continue; // :
     ++analyzedEntries;
+    if ( analyzedEntries > 0) break;
 
     if(run_lumi_eventSelector && ! (*run_lumi_eventSelector)(eventInfo))
     {
