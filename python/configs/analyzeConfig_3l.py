@@ -79,10 +79,51 @@ class analyzeConfig_3l(analyzeConfig):
       executable_analyze        = executable_analyze,
       channel                   = "3l",
       subcategories             = [
-        "3l",
-        "3l_0tau_bl_neg", "3l_0tau_bl_pos", "3l_0tau_bt_neg", "3l_0tau_bt_pos" ,
-       "3l_0tau_bl_neg_0J", "3l_0tau_bl_pos_0J", "3l_0tau_bt_neg_0J",
-       "3l_0tau_bt_pos_0J", "3l_0tau_1pHTTv2", "3l_0tau_1pAK8"
+    "3l",
+    "3l_0tau_bl_neg", "3l_0tau_bl_pos", "3l_0tau_bt_neg", "3l_0tau_bt_pos",
+    "3l_0tau_zpeak_bl_neg", "3l_0tau_zpeak_bl_pos", "3l_0tau_zpeak_bt_neg", "3l_0tau_zpeak_bt_pos",
+    "3l_0tau_no_ttH",
+    #
+    "output_NN_3l_ttH_3cat_ttH",
+    "output_NN_3l_ttH_3cat_ttZ",
+    "output_NN_3l_ttH_3cat_rest",
+    "output_NN_3l_ttH_3cat_tH",
+    "output_NN_3l_ttH_3cat_tH_1jet",
+    "output_NN_3l_ttH_3cat_tH_zpeak",
+    "output_NN_3l_ttH_3cat_ttH_zpeak",
+    #
+    "output_NN_3l_ttH_3cat_v7_ttH",
+    "output_NN_3l_ttH_3cat_v7_ttZ",
+    "output_NN_3l_ttH_3cat_v7_rest",
+    "output_NN_3l_ttH_3cat_v7_no_cat",
+    #
+    "output_NN_3l_tH_ttH_4cat_v2_ttH",
+    "output_NN_3l_tH_ttH_4cat_v2_tH",
+    "output_NN_3l_tH_ttH_4cat_v2_ttZ",
+    "output_NN_3l_tH_ttH_4cat_v2_rest",
+    "output_NN_3l_tH_ttH_4cat_v2_no_cat",
+    #
+    "output_NN_3l_tH_ttH_4cat_v3_ttH",
+    "output_NN_3l_tH_ttH_4cat_v3_tH",
+    "output_NN_3l_tH_ttH_4cat_v3_ttZ",
+    "output_NN_3l_tH_ttH_4cat_v3_rest",
+    "output_NN_3l_tH_ttH_4cat_v3_no_cat",
+    #
+    "output_NN_3l_tH_ttH_4cat_v4_ttH",
+    "output_NN_3l_tH_ttH_4cat_v4_tH",
+    "output_NN_3l_tH_ttH_4cat_v4_ttZ",
+    "output_NN_3l_tH_ttH_4cat_v4_rest",
+    "output_NN_3l_tH_ttH_4cat_v4_no_cat",
+    #
+    "output_NN_3l_tH_ttH_3cat_v5_ttH",
+    "output_NN_3l_tH_ttH_3cat_v5_tH",
+    "output_NN_3l_tH_ttH_3cat_v5_rest",
+    "output_NN_3l_tH_ttH_3cat_v5_no_cat",
+    #
+    "output_NN_3l_tH_ttH_3cat_v4_ttH",
+    "output_NN_3l_tH_ttH_3cat_v4_tH",
+    "output_NN_3l_tH_ttH_3cat_v4_rest",
+    "output_NN_3l_tH_ttH_3cat_v4_no_cat",
         ],
       samples                   = samples,
       central_or_shifts         = central_or_shifts,
@@ -169,12 +210,14 @@ class analyzeConfig_3l(analyzeConfig):
 
     self.isBDTtraining = False
 
-  def set_BDT_training(self):
+  def set_BDT_training(self, testing = False):
     """Run analysis with loose selection criteria for leptons,
        for the purpose of preparing event list files for BDT training.
     """
-    self.lepton_selections = [ "forBDTtraining" ]
-    self.lepton_frWeights  = [ "disabled" ]
+    if not testing :
+        self.lepton_selections = [ "forBDTtraining" ]
+        self.lepton_frWeights  = [ "disabled" ]
+    else : self.lepton_selections = [ "forBDTtesting" ]
     self.isBDTtraining     = True
 
   def createCfg_analyze(self, jobOptions, sample_info, lepton_selection):
@@ -257,6 +300,9 @@ class analyzeConfig_3l(analyzeConfig):
       if lepton_selection == "forBDTtraining":
         electron_selection = "Loose"
         muon_selection = "Loose"
+      if lepton_selection == "forBDTtesting":
+        electron_selection = "Tight"
+        muon_selection = "Tight"
       elif lepton_selection == "Fakeable_mcClosure_e":
         electron_selection = "Fakeable"
         muon_selection = "Tight"
@@ -267,7 +313,7 @@ class analyzeConfig_3l(analyzeConfig):
       for lepton_frWeight in self.lepton_frWeights:
         if lepton_frWeight == "enabled" and not lepton_selection.startswith("Fakeable"):
           continue
-        if lepton_frWeight == "disabled" and not lepton_selection in [ "Tight", "forBDTtraining" ]:
+        if lepton_frWeight == "disabled" and not lepton_selection in [ "Tight", "forBDTtraining", "forBDTtesting" ]:
           continue
         lepton_selection_and_frWeight = get_lepton_selection_and_frWeight(lepton_selection, lepton_frWeight)
 

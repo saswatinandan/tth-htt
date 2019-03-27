@@ -7,7 +7,7 @@ from tthAnalysis.HiggsToTauTau.runConfig import tthAnalyzeParser, filter_samples
 
 # E.g.: ./tthAnalyzeRun_3l.py -v 2017Dec13 -m default -e 2017
 
-mode_choices     = [ 'default', 'forBDTtraining', 'sync', 'sync_wMEM' ]
+mode_choices     = [ 'default', 'forBDTtraining', 'sync', 'sync_wMEM', 'forBDTtesting' ]
 sys_choices      = [ 'full' ] + systematics.an_extended_opts
 systematics.full = systematics.an_extended
 
@@ -39,7 +39,7 @@ systematics_label = args.systematics
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = args.files_per_job
+files_per_job     = 5 #args.files_per_job
 use_home          = args.use_home
 
 # Use the arguments
@@ -57,11 +57,17 @@ if mode == "default":
   if era == "2016":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2016 import samples_2016 as samples
   elif era == "2017":
-    from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017 import samples_2017 as samples
+    #from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017 import samples_2017 as samples
+    from tthAnalysis.HiggsToTauTau.samples.hhAnalyzeSamples_2017_bkg import samples_2017 as samples
   elif era == "2018":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2018 import samples_2018 as samples
   else:
     raise ValueError("Invalid era: %s" % era)
+elif mode == "forBDTtesting":
+    if era == "2017":
+      from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017_BDT_test import samples_2017 as samples
+    else:
+      raise ValueError("Invalid era: %s" % era)
 elif mode == "forBDTtraining":
   if era == "2016":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2016_BDT import samples_2016 as samples
@@ -159,14 +165,16 @@ if __name__ == '__main__':
       "EventCounter" : {},
       "numJets"      : {},
       "mvaDiscr_3l"  : {},
-      "mva_Boosted_AK12_basic"  : {},
-      "mva_Boosted_AK12"   : {},
-      "mva_AK12"  : {},
-      "mva_Boosted_AK12_noISO"  : {},
-      "mva_Boosted_AK8"  : {},
-      "mva_Boosted_AK8_noISO"  : {},
+      "output_NN_3l_ttH_3cat"  : {},
+      "output_NN_3l_tH_ttH_4cat_v2"   : {},
+      "output_NN_3l_ttH_3cat_v7"  : {},
+      "output_NN_3l_tH_ttH_4cat_v3"  : {},
+      "output_NN_3l_tH_ttH_4cat_v4"  : {},
+      "output_NN_3l_tH_ttH_3cat_v4" : {},
+      "output_NN_3l_tH_ttH_3cat_v5"  : {},
       "mva_Updated"   : {},
       "mva_oldVar"  : {},
+      "massSameFlavor_OS" : {}
     },
     select_rle_output                     = True,
     select_root_output                    = False,
@@ -179,8 +187,9 @@ if __name__ == '__main__':
     use_home                              = use_home,
   )
 
-  if mode == "forBDTtraining" :
+  if mode in ["forBDTtraining"] :
     analysis.set_BDT_training() # hadTau_selection_relaxed
+  elif mode in ['forBDTtesting'] : analysis.set_BDT_training(testing = True) 
 
   job_statistics = analysis.create()
   for job_type, num_jobs in job_statistics.items():

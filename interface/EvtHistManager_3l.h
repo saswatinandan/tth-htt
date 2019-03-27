@@ -25,18 +25,20 @@ class EvtHistManager_3l
 
   void
   fillHistograms(int numElectrons,
-                 int numMuons,
-                 int numHadTaus,
-                 int numJets,
-                 int numBJets_loose,
-                 int numBJets_medium,
-                 double mvaOutput_3l_ttV,
-                 double mvaOutput_3l_ttbar,
-                 double mvaDiscr_3l,
-                 double mva_Boosted_AK12_basic, double mva_Boosted_AK12, double mva_AK12, double mva_Boosted_AK12_noISO,
-                 double mva_Boosted_AK8, double mva_Boosted_AK8_noISO,
-                 double mva_Updated, double mva_oldVar,
-                 double evtWeight);
+                int numMuons,
+                int numHadTaus,
+                int numJets,
+                int numBJets_loose,
+                int numBJets_medium,
+                double massSameFlavor_OS,
+                double mvaOutput_3l_ttV,
+                double output_NN_3l_tH_ttH_3cat_v4,
+                double mvaDiscr_3l,
+                double output_NN_3l_ttH_3cat, double output_NN_3l_tH_ttH_4cat_v2,
+                double output_NN_3l_ttH_3cat_v7, double output_NN_3l_tH_ttH_4cat_v3,
+                double output_NN_3l_tH_ttH_4cat_v4, double output_NN_3l_tH_ttH_3cat_v5,
+                double mva_Updated, double mva_oldVar,
+                double evtWeight);
 
   const TH1 *
   getHistogram_EventCounter() const;
@@ -57,17 +59,18 @@ class EvtHistManager_3l
   TH2 * histogram_numBJets_medium_vs_numJets_;
 
   TH1 * histogram_mvaOutput_3l_ttV_;
-  TH1 * histogram_mvaOutput_3l_ttbar_;
+  TH1 * histogram_output_NN_3l_tH_ttH_3cat_v4_;
   TH1 * histogram_mvaDiscr_3l_;
 
-  TH1 * histogram_mva_Boosted_AK12_basic_;
-  TH1 * histogram_mva_Boosted_AK12_;
-  TH1 * histogram_mva_AK12_;
-  TH1 * histogram_mva_Boosted_AK12_noISO_;
-  TH1 * histogram_mva_Boosted_AK8_;
-  TH1 * histogram_mva_Boosted_AK8_noISO_;
+  TH1 * histogram_output_NN_3l_ttH_3cat_;
+  TH1 * histogram_output_NN_3l_tH_ttH_4cat_v2_;
+  TH1 * histogram_output_NN_3l_ttH_3cat_v7_;
+  TH1 * histogram_output_NN_3l_tH_ttH_4cat_v3_;
+  TH1 * histogram_output_NN_3l_tH_ttH_4cat_v4_;
+  TH1 * histogram_output_NN_3l_tH_ttH_3cat_v5_;
   TH1 * histogram_mva_Updated_;
   TH1 * histogram_mva_oldVar_;
+  TH1 * histogram_massSameFlavor_OS_;
 
   TH1 * histogram_EventCounter_;
 };
