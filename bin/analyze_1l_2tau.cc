@@ -52,6 +52,7 @@
 #include "tthAnalysis/HiggsToTauTau/interface/RecoHadTauCollectionSelectorTight.h" // RecoHadTauCollectionSelectorTight
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelector.h" // RecoJetCollectionSelector
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorBtag.h" // RecoJetCollectionSelectorBtagLoose, RecoJetCollectionSelectorBtagMedium
+#include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorForward.h" // RecoJetSelectorForward
 #include "tthAnalysis/HiggsToTauTau/interface/RunLumiEventSelector.h" // RunLumiEventSelector
 #include "tthAnalysis/HiggsToTauTau/interface/MEtFilterSelector.h" // MEtFilterSelector
 #include "tthAnalysis/HiggsToTauTau/interface/ElectronHistManager.h" // ElectronHistManager
@@ -504,6 +505,7 @@ int main(int argc, char* argv[])
   RecoJetCollectionCleaner jetCleaner_large8(0.8, isDEBUG);
   //RecoJetCollectionCleaner jetCleaner_large12(1.2, isDEBUG);
   RecoJetCollectionSelector jetSelector(era, -1, isDEBUG);
+  RecoJetCollectionSelectorForward jetSelectorForward(era, -1, isDEBUG);
   RecoJetCollectionSelectorBtagLoose jetSelectorBtagLoose(era, -1, isDEBUG);
   RecoJetCollectionSelectorBtagMedium jetSelectorBtagMedium(era, -1, isDEBUG);
 
@@ -657,6 +659,8 @@ int main(int argc, char* argv[])
     std::map<std::string, EvtHistManager_1l_2tau*> evt_in_decayModes_;
     std::map<std::string, EvtHistManager_1l_2tau*> evt_in_categories_;
     std::map<std::string, EvtHistManager_1l_2tau*> evt_in_categories_in_decayModes_;
+    std::map<std::string, EvtHistManager_1l_2tau*> evt_in_categories_1l_2tau_ttH_3cat_TF_;
+    std::map<std::string, EvtHistManager_1l_2tau*> evt_in_categories_1l_2tau_ttH_3cat_TF_and_decayModes_;
     EvtYieldHistManager* evtYield_;
     WeightHistManager* weights_;
   };
@@ -716,6 +720,8 @@ int main(int argc, char* argv[])
       preselHistManager->evtYield_ = new EvtYieldHistManager(cfg_EvtYieldHistManager_presel);
       preselHistManager->evtYield_->bookHistograms(fs);
       preselHistManagers[idxLepton][idxHadTau] = preselHistManager;
+
+      vstring category_1l_2tau_ttH_3cat_TF = {"output_ttH_3cat_ttH", "output_ttH_3cat_tH", "output_ttH_3cat_tH_1jet"};
 
       selHistManagerType* selHistManager = new selHistManagerType();
       selHistManager->electrons_ = new ElectronHistManager(makeHistManager_cfg(process_and_genMatch,
@@ -840,6 +846,18 @@ int main(int argc, char* argv[])
               Form("%s/sel/evt", histogramDir_category.Data()), central_or_shift));
             selHistManager->evt_in_categories_in_decayModes_[category->data()+decayMode_evt]->bookHistograms(fs);
           }
+          for ( vstring::const_iterator category = category_1l_2tau_ttH_3cat_TF.begin();
+          category != category_1l_2tau_ttH_3cat_TF.end(); ++category ) {
+            TString histogramDir_category = histogramDir.data();
+            histogramDir_category.ReplaceAll("1l_2tau",  category->data());
+            selHistManager -> evt_in_categories_1l_2tau_ttH_3cat_TF_and_decayModes_[category->data()+decayMode_evt] = new EvtHistManager_1l_2tau(makeHistManager_cfg(
+              decayMode_and_genMatch,
+              Form("%s/sel/evt", histogramDir_category.Data()),
+              era_string,
+              central_or_shift
+            ));
+            selHistManager -> evt_in_categories_1l_2tau_ttH_3cat_TF_and_decayModes_[category->data()+decayMode_evt] -> bookHistograms(fs);
+          }
         }
       }
       for ( vstring::const_iterator category = categories_evt.begin();
@@ -849,6 +867,14 @@ int main(int argc, char* argv[])
         selHistManager->evt_in_categories_[*category] = new EvtHistManager_1l_2tau(makeHistManager_cfg(process_and_genMatch,
           Form("%s/sel/evt", histogramDir_category.Data()), central_or_shift));
         selHistManager->evt_in_categories_[*category]->bookHistograms(fs);
+      }
+      for ( vstring::const_iterator category = category_1l_2tau_ttH_3cat_TF.begin();
+        category != category_1l_2tau_ttH_3cat_TF.end(); ++category ) {
+        TString histogramDir_category = histogramDir.data();
+        histogramDir_category.ReplaceAll("1l_2tau",  category->data());
+        selHistManager->evt_in_categories_1l_2tau_ttH_3cat_TF_[*category] = new EvtHistManager_1l_2tau(makeHistManager_cfg(process_and_genMatch,
+          Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
+        selHistManager->evt_in_categories_1l_2tau_ttH_3cat_TF_[*category]->bookHistograms(fs);
       }
       edm::ParameterSet cfg_EvtYieldHistManager_sel = makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evtYield", histogramDir.data()), central_or_shift);
@@ -907,7 +933,7 @@ int main(int argc, char* argv[])
       "dr_lep_HadTop",
       "dr_HadTop_tau_OS","dr_HadTop_tau_SS",
       "genTopPt",
-      "prob_fake_lepton", "tau_fake_prob_lead", "tau_fake_prob_sublead",
+      //"prob_fake_lepton", "tau_fake_prob_lead", "tau_fake_prob_sublead",
       "res-HTT", "res-HTT_IHEP",
       "minDR_HTTv2_lep", "DR_HTTv2_tau", "minDR_HTTv2_L",
       "minDR_AK12_lep", "DR_AK12_tau", "minDR_AK12_L",
@@ -927,7 +953,8 @@ int main(int argc, char* argv[])
       "HTT_boosted_WithKinFit", "genTopPt_HTT_boosted_WithKinFit", "HadTop_pt_HTT_boosted_WithKinFit",
       "HTT_semi_boosted", "genTopPt_HTT_semi_boosted", "HadTop_pt_HTT_semi_boosted",
       "HTT_semi_boosted_WithKinFit", "genTopPt_HTT_semi_boosted_WithKinFit", "HadTop_pt_HTT_semi_boosted_WithKinFit", "DR_W_b_gen_AK12", "DR_W_b_gen_AK8",
-      "minDR_AK8subjets_lep", "minDR_HTTv2subjets_lep"
+      "minDR_AK8subjets_lep", "minDR_HTTv2subjets_lep",
+      "output_1l_2tau_ttH_3cat"
     );
     bdt_filler -> register_variable<int_type>(
       "nJet", "nBJetLoose", "nBJetMedium", "nHTTv2", "nElectron", "nMuon",
@@ -1289,6 +1316,7 @@ int main(int argc, char* argv[])
     std::vector<const RecoJet*> selJets = jetSelector(cleanedJets, isHigherPt);
     std::vector<const RecoJet*> selBJets_loose = jetSelectorBtagLoose(cleanedJets, isHigherPt);
     std::vector<const RecoJet*> selBJets_medium = jetSelectorBtagMedium(cleanedJets, isHigherPt);
+    std::vector<const RecoJet*> selJetsForward = jetSelectorForward(jet_ptrs, isHigherPt);
     if(isDEBUG || run_lumi_eventSelector)
     {
       printCollection("uncleanedJets", jet_ptrs);
@@ -1386,12 +1414,13 @@ int main(int argc, char* argv[])
     double mTauTauVis_presel = (preselHadTau_lead->p4() + preselHadTau_sublead->p4()).mass();
 
     // apply requirement on jets (incl. b-tagged jets) on preselection level
-    if ( !(selJets.size() >= 2) ) continue;
+    /*if ( !(selJets.size() >= 2) ) continue;
     cutFlowTable.update(">= 2 jets", evtWeight_inclusive);
     cutFlowHistManager->fillHistograms(">= 2 jets", evtWeight_inclusive);
     if ( !(selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) ) continue;
     cutFlowTable.update(">= 2 loose b-jets || 1 medium b-jet (1)", evtWeight_inclusive);
     cutFlowHistManager->fillHistograms(">= 2 loose b-jets || 1 medium b-jet (1)", evtWeight_inclusive);
+    Xanda */
 
 	//--- compute MHT and linear MET discriminant (met_LD)
     RecoMEt met = metReader->read();
@@ -1679,6 +1708,7 @@ int main(int argc, char* argv[])
     }
 
     // apply requirement on jets (incl. b-tagged jets) on level of final event selection
+    /*
     if ( !(selJets.size() >= 3) )
     {
       if(run_lumi_eventSelector)
@@ -1695,6 +1725,31 @@ int main(int argc, char* argv[])
       if(run_lumi_eventSelector)
       {
         std::cout << "event " << eventInfo.str() << " FAILS to have at least 2 loose or 1 medium jet(s)\n";
+      }
+      continue;
+    }
+    */
+    bool tH_like = false;
+    bool tH_like_1jet = false;
+    bool ttH_like = false;
+
+    if ((selBJets_loose.size() >= 3 || selBJets_medium.size() >= 1) && ((int)selJets.size() >= 3)) {
+      ttH_like = true;
+    }
+    if ((selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_medium.size()) + selJetsForward.size()) >= 1) && (selJets.size() >= 2)) {tH_like = true;} // Xanda -- adapted logic
+    if ((selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_medium.size()) + selJetsForward.size()) >= 1) && (selJets.size() >= 1))  tH_like_1jet =true;
+    if ( tH_like && 0 > 1 ) std::cout <<
+    "selBJets_medium.size() = "<< selBJets_medium.size() << "\n" <<
+    "selBJets_loose.size() = "<< selBJets_loose.size() << "\n" <<
+    "selJets.size() = " << selJets.size() << "\n" <<
+    "selJetsForward.size()" << selJetsForward.size() << "\n ================ \n";
+    if (!(tH_like || ttH_like || tH_like_1jet))
+    {
+      if ( run_lumi_eventSelector ) {
+    std::cout << "event " << eventInfo.str() << " FAILS selBJets selection adding tH-like and ttW-like (2)." << std::endl;
+  printCollection("selJets", selJets);
+  printCollection("selBJets_loose", selBJets_loose);
+  printCollection("selBJets_medium", selBJets_medium);
       }
       continue;
     }
@@ -2245,6 +2300,16 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
     };
     const double mvaOutput_plainKin_SUM_VT = mva_plainKin_sum_VT(mvaInputsplainKin_sum);
 
+    std::string category_1l_2tau_ttH_3cat = "output_ttH_3cat_";
+    double output_1l_2tau_ttH_3cat = -10;
+    if (ttH_like) {
+      category_1l_2tau_ttH_3cat += "ttH"; output_1l_2tau_ttH_3cat = mvaOutput_plainKin_SUM_VT;
+    } else if (tH_like) {
+      category_1l_2tau_ttH_3cat += "tH"; output_1l_2tau_ttH_3cat = mvaOutput_plainKin_SUM_VT;
+    }  else if (tH_like_1jet) {
+      category_1l_2tau_ttH_3cat += "tH_1jet"; output_1l_2tau_ttH_3cat = mvaOutput_plainKin_SUM_VT;
+    }
+
 //--- fill histograms with events passing final selection
     selHistManagerType* selHistManager = selHistManagers[idxSelLepton_genMatch][idxSelHadTau_genMatch];
     assert(selHistManager != 0);
@@ -2332,6 +2397,21 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
             mvaOutput_plainKin_SUM_VT,
             mTauTauVis,
             evtWeight);
+        EvtHistManager_1l_2tau* selHistManager_evt_category1l_2tau_ttH_3cat_and_decayModes = selHistManager->evt_in_categories_1l_2tau_ttH_3cat_TF_and_decayModes_[category_1l_2tau_ttH_3cat+decayModeStr];
+        if ( selHistManager_evt_category1l_2tau_ttH_3cat_and_decayModes ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+        selHistManager_evt_category1l_2tau_ttH_3cat_and_decayModes->fillHistograms(
+          preselElectrons.size(), preselMuons.size(), selHadTaus.size(),
+          selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+          sel_HTTv2.size(),
+          mvaOutput_plainKin_ttV,
+          mvaOutput_plainKin_tt,
+          mvaOutput_plainKin_1B_VT,
+          mvaOutput_HTT_SUM_VT,
+          mvaOutput_plainKin_SUM_VT,
+          mTauTauVis,
+          evtWeight
+            );
+          }
       }
     }
     selHistManager->evtYield_->fillHistograms(eventInfo, evtWeight);
@@ -2363,6 +2443,21 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
       mvaOutput_plainKin_SUM_VT,
       mTauTauVis,
       evtWeight);
+    EvtHistManager_1l_2tau* selHistManager_evt_category1l_2tau_ttH_3cat = selHistManager->evt_in_categories_1l_2tau_ttH_3cat_TF_[category_1l_2tau_ttH_3cat];
+    if ( selHistManager_evt_category1l_2tau_ttH_3cat ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_category1l_2tau_ttH_3cat->fillHistograms(
+        preselElectrons.size(), preselMuons.size(), selHadTaus.size(),
+        selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+        sel_HTTv2.size(),
+        mvaOutput_plainKin_ttV,
+        mvaOutput_plainKin_tt,
+        mvaOutput_plainKin_1B_VT,
+        mvaOutput_HTT_SUM_VT,
+        mvaOutput_plainKin_SUM_VT,
+        mTauTauVis,
+        evtWeight
+      );
+    }
 
     if ( isMC ) {
       genEvtHistManager_afterCuts->fillHistograms(genElectrons, genMuons, genHadTaus, genPhotons, genJets, evtWeight_inclusive);
@@ -2512,6 +2607,7 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
           ("resolved_and_semi",         resolved_and_semi)
           ("boosted_and_semi",          boosted_and_semi)
           ("resolved_and_boosted",      resolved_and_boosted)
+          ("output_1l_2tau_ttH_3cat", output_1l_2tau_ttH_3cat)
         .fill();
     }
 

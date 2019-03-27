@@ -81,7 +81,10 @@ class analyzeConfig_1l_2tau(analyzeConfig):
       outputDir          = outputDir,
       executable_analyze = executable_analyze,
       channel            = "1l_2tau",
-      subcategories = ["1l_2tau", "1e_2tau_btight_0J", "1e_2tau_bloose_0J", "1mu_2tau_btight_0J", "1mu_2tau_bloose_0J", "1l_2tau_1Jp"],
+      subcategories = ["1l_2tau",
+       "1e_2tau_btight_0J", "1e_2tau_bloose_0J", "1mu_2tau_btight_0J", "1mu_2tau_bloose_0J", "1l_2tau_1Jp",
+       "output_ttH_3cat_ttH", "output_ttH_3cat_tH", "output_ttH_3cat_tH_1jet"
+       ],
       samples            = samples,
       lep_mva_wp         = lep_mva_wp,
       central_or_shifts  = central_or_shifts,

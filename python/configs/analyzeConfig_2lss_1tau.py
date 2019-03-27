@@ -89,7 +89,9 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
       "2ess_1tau_btight_0J", "2ess_1tau_bloose_0J",
       "2muss_1tau_btight_0J", "2muss_1tau_bloose_0J",
       "1mu1ess_1tau_btight_0J", "1mu1ess_1tau_bloose_0J",
-      "2lss_1tau_1Jp"],
+      "2lss_1tau_1Jp",
+      "output_NN_2lss_ttH_3cat_ttH_1tau", "output_NN_2lss_ttH_3cat_ttW_1tau", "output_NN_2lss_ttH_3cat_rest_1tau",
+      "output_NN_2lss_ttH_3cat_tH_1tau", "output_NN_2lss_ttH_3cat_tH_1jet_1tau"],
       samples                   = samples,
       lep_mva_wp                = lep_mva_wp,
       central_or_shifts         = central_or_shifts,
@@ -209,8 +211,8 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
         histogramDir_prep_dcard_OS_local+=[self.subcategories[cc]+"_lepOS_sum%s_Tight"]
     self.histogramDir_prep_dcard = histogramDir_prep_dcard_local #"2lss_1tau_lepSS_sum%s_Tight"
     self.histogramDir_prep_dcard_OS = histogramDir_prep_dcard_OS_local #"2lss_1tau_lepOS_sum%s_Tight"
-    self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_2lss_1tau_cfg.py")
-    self.cfgFile_make_plots_mcClosure = os.path.join(self.template_dir, "makePlots_mcClosure_2lss_1tau_cfg.py")  #TODO
+    #self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_2lss_1tau_cfg.py")
+    #self.cfgFile_make_plots_mcClosure = os.path.join(self.template_dir, "makePlots_mcClosure_2lss_1tau_cfg.py")  #TODO
 
     self.select_rle_output = select_rle_output
     self.rle_select = rle_select
@@ -977,6 +979,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
           })
         self.createCfg_add_syst_fakerate(self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job])
 
+      """
       logging.info("Creating configuration files to run 'makePlots'")
       for chargeSumSelection in self.chargeSumSelections:
         histogramDirList_OS = []
@@ -1028,6 +1031,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
             'histogramDir_sideband' : histogramFakesDirList #(self.histogramDir_prep_dcard.replace("Tight", "Fakeable_mcClosure_wFakeRateWeights") % jobOptions['chargeSumSelection'])
           }
           self.createCfg_makePlots_mcClosure(self.jobOptions_make_plots[key_makePlots_job])
+      """
 
     if self.is_sbatch:
       logging.info("Creating script for submitting '%s' jobs to batch system" % self.executable_analyze)
@@ -1053,7 +1057,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
     self.addToMakefile_hadd_stage2(lines_makefile)
     self.addToMakefile_prep_dcard(lines_makefile)
     self.addToMakefile_add_syst_fakerate(lines_makefile)
-    self.addToMakefile_make_plots(lines_makefile)
+    #self.addToMakefile_make_plots(lines_makefile)
     self.createMakefile(lines_makefile)
 
     logging.info("Done")
