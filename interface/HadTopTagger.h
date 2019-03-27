@@ -51,6 +51,7 @@ protected:
 
   std::map<std::string, double> mvaInputsHTT;
   std::vector<std::string>      mvaInputsHTTSort;
+  std::vector<std::string>      mvaInputsHTTSortKin;
 
   std::map<std::string, double> mvaInputsHTT_withKinFit;
   std::vector<std::string>      mvaInputsHTT_withKinFitSort;

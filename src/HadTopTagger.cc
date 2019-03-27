@@ -68,17 +68,17 @@ HadTopTagger::HadTopTagger(void)
     mvaFileNameHTT_highestCSV, mvaInputsHTTSort
   );
 
-  mvaInputsHTTSort =  {
+  mvaInputsHTTSortKin =  {
     "btagDisc_b", "btagDisc_Wj1", "btagDisc_Wj2", "qg_Wj1", "qg_Wj2",
     "m_Wj1Wj2_div_m_bWj1Wj2", "pT_Wj1Wj2", "dR_Wj1Wj2", "m_bWj1Wj2", "dR_bW", "m_bWj1", "m_bWj2",
     "mass_Wj1", "pT_Wj2", "mass_Wj2", "pT_b", "mass_b",
     "kinFit_pT_b_o_pT_b", "kinFit_pT_Wj2_o_pT_Wj2", "nllKinFit"
   };
   mva_xgb_HTT_CSVsort4rd_withKinFit_ = new XGBInterface(
-    mvaFileNameHTT_CSVsort4rd_withKinFit, mvaInputsHTTSort
+    mvaFileNameHTT_CSVsort4rd_withKinFit, mvaInputsHTTSortKin
   );
   mva_xgb_HTT_highestCSV_withKinFit_ = new XGBInterface(
-    mvaFileNameHTT_highestCSV_withKinFit, mvaInputsHTTSort
+    mvaFileNameHTT_highestCSV_withKinFit, mvaInputsHTTSortKin
   );
 
   mva_xgb_HTT_CSVsort4rd_ = new XGBInterface(
