@@ -85,10 +85,37 @@ class analyzeConfig_2lss(analyzeConfig):
         "2lss_0tau_ee_neg", "2lss_0tau_ee_pos",
         "2lss_0tau_em_bl_neg", "2lss_0tau_em_bl_pos", "2lss_0tau_em_bt_neg", "2lss_0tau_em_bt_pos",
         "2lss_0tau_mm_bl_neg", "2lss_0tau_mm_bl_pos", "2lss_0tau_mm_bt_neg", "2lss_0tau_mm_bt_pos",
-        ############
-        "2lss_0tau_1pHTTv2", "2lss_0tau_1pAK8", "2lss_0tau_ee_neg_0J", "2lss_0tau_ee_pos_0J",
-        "2lss_0tau_em_bl_neg_0J", "2lss_0tau_em_bl_pos_0J", "2lss_0tau_em_bt_neg_0J", "2lss_0tau_em_bt_pos_0J",
-        "2lss_0tau_mm_bl_neg_0J", "2lss_0tau_mm_bl_pos_0J", "2lss_0tau_mm_bt_neg_0J", "2lss_0tau_mm_bt_pos_0J"
+        #//
+        "2lss_0tau_ttW_ee_neg", "2lss_0tau_ttW_ee_pos",
+        "2lss_0tau_ttW_em_bl_neg", "2lss_0tau_ttW_em_bl_pos", "2lss_0tau_ttW_em_bt_neg", "2lss_0tau_ttW_em_bt_pos",
+        "2lss_0tau_ttW_mm_bl_neg", "2lss_0tau_ttW_mm_bl_pos", "2lss_0tau_ttW_mm_bt_neg", "2lss_0tau_ttW_mm_bt_pos",
+        #//
+        "2lss_0tau_no_ttH",
+        #
+        "output_NN_2lss_ttW_ttH_tH_3cat_v1_ttH",
+        "output_NN_2lss_ttW_ttH_tH_3cat_v1_rest", "output_NN_2lss_ttW_ttH_tH_3cat_v1_tH",
+        "output_NN_2lss_ttW_ttH_tH_3cat_v1_no_cat",
+        #
+        "output_NN_2lss_ttW_ttH_tH_3cat_v3_ttH",
+        "output_NN_2lss_ttW_ttH_tH_3cat_v3_rest", "output_NN_2lss_ttW_ttH_tH_3cat_v3_tH",
+        "output_NN_2lss_ttW_ttH_tH_3cat_v3_no_cat",
+        #
+        "output_NN_2lss_ttW_ttH_tH_4cat_v2_ttH", "output_NN_2lss_ttW_ttH_tH_4cat_v2_ttW",
+        "output_NN_2lss_ttW_ttH_tH_4cat_v2_rest", "output_NN_2lss_ttW_ttH_tH_4cat_v2_tH",
+        "output_NN_2lss_ttW_ttH_tH_4cat_v2_no_cat",
+        #
+        "output_NN_2lss_ttW_ttH_tH_4cat_v1_ttH", "output_NN_2lss_ttW_ttH_tH_4cat_v1_ttW",
+        "output_NN_2lss_ttW_ttH_tH_4cat_v1_rest", "output_NN_2lss_ttW_ttH_tH_4cat_v1_tH",
+        "output_NN_2lss_ttW_ttH_tH_4cat_v1_no_cat",
+        #
+        "output_NN_2lss_ttW_ttH_3cat_ttH", "output_NN_2lss_ttW_ttH_3cat_ttW", "output_NN_2lss_ttW_ttH_3cat_rest",
+        "output_NN_2lss_ttW_ttH_3cat_no_cat",
+        #
+        "output_NN_2lss_ttW_ttH_3cat_v7_ttH", "output_NN_2lss_ttW_ttH_3cat_v7_ttW", "output_NN_2lss_ttW_ttH_3cat_v7_rest",
+        "output_NN_2lss_ttW_ttH_3cat_v7_tH", "output_NN_2lss_ttW_ttH_3cat_v7_no_cat",
+        #
+        "output_NN_2lss_ttH_3cat_ttH", "output_NN_2lss_ttH_3cat_ttW", "output_NN_2lss_ttH_3cat_rest",
+        "output_NN_2lss_ttH_3cat_tH_like_exp", "output_NN_2lss_ttH_3cat_tH_ttW", "output_NN_2lss_ttH_3cat_ttWsel"
         ],
       samples                   = samples,
       central_or_shifts         = central_or_shifts,

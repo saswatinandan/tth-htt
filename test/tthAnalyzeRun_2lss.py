@@ -39,7 +39,7 @@ systematics_label = args.systematics
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = 5 #args.files_per_job
+files_per_job     = 3 #args.files_per_job
 #files_per_job     = args.files_per_job
 use_home          = args.use_home
 
@@ -58,7 +58,12 @@ if mode == "default":
   if era == "2016":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2016 import samples_2016 as samples
   elif era == "2017":
-    from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017 import samples_2017 as samples
+    #from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017 import samples_2017 as samples
+    from tthAnalysis.HiggsToTauTau.samples.hhAnalyzeSamples_2017_bkg import samples_2017 as samples
+    #for sample_name, sample_info in samples.items():
+    #  print (sample_name, sample_info["process_name_specific"])
+    #  if sample_info["process_name_specific"] in ["TTTT_PSweights", "TTTT"] : sample_info["use_it"] = False
+    #  ## I am not sure, this process is getting stuck on the code
   elif era == "2018":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2018 import samples_2018 as samples
   else:
@@ -67,7 +72,7 @@ elif mode == "forBDTtraining":
   if era == "2016":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2016_BDT import samples_2016 as samples
   elif era == "2017":
-    from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017_BDT import samples_2017 as samples
+    from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017_BDT_inclusive import samples_2017 as samples
   elif era == "2018":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2018_BDT import samples_2018 as samples
   else:
@@ -163,20 +168,21 @@ if __name__ == '__main__':
       "numJets"              : {},
       "numHTTv2"             : {},
       "mvaOutput_2lss_ttV"   : {},
-      "mvaOutput_2lss_ttbar" : {},
+      "output_NN_2lss_ttW_ttH_tH_3cat_v1" : {},
       "mvaDiscr_2lss"        : {},
-      "mva_AK12_basic"       : {},
-      "mva_Boosted_AK12_basic"  : {},
-      "mva_Boosted_AK12"        : {},
-      "mva_Boosted_AK12_noISO"  : {},
-      "mva_Boosted_AK8"         : {},
-      "mva_Boosted_AK8_noISO"   : {},
+      "output_NN_2lss_ttW_ttH_3cat_v7"       : {},
+      "output_NN_2lss_ttH_3cat"  : {},
+      "output_NN_2lss_ttW_ttH_3cat"        : {},
+      "output_NN_2lss_ttW_ttH_tH_4cat_v1"         : {},
+      "output_NN_2lss_ttW_ttH_tH_4cat_v2"   : {},
+      "output_NN_2lss_ttW_ttH_tH_3cat_v3"   : {},
       "mva_Updated"             : {},
       "mva_oldVar"              : {},
       "mvaOutput_2lss_ttV"   : {},
-      "mvaOutput_2lss_ttbar" : {},
+      "output_NN_2lss_ttW_ttH_tH_3cat_v1" : {},
       "mvaDiscr_2lss"        : {},
     },
+
     select_rle_output         = True,
     dry_run                   = dry_run,
     do_sync                   = do_sync,
