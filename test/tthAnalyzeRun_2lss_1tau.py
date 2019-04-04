@@ -76,7 +76,7 @@ if mode == "default":
     if era == "2016":
       from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2016 import samples_2016 as samples
     elif era == "2017":
-      from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017 import samples_2017 as samples
+      from tthAnalysis.HiggsToTauTau.samples.hhAnalyzeSamples_2017_bkg import samples_2017 as samples
     elif era == "2018":
       from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2018 import samples_2018 as samples
     else:

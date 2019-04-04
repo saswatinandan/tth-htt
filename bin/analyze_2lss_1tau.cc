@@ -1031,6 +1031,8 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
 
   int contHTTv2_noclean = 0;
   int contHTTv2_clean = 0;
+  double count_ttH_like = 0;
+  double count_tH_like = 0;
   while(inputTree -> hasNextEvent() && (! run_lumi_eventSelector || (run_lumi_eventSelector && ! run_lumi_eventSelector -> areWeDone())))
   {
     if(inputTree -> canReport(reportEvery))
@@ -2489,6 +2491,9 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
        category_2lss_ttH_3cat_TF += "tH_1jet"; output_NN_2lss_ttH_3cat = mvaOutput_2lss_TF["predictions_ttH"];
      }
 
+     if (ttH_like) count_ttH_like += evtWeight;
+     if (tH_like && !ttH_like) count_tH_like += evtWeight;
+
 //--- fill histograms with events passing final selection
     selHistManagerType* selHistManager = selHistManagers[idxSelLepton_genMatch][idxSelHadTau_genMatch];
     assert(selHistManager != 0);
@@ -2971,6 +2976,9 @@ for ( std::vector<const RecoJetHTTv2*>::const_iterator jetIter = sel_HTTv2.begin
             << "cut-flow table" << std::endl;
   cutFlowTable.print(std::cout);
   std::cout << std::endl;
+
+  std::cout << "count_ttH_like = " << count_ttH_like << "\n"
+  <<  "count_tH_like =" << count_tH_like << "\n\n";
 
   std::cout << "sel. Entries by gen. matching:" << std::endl;
   for ( std::vector<leptonGenMatchEntry>::const_iterator leptonGenMatch_definition = leptonGenMatch_definitions.begin();
