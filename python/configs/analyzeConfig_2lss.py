@@ -206,12 +206,14 @@ class analyzeConfig_2lss(analyzeConfig):
 
     self.isBDTtraining = False
 
-  def set_BDT_training(self):
+  def set_BDT_training(self, testing = False):
     """Run analysis with loose selection criteria for leptons,
        for the purpose of preparing event list files for BDT training.
     """
-    self.lepton_selections = [ "forBDTtraining" ]
-    self.lepton_frWeights  = [ "disabled" ]
+    if not testing :
+        self.lepton_selections = [ "forBDTtraining" ]
+        self.lepton_frWeights  = [ "disabled" ]
+    else : self.lepton_selections = [ "forBDTtesting" ]
     self.isBDTtraining     = True
 
   def createCfg_analyze(self, jobOptions, sample_info, lepton_selection):
@@ -347,6 +349,11 @@ class analyzeConfig_2lss(analyzeConfig):
       if lepton_selection == "forBDTtraining":
         electron_selection = "Loose" # "Tight"
         muon_selection =  "Loose" # "Tight"
+        #lepton_selection = "forBDTtraining" 
+      if lepton_selection == "forBDTtesting":
+        electron_selection = "Tight"
+        muon_selection = "Tight"
+        #lepton_selection = "forBDTtesting"
       elif lepton_selection == "Fakeable_mcClosure_e":
         electron_selection = "Fakeable"
         muon_selection = "Tight"
@@ -354,11 +361,11 @@ class analyzeConfig_2lss(analyzeConfig):
         electron_selection = "Tight"
         muon_selection = "Fakeable"
 
-      if self.isBDTtraining : lepton_selection = "forBDTtraining" ## Xanda FIX that
+      #if self.isBDTtraining : lepton_selection = "forBDTtraining" ## Xanda FIX that
       for lepton_frWeight in self.lepton_frWeights:
         if lepton_frWeight == "enabled" and not lepton_selection.startswith("Fakeable"):
           continue
-        if lepton_frWeight == "disabled" and not lepton_selection in [ "Tight", "forBDTtraining" ] :
+        if lepton_frWeight == "disabled" and not lepton_selection in [ "Tight", "forBDTtraining", "forBDTtesting"  ] :
           continue
         lepton_selection_and_frWeight = get_lepton_selection_and_frWeight(lepton_selection, lepton_frWeight)
 

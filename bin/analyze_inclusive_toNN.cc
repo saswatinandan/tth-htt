@@ -1003,7 +1003,7 @@ int main(int argc, char* argv[])
     if (
       !(
         (selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) || \
-        (selJets.size() >= 2 && selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size() >= 1))
+        (selJets.size() >= 1 && selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size() >= 1))
     )
     ) {
         pass_2los_0tau = false;
@@ -1034,12 +1034,12 @@ int main(int argc, char* argv[])
 
     if (
       !((int)selJets.size() >= 4) &&
-      !(selJets.size() >= 2 && selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1)
+      !((selJets.size()+selJetsForward.size()) >= 2 && selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1)
       ) pass_2lss_0tau = false; // remove overlap with ttW
 
       if (
         !((int)selJets.size() >= 3) &&
-        !(selJets.size() >= 2 && selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1)
+        !(selJets.size() >= 1 && selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1)
         ) {
           pass_1l_2tau = false;
           pass_2lss_1tau = false;
@@ -1174,6 +1174,14 @@ int main(int argc, char* argv[])
       pass_ttZctrl = false;
     } else {
       sum_lep_charge = selLepton_lead->charge() + selLepton_sublead->charge() + selLepton_third->charge();
+      if (std::abs(sum_lep_charge) > 1) {
+        pass_3l_0tau = false;
+        pass_ttZctrl = false;
+        pass_WZctrl = false;
+      }
+      if (std::abs(sum_lep_charge) > 0) {
+        pass_3l_1tau = false;
+      }
       const leptonGenMatchEntry& selLepton_genMatch = getLeptonGenMatch(
         leptonGenMatch_definitions,
         selLepton_lead,
@@ -1430,7 +1438,7 @@ int main(int argc, char* argv[])
     if ( met_LD_cut > 0 && met_LD < met_LD_cut ) {
       pass_3l_0tau = false;
       pass_4l_0tau = false;
-      pass_ttWctrl = false;
+      pass_ttZctrl = false;
       pass_2los_1tau = false;
       pass_3l_1tau = false;
       pass_2l_2tau = false;
@@ -1439,11 +1447,11 @@ int main(int argc, char* argv[])
       pass_WZctrl = false;
       pass_ZZctrl = false;
     }
-    if (pass_2lss_0tau || pass_2lss_1tau || pass_ttZctrl) {
+    if (pass_2lss_0tau || pass_2lss_1tau || pass_ttWctrl) {
       if ( (selLepton_lead->is_electron() && selLepton_sublead->is_electron()) && met_LD < 30. ) {
       pass_2lss_0tau = false;
       pass_2lss_1tau = false;
-      pass_ttZctrl = false;
+      pass_ttWctrl = false;
     }
     }
 

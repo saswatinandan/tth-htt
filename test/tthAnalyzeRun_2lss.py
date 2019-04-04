@@ -7,7 +7,7 @@ from tthAnalysis.HiggsToTauTau.runConfig import tthAnalyzeParser, filter_samples
 
 # E.g. to run: ./tthAnalyzeRun_2lss.py -v 2017Dec13 -m default -e 2017
 
-mode_choices     = [ 'default', 'forBDTtraining', 'sync', 'sync_wMEM' ]
+mode_choices     = [ 'default', 'forBDTtraining', 'sync', 'sync_wMEM', 'forBDTtesting'  ]
 sys_choices      = [ 'full' ] + systematics.an_extended_opts
 systematics.full = systematics.an_extended
 
@@ -77,8 +77,13 @@ elif mode == "forBDTtraining":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2018_BDT import samples_2018 as samples
   else:
     raise ValueError("Invalid era: %s" % era)
-
   lepton_charge_selections = [ "SS" ]
+elif mode == "forBDTtesting":
+    if era == "2017":
+      from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2017_BDT_test import samples_2017 as samples
+    else:
+      raise ValueError("Invalid era: %s" % era)
+    lepton_charge_selections = [ "SS" ]
 elif mode == "sync_wMEM":
   if era == "2016":
     from tthAnalysis.HiggsToTauTau.samples.tthAnalyzeSamples_2016_addMEM_sync import samples_2016 as samples
@@ -195,6 +200,7 @@ if __name__ == '__main__':
 
   if mode.find("forBDTtraining") != -1:
     analysis.set_BDT_training()
+  elif mode in ['forBDTtesting'] : analysis.set_BDT_training(testing = True) 
 
   job_statistics = analysis.create()
   for job_type, num_jobs in job_statistics.items():

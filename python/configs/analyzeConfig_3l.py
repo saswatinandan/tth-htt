@@ -198,9 +198,9 @@ class analyzeConfig_3l(analyzeConfig):
         histogramDir_prep_dcard_SS_local+=[self.subcategories[cc]+"_SS_Tight"]
     self.histogramDir_prep_dcard = histogramDir_prep_dcard_local
     self.histogramDir_prep_dcard_SS = histogramDir_prep_dcard_SS_local
-    self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "conversions", "fakes_data" ]
-    self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_3l_cfg.py")
-    self.cfgFile_make_plots_mcClosure = os.path.join(self.template_dir, "makePlots_mcClosure_3l_cfg.py") #TODO
+    #self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "conversions", "fakes_data" ]
+    #self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_3l_cfg.py")
+    #self.cfgFile_make_plots_mcClosure = os.path.join(self.template_dir, "makePlots_mcClosure_3l_cfg.py") #TODO
 
     self.select_rle_output = select_rle_output
     self.select_root_output = select_root_output
@@ -830,6 +830,7 @@ class analyzeConfig_3l(analyzeConfig):
           })
         self.createCfg_add_syst_fakerate(self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job])
 
+    """
     logging.info("Creating configuration files to run 'makePlots'")
     key_makePlots_job = getKey("OS")
     key_hadd_stage2 = getKey(get_lepton_selection_and_frWeight("Tight", "disabled"), "OS")
@@ -881,6 +882,7 @@ class analyzeConfig_3l(analyzeConfig):
         'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_mcClosure_%s.png" % self.channel)
       }
       self.createCfg_makePlots_mcClosure(self.jobOptions_make_plots[key_makePlots_job])
+    """
 
     if self.is_sbatch:
       logging.info("Creating script for submitting '%s' jobs to batch system" % self.executable_analyze)
@@ -903,7 +905,7 @@ class analyzeConfig_3l(analyzeConfig):
     self.addToMakefile_hadd_stage2(lines_makefile)
     self.addToMakefile_prep_dcard(lines_makefile)
     self.addToMakefile_add_syst_fakerate(lines_makefile)
-    self.addToMakefile_make_plots(lines_makefile)
+    #self.addToMakefile_make_plots(lines_makefile)
     self.createMakefile(lines_makefile)
 
     logging.info("Done")

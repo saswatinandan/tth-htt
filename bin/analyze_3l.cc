@@ -740,7 +740,31 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
   std::map<std::string, double> mvaInputs_3l_ttH_3cat_v7_TF;
   std::cout << "read NN 2_v3" << std::endl;
 
-  std::string mvaFileName_TensorFlow_3l_tH_ttH_4cat_v2 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_3cat_no4mom_noSemi_v2.pb";
+  // model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v1
+  double tH_in_predictions_ttH = 0.;
+  double tH_in_predictions_ttZ = 0.;
+  double tH_in_predictions_rest = 0.;
+  double tH_in_predictions_tH = 0.;
+  // was test_model_3l_ttH_tH_3cat_no4mom_noSemi_v2
+  /*
+  std::string mvaFileName_TensorFlow_3l_tH_ttH_4cat_v2 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v1.pb";
+  std::vector<std::string> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2 = {
+    "avg_dr_jet", "ptmiss", "mbb_medium",
+    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
+    "max_lep_eta", "lep_min_dr_jet",
+    "lep1_mT", "lep1_conept",
+    "lep2_mT", "lep2_conept",
+    "lep3_mT", "lep3_conept",
+    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge"
+  };
+  std::vector<std::string> classes_TensorFlow_3l_tH_ttH_4cat_v2 = {"predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"};
+  TensorFlowInterface mva_3l_tH_ttH_4cat_v2_TF(
+    mvaFileName_TensorFlow_3l_tH_ttH_4cat_v2,
+    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2,
+    classes_TensorFlow_3l_tH_ttH_4cat_v2
+  );
+  */
   // the order of input variables should be the same as during the training
   //data/NN_14Feb2019/model_3l_tH_ttH_4cat_no4mom_noSemi_quasar_classes.log
   //data/NN_14Feb2019/model_3l_tH_ttH_4cat_no4mom_noSemi_quasar_variables.log
@@ -756,6 +780,8 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
   'nJet', 'nJetForward', 'nBJetLoose','nElectron', 'sum_lep_charge',
   'mvaOutput_Hj_tagger'
   */
+  ///*
+  std::string mvaFileName_TensorFlow_3l_tH_ttH_4cat_v2 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_3cat_no4mom_noSemi_v2.pb";
   std::vector<std::string> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2 = {
     "avg_dr_jet", "ptmiss", "mbb_medium",
     "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
@@ -795,15 +821,12 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2_mean,
     mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2_var
   );
+  //*/
   std::map<std::string, double> mvaInputs_3l_tH_ttH_4cat_v2_TF;
   std::cout << "read NN 2" << std::endl;
 
   //model_3l_ttH_tH_3cat_no4mom_noSemi_v3
   std::string mvaFileName_TensorFlow_3l_tH_ttH_4cat_v3 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_3cat_no4mom_noSemi_v3.pb";
-  double tH_in_predictions_ttH = 0.;
-  double tH_in_predictions_ttZ = 0.;
-  double tH_in_predictions_rest = 0.;
-  double tH_in_predictions_tH = 0.;
   /*
   "avg_dr_jet", "ptmiss", "mbb_medium",
   "jet1_pt", "jet2_pt", "jet3_pt",
@@ -1499,7 +1522,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
       "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
       "jetForward1_pt", "jetForward1_eta_abs",
       "avg_dr_jet", "ptmiss",  "htmiss", "dr_leps",
-      "lumiScale", "genWeight", "evtWeight",
+      "lumiScale", "genWeight", "evtWeight", "evtWeight_lhe",
       "lep1_genLepPt", "lep2_genLepPt", "lep3_genLepPt",
       "lep1_fake_prob", "lep2_fake_prob", "lep3_fake_prob",
       "lep1_frWeight", "lep2_frWeight", "lep3_frWeight",
@@ -1582,14 +1605,16 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     "met LD",
     "MEt filters",
     "signal region veto",
+    " only tH_like"
   };
   CutFlowTableHistManager * cutFlowHistManager = new CutFlowTableHistManager(cutFlowTableCfg, cuts);
   cutFlowHistManager->bookHistograms(fs);
 
-  double count_tH_like = 0;
-  double count_ttH_like = 0;
-  double count_ttZ_like = 0;
-  double count_tH_like_Zpeak = 0;
+  double count_tH_like = 0.;
+  double count_ttH_like = 0.;
+  double count_ttZ_like = 0.;
+  double count_tH_like_Zpeak = 0.;
+  double evtWeight_lhe_count = 0.;
 
   while(inputTree -> hasNextEvent() && (! run_lumi_eventSelector || (run_lumi_eventSelector && ! run_lumi_eventSelector -> areWeDone())))
   {
@@ -1602,7 +1627,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
                 << ") file (" << selectedEntries << " Entries selected)\n";
     }
     ++analyzedEntries;
-    //if ( analyzedEntries > 50000 ) break;
+    //if ( analyzedEntries > 10 ) break;
     //std::cout << "analyzedEntries = " << analyzedEntries << std::endl;
     histogram_analyzedEntries->Fill(0.);
 
@@ -1685,10 +1710,15 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     //---------------------------------------------------------------------------
 
     double evtWeight_inclusive = 1.;
+    double evtWeight_lhe = 1.;
     if(isMC)
     {
       if(apply_genWeight)    evtWeight_inclusive *= boost::math::sign(eventInfo.genWeight);
-      if(isMC_tH)            evtWeight_inclusive *= eventInfo.genWeight_tH;
+      if(isMC_tH)            {
+        evtWeight_inclusive *= eventInfo.genWeight_tH;
+        evtWeight_lhe = eventInfo.genWeight_tH; // to compare with tHq
+        evtWeight_lhe_count += evtWeight_lhe;
+      }
       if(eventWeightManager) evtWeight_inclusive *= eventWeightManager->getWeight();
       lheInfoReader->read();
       evtWeight_inclusive *= lheInfoReader->getWeight_scale(lheScale_option);
@@ -1947,6 +1977,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     {
       printCollection("uncleanedJets", jet_ptrs);
       printCollection("selJets",       selJets);
+      printCollection("selJetsForward",       selJetsForward);
     }
 
 //--- cleaned RecoJet collection from AK12 as well
@@ -2020,6 +2051,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     assert(idxPreselLepton_genMatch != kGen_LeptonUndefined3);
 
     // require that trigger paths match event category (with event category based on preselLeptons)
+    /* Xanda: removed trigger match for the time being
     if ( !((preselElectrons.size() >= 3 &&                            (selTrigger_3e    || selTrigger_2e  || selTrigger_1e                                      )) ||
 	   (preselElectrons.size() >= 2 && preselMuons.size() >= 1 && (selTrigger_2e1mu || selTrigger_2e  || selTrigger_1e1mu || selTrigger_1mu || selTrigger_1e)) ||
 	   (preselElectrons.size() >= 1 && preselMuons.size() >= 2 && (selTrigger_1e2mu || selTrigger_2mu || selTrigger_1e1mu || selTrigger_1mu || selTrigger_1e)) ||
@@ -2040,6 +2072,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
       }
       continue;
     }
+    */
     cutFlowTable.update("presel lepton trigger match");
     cutFlowHistManager->fillHistograms("presel lepton trigger match", lumiScale);
 
@@ -2075,14 +2108,17 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
       ttH_like = true;
       ttZ_like = true;
     }
-    if ((selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_medium.size()) + selJetsForward.size()) >= 1) && ((selJets.size()+selJetsForward.size()) >= 2)) {tH_like = true; tH_like_Zpeak = true; } // Xanda -- adapted logic
-    if ((selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_medium.size()) + selJetsForward.size()) >= 1) && (selJets.size() >= 1))  tH_like_1jet = true;
+    if (
+      (selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1) &&\
+      ((selJets.size()+selJetsForward.size()) >= 2)
+    ) {tH_like = true; tH_like_Zpeak = true; } // Xanda -- adapted logic
+    if ((selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1) && (selJets.size() >= 1))  tH_like_1jet = true;
     if ( tH_like && 0 > 1 ) std::cout <<
     "selBJets_medium.size() = "<< selBJets_medium.size() << "\n" <<
     "selBJets_loose.size() = "<< selBJets_loose.size() << "\n" <<
     "selJets.size() = " << selJets.size() << "\n" <<
     "selJetsForward.size()" << selJetsForward.size() << "\n ================ \n";
-    if (!(tH_like || ttH_like || ttZ_like || tH_like_Zpeak))
+    if (!(tH_like || ttH_like))
     {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS selBJets selection adding tH-like and ttW-like (2)." << std::endl;
@@ -2245,6 +2281,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     }
 
     // require that trigger paths match event category (with event category based on fakeableLeptons)
+    /* Xanda: remove the trigger match
     if ( !((fakeableElectrons.size() >= 3 &&                              (selTrigger_3e    || selTrigger_2e  || selTrigger_1e                                      )) ||
 	   (fakeableElectrons.size() >= 2 && fakeableMuons.size() >= 1 && (selTrigger_2e1mu || selTrigger_2e  || selTrigger_1e1mu || selTrigger_1mu || selTrigger_1e)) ||
 	   (fakeableElectrons.size() >= 1 && fakeableMuons.size() >= 2 && (selTrigger_1e2mu || selTrigger_2mu || selTrigger_1e1mu || selTrigger_1mu || selTrigger_1e)) ||
@@ -2264,7 +2301,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
 		  << ", selTrigger_1e = " << selTrigger_1e << ")" << std::endl;
       }
       continue;
-    }
+    }*/
     cutFlowTable.update("fakeable lepton trigger match", evtWeight);
     cutFlowHistManager->fillHistograms("fakeable lepton trigger match", evtWeight);
 
@@ -2350,7 +2387,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
 
     const double minPt_lead = 25.;
     const double minPt_sublead = 15.;
-    const double minPt_third = 15.;
+    const double minPt_third = 10.;
     // CV: according to Giovanni, the pT cuts should be applied on cone_pt
     //    (combined efficiency of single lepton, double lepton, and triple lepton triggers assumed to be high,
     //     even if one or two leptons and fakes and hence cone_pt may be significantly smaller than lepton_pt,
@@ -2477,12 +2514,12 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
 
     double met_LD_cut = 0.;
     if      ( selJets.size() >= 4 ) met_LD_cut = -1.; // MET LD cut not applied
-    else if ( isSameFlavor_OS_FO     ) met_LD_cut = 45.;
+    else if ( isSameFlavor_OS_FO     ) met_LD_cut = 45.; // isSameFlavor_OS_FO
     else                            met_LD_cut = 30.;
-    if ( met_LD_cut > 0 && met_LD < met_LD_cut ) {
+    if ( met_LD_cut > 0 && (met_LD < met_LD_cut)) {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS MET LD selection." << std::endl;
-	std::cout << " (met_LD = " << met_LD << ", met_LD_cut = " << met_LD_cut << ")" << std::endl;
+	std::cout << " (met_LD = " << met_LD << ", met_LD_cut = " << met_LD_cut << ") isSameFlavor_OS_FO = "<< isSameFlavor_OS_FO << std::endl;
       }
       continue;
     }
@@ -2518,6 +2555,20 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     }
     cutFlowTable.update("signal region veto", evtWeight);
     cutFlowHistManager->fillHistograms("signal region veto", evtWeight);
+
+    if ( ttH_like ) count_ttH_like = count_ttH_like + evtWeight;
+    else if ( ttZ_like ) count_ttZ_like = count_ttZ_like + evtWeight;
+    if ( tH_like && !ttH_like) count_tH_like = count_tH_like + evtWeight;
+    else if ( tH_like_Zpeak && !ttZ_like) count_tH_like_Zpeak = count_tH_like_Zpeak + evtWeight;
+    if (!(tH_like || ttH_like || tH_like_Zpeak || ttZ_like))
+    {
+      if ( run_lumi_eventSelector ) {
+    std::cout << "event " << eventInfo.str() << " only tH_like" << std::endl;
+      }
+      continue;
+    }
+    cutFlowTable.update(" only tH_like", evtWeight);
+    cutFlowHistManager->fillHistograms(" only tH_like", evtWeight);
 
 //--- compute output of hadronic top tagger BDT
 // it returns the gen-triplets organized in top/anti-top
@@ -3290,6 +3341,16 @@ selJet != selJets.end(); ++selJet ) {
     "nJet", "nJetForward", "nBJetLoose","nElectron", "sum_lep_charge",
     "mvaOutput_Hj_tagger"
     */
+    /* -- no standartization
+    "avg_dr_jet", "ptmiss", "mbb_medium",
+    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
+    "max_lep_eta", "lep_min_dr_jet",
+    "lep1_mT", "lep1_conept",
+    "lep2_mT", "lep2_conept",
+    "lep3_mT", "lep3_conept",
+    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge"
+    */
     mvaInputs_3l_tH_ttH_4cat_v2_TF["avg_dr_jet"]                 = avg_dr_jet;
     mvaInputs_3l_tH_ttH_4cat_v2_TF["ptmiss"] = met.pt();
     mvaInputs_3l_tH_ttH_4cat_v2_TF["mbb_medium"] = selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0;
@@ -3481,11 +3542,6 @@ selJet != selJets.end(); ++selJet ) {
       output_NN_3l_ttH_3cat = mvaOutput_3l_ttH_3cat_TF["predictions_ttH"];
     }
 
-    if ( ttH_like ) count_ttH_like = count_ttH_like + evtWeight;
-    else if ( ttZ_like ) count_ttZ_like = count_ttZ_like + evtWeight;
-    if ( tH_like ) count_tH_like = count_tH_like + evtWeight;
-    else if ( tH_like_Zpeak ) count_tH_like_Zpeak = count_tH_like_Zpeak + evtWeight;
-
     //std::map<std::string, double> mvaOutput_3l_ttH_3cat_TF = mva_2lss_TF(mvaInputs_3l_ttH_3cat_TF);
     std::string category_3l_ttH_3cat_v7_TF = "output_NN_3l_ttH_3cat_v7_";
     double output_NN_3l_ttH_3cat_v7 = -10;
@@ -3531,6 +3587,7 @@ selJet != selJets.end(); ++selJet ) {
       ) {
         category_3l_tH_ttH_4cat_v2_TF += "ttH";
         output_NN_3l_tH_ttH_4cat_v2 = mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"];
+        tH_in_predictions_ttH += evtWeight;
       }
       if (
         mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttZ"] >  mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"] &&\
@@ -3539,6 +3596,7 @@ selJet != selJets.end(); ++selJet ) {
       ) {
         category_3l_tH_ttH_4cat_v2_TF += "ttZ";
         output_NN_3l_tH_ttH_4cat_v2 = mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttZ"];
+        tH_in_predictions_ttZ += evtWeight;
       }
       if (
         mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_tH"] >  mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"] &&\
@@ -3547,6 +3605,7 @@ selJet != selJets.end(); ++selJet ) {
       ) {
         category_3l_tH_ttH_4cat_v2_TF += "tH";
         output_NN_3l_tH_ttH_4cat_v2 = mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"];
+        tH_in_predictions_tH += evtWeight;
         }
       if (
         mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"] &&\
@@ -3555,6 +3614,7 @@ selJet != selJets.end(); ++selJet ) {
       ) {
         category_3l_tH_ttH_4cat_v2_TF += "rest";
         output_NN_3l_tH_ttH_4cat_v2 = mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"];
+        tH_in_predictions_rest += evtWeight;
         }
     } else {
       category_3l_tH_ttH_4cat_v2_TF += "no_cat";
@@ -3573,14 +3633,12 @@ selJet != selJets.end(); ++selJet ) {
       ) {
         category_3l_tH_ttH_4cat_v3_TF += "ttH";
         output_NN_3l_tH_ttH_4cat_v3 = mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttH"];
-        tH_in_predictions_ttH += evtWeight;
       }
       if (
         mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] >  mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttH"] &&\
         mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] >= mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"] &&\
         mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] >= mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_tH"]
       ) {
-        tH_in_predictions_ttZ += evtWeight;
         category_3l_tH_ttH_4cat_v3_TF += "ttZ";
         output_NN_3l_tH_ttH_4cat_v3 = mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"];
       }
@@ -3589,7 +3647,6 @@ selJet != selJets.end(); ++selJet ) {
         mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_tH"] >  mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] &&\
         mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_tH"] >= mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"]
       ) {
-        tH_in_predictions_tH += evtWeight;
         category_3l_tH_ttH_4cat_v3_TF += "tH";
         output_NN_3l_tH_ttH_4cat_v3 = mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"];
         }
@@ -3598,7 +3655,6 @@ selJet != selJets.end(); ++selJet ) {
         mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] &&\
         mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_tH"]
       ) {
-        tH_in_predictions_rest += evtWeight;
         category_3l_tH_ttH_4cat_v3_TF += "rest";
         output_NN_3l_tH_ttH_4cat_v3 = mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"];
         }
@@ -4139,7 +4195,7 @@ selJet != selJets.end(); ++selJet ) {
       double lep3_genLepPt = ( selLepton_third->genLepton()   ) ? selLepton_third->genLepton()->pt()   : 0.;
 
       //FR weights for bdt ntuple
-      std::cout << "filling bdt tree "<< applyFakeRateWeights_string << std::endl;
+      //std::cout << "filling bdt tree "<< applyFakeRateWeights_string << std::endl;
       double prob_fake_lepton_lead = 1.;
       if      ( std::abs(selLepton_lead->pdgId()) == 11 ) prob_fake_lepton_lead = leptonFakeRateInterface->getWeight_e(selLepton_lead->cone_pt(), selLepton_lead->absEta());
       else if ( std::abs(selLepton_lead->pdgId()) == 13 ) prob_fake_lepton_lead = leptonFakeRateInterface->getWeight_mu(selLepton_lead->cone_pt(), selLepton_lead->absEta());
@@ -4304,6 +4360,7 @@ selJet != selJets.end(); ++selJet ) {
 
           ("mvaOutput_Hj_tagger",    Hj_tagger_fromCSVsort4th)
           ("Hj_tagger_fromCSVsort4th", Hj_tagger_fromCSVsort4th)
+          ("evtWeight_lhe",            evtWeight_lhe)
         .fill()
       ;
     }
@@ -4444,14 +4501,15 @@ selJet != selJets.end(); ++selJet ) {
   std::cout << std::endl;
 
   std::cout << "tH_in_predictions_ttH = " << tH_in_predictions_ttH << "\n"
-  << "tH_in_predictions_ttZ " << tH_in_predictions_ttZ << "\n"
-  << "tH_in_predictions_rest " << tH_in_predictions_rest << "\n"
-  << "tH_in_predictions_tH " << tH_in_predictions_tH << "\n\n";
+  << "tH_in_predictions_ttZ = " << tH_in_predictions_ttZ << "\n"
+  << "tH_in_predictions_rest = " << tH_in_predictions_rest << "\n"
+  << "tH_in_predictions_tH = " << tH_in_predictions_tH << "\n\n";
 
-  std::cout <<  "count_tH_like ble = " << count_tH_like << "\n"
+  std::cout <<  "count_tH_like = " << count_tH_like << "\n"
   "count_ttH_like = " << count_ttH_like << "\n"
   "count_ttZ_like = " << count_ttZ_like << "\n"
-  "count_tH_like_Zpeak = " << count_tH_like_Zpeak << "\n\n";
+  "count_tH_like_Zpeak = " << count_tH_like_Zpeak << "\n\n"
+  "evtWeight_lhe_count = "<< evtWeight_lhe_count << "\n\n";
 
   std::cout << "sel. Entries by gen. matching:" << std::endl;
   for ( std::vector<leptonGenMatchEntry>::const_iterator leptonGenMatch_definition = leptonGenMatch_definitions.begin();

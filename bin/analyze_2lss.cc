@@ -1417,9 +1417,16 @@ int main(int argc, char* argv[])
     "MEt filters",
     "sel lepton-pair gen=rec charge match",
     "signal region veto",
+    "tH signal region veto"
   };
   CutFlowTableHistManager * cutFlowHistManager = new CutFlowTableHistManager(cutFlowTableCfg, cuts);
   cutFlowHistManager->bookHistograms(fs);
+  double count_tH_like_ext = 0.0;
+  double count_tH_like_Wtype = 0.0;
+  double count_tH_like = 0.0;
+  double count_ttW_like = 0.0;
+  double count_ttH_like = 0.0;
+  double evtWeight_lhe_count = 0.;
 
   while(inputTree -> hasNextEvent() && (! run_lumi_eventSelector || (run_lumi_eventSelector && ! run_lumi_eventSelector -> areWeDone())))
   {
@@ -1485,10 +1492,15 @@ int main(int argc, char* argv[])
     }
 
     double evtWeight_inclusive = 1.;
+    double evtWeight_lhe = 1.;
     if(isMC)
     {
       if(apply_genWeight)    evtWeight_inclusive *= boost::math::sign(eventInfo.genWeight);
-      if(isMC_tH)            evtWeight_inclusive *= eventInfo.genWeight_tH;
+      if(isMC_tH)            {
+        evtWeight_inclusive *= eventInfo.genWeight_tH;
+        evtWeight_lhe = eventInfo.genWeight_tH; // to compare with tHq
+        evtWeight_lhe_count += evtWeight_lhe;
+      }
       if(eventWeightManager) evtWeight_inclusive *= eventWeightManager->getWeight();
       lheInfoReader->read();
       evtWeight_inclusive *= lheInfoReader->getWeight_scale(lheScale_option);
@@ -1765,6 +1777,7 @@ int main(int argc, char* argv[])
     assert(idxPreselLepton_genMatch != kGen_LeptonUndefined2);
 
     // require that trigger paths match event category (with event category based on preselLeptons)
+    /* Xanda: remove the trigger match
     if ( !((preselElectrons.size() >= 2 &&                            (selTrigger_2e    || selTrigger_1e                  )) ||
 	   (preselElectrons.size() >= 1 && preselMuons.size() >= 1 && (selTrigger_1e1mu || selTrigger_1mu || selTrigger_1e)) ||
 	   (                               preselMuons.size() >= 2 && (selTrigger_2mu   || selTrigger_1mu                 ))) ) {
@@ -1779,7 +1792,7 @@ int main(int argc, char* argv[])
 		  << ", selTrigger_1e = " << selTrigger_1e << ")" << std::endl;
       }
       continue;
-    }
+    }*/
     cutFlowTable.update("presel lepton trigger match");
     cutFlowHistManager->fillHistograms("presel lepton trigger match", lumiScale);
 
@@ -1932,6 +1945,7 @@ int main(int argc, char* argv[])
       std::cout << "evtWeight = " << evtWeight << std::endl;
     }
     // require exactly two leptons passing tight selection criteria, to avoid overlap with other channels
+    /* Xanda: remove the trigger match
     if ( !(tightLeptonsFull.size() <= 2) ) {
       if ( run_lumi_eventSelector ) {
         std::cout << "event " << eventInfo.str() << " FAILS tightLeptons selection.\n";
@@ -1956,7 +1970,7 @@ int main(int argc, char* argv[])
 		  << ", selTrigger_1e = " << selTrigger_1e << ")" << std::endl;
       }
       continue;
-    }
+    }*/
     cutFlowTable.update("fakeable lepton trigger match", evtWeight);
     cutFlowHistManager->fillHistograms("fakeable lepton trigger match", evtWeight);
 
@@ -2001,14 +2015,17 @@ int main(int argc, char* argv[])
     bool ttW_tH_like = false;
     if ((selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) && (selJets.size() >= 4)) ttH_like = true;
     if ((selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) && (selJets.size() == 3)) ttW_like = true;
-    if ((selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) && ((selJets.size()+selJetsForward.size()) == 3 || (selJets.size()+selJetsForward.size()) == 2)) ttW_tH_like = true;
     if (
-      (selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_medium.size()) + selJetsForward.size()) >= 1) &&\
-      (selJets.size()) >= 2
+      (selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) && ((selJets.size()+selJetsForward.size()) == 3 ||\
+      (selJets.size()+selJetsForward.size()) == 2)
+    ) ttW_tH_like = true;
+    if (
+      (selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1) &&\
+      (selJets.size() + selJetsForward.size()) >= 2
     ) tH_like = true;
     if (
-      (selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_medium.size()) + selJetsForward.size()) >= 1) &&\
-      (selJets.size()+selJetsForward.size()) >= 2
+      (selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1) &&\
+      (selJets.size()) >= 2
     ) tH_like_exp = true;
     if (!(tH_like || ttH_like || ttW_like || ttW_tH_like || tH_like_exp))
     {
@@ -2209,6 +2226,21 @@ int main(int argc, char* argv[])
 
     cutFlowTable.update("signal region veto", evtWeight);
     cutFlowHistManager->fillHistograms("signal region veto", evtWeight);
+
+    if ( ttH_like ) count_ttH_like = count_ttH_like + evtWeight;
+    if ( ttW_like ) count_ttW_like = count_ttW_like + evtWeight;
+    if ( tH_like && !ttH_like && !ttW_like) count_tH_like = count_tH_like + evtWeight;
+    if ( ttW_tH_like && !ttW_like && !ttH_like && !tH_like) count_tH_like_Wtype = count_tH_like_Wtype + evtWeight;
+    if ( tH_like_exp && !tH_like && !ttH_like && !ttW_like && !ttW_tH_like ) count_tH_like_ext = count_tH_like_ext + evtWeight;
+    if (!(tH_like || ttH_like || ttW_like || ttW_tH_like || tH_like_exp)) // Xanda FIX for sfter sync -- add ttW  || ttH_like || ttW_like
+    {
+      if ( run_lumi_eventSelector ) {
+    std::cout << "event " << eventInfo.str() << "tH signal region veto" << std::endl;
+      }
+      continue;
+    }
+    cutFlowTable.update("tH signal region veto", evtWeight);
+    cutFlowHistManager->fillHistograms("tH signal region veto", evtWeight);
 
 //--- compute variables BDTs used to discriminate ttH vs. ttV and ttH vs. ttbar
     double mindr_lep1_jet=comp_mindr_lep1_jet(*selLepton_lead, selJets);
@@ -3775,9 +3807,16 @@ int main(int argc, char* argv[])
   std::cout << std::endl;
 
   std::cout << "tH_in_predictions_ttH = " << tH_in_predictions_ttH << "\n"
-  << "tH_in_predictions_ttZ " << tH_in_predictions_ttZ << "\n"
-  << "tH_in_predictions_rest " << tH_in_predictions_rest << "\n"
-  << "tH_in_predictions_tH " << tH_in_predictions_tH << "\n\n";
+  << "tH_in_predictions_ttZ = " << tH_in_predictions_ttZ << "\n"
+  << "tH_in_predictions_rest = " << tH_in_predictions_rest << "\n"
+  << "tH_in_predictions_tH = " << tH_in_predictions_tH << "\n\n";
+
+  std::cout << "count_tH_like_ext = "<< count_tH_like_ext << "\n"
+  "count_tH_like_Wtype = "<< count_tH_like_Wtype << "\n"
+  "count_tH_like = "<< count_tH_like << "\n"
+  "count_ttW_like = "<< count_ttW_like << "\n"
+  "count_ttH_like = "<< count_ttH_like << "\n\n"
+  "evtWeight_lhe_count = "<< evtWeight_lhe_count<< "\n\n";
 
   std::cout << "sel. Entries by gen. matching:" << std::endl;
   for ( std::vector<leptonGenMatchEntry>::const_iterator leptonGenMatch_definition = leptonGenMatch_definitions.begin();
