@@ -22649,9 +22649,9 @@ samples_2017["/THQ_4f_Hincl_13TeV_madgraph_pythia8_Fall17/private/USER"] = OD([
   ("nof_db_events",                   124500),
   ("fsize_local",                     374427130), # 374.43MB, avg file size 374.43MB
   ("fsize_db",                        9518371556), # 9.52GB, avg file size 1.06GB
-  ("use_it",                          True),
+  ("use_it",                          False),
   ("xsection",                        0.07096),
-  ("genWeight",                       True),
+  ("genWeight",                       False),
   ("triggers",                        ['1e', '1mu', '2e', '2mu', '1e1mu', '3e', '3mu', '2e1mu', '1e2mu', '1e1tau', '1mu1tau', '2tau']),
   ("has_LHE",                         True),
   ("local_paths",
@@ -22695,9 +22695,9 @@ samples_2017["/THW_5f_Hincl_13TeV_madgraph_pythia8_Fall17/private/USER"] = OD([
   ("nof_db_events",                   50000),
   ("fsize_local",                     178822898), # 178.82MB, avg file size 178.82MB
   ("fsize_db",                        4388282654), # 4.39GB, avg file size 1.10GB
-  ("use_it",                          True),
+  ("use_it",                          False),
   ("xsection",                        0.01561),
-  ("genWeight",                       True),
+  ("genWeight",                       False),
   ("triggers",                        ['1e', '1mu', '2e', '2mu', '1e1mu', '3e', '3mu', '2e1mu', '1e2mu', '1e1tau', '1mu1tau', '2tau']),
   ("has_LHE",                         True),
   ("local_paths",
@@ -22880,7 +22880,7 @@ samples_2017["/THQ_ctcvcp_4f_Hincl_13TeV_madgraph_pythia8/RunIIFall17MiniAODv2-P
   ("nof_db_events",                   9918994),
   ("fsize_local",                     31306694780), # 31.31GB, avg file size 1.42GB
   ("fsize_db",                        569542482347), # 569.54GB, avg file size 2.21GB
-  ("use_it",                          False),
+  ("use_it",                          True),
   ("xsection",                        0.07096),
   ("genWeight",                       True),
   ("triggers",                        ['1e', '1mu', '2e', '2mu', '1e1mu', '3e', '3mu', '2e1mu', '1e2mu', '1e1tau', '1mu1tau', '2tau']),
@@ -22926,7 +22926,7 @@ samples_2017["/THW_ctcvcp_5f_Hincl_13TeV_madgraph_pythia8/RunIIFall17MiniAODv2-P
   ("nof_db_events",                   4719999),
   ("fsize_local",                     16395318368), # 16.40GB, avg file size 1.64GB
   ("fsize_db",                        308444472684), # 308.44GB, avg file size 1.79GB
-  ("use_it",                          False),
+  ("use_it",                          True),
   ("xsection",                        0.01561),
   ("genWeight",                       True),
   ("triggers",                        ['1e', '1mu', '2e', '2mu', '1e1mu', '3e', '3mu', '2e1mu', '1e2mu', '1e1tau', '1mu1tau', '2tau']),
