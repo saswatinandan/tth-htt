@@ -92,30 +92,47 @@ class analyzeConfig_2lss(analyzeConfig):
         #//
         "2lss_0tau_no_ttH",
         #
-        "output_NN_2lss_ttW_ttH_tH_3cat_v1_ttH",
-        "output_NN_2lss_ttW_ttH_tH_3cat_v1_rest", "output_NN_2lss_ttW_ttH_tH_3cat_v1_tH",
-        "output_NN_2lss_ttW_ttH_tH_3cat_v1_no_cat",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttW",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_rest",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_tH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_no_cat",
         #
-        "output_NN_2lss_ttW_ttH_tH_3cat_v3_ttH",
-        "output_NN_2lss_ttW_ttH_tH_3cat_v3_rest", "output_NN_2lss_ttW_ttH_tH_3cat_v3_tH",
-        "output_NN_2lss_ttW_ttH_tH_3cat_v3_no_cat",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttW",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_rest",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_tH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_no_cat",
         #
-        "output_NN_2lss_ttW_ttH_tH_4cat_v2_ttH", "output_NN_2lss_ttW_ttH_tH_4cat_v2_ttW",
-        "output_NN_2lss_ttW_ttH_tH_4cat_v2_rest", "output_NN_2lss_ttW_ttH_tH_4cat_v2_tH",
-        "output_NN_2lss_ttW_ttH_tH_4cat_v2_no_cat",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttW",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_rest",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_tH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_no_cat",
         #
-        "output_NN_2lss_ttW_ttH_tH_4cat_v1_ttH", "output_NN_2lss_ttW_ttH_tH_4cat_v1_ttW",
-        "output_NN_2lss_ttW_ttH_tH_4cat_v1_rest", "output_NN_2lss_ttW_ttH_tH_4cat_v1_tH",
-        "output_NN_2lss_ttW_ttH_tH_4cat_v1_no_cat",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttW",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_rest",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_tH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_no_cat",
         #
-        "output_NN_2lss_ttW_ttH_3cat_ttH", "output_NN_2lss_ttW_ttH_3cat_ttW", "output_NN_2lss_ttW_ttH_3cat_rest",
-        "output_NN_2lss_ttW_ttH_3cat_no_cat",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_ttH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_ttW",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_rest",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_tH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_no_cat",
         #
-        "output_NN_2lss_ttW_ttH_3cat_v7_ttH", "output_NN_2lss_ttW_ttH_3cat_v7_ttW", "output_NN_2lss_ttW_ttH_3cat_v7_rest",
-        "output_NN_2lss_ttW_ttH_3cat_v7_tH", "output_NN_2lss_ttW_ttH_3cat_v7_no_cat",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_ttH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_ttW",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_rest",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_tH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_no_cat",
         #
-        "output_NN_2lss_ttH_3cat_ttH", "output_NN_2lss_ttH_3cat_ttW", "output_NN_2lss_ttH_3cat_rest",
-        "output_NN_2lss_ttH_3cat_tH_like_exp", "output_NN_2lss_ttH_3cat_tH_ttW", "output_NN_2lss_ttH_3cat_ttWsel"
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttW",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_rest",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_tH",
+        "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_no_cat"
         ],
       samples                   = samples,
       central_or_shifts         = central_or_shifts,
@@ -349,7 +366,7 @@ class analyzeConfig_2lss(analyzeConfig):
       if lepton_selection == "forBDTtraining":
         electron_selection = "Loose" # "Tight"
         muon_selection =  "Loose" # "Tight"
-        #lepton_selection = "forBDTtraining" 
+        #lepton_selection = "forBDTtraining"
       if lepton_selection == "forBDTtesting":
         electron_selection = "Tight"
         muon_selection = "Tight"

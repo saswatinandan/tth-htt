@@ -29,19 +29,19 @@ void EvtHistManager_2lss::bookHistograms(TFileDirectory & dir)
   histogram_numBJets_medium_vs_numJets_ = book2D(dir, "numBJets_medium_vs_numJets", "numBJets_medium_vs_numJets", 8, -0.5, +7.5, 6, -0.5, +5.5);
 
   histogram_mvaOutput_2lss_ttV_   = book1D(dir, "mvaOutput_2lss_ttV",   "mvaOutput_2lss_ttV",   40, -1., +1.);
-  histogram_output_NN_2lss_ttW_ttH_tH_3cat_v1_ = book1D(dir, "output_NN_2lss_ttW_ttH_tH_3cat_v1", "output_NN_2lss_ttW_ttH_tH_3cat_v1", 100, 0., +1.);
+  histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ = book1D(dir, "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5", "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5", 100, 0., +1.);
   histogram_mvaDiscr_2lss_        = book1D(dir, "mvaDiscr_2lss",        "mvaDiscr_2lss",         11,  -0.5, 10.5);
 
-  histogram_output_NN_2lss_ttW_ttH_tH_3cat_v3_  = book1D(dir, "output_NN_2lss_ttW_ttH_tH_3cat_v3",  "output_NN_2lss_ttW_ttH_tH_3cat_v3",  100, 0, +1.);
-  histogram_output_NN_2lss_ttW_ttH_3cat_v7_ = book1D(dir, "output_NN_2lss_ttW_ttH_3cat_v7", "output_NN_2lss_ttW_ttH_3cat_v7", 100, -1., +1.);
+  histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_  = book1D(dir, "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7",  "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7",  100, 0, +1.);
+  histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_ = book1D(dir, "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3", "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3", 100, -1., +1.);
 
   histogram_EventCounter_ = book1D(dir, "EventCounter", "EventCounter", 1, -0.5, +0.5);
 
-  histogram_output_NN_2lss_ttH_3cat_    = book1D(dir, "output_NN_2lss_ttH_3cat",    "output_NN_2lss_ttH_3cat",     100, 0.0,  +1.0);
-  histogram_output_NN_2lss_ttW_ttH_3cat_ = book1D(dir, "output_NN_2lss_ttW_ttH_3cat",    "output_NN_2lss_ttW_ttH_3cat",     100, 0.0,  +1.0);
+  histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_    = book1D(dir, "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1",    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1",     100, 0.0,  +1.0);
+  histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_ = book1D(dir, "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2",    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2",     100, 0.0,  +1.0);
 
-  histogram_output_NN_2lss_ttW_ttH_tH_4cat_v1_    = book1D(dir, "output_NN_2lss_ttW_ttH_tH_4cat_v1",    "output_NN_2lss_ttW_ttH_tH_4cat_v1",     100, 0.0,  +1.0);
-  histogram_output_NN_2lss_ttW_ttH_tH_4cat_v2_    = book1D(dir, "output_NN_2lss_ttW_ttH_tH_4cat_v2",    "output_NN_2lss_ttW_ttH_tH_4cat_v2",     100, 0.0,  +1.0);
+  histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_    = book1D(dir, "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4",    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4",     100, 0.0,  +1.0);
+  histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_    = book1D(dir, "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6",    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6",     100, 0.0,  +1.0);
   histogram_mva_Updated_    = book1D(dir, "mva_Updated",    "mva_Updated",     100, 0.0,  +1.0);
   histogram_mva_oldVar_    = book1D(dir, "mva_oldVar",    "mva_oldVar",     100, 0.0,  +1.0);
 
@@ -57,15 +57,14 @@ EvtHistManager_2lss::fillHistograms(int numElectrons,
                                     int numHTTv2,
                                     double evtWeight,
                                     double mvaOutput_2lss_ttV,
-                                    double output_NN_2lss_ttW_ttH_tH_3cat_v1,
+                                    double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
                                     double mvaDiscr_2lss,
-                                    double output_NN_2lss_ttW_ttH_tH_3cat_v3,
-                                    double output_NN_2lss_ttW_ttH_3cat_v7,
-                                    //
-                                    double output_NN_2lss_ttH_3cat,
-                                    double output_NN_2lss_ttW_ttH_3cat,
-                                    double output_NN_2lss_ttW_ttH_tH_4cat_v1,
-                                    double output_NN_2lss_ttW_ttH_tH_4cat_v2,
+                                    double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
+                                    double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
+                                    double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
+                                    double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+                                    double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
+                                    double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
                                     double mva_Updated,
                                     double mva_oldVar
                                   )
@@ -84,19 +83,19 @@ EvtHistManager_2lss::fillHistograms(int numElectrons,
   fillWithOverFlow2d(histogram_numBJets_medium_vs_numJets_, numJets, numBJets_medium, evtWeight, evtWeightErr);
 
   fillWithOverFlow(histogram_mvaOutput_2lss_ttV_,   mvaOutput_2lss_ttV,   evtWeight, evtWeightErr);
-  fillWithOverFlow(histogram_output_NN_2lss_ttW_ttH_tH_3cat_v1_, output_NN_2lss_ttW_ttH_tH_3cat_v1, evtWeight, evtWeightErr);
   fillWithOverFlow(histogram_mvaDiscr_2lss_,        mvaDiscr_2lss,        evtWeight, evtWeightErr);
 
-  fillWithOverFlow(histogram_output_NN_2lss_ttW_ttH_tH_3cat_v3_,  output_NN_2lss_ttW_ttH_tH_3cat_v3,  evtWeight, evtWeightErr);
-  fillWithOverFlow(histogram_output_NN_2lss_ttW_ttH_3cat_v7_, output_NN_2lss_ttW_ttH_3cat_v7, evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_,  output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,  evtWeight, evtWeightErr);
 
   fillWithOverFlow(histogram_EventCounter_, 0., evtWeight, evtWeightErr);
 
-  fillWithOverFlow(histogram_output_NN_2lss_ttH_3cat_,           output_NN_2lss_ttH_3cat,    evtWeight, evtWeightErr);
-  fillWithOverFlow(histogram_output_NN_2lss_ttW_ttH_3cat_,   output_NN_2lss_ttW_ttH_3cat,        evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_,           output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,    evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_,   output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,        evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3, evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_,  output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,  evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5, evtWeight, evtWeightErr);
+  fillWithOverFlow(histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6, evtWeight, evtWeightErr);
 
-  fillWithOverFlow(histogram_output_NN_2lss_ttW_ttH_tH_4cat_v1_,  output_NN_2lss_ttW_ttH_tH_4cat_v1,  evtWeight, evtWeightErr);
-  fillWithOverFlow(histogram_output_NN_2lss_ttW_ttH_tH_4cat_v2_, output_NN_2lss_ttW_ttH_tH_4cat_v2, evtWeight, evtWeightErr);
   fillWithOverFlow(histogram_mva_Updated_,        mva_Updated, evtWeight, evtWeightErr);
   fillWithOverFlow(histogram_mva_oldVar_,        mva_oldVar, evtWeight, evtWeightErr);
 

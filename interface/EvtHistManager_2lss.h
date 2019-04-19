@@ -33,15 +33,15 @@ class EvtHistManager_2lss
                  double evtWeight,
                  //
                  double mvaOutput_2lss_ttV,
-                 double output_NN_2lss_ttW_ttH_tH_3cat_v1,
+                 double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
                  double mvaDiscr_2lss,
-                 double output_NN_2lss_ttW_ttH_tH_3cat_v3,
-                 double output_NN_2lss_ttW_ttH_3cat_v7,
+                 double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
+                 double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
                  //
-                 double output_NN_2lss_ttH_3cat,
-                 double output_NN_2lss_ttW_ttH_3cat,
-                 double output_NN_2lss_ttW_ttH_tH_4cat_v1,
-                 double output_NN_2lss_ttW_ttH_tH_4cat_v2,
+                 double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
+                 double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+                 double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
+                 double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
                  double mva_Updated,
                  double mva_oldVar
                );
@@ -67,18 +67,18 @@ class EvtHistManager_2lss
   TH2 * histogram_numBJets_medium_vs_numJets_;
 
   TH1 * histogram_mvaOutput_2lss_ttV_;
-  TH1 * histogram_output_NN_2lss_ttW_ttH_tH_3cat_v1_;
   TH1 * histogram_mvaDiscr_2lss_;
 
-  TH1 * histogram_output_NN_2lss_ttW_ttH_tH_3cat_v3_;
-  TH1 * histogram_output_NN_2lss_ttW_ttH_3cat_v7_;
+  TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_;
 
   TH1 * histogram_EventCounter_;
 
-  TH1 * histogram_output_NN_2lss_ttH_3cat_;
-  TH1 * histogram_output_NN_2lss_ttW_ttH_3cat_;
-  TH1 * histogram_output_NN_2lss_ttW_ttH_tH_4cat_v1_;
-  TH1 * histogram_output_NN_2lss_ttW_ttH_tH_4cat_v2_;
+  TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_;
+  TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_;
+  TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_;
+  TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_;
+  TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_;
+  TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_;
   TH1 * histogram_mva_Updated_;
   TH1 * histogram_mva_oldVar_;
 

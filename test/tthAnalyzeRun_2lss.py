@@ -39,7 +39,7 @@ systematics_label = args.systematics
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = 3 #args.files_per_job
+files_per_job     = 2 #args.files_per_job
 #files_per_job     = args.files_per_job
 use_home          = args.use_home
 
@@ -173,18 +173,17 @@ if __name__ == '__main__':
       "numJets"              : {},
       "numHTTv2"             : {},
       "mvaOutput_2lss_ttV"   : {},
-      "output_NN_2lss_ttW_ttH_tH_3cat_v1" : {},
       "mvaDiscr_2lss"        : {},
-      "output_NN_2lss_ttW_ttH_3cat_v7"       : {},
-      "output_NN_2lss_ttH_3cat"  : {},
-      "output_NN_2lss_ttW_ttH_3cat"        : {},
-      "output_NN_2lss_ttW_ttH_tH_4cat_v1"         : {},
-      "output_NN_2lss_ttW_ttH_tH_4cat_v2"   : {},
-      "output_NN_2lss_ttW_ttH_tH_3cat_v3"   : {},
+      "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3"       : {},
+      "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1"  : {},
+      "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2"        : {},
+      "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4"         : {},
+      "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6"   : {},
+      "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7"   : {},
       "mva_Updated"             : {},
       "mva_oldVar"              : {},
       "mvaOutput_2lss_ttV"   : {},
-      "output_NN_2lss_ttW_ttH_tH_3cat_v1" : {},
+      "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5" : {},
       "mvaDiscr_2lss"        : {},
     },
 
@@ -200,7 +199,7 @@ if __name__ == '__main__':
 
   if mode.find("forBDTtraining") != -1:
     analysis.set_BDT_training()
-  elif mode in ['forBDTtesting'] : analysis.set_BDT_training(testing = True) 
+  elif mode in ['forBDTtesting'] : analysis.set_BDT_training(testing = True)
 
   job_statistics = analysis.create()
   for job_type, num_jobs in job_statistics.items():
