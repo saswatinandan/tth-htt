@@ -39,7 +39,7 @@ systematics_label = args.systematics
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = 5 #args.files_per_job
+files_per_job     = 2 #args.files_per_job
 use_home          = args.use_home
 
 # Use the arguments
@@ -165,16 +165,19 @@ if __name__ == '__main__':
       "EventCounter" : {},
       "numJets"      : {},
       "mvaDiscr_3l"  : {},
-      "output_NN_3l_ttH_3cat"  : {},
-      "output_NN_3l_tH_ttH_4cat_v2"   : {},
-      "output_NN_3l_ttH_3cat_v7"  : {},
-      "output_NN_3l_tH_ttH_4cat_v3"  : {},
-      "output_NN_3l_tH_ttH_4cat_v4"  : {},
-      "output_NN_3l_tH_ttH_3cat_v4" : {},
-      "output_NN_3l_tH_ttH_3cat_v5"  : {},
+      "output_NN_3l_ttH_tH_4cat_v3"  : {},
+      "output_NN_3l_ttH_tH_4cat_v4"   : {},
+      "output_NN_3l_ttH_tH_4cat_v2"  : {},
+      "output_NN_3l_ttH_tH_4cat_v5"  : {},
+      "output_NN_3l_ttH_tH_4cat_v7"  : {},
+      "output_NN_3l_ttH_tH_3cat_v5" : {},
+      "output_NN_3l_ttH_tH_3cat_v6"  : {},
+      "output_NN_3l_ttH_tH_3cat_v7" : {},
+      "output_NN_3l_ttH_tH_3cat_v8"  : {},
       "mva_Updated"   : {},
       "mva_oldVar"  : {},
       "massSameFlavor_OS" : {}
+
     },
     select_rle_output                     = True,
     select_root_output                    = False,
@@ -189,7 +192,7 @@ if __name__ == '__main__':
 
   if mode in ["forBDTtraining"] :
     analysis.set_BDT_training() # hadTau_selection_relaxed
-  elif mode in ['forBDTtesting'] : analysis.set_BDT_training(testing = True) 
+  elif mode in ['forBDTtesting'] : analysis.set_BDT_training(testing = True)
 
   job_statistics = analysis.create()
   for job_type, num_jobs in job_statistics.items():

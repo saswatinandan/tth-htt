@@ -591,464 +591,195 @@ std::vector<std::string> mvaInputVariables_XGB_Updated = {
 };
 XGBInterface mva_XGB_Updated(mvaFileName_XGB_Updated, mvaInputVariables_XGB_Updated);
 std::map<std::string, double> mvaInputs_XGB_Updated;
-
-/*std::string mvaFileName_XGB_Boosted_AK8_noISO = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/3l_0tau/3l_0tau_XGB_Boosted_AK8_noISO_evtLevelSUM_TTH_22Var.pkl";
-std::vector<std::string> mvaInputVariables_XGB_Boosted_AK8_noISO = {
-  "lep1_conept", "lep2_conept", "lep3_conePt",
-  "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
-  "lep1_mT", "lep2_mT", "lep3_mT", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
-  "min_lep_dr_os", "dr_lss",
-  "nBJetMedium", "nElectron", "ptmiss", "sum_lep_charge", "HTT_boosted", "HTT_semi_boosted_fromAK8"
-};
-XGBInterface mva_XGB_Boosted_AK8_noISO(mvaFileName_XGB_Boosted_AK8_noISO, mvaInputVariables_XGB_Boosted_AK8_noISO);
-std::map<std::string, double> mvaInputs_XGB_Boosted_AK8_noISO;*/
-
-/*std::string mvaFileName_XGB_Boosted_AK8 = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/3l_0tau/3l_0tau_XGB_Boosted_AK8_evtLevelSUM_TTH_22Var.pkl";
-std::vector<std::string> mvaInputVariables_XGB_Boosted_AK8 = {
-  "lep1_conept", "lep2_conept", "lep3_conePt",
-  "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
-  "lep1_mT", "lep2_mT", "lep3_mT", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
-  "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sum_lep_charge",
-  "HTT_boosted", "HTT_semi_boosted_fromAK8"
-};
-XGBInterface mva_XGB_Boosted_AK8(mvaFileName_XGB_Boosted_AK8, mvaInputVariables_XGB_Boosted_AK8);
-std::map<std::string, double> mvaInputs_XGB_Boosted_AK8;*/
-
-/*std::string mvaFileName_XGB_Boosted_AK12_noISO = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/3l_0tau/3l_0tau_XGB_Boosted_AK12_noISO_evtLevelSUM_TTH_22Var.pkl";
-std::vector<std::string> mvaInputVariables_XGB_Boosted_AK12_noISO = {
-  "lep1_conept", "lep2_conept", "lep3_conePt",
-  "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
-  "lep1_mT", "lep2_mT", "lep3_mT", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-  "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sum_lep_charge",
-  "minDR_AK12_lep", "HTT_semi_boosted", "HadTop_pt_semi_boosted"
-};
-XGBInterface mva_XGB_Boosted_AK12_noISO(mvaFileName_XGB_Boosted_AK12_noISO, mvaInputVariables_XGB_Boosted_AK12_noISO);
-std::map<std::string, double> mvaInputs_XGB_Boosted_AK12_noISO;*/
-
-/*std::string mvaFileName_XGB_Boosted_AK12 = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/3l_0tau/3l_0tau_XGB_Boosted_AK12_evtLevelSUM_TTH_22Var.pkl";
-std::vector<std::string> mvaInputVariables_XGB_Boosted_AK12 = {
-  "lep1_conept", "lep2_conept", "lep3_conePt",
-  "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
-  "lep1_mT", "lep2_mT", "lep3_mT", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
-  "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sum_lep_charge",
-  "HTT_semi_boosted", "HTT_boosted"
-};
-XGBInterface mva_XGB_Boosted_AK12(mvaFileName_XGB_Boosted_AK12, mvaInputVariables_XGB_Boosted_AK12);
-std::map<std::string, double> mvaInputs_XGB_Boosted_AK12;*/
-
-/*std::string mvaFileName_XGB_AK12 = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/3l_0tau/3l_0tau_XGB_AK12_evtLevelSUM_TTH_22Var.pkl";
-std::vector<std::string> mvaInputVariables_XGB_AK12 = {
-  "lep1_conept", "lep2_conept", "lep3_conePt",
-  "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
-  "lep1_mT", "lep2_mT", "lep3_mT", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
-  "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sum_lep_charge",
-  "resolved_and_semi", "HTT_semi_boosted"
-};
-XGBInterface mva_XGB_AK12(mvaFileName_XGB_AK12, mvaInputVariables_XGB_AK12);
-std::map<std::string, double> mvaInputs_XGB_AK12;*/
-
-/*std::string mvaFileName_XGB_Boosted_AK12_basic = "tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/3l_0tau/3l_0tau_XGB_AK12_basic_evtLevelSUM_TTH_21Var.pkl";
-std::vector<std::string> mvaInputVariables_XGB_Boosted_AK12_basic = {
-  "lep1_conept", "lep2_conept", "lep3_conePt",
-  "mindr_lep1_jet", "mindr_lep2_jet", "mindr_lep3_jet",
-  "lep1_mT", "lep2_mT", "lep3_mT", "max_lep_eta",
-  "nJet", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd", "Hj_tagger_fromCSVsort4th",
-  "min_lep_dr_os", "dr_lss", "nBJetMedium", "nElectron", "ptmiss", "sum_lep_charge", "N_jetAK12"
-};
-XGBInterface mva_XGB_Boosted_AK12_basic(mvaFileName_XGB_Boosted_AK12_basic, mvaInputVariables_XGB_Boosted_AK12_basic);
-std::map<std::string, double> mvaInputs_XGB_Boosted_AK12_basic;*/
-
 std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVariables_3l_ttV, mvaInputVariables_3l_ttbar);
 
-  std::string mvaFileName_TensorFlow_3l_ttH_3cat = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_3cat_no4mom_noSemi_v4.pb";
-  // the order of input variables should be the same as during the training
-  //data/NN_14Feb2019/model_3l_ttH_3cat_no4mom_noSemi_quasar_classes.log
-  //data/NN_14Feb2019/model_3l_ttH_3cat_no4mom_noSemi_quasar_variables.log
-  std::vector<std::string> mvaInputVariables_TensorFlow_3l_ttH_3cat = {
-    "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nBJetLoose", "nElectron", "sum_lep_charge", "mvaOutput_Hj_tagger"
-  };
-  // the order also matters
-  std::vector<std::string> classes_TensorFlow_3l_ttH_3cat = {"predictions_ttH", "predictions_ttZ", "predictions_rest"};
-  TensorFlowInterface mva_3l_ttH_3cat_TF(
-    mvaFileName_TensorFlow_3l_ttH_3cat,
-    mvaInputVariables_TensorFlow_3l_ttH_3cat,
-    classes_TensorFlow_3l_ttH_3cat
-    );
-  std::map<std::string, double> mvaInputs_3l_ttH_3cat_TF;
-  std::cout << "read NN 2" << std::endl;
-
-  std::string mvaFileName_TensorFlow_3l_ttH_3cat_v7 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_3cat_no4mom_noSemi_v7.pb";
-  // the order of input variables should be the same as during the training
   /*
-  'avg_dr_jet', 'ptmiss', 'mbb_medium',
-  'jet1_pt', 'jet2_pt', 'jet3_pt', 'jet4_pt',
-  'max_lep_eta', 'lep_min_dr_jet',
-  'lep1_mT', 'lep1_conept',
-  'lep2_mT', 'lep2_conept',
-  'lep3_mT', 'lep3_conept',
-  'res-HTT_CSVsort4rd', 'HadTop_pt_CSVsort4rd',
-  'nJet', 'nJetForward', 'nBJetLoose', 'nElectron', 'sum_lep_charge',
-  'mvaOutput_Hj_tagger'
+  model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v2 -
+  model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v3 -
+  model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v4 -
+  model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v5 -
+  model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v6 - not implemented
+  model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v7 -
+  model_3l_ttH_tH_3cat_nottZ_no4mom_noSemi_noStand_v5 -
+  model_3l_ttH_tH_3cat_nottZ_no4mom_noSemi_noStand_v6
+  model_3l_ttH_tH_3cat_nottZ_no4mom_noSemi_noStand_v7
+  model_3l_ttH_tH_3cat_nottZ_no4mom_noSemi_noStand_v8
   */
-  std::vector<std::string> mvaInputVariables_TensorFlow_3l_ttH_3cat_v7 = {
+  std::string mvaFileName_TensorFlow_3l_ttH_tH_4cat_v3 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v3.pb";
+  // the order of input variables should be the same as during the training
+  //data/NN_14Feb2019/model_3l_ttH_tH_4cat_v3_no4mom_noSemi_quasar_classes.log
+  //data/NN_14Feb2019/model_3l_ttH_tH_4cat_v3_no4mom_noSemi_quasar_variables.log
+  /*
+  "avg_dr_jet", "ptmiss", "mbb_medium",
+  "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
+  "max_lep_eta", "lep_min_dr_jet",
+  "lep1_mT", "lep1_conept", "lep2_mT", "lep2_conept", "lep3_mT", "lep3_conept",
+  "jetForward1_pt", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+  "nJet", "nJetForward", "nBJetLoose", "nBJetMedium", "nElectron", "sum_lep_charge"
+  */
+  std::vector<std::string> mvaInputVariables_TensorFlow_3l_ttH_tH_4cat = {
     "avg_dr_jet", "ptmiss", "mbb_medium",
     "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
     "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge",
-    "mvaOutput_Hj_tagger"
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_ttH_3cat_v7_mean = {
-       2.27899520e+00, 1.02601901e+02, 4.29245325e+01, 1.30532442e+02,
-       7.14582643e+01, 3.27867354e+01, 1.42944611e+01, 1.48303578e+00,
-       1.98732111e+00, 1.18113827e+02, 9.67065173e+01, 8.11850545e+01,
-       5.29980875e+01, 5.87858228e+01, 2.84009469e+01, 9.89752124e-02,
-       8.30408493e+01, 3.18058850e+00, 5.72311664e-01, 1.59925974e+00,
-       1.51177907e+00, 4.82287665e-02, 7.76712396e-02
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_ttH_3cat_v7_var = {
-      0.67296155,  64.73913482,  96.63885775,  96.7424612 ,
-      48.50844474,  34.58101383,  23.06070277,   0.54459569,
-      0.62902252,  89.92877752,  65.00641734,  56.79978833,
-      33.86483439,  39.8295567 ,  17.52749002,   0.1950244 ,
-      101.51619313,   1.25114283,   0.79916734,   0.69720235,
-      0.85128747,   1.0902174 ,   0.16506006
+    "lep1_mT", "lep1_conept", "lep2_mT", "lep2_conept", "lep3_mT", "lep3_conept",
+    "jetForward1_pt", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+    "nJet", "nJetForward", "nBJetLoose",
+    "nBJetMedium", "nElectron", "sum_lep_charge"
   };
   // the order also matters
-  std::vector<std::string> classes_TensorFlow_3l_ttH_3cat_v7 = {"predictions_ttH", "predictions_ttZ", "predictions_rest"};
-  TensorFlowInterface mva_3l_ttH_3cat_v7_TF(
-    mvaFileName_TensorFlow_3l_ttH_3cat_v7,
-    mvaInputVariables_TensorFlow_3l_ttH_3cat_v7,
-    classes_TensorFlow_3l_ttH_3cat_v7,
-    mvaInputVariables_TensorFlow_3l_ttH_3cat_v7_mean,
-    mvaInputVariables_TensorFlow_3l_ttH_3cat_v7_var
+  std::vector<std::string> classes_TensorFlow_3l_ttH_tH_4cat = {"predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"};
+  TensorFlowInterface mva_3l_ttH_tH_4cat_v3_TF(
+    mvaFileName_TensorFlow_3l_ttH_tH_4cat_v3,
+    mvaInputVariables_TensorFlow_3l_ttH_tH_4cat,
+    classes_TensorFlow_3l_ttH_tH_4cat
+    );
+  std::map<std::string, double> mvaInputs_3l_ttH_tH_4cat_TF;
+  std::cout << "read NN 2" << std::endl;
+
+  std::string mvaFileName_TensorFlow_3l_ttH_tH_4cat_v2 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v2.pb";
+  // the order of input variables should be the same as during the training
+  /*
+  "avg_dr_jet", "ptmiss", "mbb_medium",
+  "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
+  "max_lep_eta", "lep_min_dr_jet",
+  "lep1_mT", "lep1_conept", "lep2_mT", "lep2_conept", "lep3_mT", "lep3_conept",
+  "jetForward1_pt", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+  "nJet", "nJetForward", "nBJetLoose", "nBJetMedium", "nElectron", "sum_lep_charge"
+  */
+  TensorFlowInterface mva_3l_ttH_tH_4cat_v2_TF(
+    mvaFileName_TensorFlow_3l_ttH_tH_4cat_v2,
+    mvaInputVariables_TensorFlow_3l_ttH_tH_4cat,
+    classes_TensorFlow_3l_ttH_tH_4cat
   );
-  std::map<std::string, double> mvaInputs_3l_ttH_3cat_v7_TF;
   std::cout << "read NN 2_v3" << std::endl;
 
-  // model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v1
   double tH_in_predictions_ttH = 0.;
   double tH_in_predictions_ttZ = 0.;
   double tH_in_predictions_rest = 0.;
   double tH_in_predictions_tH = 0.;
-  // was test_model_3l_ttH_tH_3cat_no4mom_noSemi_v2
-  /*
-  std::string mvaFileName_TensorFlow_3l_tH_ttH_4cat_v2 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v1.pb";
-  std::vector<std::string> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2 = {
-    "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge"
-  };
-  std::vector<std::string> classes_TensorFlow_3l_tH_ttH_4cat_v2 = {"predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"};
-  TensorFlowInterface mva_3l_tH_ttH_4cat_v2_TF(
-    mvaFileName_TensorFlow_3l_tH_ttH_4cat_v2,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2,
-    classes_TensorFlow_3l_tH_ttH_4cat_v2
-  );
-  */
-  // the order of input variables should be the same as during the training
-  //data/NN_14Feb2019/model_3l_tH_ttH_4cat_no4mom_noSemi_quasar_classes.log
-  //data/NN_14Feb2019/model_3l_tH_ttH_4cat_no4mom_noSemi_quasar_variables.log
-  /*
-  'avg_dr_jet', 'ptmiss', 'mbb_medium',
-  'jet1_pt', 'jet2_pt', 'jet3_pt', 'jet4_pt',
-  'max_lep_eta', 'lep_min_dr_jet',
-  'lep1_mT', 'lep1_conept',
-  'lep2_mT', 'lep2_conept',
-  'lep3_mT', 'lep3_conept',
-  'jetForward1_pt', 'jetForward1_eta_abs',
-  'res-HTT_CSVsort4rd', 'HadTop_pt_CSVsort4rd',
-  'nJet', 'nJetForward', 'nBJetLoose','nElectron', 'sum_lep_charge',
-  'mvaOutput_Hj_tagger'
-  */
   ///*
-  std::string mvaFileName_TensorFlow_3l_tH_ttH_4cat_v2 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_3cat_no4mom_noSemi_v2.pb";
-  std::vector<std::string> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2 = {
-    "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "jetForward1_pt", "jetForward1_eta_abs",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose","nElectron", "sum_lep_charge",
-    "mvaOutput_Hj_tagger"
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2_mean = {
-    2.27899520e+00, 1.02601901e+02, 4.29245325e+01, 1.30532442e+02,
-       7.14582643e+01, 3.27867354e+01, 1.42944611e+01, 1.48303578e+00,
-       1.98732111e+00, 1.18113827e+02, 9.67065173e+01, 8.11850545e+01,
-       5.29980875e+01, 5.87858228e+01, 2.84009469e+01, 2.31425129e+01,
-       7.32208689e-01, 9.89752124e-02, 8.30408493e+01, 3.18058850e+00,
-       5.72311664e-01, 1.59925974e+00, 1.51177907e+00, 4.82287665e-02,
-       7.76712396e-02
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2_var = {
-    0.67296155,  64.73913482,  96.63885775,  96.7424612 ,
-        48.50844474,  34.58101383,  23.06070277,   0.54459569,
-         0.62902252,  89.92877752,  65.00641734,  56.79978833,
-        33.86483439,  39.8295567 ,  17.52749002,  38.43821441,
-         2.07621649,   0.1950244 , 101.51619313,   1.25114283,
-         0.79916734,   0.69720235,   0.85128747,   1.0902174 ,
-         0.16506006
-  };
+  std::string mvaFileName_TensorFlow_3l_ttH_tH_4cat_v4 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v4.pb";
+  /*
+  ["avg_dr_jet", "ptmiss", "mbb_medium",
+  "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
+  "max_lep_eta", "lep_min_dr_jet",
+  "lep1_mT", "lep1_conept", "lep2_mT", "lep2_conept", "lep3_mT", "lep3_conept",
+  "jetForward1_pt", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+  "nJet", "nJetForward", "nBJetLoose", "nBJetMedium", "nElectron", "sum_lep_charge"]
+  */
   // the order also matters
-  std::vector<std::string> classes_TensorFlow_3l_tH_ttH_4cat_v2 = {"predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"};
-  TensorFlowInterface mva_3l_tH_ttH_4cat_v2_TF(
-    mvaFileName_TensorFlow_3l_tH_ttH_4cat_v2,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2,
-    classes_TensorFlow_3l_tH_ttH_4cat_v2,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2_mean,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v2_var
+  TensorFlowInterface mva_3l_ttH_tH_4cat_v4_TF(
+    mvaFileName_TensorFlow_3l_ttH_tH_4cat_v4,
+    mvaInputVariables_TensorFlow_3l_ttH_tH_4cat,
+    classes_TensorFlow_3l_ttH_tH_4cat
   );
   //*/
-  std::map<std::string, double> mvaInputs_3l_tH_ttH_4cat_v2_TF;
   std::cout << "read NN 2" << std::endl;
 
-  //model_3l_ttH_tH_3cat_no4mom_noSemi_v3
-  std::string mvaFileName_TensorFlow_3l_tH_ttH_4cat_v3 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_3cat_no4mom_noSemi_v3.pb";
+  std::string mvaFileName_TensorFlow_3l_ttH_tH_4cat_v5 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v5.pb";
+  /*
+  ['avg_dr_jet', 'ptmiss', 'mbb_medium',
+  'jet1_pt', 'jet2_pt', 'jet3_pt', 'jet4_pt',
+  'max_lep_eta', 'lep_min_dr_jet',
+  'lep1_mT', 'lep1_conept', 'lep2_mT', 'lep2_conept', 'lep3_mT', 'lep3_conept',
+  'jetForward1_pt', 'res-HTT_CSVsort4rd', 'HadTop_pt_CSVsort4rd',
+  'nJet', 'nJetForward', 'nBJetLoose', 'nBJetMedium', 'nElectron', 'sum_lep_charge']
+  */
+  // the order also matters
+  TensorFlowInterface mva_3l_ttH_tH_4cat_v5_TF(
+    mvaFileName_TensorFlow_3l_ttH_tH_4cat_v5,
+    mvaInputVariables_TensorFlow_3l_ttH_tH_4cat,
+    classes_TensorFlow_3l_ttH_tH_4cat
+  );
+
+
+  std::string mvaFileName_TensorFlow_3l_ttH_tH_4cat_v7 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_nottZ_no4mom_noSemi_noStand_v7.pb";
   /*
   "avg_dr_jet", "ptmiss", "mbb_medium",
-  "jet1_pt", "jet2_pt", "jet3_pt",
-  "max_lep_eta", "lep_min_dr_jet",
-  "lep1_mT", "lep1_conept",
-  "lep2_mT", "lep2_conept",
-  "lep3_mT", "lep3_conept",
-  "jetForward1_pt",
-  "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-  "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge",
-  "mvaOutput_Hj_tagger"
-
-  'predictions_ttH', 'predictions_ttZ', 'predictions_rest', 'predictions_tH'
+  "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
+  "max_lep_eta",
+  "lep1_mT", "lep1_conept", "lep2_mT", "lep2_conept", "lep3_mT", "lep3_conept",
+  "jetForward1_pt", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+  "nJet", "nJetForward", "nBJetLoose",
+  "nBJetMedium", "nElectron", "sum_lep_charge"
   */
-  std::vector<std::string> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3 = {
+  std::vector<std::string> mvaInputVariables_TensorFlow_3l_ttH_tH_4cat_v7 = {
     "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "jetForward1_pt",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge",
-    "mvaOutput_Hj_tagger"
+    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
+    "max_lep_eta",
+    "lep1_mT", "lep1_conept", "lep2_mT", "lep2_conept", "lep3_mT", "lep3_conept",
+    "jetForward1_pt", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+    "nJet", "nJetForward", "nBJetLoose",
+    "nBJetMedium", "nElectron", "sum_lep_charge"
   };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3_mean = {
-    2.27899520e+00, 1.02601901e+02, 4.29245325e+01, 1.30532442e+02,
-       7.14582643e+01, 3.27867354e+01, 1.48303578e+00, 1.98732111e+00,
-       1.18113827e+02, 9.67065173e+01, 8.11850545e+01, 5.29980875e+01,
-       5.87858228e+01, 2.84009469e+01, 2.31425129e+01, 9.89752124e-02,
-       8.30408493e+01, 3.18058850e+00, 5.72311664e-01, 1.59925974e+00,
-       1.51177907e+00, 4.82287665e-02, 7.76712396e-02
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3_var = {
-    0.67296155,  64.73913482,  96.63885775,  96.7424612 ,
-        48.50844474,  34.58101383,   0.54459569,   0.62902252,
-        89.92877752,  65.00641734,  56.79978833,  33.86483439,
-        39.8295567 ,  17.52749002,  38.43821441,   0.1950244 ,
-       101.51619313,   1.25114283,   0.79916734,   0.69720235,
-         0.85128747,   1.0902174 ,   0.16506006
-  };
-  // the order also matters
-  std::vector<std::string> classes_TensorFlow_3l_tH_ttH_4cat_v3 = {"predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"};
-  TensorFlowInterface mva_3l_tH_ttH_4cat_v3_TF(
-    mvaFileName_TensorFlow_3l_tH_ttH_4cat_v3,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3,
-    classes_TensorFlow_3l_tH_ttH_4cat_v3,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3_mean,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3_var
+  TensorFlowInterface mva_3l_ttH_tH_4cat_v7_TF(
+    mvaFileName_TensorFlow_3l_ttH_tH_4cat_v7,
+    mvaInputVariables_TensorFlow_3l_ttH_tH_4cat_v7,
+    classes_TensorFlow_3l_ttH_tH_4cat
   );
-  std::map<std::string, double> mvaInputs_3l_tH_ttH_4cat_v3_TF;
+  std::map<std::string, double> mvaInputs_3l_ttH_tH_4cat_v7_TF;
 
-
-  //model_3l_ttH_tH_3cat_no4mom_noSemi_v4
-  std::string mvaFileName_TensorFlow_3l_tH_ttH_4cat_v4 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_3cat_no4mom_noSemi_v4.pb";
-  /*
-  "avg_dr_jet", "ptmiss", "mbb_medium",
-  "jet1_pt", "jet2_pt", "jet3_pt",
-  "max_lep_eta", "lep_min_dr_jet",
-  "lep1_mT", "lep1_conept",
-  "lep2_mT", "lep2_conept",
-  "lep3_mT", "lep3_conept",
-  "jetForward1_pt",
-  "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-  "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge",
-  "mvaOutput_Hj_tagger"
-
-  'predictions_ttH', 'predictions_ttZ', 'predictions_rest', 'predictions_tH'
-  */
-  /*
-  std::vector<std::string> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v4 = {
-    "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "jetForward1_pt",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge",
-    "mvaOutput_Hj_tagger"
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v4_mean = {
-
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v4_var = {
-
-  };
-  // the order also matters
-  std::vector<std::string> classes_TensorFlow_3l_tH_ttH_4cat_v4 = {"predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"};
-  */
-  TensorFlowInterface mva_3l_tH_ttH_4cat_v4_TF(
-    mvaFileName_TensorFlow_3l_tH_ttH_4cat_v4,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3,
-    classes_TensorFlow_3l_tH_ttH_4cat_v3,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3_mean,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3_var
-  );
-  std::map<std::string, double> mvaInputs_3l_tH_ttH_4cat_v4_TF;
-
+  // xanda continue with 3 cat
   //model_3l_ttH_tH_nottZ_no4mom_noSemi_v4
-  std::string mvaFileName_TensorFlow_3l_tH_ttH_3cat_v4 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_nottZ_no4mom_noSemi_v4.pb";
+  std::string mvaFileName_TensorFlow_3l_ttH_tH_3cat_v5 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_3cat_nottZ_no4mom_noSemi_noStand_v5.pb";
   /*
-  "avg_dr_jet", "ptmiss", "mbb_medium",
-  "jet1_pt", "jet2_pt", "jet3_pt",
-  "max_lep_eta", "lep_min_dr_jet",
-  "lep1_mT", "lep1_conept",
-  "lep2_mT", "lep2_conept",
-  "lep3_mT", "lep3_conept",
-  "jetForward1_pt",
-  "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-  "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge",
-  "mvaOutput_Hj_tagger"
+  ['avg_dr_jet', 'ptmiss', 'mbb_medium',
+  'jet1_pt', 'jet2_pt', 'jet3_pt', 'jet4_pt',
+  'max_lep_eta', 'lep_min_dr_jet',
+  'lep1_mT', 'lep1_conept', 'lep2_mT','lep2_conept', 'lep3_mT', 'lep3_conept',
+  'jetForward1_pt', 'res-HTT_CSVsort4rd', 'HadTop_pt_CSVsort4rd',
+  'nJet', 'nJetForward', 'nBJetLoose', 'nBJetMedium', 'nElectron', 'sum_lep_charge']
 
   'predictions_ttH', 'predictions_rest', 'predictions_tH'
   */
+  // the order also matters
+  std::vector<std::string> classes_TensorFlow_3l_ttH_tH_3cat = {"predictions_ttH",  "predictions_rest", "predictions_tH"};
+  TensorFlowInterface mva_3l_ttH_tH_3cat_v5_TF(
+    mvaFileName_TensorFlow_3l_ttH_tH_3cat_v5,
+    mvaInputVariables_TensorFlow_3l_ttH_tH_4cat,
+    classes_TensorFlow_3l_ttH_tH_3cat
+  );
+
+  std::string mvaFileName_TensorFlow_3l_ttH_tH_3cat_v6 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_3cat_nottZ_no4mom_noSemi_noStand_v6.pb";
   /*
-  std::vector<std::string> mvaInputVariables_TensorFlow_3l_tH_ttH_3cat_v4 = {
-    "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "jetForward1_pt",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge",
-    "mvaOutput_Hj_tagger"
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_tH_ttH_3cat_v4_mean = {
-    2.27899520e+00, 1.02601901e+02, 4.29245325e+01, 1.30532442e+02,
-       7.14582643e+01, 3.27867354e+01, 1.48303578e+00, 1.98732111e+00,
-       1.18113827e+02, 9.67065173e+01, 8.11850545e+01, 5.29980875e+01,
-       5.87858228e+01, 2.84009469e+01, 2.31425129e+01, 9.89752124e-02,
-       8.30408493e+01, 3.18058850e+00, 5.72311664e-01, 1.59925974e+00,
-       1.51177907e+00, 4.82287665e-02
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_tH_ttH_3cat_v4_var = {
-    0.67296155,  64.73913482,  96.63885775,  96.7424612 ,
-        48.50844474,  34.58101383,   0.54459569,   0.62902252,
-        89.92877752,  65.00641734,  56.79978833,  33.86483439,
-        39.8295567 ,  17.52749002,  38.43821441,   0.1950244 ,
-       101.51619313,   1.25114283,   0.79916734,   0.69720235,
-         0.85128747,   1.0902174
-  };
+  ['avg_dr_jet', 'ptmiss', 'mbb_medium',
+  'jet1_pt', 'jet2_pt', 'jet3_pt', 'jet4_pt',
+  'max_lep_eta',
+  'lep1_mT', 'lep1_conept', 'lep2_mT', 'lep2_conept', 'lep3_mT', 'lep3_conept',
+  'jetForward1_pt', 'res-HTT_CSVsort4rd', 'HadTop_pt_CSVsort4rd',
+  'nJet', 'nJetForward', 'nBJetLoose', 'nBJetMedium', 'nElectron', 'sum_lep_charge']
   */
   // the order also matters
-  std::vector<std::string> classes_TensorFlow_3l_tH_ttH_3cat_v4 = {"predictions_ttH",  "predictions_rest", "predictions_tH"};
-  TensorFlowInterface mva_3l_tH_ttH_3cat_v4_TF(
-    mvaFileName_TensorFlow_3l_tH_ttH_3cat_v4,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3,
-    classes_TensorFlow_3l_tH_ttH_3cat_v4,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3_mean,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_4cat_v3_var
+  TensorFlowInterface mva_3l_ttH_tH_3cat_v6_TF(
+    mvaFileName_TensorFlow_3l_ttH_tH_3cat_v6,
+    mvaInputVariables_TensorFlow_3l_ttH_tH_4cat_v7,
+    classes_TensorFlow_3l_ttH_tH_3cat
   );
-  std::map<std::string, double> mvaInputs_3l_tH_ttH_3cat_v4_TF;
 
-  //model_3l_ttH_tH_nottZ_no4mom_noSemi_v5
-  std::string mvaFileName_TensorFlow_3l_tH_ttH_3cat_v5 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_nottZ_no4mom_noSemi_v5.pb";
-  /*
-  "avg_dr_jet", "ptmiss", "mbb_medium",
-  "jet1_pt", "jet2_pt", "jet3_pt",
-  "max_lep_eta", "lep_min_dr_jet",
-  "lep1_mT", "lep1_conept",
-  "lep2_mT", "lep2_conept",
-  "lep3_mT", "lep3_conept",
-  "jetForward1_pt",
-  "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-  "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge"
-
-  'predictions_ttH', 'predictions_rest', 'predictions_tH'
-  */
-  std::vector<std::string> mvaInputVariables_TensorFlow_3l_tH_ttH_3cat_v5 = {
-    "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "jetForward1_pt",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge"
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_tH_ttH_3cat_v5_mean = {
-    2.27899520e+00, 1.02601901e+02, 4.29245325e+01, 1.30532442e+02,
-       7.14582643e+01, 3.27867354e+01, 1.48303578e+00, 1.98732111e+00,
-       1.18113827e+02, 9.67065173e+01, 8.11850545e+01, 5.29980875e+01,
-       5.87858228e+01, 2.84009469e+01, 2.31425129e+01, 9.89752124e-02,
-       8.30408493e+01, 3.18058850e+00, 5.72311664e-01, 1.59925974e+00,
-       1.51177907e+00, 4.82287665e-02
-  };
-  std::vector<double> mvaInputVariables_TensorFlow_3l_tH_ttH_3cat_v5_var = {
-    0.67296155,  64.73913482,  96.63885775,  96.7424612 ,
-        48.50844474,  34.58101383,   0.54459569,   0.62902252,
-        89.92877752,  65.00641734,  56.79978833,  33.86483439,
-        39.8295567 ,  17.52749002,  38.43821441,   0.1950244 ,
-       101.51619313,   1.25114283,   0.79916734,   0.69720235,
-         0.85128747,   1.0902174
-  };
-  // the order also matters
-  std::vector<std::string> classes_TensorFlow_3l_tH_ttH_3cat_v5 = {"predictions_ttH",  "predictions_rest", "predictions_tH"};
-  TensorFlowInterface mva_3l_tH_ttH_3cat_v5_TF(
-    mvaFileName_TensorFlow_3l_tH_ttH_3cat_v5,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_3cat_v5,
-    classes_TensorFlow_3l_tH_ttH_3cat_v5,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_3cat_v5_mean,
-    mvaInputVariables_TensorFlow_3l_tH_ttH_3cat_v5_var
+  std::string mvaFileName_TensorFlow_3l_ttH_tH_3cat_v7 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_3cat_nottZ_no4mom_noSemi_noStand_v7.pb";
+  TensorFlowInterface mva_3l_ttH_tH_3cat_v7_TF(
+    mvaFileName_TensorFlow_3l_ttH_tH_3cat_v7,
+    mvaInputVariables_TensorFlow_3l_ttH_tH_4cat_v7,
+    classes_TensorFlow_3l_ttH_tH_3cat
   );
-  std::map<std::string, double> mvaInputs_3l_tH_ttH_3cat_v5_TF;
+  std::string mvaFileName_TensorFlow_3l_ttH_tH_3cat_v8 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_3l_ttH_tH_3cat_nottZ_no4mom_noSemi_noStand_v8.pb";
+  TensorFlowInterface mva_3l_ttH_tH_3cat_v8_TF(
+    mvaFileName_TensorFlow_3l_ttH_tH_3cat_v8,
+    mvaInputVariables_TensorFlow_3l_ttH_tH_4cat_v7,
+    classes_TensorFlow_3l_ttH_tH_3cat
+  );
 
 //--- open output file containing run:lumi:event numbers of events passing final event selection criteria
   std::ostream* selEventsFile = ( selEventsFileName_output != "" ) ? new std::ofstream(selEventsFileName_output.data(), std::ios::out) : 0;
 
   /*
-  mvaOutput_3l_ttH_3cat_TF
-  mvaOutput_3l_ttH_3cat_v7_TF
-  mvaOutput_3l_tH_ttH_4cat_v2_TF
-  mvaOutput_3l_tH_ttH_4cat_v3_TF
-  mvaOutput_3l_tH_ttH_4cat_v4_TF
-  mvaOutput_3l_tH_ttH_3cat_v5_TF
-  mvaOutput_3l_tH_ttH_3cat_v4_TF
+  mvaOutput_3l_ttH_tH_4cat_v3_TF
+  mvaOutput_3l_ttH_tH_4cat_v2_TF
+  mvaOutput_3l_ttH_tH_4cat_v4_TF
+  mvaOutput_3l_ttH_tH_4cat_v5_TF
+  mvaOutput_3l_ttH_tH_4cat_v7_TF
+  mvaOutput_3l_ttH_tH_3cat_v6_TF
+  mvaOutput_3l_ttH_tH_3cat_v5_TF
   */
 //--- declare histograms
   struct preselHistManagerType
@@ -1085,23 +816,27 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     EvtHistManager_3l* evt_;
     std::map<std::string, EvtHistManager_3l*> evt_in_categories_;
     //std::map<std::string, EvtHistManager_3l*> evt_in_categoriesFat_;
-    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_3cat_TF_;
-    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_3cat_v7_TF_;
-    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_tH_ttH_4cat_v2_TF_;
-    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_tH_ttH_4cat_v3_TF_;
-    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_tH_ttH_4cat_v4_TF_;
-    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_tH_ttH_3cat_v4_TF_;
-    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_tH_ttH_3cat_v5_TF_;
+    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_tH_4cat_v3_TF_;
+    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_tH_4cat_v2_TF_;
+    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_tH_4cat_v4_TF_;
+    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_tH_4cat_v5_TF_;
+    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_tH_4cat_v7_TF_;
+    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_tH_3cat_v5_TF_;
+    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_tH_3cat_v6_TF_;
+    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_tH_3cat_v7_TF_;
+    std::map<std::string, EvtHistManager_3l*> evt_in_categories_3l_ttH_tH_3cat_v8_TF_;
     std::map<std::string, EvtHistManager_3l*> evt_in_decayModes_;
     std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_and_decayModes_; // key = category, decayMode
     //std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categoriesFat_and_decayModes_; // key = category, decayMode
-    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_3cat_TF_and_decayModes_;
-    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_3cat_v7_TF_and_decayModes_;
-    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_tH_ttH_4cat_v2_TF_and_decayModes_;
-    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_tH_ttH_4cat_v3_TF_and_decayModes_;
-    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_tH_ttH_4cat_v4_TF_and_decayModes_;
-    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_tH_ttH_3cat_v4_TF_and_decayModes_;
-    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_tH_ttH_3cat_v5_TF_and_decayModes_;
+    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_tH_4cat_v3_TF_and_decayModes_;
+    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_tH_4cat_v2_TF_and_decayModes_;
+    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_tH_4cat_v4_TF_and_decayModes_;
+    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_tH_4cat_v5_TF_and_decayModes_;
+    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_tH_4cat_v7_TF_and_decayModes_;
+    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_tH_3cat_v5_TF_and_decayModes_;
+    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_tH_3cat_v6_TF_and_decayModes_;
+    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_tH_3cat_v7_TF_and_decayModes_;
+    std::map<std::string, std::map<std::string, EvtHistManager_3l*>> evt_in_categories_3l_ttH_tH_3cat_v8_TF_and_decayModes_;
     EvtYieldHistManager* evtYield_;
     WeightHistManager* weights_;
   };
@@ -1116,59 +851,72 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     "3l_0tau_bl_neg_0J", "3l_0tau_bl_pos_0J", "3l_0tau_bt_neg_0J", "3l_0tau_bt_pos_0J", "3l_0tau_1pHTTv2", "3l_0tau_1pAK8", "3l_0tau_no_ttH_noFat"
   };*/
 
-  vstring categories_TensorFlow_3l_ttH_3cat = {
-    "output_NN_3l_ttH_3cat_ttH",
-    "output_NN_3l_ttH_3cat_ttZ",
-    "output_NN_3l_ttH_3cat_rest",
-    "output_NN_3l_ttH_3cat_tH",
-    "output_NN_3l_ttH_3cat_tH_1jet",
-    "output_NN_3l_ttH_3cat_tH_zpeak",
-    "output_NN_3l_ttH_3cat_ttH_zpeak"
+  vstring categories_TensorFlow_3l_ttH_tH_4cat_v3 = {
+    "output_NN_3l_ttH_tH_4cat_v3_ttH",
+    "output_NN_3l_ttH_tH_4cat_v3_ttZ",
+    "output_NN_3l_ttH_tH_4cat_v3_rest",
+    "output_NN_3l_ttH_tH_4cat_v3_tH",
+    "output_NN_3l_ttH_tH_4cat_v3_no_cat"
   };
 
-  vstring categories_TensorFlow_3l_ttH_3cat_v7 = {
-    "output_NN_3l_ttH_3cat_v7_ttH",
-    "output_NN_3l_ttH_3cat_v7_ttZ",
-    "output_NN_3l_ttH_3cat_v7_rest",
-    "output_NN_3l_ttH_3cat_v7_no_cat",
+  vstring categories_TensorFlow_3l_ttH_tH_4cat_v2 = {
+    "output_NN_3l_ttH_tH_4cat_v2_ttH",
+    "output_NN_3l_ttH_tH_4cat_v2_tH",
+    "output_NN_3l_ttH_tH_4cat_v2_ttZ",
+    "output_NN_3l_ttH_tH_4cat_v2_rest",
+    "output_NN_3l_ttH_tH_4cat_v2_no_cat"
   };
 
-  vstring categories_TensorFlow_3l_tH_ttH_4cat_v2 = {
-    "output_NN_3l_tH_ttH_4cat_v2_ttH",
-    "output_NN_3l_tH_ttH_4cat_v2_tH",
-    "output_NN_3l_tH_ttH_4cat_v2_ttZ",
-    "output_NN_3l_tH_ttH_4cat_v2_rest",
-    "output_NN_3l_tH_ttH_4cat_v2_no_cat",
+  vstring categories_TensorFlow_3l_ttH_tH_4cat_v4 = {
+    "output_NN_3l_ttH_tH_4cat_v4_ttH",
+    "output_NN_3l_ttH_tH_4cat_v4_tH",
+    "output_NN_3l_ttH_tH_4cat_v4_ttZ",
+    "output_NN_3l_ttH_tH_4cat_v4_rest",
+    "output_NN_3l_ttH_tH_4cat_v4_no_cat"
   };
 
-  vstring categories_TensorFlow_3l_tH_ttH_4cat_v3 = {
-    "output_NN_3l_tH_ttH_4cat_v3_ttH",
-    "output_NN_3l_tH_ttH_4cat_v3_tH",
-    "output_NN_3l_tH_ttH_4cat_v3_ttZ",
-    "output_NN_3l_tH_ttH_4cat_v3_rest",
-    "output_NN_3l_tH_ttH_4cat_v3_no_cat",
+  vstring categories_TensorFlow_3l_ttH_tH_4cat_v5 = {
+    "output_NN_3l_ttH_tH_4cat_v5_ttH",
+    "output_NN_3l_ttH_tH_4cat_v5_tH",
+    "output_NN_3l_ttH_tH_4cat_v5_ttZ",
+    "output_NN_3l_ttH_tH_4cat_v5_rest",
+    "output_NN_3l_ttH_tH_4cat_v5_no_cat"
   };
 
-  vstring categories_TensorFlow_3l_tH_ttH_4cat_v4 = {
-    "output_NN_3l_tH_ttH_4cat_v4_ttH",
-    "output_NN_3l_tH_ttH_4cat_v4_tH",
-    "output_NN_3l_tH_ttH_4cat_v4_ttZ",
-    "output_NN_3l_tH_ttH_4cat_v4_rest",
-    "output_NN_3l_tH_ttH_4cat_v4_no_cat",
+  vstring categories_TensorFlow_3l_ttH_tH_4cat_v7 = {
+    "output_NN_3l_ttH_tH_4cat_v7_ttH",
+    "output_NN_3l_ttH_tH_4cat_v7_tH",
+    "output_NN_3l_ttH_tH_4cat_v7_ttZ",
+    "output_NN_3l_ttH_tH_4cat_v7_rest",
+    "output_NN_3l_ttH_tH_4cat_v7_no_cat"
+  };
+  // xanda continue 3 cat
+  vstring categories_TensorFlow_3l_ttH_tH_3cat_v6 = {
+    "output_NN_3l_ttH_tH_3cat_v6_ttH",
+    "output_NN_3l_ttH_tH_3cat_v6_tH",
+    "output_NN_3l_ttH_tH_3cat_v6_rest",
+    "output_NN_3l_ttH_tH_3cat_v6_no_cat"
   };
 
-  vstring categories_TensorFlow_3l_tH_ttH_3cat_v5 = {
-    "output_NN_3l_tH_ttH_3cat_v5_ttH",
-    "output_NN_3l_tH_ttH_3cat_v5_tH",
-    "output_NN_3l_tH_ttH_3cat_v5_rest",
-    "output_NN_3l_tH_ttH_3cat_v5_no_cat",
+  vstring categories_TensorFlow_3l_ttH_tH_3cat_v5 = {
+    "output_NN_3l_ttH_tH_3cat_v5_ttH",
+    "output_NN_3l_ttH_tH_3cat_v5_tH",
+    "output_NN_3l_ttH_tH_3cat_v5_rest",
+    "output_NN_3l_ttH_tH_3cat_v5_no_cat"
   };
 
-  vstring categories_TensorFlow_3l_tH_ttH_3cat_v4 = {
-    "output_NN_3l_tH_ttH_3cat_v4_ttH",
-    "output_NN_3l_tH_ttH_3cat_v4_tH",
-    "output_NN_3l_tH_ttH_3cat_v4_rest",
-    "output_NN_3l_tH_ttH_3cat_v4_no_cat",
+  vstring categories_TensorFlow_3l_ttH_tH_3cat_v7 = {
+    "output_NN_3l_ttH_tH_3cat_v7_ttH",
+    "output_NN_3l_ttH_tH_3cat_v7_tH",
+    "output_NN_3l_ttH_tH_3cat_v7_rest",
+    "output_NN_3l_ttH_tH_3cat_v7_no_cat"
+  };
+
+  vstring categories_TensorFlow_3l_ttH_tH_3cat_v8 = {
+    "output_NN_3l_ttH_tH_3cat_v8_ttH",
+    "output_NN_3l_ttH_tH_3cat_v8_tH",
+    "output_NN_3l_ttH_tH_3cat_v8_rest",
+    "output_NN_3l_ttH_tH_3cat_v8_no_cat"
   };
 
   for ( std::vector<leptonGenMatchEntry>::const_iterator leptonGenMatch_definition = leptonGenMatch_definitions.begin();
@@ -1290,61 +1038,77 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
       selHistManager->evt_in_categoriesFat_[*category]->bookHistograms(fs);
     }*/
-    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_3cat.begin();
-      category != categories_TensorFlow_3l_ttH_3cat.end(); ++category ) {
+    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_4cat_v3.begin();
+      category != categories_TensorFlow_3l_ttH_tH_4cat_v3.end(); ++category ) {
       TString histogramDir_category = histogramDir.data();
       histogramDir_category.ReplaceAll("3l",  category->data());
-      selHistManager->evt_in_categories_3l_ttH_3cat_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
+      selHistManager->evt_in_categories_3l_ttH_tH_4cat_v3_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
-      selHistManager->evt_in_categories_3l_ttH_3cat_TF_[*category]->bookHistograms(fs);
+      selHistManager->evt_in_categories_3l_ttH_tH_4cat_v3_TF_[*category]->bookHistograms(fs);
     }
-    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_3cat_v7.begin();
-      category != categories_TensorFlow_3l_ttH_3cat_v7.end(); ++category ) {
+    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_4cat_v2.begin();
+      category != categories_TensorFlow_3l_ttH_tH_4cat_v2.end(); ++category ) {
       TString histogramDir_category = histogramDir.data();
       histogramDir_category.ReplaceAll("3l",  category->data());
-      selHistManager->evt_in_categories_3l_ttH_3cat_v7_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
+      selHistManager->evt_in_categories_3l_ttH_tH_4cat_v2_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
-      selHistManager->evt_in_categories_3l_ttH_3cat_v7_TF_[*category]->bookHistograms(fs);
+      selHistManager->evt_in_categories_3l_ttH_tH_4cat_v2_TF_[*category]->bookHistograms(fs);
     }
-    for ( vstring::const_iterator category = categories_TensorFlow_3l_tH_ttH_4cat_v2.begin();
-      category != categories_TensorFlow_3l_tH_ttH_4cat_v2.end(); ++category ) {
+    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_4cat_v4.begin();
+      category != categories_TensorFlow_3l_ttH_tH_4cat_v4.end(); ++category ) {
       TString histogramDir_category = histogramDir.data();
       histogramDir_category.ReplaceAll("3l",  category->data());
-      selHistManager->evt_in_categories_3l_tH_ttH_4cat_v2_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
+      selHistManager->evt_in_categories_3l_ttH_tH_4cat_v4_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
-      selHistManager->evt_in_categories_3l_tH_ttH_4cat_v2_TF_[*category]->bookHistograms(fs);
+      selHistManager->evt_in_categories_3l_ttH_tH_4cat_v4_TF_[*category]->bookHistograms(fs);
     }
-    for ( vstring::const_iterator category = categories_TensorFlow_3l_tH_ttH_4cat_v3.begin();
-      category != categories_TensorFlow_3l_tH_ttH_4cat_v3.end(); ++category ) {
+    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_4cat_v5.begin();
+      category != categories_TensorFlow_3l_ttH_tH_4cat_v5.end(); ++category ) {
       TString histogramDir_category = histogramDir.data();
       histogramDir_category.ReplaceAll("3l",  category->data());
-      selHistManager->evt_in_categories_3l_tH_ttH_4cat_v3_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
+      selHistManager->evt_in_categories_3l_ttH_tH_4cat_v5_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
-      selHistManager->evt_in_categories_3l_tH_ttH_4cat_v3_TF_[*category]->bookHistograms(fs);
+      selHistManager->evt_in_categories_3l_ttH_tH_4cat_v5_TF_[*category]->bookHistograms(fs);
     }
-    for ( vstring::const_iterator category = categories_TensorFlow_3l_tH_ttH_4cat_v4.begin();
-      category != categories_TensorFlow_3l_tH_ttH_4cat_v4.end(); ++category ) {
+    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_4cat_v7.begin();
+      category != categories_TensorFlow_3l_ttH_tH_4cat_v7.end(); ++category ) {
       TString histogramDir_category = histogramDir.data();
       histogramDir_category.ReplaceAll("3l",  category->data());
-      selHistManager->evt_in_categories_3l_tH_ttH_4cat_v4_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
+      selHistManager->evt_in_categories_3l_ttH_tH_4cat_v7_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
-      selHistManager->evt_in_categories_3l_tH_ttH_4cat_v4_TF_[*category]->bookHistograms(fs);
+      selHistManager->evt_in_categories_3l_ttH_tH_4cat_v7_TF_[*category]->bookHistograms(fs);
     }
-    for ( vstring::const_iterator category = categories_TensorFlow_3l_tH_ttH_3cat_v4.begin();
-      category != categories_TensorFlow_3l_tH_ttH_3cat_v4.end(); ++category ) {
+    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_3cat_v5.begin();
+      category != categories_TensorFlow_3l_ttH_tH_3cat_v5.end(); ++category ) {
       TString histogramDir_category = histogramDir.data();
       histogramDir_category.ReplaceAll("3l",  category->data());
-      selHistManager->evt_in_categories_3l_tH_ttH_3cat_v4_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
+      selHistManager->evt_in_categories_3l_ttH_tH_3cat_v5_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
-      selHistManager->evt_in_categories_3l_tH_ttH_3cat_v4_TF_[*category]->bookHistograms(fs);
+      selHistManager->evt_in_categories_3l_ttH_tH_3cat_v5_TF_[*category]->bookHistograms(fs);
     }
-    for ( vstring::const_iterator category = categories_TensorFlow_3l_tH_ttH_3cat_v5.begin();
-      category != categories_TensorFlow_3l_tH_ttH_3cat_v5.end(); ++category ) {
+    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_3cat_v6.begin();
+      category != categories_TensorFlow_3l_ttH_tH_3cat_v6.end(); ++category ) {
       TString histogramDir_category = histogramDir.data();
       histogramDir_category.ReplaceAll("3l",  category->data());
-      selHistManager->evt_in_categories_3l_tH_ttH_3cat_v5_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
+      selHistManager->evt_in_categories_3l_ttH_tH_3cat_v6_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
-      selHistManager->evt_in_categories_3l_tH_ttH_3cat_v5_TF_[*category]->bookHistograms(fs);
+      selHistManager->evt_in_categories_3l_ttH_tH_3cat_v6_TF_[*category]->bookHistograms(fs);
+    }
+    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_3cat_v7.begin();
+      category != categories_TensorFlow_3l_ttH_tH_3cat_v7.end(); ++category ) {
+      TString histogramDir_category = histogramDir.data();
+      histogramDir_category.ReplaceAll("3l",  category->data());
+      selHistManager->evt_in_categories_3l_ttH_tH_3cat_v7_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
+        Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
+      selHistManager->evt_in_categories_3l_ttH_tH_3cat_v7_TF_[*category]->bookHistograms(fs);
+    }
+    for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_3cat_v8.begin();
+      category != categories_TensorFlow_3l_ttH_tH_3cat_v8.end(); ++category ) {
+      TString histogramDir_category = histogramDir.data();
+      histogramDir_category.ReplaceAll("3l",  category->data());
+      selHistManager->evt_in_categories_3l_ttH_tH_3cat_v8_TF_[*category] = new EvtHistManager_3l(makeHistManager_cfg(process_and_genMatch,
+        Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
+      selHistManager->evt_in_categories_3l_ttH_tH_3cat_v8_TF_[*category]->bookHistograms(fs);
     }
 
     const vstring decayModes_evt = eventInfo.getDecayModes();
@@ -1387,89 +1151,113 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
           ));
 	  selHistManager -> evt_in_categoriesFat_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
 	}*/
-  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_3cat.begin();
-  category != categories_TensorFlow_3l_ttH_3cat.end(); ++category ) {
+  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_4cat_v3.begin();
+  category != categories_TensorFlow_3l_ttH_tH_4cat_v3.end(); ++category ) {
     TString histogramDir_category = histogramDir.data();
     histogramDir_category.ReplaceAll("3l",  category->data());
-    selHistManager -> evt_in_categories_3l_ttH_3cat_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
+    selHistManager -> evt_in_categories_3l_ttH_tH_4cat_v3_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
       decayMode_and_genMatch,
       Form("%s/sel/evt", histogramDir_category.Data()),
       era_string,
       central_or_shift
     ));
-    selHistManager -> evt_in_categories_3l_ttH_3cat_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
+    selHistManager -> evt_in_categories_3l_ttH_tH_4cat_v3_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
   }
-  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_3cat_v7.begin();
-  category != categories_TensorFlow_3l_ttH_3cat_v7.end(); ++category ) {
+  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_4cat_v2.begin();
+  category != categories_TensorFlow_3l_ttH_tH_4cat_v2.end(); ++category ) {
     TString histogramDir_category = histogramDir.data();
     histogramDir_category.ReplaceAll("3l",  category->data());
-    selHistManager -> evt_in_categories_3l_ttH_3cat_v7_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
+    selHistManager -> evt_in_categories_3l_ttH_tH_4cat_v2_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
       decayMode_and_genMatch,
       Form("%s/sel/evt", histogramDir_category.Data()),
       era_string,
       central_or_shift
     ));
-    selHistManager -> evt_in_categories_3l_ttH_3cat_v7_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
+    selHistManager -> evt_in_categories_3l_ttH_tH_4cat_v2_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
   }
-  for ( vstring::const_iterator category = categories_TensorFlow_3l_tH_ttH_4cat_v2.begin();
-  category != categories_TensorFlow_3l_tH_ttH_4cat_v2.end(); ++category ) {
+  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_4cat_v4.begin();
+  category != categories_TensorFlow_3l_ttH_tH_4cat_v4.end(); ++category ) {
     TString histogramDir_category = histogramDir.data();
     histogramDir_category.ReplaceAll("3l",  category->data());
-    selHistManager -> evt_in_categories_3l_tH_ttH_4cat_v2_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
+    selHistManager -> evt_in_categories_3l_ttH_tH_4cat_v4_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
       decayMode_and_genMatch,
       Form("%s/sel/evt", histogramDir_category.Data()),
       era_string,
       central_or_shift
     ));
-    selHistManager -> evt_in_categories_3l_tH_ttH_4cat_v2_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
+    selHistManager -> evt_in_categories_3l_ttH_tH_4cat_v4_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
   }
-  for ( vstring::const_iterator category = categories_TensorFlow_3l_tH_ttH_4cat_v3.begin();
-  category != categories_TensorFlow_3l_tH_ttH_4cat_v3.end(); ++category ) {
+  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_4cat_v5.begin();
+  category != categories_TensorFlow_3l_ttH_tH_4cat_v5.end(); ++category ) {
     TString histogramDir_category = histogramDir.data();
     histogramDir_category.ReplaceAll("3l",  category->data());
-    selHistManager -> evt_in_categories_3l_tH_ttH_4cat_v3_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
+    selHistManager -> evt_in_categories_3l_ttH_tH_4cat_v5_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
       decayMode_and_genMatch,
       Form("%s/sel/evt", histogramDir_category.Data()),
       era_string,
       central_or_shift
     ));
-    selHistManager -> evt_in_categories_3l_tH_ttH_4cat_v3_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
+    selHistManager -> evt_in_categories_3l_ttH_tH_4cat_v5_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
   }
-  for ( vstring::const_iterator category = categories_TensorFlow_3l_tH_ttH_4cat_v4.begin();
-  category != categories_TensorFlow_3l_tH_ttH_4cat_v4.end(); ++category ) {
+  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_4cat_v7.begin();
+  category != categories_TensorFlow_3l_ttH_tH_4cat_v7.end(); ++category ) {
     TString histogramDir_category = histogramDir.data();
     histogramDir_category.ReplaceAll("3l",  category->data());
-    selHistManager -> evt_in_categories_3l_tH_ttH_4cat_v4_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
+    selHistManager -> evt_in_categories_3l_ttH_tH_4cat_v7_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
       decayMode_and_genMatch,
       Form("%s/sel/evt", histogramDir_category.Data()),
       era_string,
       central_or_shift
     ));
-    selHistManager -> evt_in_categories_3l_tH_ttH_4cat_v4_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
+    selHistManager -> evt_in_categories_3l_ttH_tH_4cat_v7_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
   }
-  for ( vstring::const_iterator category = categories_TensorFlow_3l_tH_ttH_3cat_v4.begin();
-  category != categories_TensorFlow_3l_tH_ttH_3cat_v4.end(); ++category ) {
+  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_3cat_v5.begin();
+  category != categories_TensorFlow_3l_ttH_tH_3cat_v5.end(); ++category ) {
     TString histogramDir_category = histogramDir.data();
     histogramDir_category.ReplaceAll("3l",  category->data());
-    selHistManager -> evt_in_categories_3l_tH_ttH_3cat_v4_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
+    selHistManager -> evt_in_categories_3l_ttH_tH_3cat_v5_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
       decayMode_and_genMatch,
       Form("%s/sel/evt", histogramDir_category.Data()),
       era_string,
       central_or_shift
     ));
-    selHistManager -> evt_in_categories_3l_tH_ttH_3cat_v4_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
+    selHistManager -> evt_in_categories_3l_ttH_tH_3cat_v5_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
   }
-  for ( vstring::const_iterator category = categories_TensorFlow_3l_tH_ttH_3cat_v5.begin();
-  category != categories_TensorFlow_3l_tH_ttH_3cat_v5.end(); ++category ) {
+  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_3cat_v6.begin();
+  category != categories_TensorFlow_3l_ttH_tH_3cat_v6.end(); ++category ) {
     TString histogramDir_category = histogramDir.data();
     histogramDir_category.ReplaceAll("3l",  category->data());
-    selHistManager -> evt_in_categories_3l_tH_ttH_3cat_v5_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
+    selHistManager -> evt_in_categories_3l_ttH_tH_3cat_v6_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
       decayMode_and_genMatch,
       Form("%s/sel/evt", histogramDir_category.Data()),
       era_string,
       central_or_shift
     ));
-    selHistManager -> evt_in_categories_3l_tH_ttH_3cat_v5_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
+    selHistManager -> evt_in_categories_3l_ttH_tH_3cat_v6_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
+  }
+  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_3cat_v7.begin();
+  category != categories_TensorFlow_3l_ttH_tH_3cat_v7.end(); ++category ) {
+    TString histogramDir_category = histogramDir.data();
+    histogramDir_category.ReplaceAll("3l",  category->data());
+    selHistManager -> evt_in_categories_3l_ttH_tH_3cat_v7_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
+      decayMode_and_genMatch,
+      Form("%s/sel/evt", histogramDir_category.Data()),
+      era_string,
+      central_or_shift
+    ));
+    selHistManager -> evt_in_categories_3l_ttH_tH_3cat_v7_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
+  }
+  for ( vstring::const_iterator category = categories_TensorFlow_3l_ttH_tH_3cat_v8.begin();
+  category != categories_TensorFlow_3l_ttH_tH_3cat_v8.end(); ++category ) {
+    TString histogramDir_category = histogramDir.data();
+    histogramDir_category.ReplaceAll("3l",  category->data());
+    selHistManager -> evt_in_categories_3l_ttH_tH_3cat_v8_TF_and_decayModes_[*category][decayMode_evt] = new EvtHistManager_3l(makeHistManager_cfg(
+      decayMode_and_genMatch,
+      Form("%s/sel/evt", histogramDir_category.Data()),
+      era_string,
+      central_or_shift
+    ));
+    selHistManager -> evt_in_categories_3l_ttH_tH_3cat_v8_TF_and_decayModes_[*category][decayMode_evt] -> bookHistograms(fs);
   }
 
       }
@@ -1615,6 +1403,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
   double count_ttZ_like = 0.;
   double count_tH_like_Zpeak = 0.;
   double evtWeight_lhe_count = 0.;
+  bool isDebugTF=false;
 
   while(inputTree -> hasNextEvent() && (! run_lumi_eventSelector || (run_lumi_eventSelector && ! run_lumi_eventSelector -> areWeDone())))
   {
@@ -1627,7 +1416,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
                 << ") file (" << selectedEntries << " Entries selected)\n";
     }
     ++analyzedEntries;
-    //if ( analyzedEntries > 10 ) break;
+    //if ( analyzedEntries > 10000 ) break;
     //std::cout << "analyzedEntries = " << analyzedEntries << std::endl;
     histogram_analyzedEntries->Fill(0.);
 
@@ -2099,7 +1888,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     }
     */
     bool tH_like = false;
-    bool tH_like_1jet = false;
+    //bool tH_like_1jet = false;
     bool ttH_like = false;
     bool ttZ_like = false;
     bool tH_like_Zpeak = false;
@@ -2109,10 +1898,9 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
       ttZ_like = true;
     }
     if (
-      (selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1) &&\
-      ((selJets.size()+selJetsForward.size()) >= 2)
+      (selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1)
     ) {tH_like = true; tH_like_Zpeak = true; } // Xanda -- adapted logic
-    if ((selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1) && (selJets.size() >= 1))  tH_like_1jet = true;
+    //if ((selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1) && (selJets.size() >= 1))  tH_like_1jet = true;
     if ( tH_like && 0 > 1 ) std::cout <<
     "selBJets_medium.size() = "<< selBJets_medium.size() << "\n" <<
     "selBJets_loose.size() = "<< selBJets_loose.size() << "\n" <<
@@ -2152,7 +1940,7 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
       preselElectrons.size(), preselMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       -1., -1., -1., -1.,
-      -1., -1., -1., -1., -1., -1., -1., -1.,
+      -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
       1.);
     preselHistManager->evtYield_->fillHistograms(eventInfo, 1.);
 
@@ -2457,14 +2245,15 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     */
     if ( failsZbosonMassVeto ) {
       ttH_like = false;
-      tH_like = false; tH_like_1jet = false;
+      tH_like = false; //tH_like_1jet = false;
     } else {
       ttZ_like = false;
       tH_like_Zpeak = false;
     }
     cutFlowTable.update("Z-boson mass veto", evtWeight);
     cutFlowHistManager->fillHistograms("Z-boson mass veto", evtWeight);
-    if (!(tH_like || ttH_like || ttZ_like || tH_like_Zpeak || tH_like_1jet)) continue;
+    //if (!(tH_like || ttH_like || ttZ_like || tH_like_Zpeak || tH_like_1jet)) continue;
+    if (!(tH_like || ttH_like)) continue; // Xanda not considering zpeak
     if ( tH_like && 0 > 1) std::cout <<
     "selBJets_medium.size() = "<< selBJets_medium.size() << "\n" <<
     "selBJets_loose.size() = "<< selBJets_loose.size() << "\n" <<
@@ -2513,7 +2302,8 @@ std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVa
     }
 
     double met_LD_cut = 0.;
-    if      ( selJets.size() >= 4 ) met_LD_cut = -1.; // MET LD cut not applied
+    if ( tH_like ) met_LD_cut = -1.;
+    else if ( selJets.size() >= 4 ) met_LD_cut = -1.; // MET LD cut not applied
     else if ( isSameFlavor_OS_FO     ) met_LD_cut = 45.; // isSameFlavor_OS_FO
     else                            met_LD_cut = 30.;
     if ( met_LD_cut > 0 && (met_LD < met_LD_cut)) {
@@ -3149,7 +2939,7 @@ selJet != selJets.end(); ++selJet ) {
     mvaInputs_XGB_Boosted_AK12_noISO["HadTop_pt_semi_boosted"] = HadTop_pt_semi_boosted_noISO;
     */
     //double mva_Boosted_AK12_noI SO = 1.0; // mva_XGB_Boosted_AK12_noISO(mvaInputs_XGB_Boosted_AK12_noISO);
-    //std::cout<<" output_NN_3l_tH_ttH_4cat_v3 "<<output_NN_3l_tH_ttH_4cat_v3<<std::endl;
+    //std::cout<<" output_NN_3l_ttH_tH_4cat_v5 "<<output_NN_3l_ttH_tH_4cat_v5<<std::endl;
 
     /*
     //mvaInputs_XGB_Boosted_AK8
@@ -3253,523 +3043,449 @@ selJet != selJets.end(); ++selJet ) {
     };
     */
     //std::cout << "mvaInputs_3l_tH_ttH_4cat_TF" << std::endl;
-    mvaInputs_3l_ttH_3cat_TF["ptmiss"] = met.pt();
-    mvaInputs_3l_ttH_3cat_TF["mbb_medium"] = selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0;
-    mvaInputs_3l_ttH_3cat_TF["jet1_pt"] = selJets[0]->pt();
-    mvaInputs_3l_ttH_3cat_TF["jet2_pt"] = selJets.size() > 1 ? selJets[1]->pt() : 0;
-    mvaInputs_3l_ttH_3cat_TF["jet3_pt"] = selJets.size() > 2 ?  selJets[2]->pt() : 0;
-    mvaInputs_3l_ttH_3cat_TF["jet4_pt"] = selJets.size() > 3 ?  selJets[3]->pt() : 0;
-    mvaInputs_3l_ttH_3cat_TF["lep1_mT"] = comp_MT_met_lep1(*selLepton_lead, met.pt(), met.phi());
-    mvaInputs_3l_ttH_3cat_TF["lep1_conept"] = lep1_conePt;
-    //mvaInputs_3l_ttH_3cat_TF["lep1_min_dr_jet"] = TMath::Min(10., mindr_lep1_jet);
-    mvaInputs_3l_ttH_3cat_TF["lep2_mT"] = comp_MT_met_lep1(*selLepton_sublead, met.pt(), met.phi());
-    mvaInputs_3l_ttH_3cat_TF["lep2_conept"] = lep2_conePt;
-    //mvaInputs_3l_ttH_3cat_TF["lep2_min_dr_jet"] = TMath::Min(10., mindr_lep2_jet);
-    mvaInputs_3l_ttH_3cat_TF["lep3_mT"] = comp_MT_met_lep1(*selLepton_third, met.pt(), met.phi());
-    mvaInputs_3l_ttH_3cat_TF["lep3_conept"] = lep3_conePt;
-    //mvaInputs_3l_ttH_3cat_TF["lep3_min_dr_jet"] = TMath::Min(10., mindr_lep3_jet);
-    mvaInputs_3l_ttH_3cat_TF["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_3l_ttH_3cat_TF["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    //mvaInputs_3l_ttH_3cat_TF["nJet"] = selJets.size();
-    //mvaInputs_3l_ttH_3cat_TF["nJetForward"] = selJetsForward.size();
-    mvaInputs_3l_ttH_3cat_TF["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_3l_ttH_3cat_TF["nElectron"] = selElectrons.size();
-    mvaInputs_3l_ttH_3cat_TF["sum_lep_charge"] = sumLeptonCharge;
-    mvaInputs_3l_ttH_3cat_TF["mvaOutput_Hj_tagger"] = Hj_tagger_fromCSVsort4th;
-    std::map<std::string, double> mvaOutput_3l_ttH_3cat_TF = mva_3l_ttH_3cat_TF(mvaInputs_3l_ttH_3cat_TF);
-    if ( isDEBUG ) {
-      for (auto elem : mvaOutput_3l_ttH_3cat_TF) std::cout << elem.first << " " << elem.second << "\n";
-      std::cout << "result  ";
-      for (auto elem : classes_TensorFlow_3l_ttH_3cat ) std::cout << elem << " = " << mvaOutput_3l_ttH_3cat_TF[elem] <<" ";
+    mvaInputs_3l_ttH_tH_4cat_TF["avg_dr_jet"]                 = avg_dr_jet;
+    mvaInputs_3l_ttH_tH_4cat_TF["ptmiss"] = met.pt();
+    mvaInputs_3l_ttH_tH_4cat_TF["mbb_medium"] = selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0;
+    mvaInputs_3l_ttH_tH_4cat_TF["jet1_pt"] = selJets[0]->pt();
+    mvaInputs_3l_ttH_tH_4cat_TF["jet2_pt"] = selJets.size() > 1 ? selJets[1]->pt() : 0;
+    mvaInputs_3l_ttH_tH_4cat_TF["jet3_pt"] = selJets.size() > 2 ?  selJets[2]->pt() : 0;
+    mvaInputs_3l_ttH_tH_4cat_TF["jet4_pt"] = selJets.size() > 3 ?  selJets[3]->pt() : 0;
+    mvaInputs_3l_ttH_tH_4cat_TF["max_lep_eta"] = max_lep_eta;
+    mvaInputs_3l_ttH_tH_4cat_TF["lep_min_dr_jet"] = lep_min_dr_jet;
+    mvaInputs_3l_ttH_tH_4cat_TF["lep1_mT"] = comp_MT_met_lep1(*selLepton_lead, met.pt(), met.phi());
+    mvaInputs_3l_ttH_tH_4cat_TF["lep1_conept"] = lep1_conePt;
+    mvaInputs_3l_ttH_tH_4cat_TF["lep2_mT"] = comp_MT_met_lep1(*selLepton_sublead, met.pt(), met.phi());
+    mvaInputs_3l_ttH_tH_4cat_TF["lep2_conept"] = lep2_conePt;
+    mvaInputs_3l_ttH_tH_4cat_TF["lep3_mT"] = comp_MT_met_lep1(*selLepton_third, met.pt(), met.phi());
+    mvaInputs_3l_ttH_tH_4cat_TF["lep3_conept"] = lep3_conePt;
+    mvaInputs_3l_ttH_tH_4cat_TF["jetForward1_pt"] = selJetsForward.size() > 0 ? selJetsForward[0]->pt() : 0;
+    mvaInputs_3l_ttH_tH_4cat_TF["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_3l_ttH_tH_4cat_TF["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
+    mvaInputs_3l_ttH_tH_4cat_TF["nJet"] = selJets.size();
+    mvaInputs_3l_ttH_tH_4cat_TF["nJetForward"] = selJetsForward.size();
+    mvaInputs_3l_ttH_tH_4cat_TF["nBJetLoose"] = selBJets_loose.size();
+    mvaInputs_3l_ttH_tH_4cat_TF["nBJetMedium"] = selBJets_medium.size();
+    mvaInputs_3l_ttH_tH_4cat_TF["nElectron"] = selElectrons.size();
+    mvaInputs_3l_ttH_tH_4cat_TF["sum_lep_charge"] = sumLeptonCharge;
+    std::map<std::string, double> mvaOutput_3l_ttH_tH_4cat_v3_TF = mva_3l_ttH_tH_4cat_v3_TF(mvaInputs_3l_ttH_tH_4cat_TF);
+    if ( isDebugTF ) {
+      for (auto elem : mvaInputs_3l_ttH_tH_4cat_TF) std::cout << elem.first << " " << elem.second << "\n";
+      for (auto elem : mvaOutput_3l_ttH_tH_4cat_v3_TF) std::cout << elem.first << " " << elem.second << "\n";
+      std::cout << "result v3 ";
+      for (auto elem : classes_TensorFlow_3l_ttH_tH_4cat ) std::cout << elem << " = " << mvaOutput_3l_ttH_tH_4cat_v3_TF[elem] <<" ";
       std::cout << std::endl;
     }
-
-    //std::cout << "mvaInputs_3l_tH_ttH_4cat_TF" << std::endl;
-    /*
-    "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge",
-    "mvaOutput_Hj_tagger"
-    */
-    mvaInputs_3l_ttH_3cat_v7_TF["avg_dr_jet"]                 = avg_dr_jet;
-    mvaInputs_3l_ttH_3cat_v7_TF["ptmiss"] = met.pt();
-    mvaInputs_3l_ttH_3cat_v7_TF["mbb_medium"] = selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0;
-    mvaInputs_3l_ttH_3cat_v7_TF["jet1_pt"] = selJets[0]->pt();
-    mvaInputs_3l_ttH_3cat_v7_TF["jet2_pt"] = selJets.size() > 1 ? selJets[1]->pt() : 0;
-    mvaInputs_3l_ttH_3cat_v7_TF["jet3_pt"] = selJets.size() > 2 ?  selJets[2]->pt() : 0;
-    mvaInputs_3l_ttH_3cat_v7_TF["jet4_pt"] = selJets.size() > 3 ?  selJets[3]->pt() : 0;
-    mvaInputs_3l_ttH_3cat_v7_TF["max_lep_eta"] = max_lep_eta;
-    mvaInputs_3l_ttH_3cat_v7_TF["lep_min_dr_jet"] = lep_min_dr_jet;
-    mvaInputs_3l_ttH_3cat_v7_TF["lep1_mT"] = comp_MT_met_lep1(*selLepton_lead, met.pt(), met.phi());
-    mvaInputs_3l_ttH_3cat_v7_TF["lep1_conept"] = lep1_conePt;
-    mvaInputs_3l_ttH_3cat_v7_TF["lep2_mT"] = comp_MT_met_lep1(*selLepton_sublead, met.pt(), met.phi());
-    mvaInputs_3l_ttH_3cat_v7_TF["lep2_conept"] = lep2_conePt;
-    //mvaInputs_3l_ttH_3cat_v7_TF["lep2_min_dr_jet"] = TMath::Min(10., mindr_lep2_jet);
-    mvaInputs_3l_ttH_3cat_v7_TF["lep3_mT"] = comp_MT_met_lep1(*selLepton_third, met.pt(), met.phi());
-    mvaInputs_3l_ttH_3cat_v7_TF["lep3_conept"] = lep3_conePt;
-    //mvaInputs_3l_ttH_3cat_v7_TF["lep3_min_dr_jet"] = TMath::Min(10., mindr_lep3_jet);
-    mvaInputs_3l_ttH_3cat_v7_TF["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_3l_ttH_3cat_v7_TF["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_3l_ttH_3cat_v7_TF["nJet"] = selJets.size();
-    mvaInputs_3l_ttH_3cat_v7_TF["nJetForward"] = selJetsForward.size();
-    mvaInputs_3l_ttH_3cat_v7_TF["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_3l_ttH_3cat_v7_TF["nElectron"] = selElectrons.size();
-    mvaInputs_3l_ttH_3cat_v7_TF["sum_lep_charge"] = sumLeptonCharge;
-    mvaInputs_3l_ttH_3cat_v7_TF["mvaOutput_Hj_tagger"] = Hj_tagger_fromCSVsort4th;
-    std::map<std::string, double> mvaOutput_3l_ttH_3cat_v7_TF = mva_3l_ttH_3cat_v7_TF(mvaInputs_3l_ttH_3cat_v7_TF);
-    if ( isDEBUG ) {
-      for (auto elem : mvaInputs_3l_ttH_3cat_v7_TF) std::cout << elem.first << " " << elem.second << "\n";
-      std::cout << "result v7 ";
-      for (auto elem : classes_TensorFlow_3l_ttH_3cat_v7 ) std::cout << elem << " = " << mvaOutput_3l_ttH_3cat_v7_TF[elem] <<" ";
-      std::cout << std::endl;
-    }
-
-    /* mva_3l_tH_ttH_4cat_v2_TF
-    "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "jetForward1_pt", "jetForward1_eta_abs",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose","nElectron", "sum_lep_charge",
-    "mvaOutput_Hj_tagger"
-    */
-    /* -- no standartization
-    "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge"
-    */
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["avg_dr_jet"]                 = avg_dr_jet;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["ptmiss"] = met.pt();
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["mbb_medium"] = selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["jet1_pt"] = selJets[0]->pt();
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["jet2_pt"] = selJets.size() > 1 ? selJets[1]->pt() : 0;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["jet3_pt"] = selJets.size() > 2 ?  selJets[2]->pt() : 0;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["jet4_pt"] = selJets.size() > 3 ?  selJets[3]->pt() : 0;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["max_lep_eta"] = max_lep_eta;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["lep_min_dr_jet"] = lep_min_dr_jet;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["lep1_mT"] = comp_MT_met_lep1(*selLepton_lead, met.pt(), met.phi());
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["lep1_conept"] = lep1_conePt;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["lep2_mT"] = comp_MT_met_lep1(*selLepton_sublead, met.pt(), met.phi());
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["lep2_conept"] = lep2_conePt;
-    //mvaInputs_3l_tH_ttH_4cat_v2_TF["lep2_min_dr_jet"] = TMath::Min(10., mindr_lep2_jet);
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["lep3_mT"] = comp_MT_met_lep1(*selLepton_third, met.pt(), met.phi());
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["lep3_conept"] = lep3_conePt;
-    //mvaInputs_3l_tH_ttH_4cat_v2_TF["lep3_min_dr_jet"] = TMath::Min(10., mindr_lep3_jet);
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["jetForward1_pt"] = selJetsForward.size() > 0 ? selJetsForward[0]->pt() : 0;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["jetForward1_eta_abs"] = selJetsForward.size() > 0 ? selJetsForward[0]->absEta() : -1;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["nJet"] = selJets.size();
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["nJetForward"] = selJetsForward.size();
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["nElectron"] = selElectrons.size();
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["sum_lep_charge"] = sumLeptonCharge;
-    mvaInputs_3l_tH_ttH_4cat_v2_TF["mvaOutput_Hj_tagger"] = Hj_tagger_fromCSVsort4th;
-    std::map<std::string, double> mvaOutput_3l_tH_ttH_4cat_v2_TF = mva_3l_tH_ttH_4cat_v2_TF(mvaInputs_3l_tH_ttH_4cat_v2_TF);
-    if ( isDEBUG ) {
-      for (auto elem : mvaInputs_3l_tH_ttH_4cat_v2_TF) std::cout << elem.first << " " << elem.second << "\n";
+    std::map<std::string, double> mvaOutput_3l_ttH_tH_4cat_v2_TF = mva_3l_ttH_tH_4cat_v2_TF(mvaInputs_3l_ttH_tH_4cat_TF);
+    if ( isDebugTF ) {
       std::cout << "result v2 ";
-      for (auto elem : classes_TensorFlow_3l_tH_ttH_4cat_v2 ) std::cout << elem << " = " << mvaOutput_3l_tH_ttH_4cat_v2_TF[elem] <<" ";
+      for (auto elem : classes_TensorFlow_3l_ttH_tH_4cat ) std::cout << elem << " = " << mvaOutput_3l_ttH_tH_4cat_v2_TF[elem] <<" ";
+      std::cout << std::endl;
+    }
+    std::map<std::string, double> mvaOutput_3l_ttH_tH_4cat_v4_TF = mva_3l_ttH_tH_4cat_v4_TF(mvaInputs_3l_ttH_tH_4cat_TF);
+    if ( isDebugTF ) {
+      std::cout << "result v4 ";
+      for (auto elem : classes_TensorFlow_3l_ttH_tH_4cat ) std::cout << elem << " = " << mvaOutput_3l_ttH_tH_4cat_v4_TF[elem] <<" ";
+      std::cout << std::endl;
+    }
+    std::map<std::string, double> mvaOutput_3l_ttH_tH_4cat_v5_TF = mva_3l_ttH_tH_4cat_v5_TF(mvaInputs_3l_ttH_tH_4cat_TF);
+    if ( isDebugTF ) {
+      std::cout << "result v5 ";
+      for (auto elem : classes_TensorFlow_3l_ttH_tH_4cat ) std::cout << elem << " = " << mvaOutput_3l_ttH_tH_4cat_v5_TF[elem] <<" ";
       std::cout << std::endl;
     }
 
     /*
-    mva_3l_tH_ttH_4cat_v3_TF
-    mva_3l_tH_ttH_4cat_v4_TF
+    mva_3l_ttH_tH_4cat_v7_TF
     "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "jetForward1_pt",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge",
-    "mvaOutput_Hj_tagger"
+    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt",
+    "max_lep_eta",
+    "lep1_mT", "lep1_conept", "lep2_mT", "lep2_conept", "lep3_mT", "lep3_conept",
+    "jetForward1_pt", "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+    "nJet", "nJetForward", "nBJetLoose",
+    "nBJetMedium", "nElectron", "sum_lep_charge"
     */
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["avg_dr_jet"]                 = avg_dr_jet;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["ptmiss"] = met.pt();
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["mbb_medium"] = selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["jet1_pt"] = selJets[0]->pt();
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["jet2_pt"] = selJets.size() > 1 ? selJets[1]->pt() : 0;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["jet3_pt"] = selJets.size() > 2 ?  selJets[2]->pt() : 0;
-    //mvaInputs_3l_tH_ttH_4cat_v3_TF["jet4_pt"] = selJets.size() > 3 ?  selJets[3]->pt() : 0;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["max_lep_eta"] = max_lep_eta;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["lep_min_dr_jet"] = lep_min_dr_jet;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["lep1_mT"] = comp_MT_met_lep1(*selLepton_lead, met.pt(), met.phi());
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["lep1_conept"] = lep1_conePt;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["lep2_mT"] = comp_MT_met_lep1(*selLepton_sublead, met.pt(), met.phi());
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["lep2_conept"] = lep2_conePt;
-    //mvaInputs_3l_tH_ttH_4cat_v3_TF["lep2_min_dr_jet"] = TMath::Min(10., mindr_lep2_jet);
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["lep3_mT"] = comp_MT_met_lep1(*selLepton_third, met.pt(), met.phi());
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["lep3_conept"] = lep3_conePt;
-    //mvaInputs_3l_tH_ttH_4cat_v3_TF["lep3_min_dr_jet"] = TMath::Min(10., mindr_lep3_jet);
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["jetForward1_pt"] = selJetsForward.size() > 0 ? selJetsForward[0]->pt() : 0;
-    //mvaInputs_3l_tH_ttH_4cat_v3_TF["jetForward1_eta_abs"] = selJetsForward.size() > 1 ? selJetsForward[0]->absEta() : -1;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["nJet"] = selJets.size();
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["nJetForward"] = selJetsForward.size();
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["nElectron"] = selElectrons.size();
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["sum_lep_charge"] = sumLeptonCharge;
-    mvaInputs_3l_tH_ttH_4cat_v3_TF["mvaOutput_Hj_tagger"] = Hj_tagger_fromCSVsort4th;
-    std::map<std::string, double> mvaOutput_3l_tH_ttH_4cat_v3_TF = mva_3l_tH_ttH_4cat_v3_TF(mvaInputs_3l_tH_ttH_4cat_v3_TF);
-    if ( isDEBUG ) {
-      for (auto elem : mvaInputs_3l_tH_ttH_4cat_v3_TF) std::cout << elem.first << " " << elem.second << "\n";
-      std::cout << "result v3 ";
-      for (auto elem : classes_TensorFlow_3l_tH_ttH_4cat_v3 ) std::cout << elem << " = " << mvaOutput_3l_tH_ttH_4cat_v3_TF[elem] <<" ";
-      std::cout << std::endl;
-    }
-    std::map<std::string, double> mvaOutput_3l_tH_ttH_4cat_v4_TF = mva_3l_tH_ttH_4cat_v4_TF(mvaInputs_3l_tH_ttH_4cat_v3_TF);
-    if ( isDEBUG ) {
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["avg_dr_jet"]                 = avg_dr_jet;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["ptmiss"] = met.pt();
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["mbb_medium"] = selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["jet1_pt"] = selJets[0]->pt();
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["jet2_pt"] = selJets.size() > 1 ? selJets[1]->pt() : 0;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["jet3_pt"] = selJets.size() > 2 ?  selJets[2]->pt() : 0;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["jet4_pt"] = selJets.size() > 3 ?  selJets[3]->pt() : 0;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["max_lep_eta"] = max_lep_eta;
+    //mvaInputs_3l_ttH_tH_4cat_v7_TF["lep_min_dr_jet"] = lep_min_dr_jet;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["lep1_mT"] = comp_MT_met_lep1(*selLepton_lead, met.pt(), met.phi());
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["lep1_conept"] = lep1_conePt;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["lep2_mT"] = comp_MT_met_lep1(*selLepton_sublead, met.pt(), met.phi());
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["lep2_conept"] = lep2_conePt;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["lep3_mT"] = comp_MT_met_lep1(*selLepton_third, met.pt(), met.phi());
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["lep3_conept"] = lep3_conePt;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["jetForward1_pt"] = selJetsForward.size() > 0 ? selJetsForward[0]->pt() : 0;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["nJet"] = selJets.size();
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["nJetForward"] = selJetsForward.size();
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["nBJetLoose"] = selBJets_loose.size();
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["nBJetMedium"] = selBJets_medium.size();
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["nElectron"] = selElectrons.size();
+    mvaInputs_3l_ttH_tH_4cat_v7_TF["sum_lep_charge"] = sumLeptonCharge;
+    //mvaInputs_3l_ttH_tH_4cat_v7_TF["mvaOutput_Hj_tagger"] = Hj_tagger_fromCSVsort4th;
+    std::map<std::string, double> mvaOutput_3l_ttH_tH_4cat_v7_TF = mva_3l_ttH_tH_4cat_v7_TF(mvaInputs_3l_ttH_tH_4cat_v7_TF);
+    if ( isDebugTF ) {
       std::cout << "result v4 ";
-      for (auto elem : classes_TensorFlow_3l_tH_ttH_4cat_v3 ) std::cout << elem << " = " << mvaOutput_3l_tH_ttH_4cat_v4_TF[elem] <<" ";
+      for (auto elem : classes_TensorFlow_3l_ttH_tH_4cat ) std::cout << elem << " = " << mvaOutput_3l_ttH_tH_4cat_v7_TF[elem] <<" ";
       std::cout << std::endl;
     }
-    std::map<std::string, double> mvaOutput_3l_tH_ttH_3cat_v4_TF = mva_3l_tH_ttH_3cat_v4_TF(mvaInputs_3l_tH_ttH_4cat_v3_TF);
-    if ( isDEBUG ) {
+
+
+
+    // NN 3 cat
+    std::map<std::string, double> mvaOutput_3l_ttH_tH_3cat_v5_TF = mva_3l_ttH_tH_3cat_v5_TF(mvaInputs_3l_ttH_tH_4cat_TF);
+    if ( isDebugTF ) {
       std::cout << "result v4 ";
-      for (auto elem : classes_TensorFlow_3l_tH_ttH_3cat_v5 ) std::cout << elem << " = " << mvaOutput_3l_tH_ttH_3cat_v4_TF[elem] <<" ";
+      for (auto elem : classes_TensorFlow_3l_ttH_tH_3cat ) std::cout << elem << " = " << mvaOutput_3l_ttH_tH_3cat_v5_TF[elem] <<" ";
       std::cout << std::endl;
     }
-
-    /*
-    mva_3l_tH_ttH_3cat_v5_TF
-    "avg_dr_jet", "ptmiss", "mbb_medium",
-    "jet1_pt", "jet2_pt", "jet3_pt",
-    "max_lep_eta", "lep_min_dr_jet",
-    "lep1_mT", "lep1_conept",
-    "lep2_mT", "lep2_conept",
-    "lep3_mT", "lep3_conept",
-    "jetForward1_pt",
-    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
-    "nJet", "nJetForward", "nBJetLoose", "nElectron", "sum_lep_charge"
-    */
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["avg_dr_jet"]                 = avg_dr_jet;
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["ptmiss"] = met.pt();
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["mbb_medium"] = selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0;
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["jet1_pt"] = selJets[0]->pt();
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["jet2_pt"] = selJets.size() > 1 ? selJets[1]->pt() : 0;
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["jet3_pt"] = selJets.size() > 2 ?  selJets[2]->pt() : 0;
-    //mvaInputs_3l_tH_ttH_3cat_v5_TF["jet4_pt"] = selJets.size() > 3 ?  selJets[3]->pt() : 0;
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["max_lep_eta"] = max_lep_eta;
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["lep_min_dr_jet"] = lep_min_dr_jet;
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["lep1_mT"] = comp_MT_met_lep1(*selLepton_lead, met.pt(), met.phi());
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["lep1_conept"] = lep1_conePt;
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["lep2_mT"] = comp_MT_met_lep1(*selLepton_sublead, met.pt(), met.phi());
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["lep2_conept"] = lep2_conePt;
-    //mvaInputs_3l_tH_ttH_3cat_v5_TF["lep2_min_dr_jet"] = TMath::Min(10., mindr_lep2_jet);
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["lep3_mT"] = comp_MT_met_lep1(*selLepton_third, met.pt(), met.phi());
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["lep3_conept"] = lep3_conePt;
-    //mvaInputs_3l_tH_ttH_3cat_v5_TF["lep3_min_dr_jet"] = TMath::Min(10., mindr_lep3_jet);
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["jetForward1_pt"] = selJetsForward.size() > 0 ? selJetsForward[0]->pt() : 0;
-    //mvaInputs_3l_tH_ttH_3cat_v5_TF["jetForward1_eta_abs"] = selJetsForward.size() > 1 ? selJetsForward[0]->absEta() : -1;
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["nJet"] = selJets.size();
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["nJetForward"] = selJetsForward.size();
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["nElectron"] = selElectrons.size();
-    mvaInputs_3l_tH_ttH_3cat_v5_TF["sum_lep_charge"] = sumLeptonCharge;
-    //mvaInputs_3l_tH_ttH_3cat_v5_TF["mvaOutput_Hj_tagger"] = Hj_tagger_fromCSVsort4th;
-    std::map<std::string, double> mvaOutput_3l_tH_ttH_3cat_v5_TF = mva_3l_tH_ttH_3cat_v5_TF(mvaInputs_3l_tH_ttH_3cat_v5_TF);
-    if ( isDEBUG ) {
-      for (auto elem : mvaInputs_3l_tH_ttH_3cat_v5_TF) std::cout << elem.first << " " << elem.second << "\n";
+    std::map<std::string, double> mvaOutput_3l_ttH_tH_3cat_v6_TF = mva_3l_ttH_tH_3cat_v6_TF(mvaInputs_3l_ttH_tH_4cat_v7_TF);
+    if ( isDebugTF ) {
       std::cout << "result v3 ";
-      for (auto elem : classes_TensorFlow_3l_tH_ttH_3cat_v5 ) std::cout << elem << " = " << mvaOutput_3l_tH_ttH_3cat_v5_TF[elem] <<" ";
+      for (auto elem : classes_TensorFlow_3l_ttH_tH_3cat ) std::cout << elem << " = " << mvaOutput_3l_ttH_tH_3cat_v6_TF[elem] <<" ";
+      std::cout << std::endl;
+    }
+    std::map<std::string, double> mvaOutput_3l_ttH_tH_3cat_v7_TF = mva_3l_ttH_tH_3cat_v7_TF(mvaInputs_3l_ttH_tH_4cat_v7_TF);
+    if ( isDebugTF ) {
+      std::cout << "result v3 ";
+      for (auto elem : classes_TensorFlow_3l_ttH_tH_3cat ) std::cout << elem << " = " << mvaOutput_3l_ttH_tH_3cat_v7_TF[elem] <<" ";
+      std::cout << std::endl;
+    }
+    std::map<std::string, double> mvaOutput_3l_ttH_tH_3cat_v8_TF = mva_3l_ttH_tH_3cat_v8_TF(mvaInputs_3l_ttH_tH_4cat_v7_TF);
+    if ( isDebugTF ) {
+      std::cout << "result v8 ";
+      for (auto elem : classes_TensorFlow_3l_ttH_tH_3cat ) std::cout << elem << " = " << mvaOutput_3l_ttH_tH_3cat_v8_TF[elem] <<" ";
       std::cout << std::endl;
     }
 
-    //std::map<std::string, double> mvaOutput_3l_ttH_3cat_TF = mva_2lss_TF(mvaInputs_3l_ttH_3cat_TF);
-    std::string category_3l_ttH_3cat_TF = "output_NN_3l_ttH_3cat_";
-    double output_NN_3l_ttH_3cat = -10;
-    if (ttH_like) {
-
-      if ( isDEBUG ) std::cout<< "ttH_like " << ttH_like << "\n"
-      << "ttZ_like "<< ttZ_like << "\n"
-      << "failsZbosonMassVeto "<< failsZbosonMassVeto << "\n"
-      << "massSameFlavor_OS " << massSameFlavor_OS << "\n"
-      << "z_mass " << z_mass << "\n"
-      << "z_window " << z_window << "\n"
-      << "std::fabs(massSameFlavor_OS - z_mass) " << std::fabs(massSameFlavor_OS - z_mass) <<"\n";
-
+    //"predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"
+    std::string category_3l_ttH_tH_4cat_v3_TF = "output_NN_3l_ttH_tH_4cat_v3_";
+    double output_NN_3l_ttH_tH_4cat_v3 = -10;
+    if (ttH_like || tH_like) {
       if (
-        mvaOutput_3l_ttH_3cat_TF["predictions_ttH"] >= mvaOutput_3l_ttH_3cat_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_ttH_3cat_TF["predictions_ttH"] >= mvaOutput_3l_ttH_3cat_TF["predictions_rest"]
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttZ"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_rest"]
       ) {
-        category_3l_ttH_3cat_TF += "ttH";
-        output_NN_3l_ttH_3cat = mvaOutput_3l_ttH_3cat_TF["predictions_ttH"];
+        category_3l_ttH_tH_4cat_v3_TF += "ttH";
+        output_NN_3l_ttH_tH_4cat_v3 = mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttH"];
       }
       if (
-        mvaOutput_3l_ttH_3cat_TF["predictions_ttZ"] > mvaOutput_3l_ttH_3cat_TF["predictions_ttH"] &&\
-        mvaOutput_3l_ttH_3cat_TF["predictions_ttZ"] >= mvaOutput_3l_ttH_3cat_TF["predictions_rest"]
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_tH"] > mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttZ"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_rest"]
       ) {
-        category_3l_ttH_3cat_TF += "ttZ";
-        output_NN_3l_ttH_3cat = mvaOutput_3l_ttH_3cat_TF["predictions_ttZ"];
+        category_3l_ttH_tH_4cat_v3_TF += "tH";
+        output_NN_3l_ttH_tH_4cat_v3 = mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_tH"];
       }
       if (
-        mvaOutput_3l_ttH_3cat_TF["predictions_rest"] > mvaOutput_3l_ttH_3cat_TF["predictions_ttH"] &&\
-        mvaOutput_3l_ttH_3cat_TF["predictions_rest"] > mvaOutput_3l_ttH_3cat_TF["predictions_ttZ"]
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttZ"] > mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttZ"] > mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttZ"] >= mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_rest"]
       ) {
-        category_3l_ttH_3cat_TF += "rest";
-        output_NN_3l_ttH_3cat = mvaOutput_3l_ttH_3cat_TF["predictions_rest"];
-        }
-    } else if (ttZ_like) {
-      category_3l_ttH_3cat_TF += "ttH_zpeak";
-      output_NN_3l_ttH_3cat = mvaOutput_3l_ttH_3cat_TF["predictions_ttH"];
-    } else if (tH_like) {
-      category_3l_ttH_3cat_TF += "tH";
-      output_NN_3l_ttH_3cat = mvaOutput_3l_ttH_3cat_TF["predictions_ttH"];
-    }  else if (tH_like_1jet) {
-      category_3l_ttH_3cat_TF += "tH_1jet";
-      output_NN_3l_ttH_3cat = mvaOutput_3l_ttH_3cat_TF["predictions_ttH"];
-    } else if (tH_like_Zpeak) {
-      category_3l_ttH_3cat_TF += "tH_zpeak";
-      output_NN_3l_ttH_3cat = mvaOutput_3l_ttH_3cat_TF["predictions_ttH"];
-    }
-
-    //std::map<std::string, double> mvaOutput_3l_ttH_3cat_TF = mva_2lss_TF(mvaInputs_3l_ttH_3cat_TF);
-    std::string category_3l_ttH_3cat_v7_TF = "output_NN_3l_ttH_3cat_v7_";
-    double output_NN_3l_ttH_3cat_v7 = -10;
-    if (ttH_like) {
-
-      if (
-        mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttH"] >= mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttH"] >= mvaOutput_3l_ttH_3cat_v7_TF["predictions_rest"]
-      ) {
-        category_3l_ttH_3cat_v7_TF += "ttH";
-        output_NN_3l_ttH_3cat_v7 = mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttH"];
+        category_3l_ttH_tH_4cat_v3_TF += "ttZ";
+        output_NN_3l_ttH_tH_4cat_v3 = mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttZ"];
       }
       if (
-        mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttZ"] > mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttH"] &&\
-        mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttZ"] >= mvaOutput_3l_ttH_3cat_v7_TF["predictions_rest"]
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttZ"]
       ) {
-        category_3l_ttH_3cat_v7_TF += "ttZ";
-        output_NN_3l_ttH_3cat_v7 = mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttZ"];
-      }
-      if (
-        mvaOutput_3l_ttH_3cat_v7_TF["predictions_rest"] > mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttH"] &&\
-        mvaOutput_3l_ttH_3cat_v7_TF["predictions_rest"] > mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttZ"]
-      ) {
-        category_3l_ttH_3cat_v7_TF += "rest";
-        output_NN_3l_ttH_3cat_v7 = mvaOutput_3l_ttH_3cat_v7_TF["predictions_rest"];
+        category_3l_ttH_tH_4cat_v3_TF += "rest";
+        output_NN_3l_ttH_tH_4cat_v3 = mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_rest"];
         }
     } else {
-      category_3l_ttH_3cat_v7_TF += "no_cat";
-      output_NN_3l_ttH_3cat_v7 = mvaOutput_3l_ttH_3cat_v7_TF["predictions_ttH"];
+      category_3l_ttH_tH_4cat_v3_TF += "no_cat";
+      output_NN_3l_ttH_tH_4cat_v3 = mvaOutput_3l_ttH_tH_4cat_v3_TF["predictions_ttH"];
     }
 
+    //std::map<std::string, double> mvaOutput_3l_ttH_tH_4cat_v3_TF = mva_2lss_TF(mvaInputs_3l_ttH_tH_4cat_v3_TF);
+    std::string category_3l_ttH_tH_4cat_v2_TF = "output_NN_3l_ttH_tH_4cat_v2_";
+    double output_NN_3l_ttH_tH_4cat_v2 = -10;
+    if (ttH_like || tH_like) {
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttZ"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_rest"]
+      ) {
+        category_3l_ttH_tH_4cat_v2_TF += "ttH";
+        output_NN_3l_ttH_tH_4cat_v2 = mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttH"];
+      }
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_tH"] > mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttZ"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_rest"]
+      ) {
+        category_3l_ttH_tH_4cat_v2_TF += "tH";
+        output_NN_3l_ttH_tH_4cat_v2 = mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_tH"];
+      }
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttZ"] > mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttZ"] > mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttZ"] >= mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_rest"]
+      ) {
+        category_3l_ttH_tH_4cat_v2_TF += "ttZ";
+        output_NN_3l_ttH_tH_4cat_v2 = mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttZ"];
+      }
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttZ"]
+      ) {
+        category_3l_ttH_tH_4cat_v2_TF += "rest";
+        output_NN_3l_ttH_tH_4cat_v2 = mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_rest"];
+        }
+    } else {
+      category_3l_ttH_tH_4cat_v2_TF += "no_cat";
+      output_NN_3l_ttH_tH_4cat_v2 = mvaOutput_3l_ttH_tH_4cat_v2_TF["predictions_ttH"];
+    }
 
-    std::string category_3l_tH_ttH_4cat_v2_TF = "output_NN_3l_tH_ttH_4cat_v2_";
-    double output_NN_3l_tH_ttH_4cat_v2 = -10.0;
-    //mvaOutput_3l_tH_ttH_4cat_v2_TF
-    // "predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"
+    std::string category_3l_ttH_tH_4cat_v4_TF = "output_NN_3l_ttH_tH_4cat_v4_";
+    double output_NN_3l_ttH_tH_4cat_v4 = -10.0;
+    if (ttH_like || tH_like) {
+     if (
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttZ"] &&\
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_tH"] &&\
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_rest"]
+     ) {
+       category_3l_ttH_tH_4cat_v4_TF += "ttH";
+       output_NN_3l_ttH_tH_4cat_v4 = mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttH"];
+     }
+     if (
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_tH"] > mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttH"] &&\
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttZ"] &&\
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_rest"]
+     ) {
+       category_3l_ttH_tH_4cat_v4_TF += "tH";
+       output_NN_3l_ttH_tH_4cat_v4 = mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_tH"];
+     }
+     if (
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttZ"] > mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_tH"] &&\
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttZ"] > mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttH"] &&\
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttZ"] >= mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_rest"]
+     ) {
+       category_3l_ttH_tH_4cat_v4_TF += "ttZ";
+       output_NN_3l_ttH_tH_4cat_v4 = mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttZ"];
+     }
+     if (
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttH"] &&\
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_tH"] &&\
+       mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttZ"]
+     ) {
+       category_3l_ttH_tH_4cat_v4_TF += "rest";
+       output_NN_3l_ttH_tH_4cat_v4 = mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_rest"];
+       }
+   } else {
+     category_3l_ttH_tH_4cat_v4_TF += "no_cat";
+     output_NN_3l_ttH_tH_4cat_v4 = mvaOutput_3l_ttH_tH_4cat_v4_TF["predictions_ttH"];
+   }
+
+    std::string category_3l_ttH_tH_4cat_v5_TF = "output_NN_3l_ttH_tH_4cat_v5_";
+    double output_NN_3l_ttH_tH_4cat_v5 = -10.0;
+    if (ttH_like || tH_like) {
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttZ"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_rest"]
+      ) {
+        category_3l_ttH_tH_4cat_v5_TF += "ttH";
+        output_NN_3l_ttH_tH_4cat_v5 = mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttH"];
+      }
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_tH"] > mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttZ"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_rest"]
+      ) {
+        category_3l_ttH_tH_4cat_v5_TF += "tH";
+        output_NN_3l_ttH_tH_4cat_v5 = mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_tH"];
+      }
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttZ"] > mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttZ"] > mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttZ"] >= mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_rest"]
+      ) {
+        category_3l_ttH_tH_4cat_v5_TF += "ttZ";
+        output_NN_3l_ttH_tH_4cat_v5 = mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttZ"];
+      }
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttZ"]
+      ) {
+        category_3l_ttH_tH_4cat_v5_TF += "rest";
+        output_NN_3l_ttH_tH_4cat_v5 = mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_rest"];
+        }
+    } else {
+      category_3l_ttH_tH_4cat_v5_TF += "no_cat";
+      output_NN_3l_ttH_tH_4cat_v5 = mvaOutput_3l_ttH_tH_4cat_v5_TF["predictions_ttH"];
+    }
+
+    std::string category_3l_ttH_tH_4cat_v7_TF = "output_NN_3l_ttH_tH_4cat_v7_";
+    double output_NN_3l_ttH_tH_4cat_v7 = -10.0;
+    if (ttH_like || tH_like) {
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttZ"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_rest"]
+      ) {
+        category_3l_ttH_tH_4cat_v7_TF += "ttH";
+        output_NN_3l_ttH_tH_4cat_v7 = mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttH"];
+      }
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_tH"] > mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttZ"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_rest"]
+      ) {
+        category_3l_ttH_tH_4cat_v7_TF += "tH";
+        output_NN_3l_ttH_tH_4cat_v7 = mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_tH"];
+      }
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttZ"] > mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttZ"] > mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttZ"] >= mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_rest"]
+      ) {
+        category_3l_ttH_tH_4cat_v7_TF += "ttZ";
+        output_NN_3l_ttH_tH_4cat_v7 = mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttZ"];
+      }
+      if (
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_tH"] &&\
+        mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttZ"]
+      ) {
+        category_3l_ttH_tH_4cat_v7_TF += "rest";
+        output_NN_3l_ttH_tH_4cat_v7 = mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_rest"];
+        }
+    } else {
+      category_3l_ttH_tH_4cat_v7_TF += "no_cat";
+      output_NN_3l_ttH_tH_4cat_v7 = mvaOutput_3l_ttH_tH_4cat_v7_TF["predictions_ttH"];
+    }
+
+    // 3 cat
+    std::string category_3l_ttH_tH_3cat_v6_TF = "output_NN_3l_ttH_tH_3cat_v6_";
+    double output_NN_3l_ttH_tH_3cat_v6 = -10.0;
     if (ttH_like || tH_like) {
 
       if (
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_tH"]
+        mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_rest"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_tH"]
       ) {
-        category_3l_tH_ttH_4cat_v2_TF += "ttH";
-        output_NN_3l_tH_ttH_4cat_v2 = mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"];
-        tH_in_predictions_ttH += evtWeight;
+        category_3l_ttH_tH_3cat_v6_TF += "ttH";
+        output_NN_3l_ttH_tH_3cat_v6 = mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_ttH"];
       }
       if (
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttZ"] >  mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttZ"] >= mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttZ"] >= mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_tH"]
+        mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_tH"] >  mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_rest"]
       ) {
-        category_3l_tH_ttH_4cat_v2_TF += "ttZ";
-        output_NN_3l_tH_ttH_4cat_v2 = mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttZ"];
-        tH_in_predictions_ttZ += evtWeight;
-      }
-      if (
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_tH"] >  mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_tH"] >  mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_tH"] >= mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"]
-      ) {
-        category_3l_tH_ttH_4cat_v2_TF += "tH";
-        output_NN_3l_tH_ttH_4cat_v2 = mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"];
-        tH_in_predictions_tH += evtWeight;
+        category_3l_ttH_tH_3cat_v6_TF += "tH";
+        output_NN_3l_ttH_tH_3cat_v6 = mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_tH"];
         }
       if (
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_tH"]
+        mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_tH"]
       ) {
-        category_3l_tH_ttH_4cat_v2_TF += "rest";
-        output_NN_3l_tH_ttH_4cat_v2 = mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_rest"];
-        tH_in_predictions_rest += evtWeight;
+        category_3l_ttH_tH_3cat_v6_TF += "rest";
+        output_NN_3l_ttH_tH_3cat_v6 = mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_rest"];
         }
     } else {
-      category_3l_tH_ttH_4cat_v2_TF += "no_cat";
-      output_NN_3l_tH_ttH_4cat_v2 = mvaOutput_3l_tH_ttH_4cat_v2_TF["predictions_ttH"];
+      category_3l_ttH_tH_3cat_v6_TF += "no_cat";
+      output_NN_3l_ttH_tH_3cat_v6 = mvaOutput_3l_ttH_tH_3cat_v6_TF["predictions_ttH"];
     }
 
-    std::string category_3l_tH_ttH_4cat_v3_TF = "output_NN_3l_tH_ttH_4cat_v3_";
-    double output_NN_3l_tH_ttH_4cat_v3 = -10.0;
-    //mvaOutput_3l_tH_ttH_4cat_v3_TF
-    // "predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"
-    if (ttH_like || tH_like) {
-      if (
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_tH"]
-      ) {
-        category_3l_tH_ttH_4cat_v3_TF += "ttH";
-        output_NN_3l_tH_ttH_4cat_v3 = mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttH"];
-      }
-      if (
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] >  mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] >= mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] >= mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_tH"]
-      ) {
-        category_3l_tH_ttH_4cat_v3_TF += "ttZ";
-        output_NN_3l_tH_ttH_4cat_v3 = mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"];
-      }
-      if (
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_tH"] >  mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_tH"] >  mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_tH"] >= mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"]
-      ) {
-        category_3l_tH_ttH_4cat_v3_TF += "tH";
-        output_NN_3l_tH_ttH_4cat_v3 = mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"];
-        }
-      if (
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_tH"]
-      ) {
-        category_3l_tH_ttH_4cat_v3_TF += "rest";
-        output_NN_3l_tH_ttH_4cat_v3 = mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_rest"];
-        }
-    } else {
-      category_3l_tH_ttH_4cat_v3_TF += "no_cat";
-      output_NN_3l_tH_ttH_4cat_v3 = mvaOutput_3l_tH_ttH_4cat_v3_TF["predictions_ttH"];
-    }
-
-    std::string category_3l_tH_ttH_4cat_v4_TF = "output_NN_3l_tH_ttH_4cat_v4_";
-    double output_NN_3l_tH_ttH_4cat_v4 = -10.0;
-    //mvaOutput_3l_tH_ttH_4cat_v4_TF
-    // "predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"
+    std::string category_3l_ttH_tH_3cat_v5_TF = "output_NN_3l_ttH_tH_3cat_v5_";
+    double output_NN_3l_ttH_tH_3cat_v5 = -10.0;
     if (ttH_like || tH_like) {
 
       if (
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_rest"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_tH"]
+        mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_rest"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_tH"]
       ) {
-        category_3l_tH_ttH_4cat_v4_TF += "ttH";
-        output_NN_3l_tH_ttH_4cat_v4 = mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttH"];
+        category_3l_ttH_tH_3cat_v5_TF += "ttH";
+        output_NN_3l_ttH_tH_3cat_v5 = mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_ttH"];
       }
       if (
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttZ"] >  mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttZ"] >= mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_rest"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttZ"] >= mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_tH"]
+        mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_tH"] >  mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_rest"]
       ) {
-        category_3l_tH_ttH_4cat_v4_TF += "ttZ";
-        output_NN_3l_tH_ttH_4cat_v4 = mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttZ"];
-      }
-      if (
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_tH"] >  mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_tH"] >  mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_tH"] >= mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_rest"]
-      ) {
-        category_3l_tH_ttH_4cat_v4_TF += "tH";
-        output_NN_3l_tH_ttH_4cat_v4 = mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_rest"];
+        category_3l_ttH_tH_3cat_v5_TF += "tH";
+        output_NN_3l_ttH_tH_3cat_v5 = mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_tH"];
         }
       if (
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttZ"] &&\
-        mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_tH"]
+        mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_tH"]
       ) {
-        category_3l_tH_ttH_4cat_v4_TF += "rest";
-        output_NN_3l_tH_ttH_4cat_v4 = mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_rest"];
+        category_3l_ttH_tH_3cat_v5_TF += "rest";
+        output_NN_3l_ttH_tH_3cat_v5 = mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_rest"];
         }
     } else {
-      category_3l_tH_ttH_4cat_v4_TF += "no_cat";
-      output_NN_3l_tH_ttH_4cat_v4 = mvaOutput_3l_tH_ttH_4cat_v4_TF["predictions_ttH"];
+      category_3l_ttH_tH_3cat_v5_TF += "no_cat";
+      output_NN_3l_ttH_tH_3cat_v5 = mvaOutput_3l_ttH_tH_3cat_v5_TF["predictions_ttH"];
     }
 
-    std::string category_3l_tH_ttH_3cat_v5_TF = "output_NN_3l_tH_ttH_3cat_v5_";
-    double output_NN_3l_tH_ttH_3cat_v5 = -10.0;
-    //mvaOutput_3l_tH_ttH_3cat_v5_TF
-    // "predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"
+    std::string category_3l_ttH_tH_3cat_v7_TF = "output_NN_3l_ttH_tH_3cat_v7_";
+    double output_NN_3l_ttH_tH_3cat_v7 = -10.0;
     if (ttH_like || tH_like) {
 
       if (
-        mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_rest"] &&\
-        mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_tH"]
+        mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_rest"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_tH"]
       ) {
-        category_3l_tH_ttH_3cat_v5_TF += "ttH";
-        output_NN_3l_tH_ttH_3cat_v5 = mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_ttH"];
+        category_3l_ttH_tH_3cat_v7_TF += "ttH";
+        output_NN_3l_ttH_tH_3cat_v7 = mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_ttH"];
       }
       if (
-        mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_tH"] >  mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_tH"] >= mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_rest"]
+        mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_tH"] >  mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_rest"]
       ) {
-        category_3l_tH_ttH_3cat_v5_TF += "tH";
-        output_NN_3l_tH_ttH_3cat_v5 = mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_rest"];
+        category_3l_ttH_tH_3cat_v7_TF += "tH";
+        output_NN_3l_ttH_tH_3cat_v7 = mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_tH"];
         }
       if (
-        mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_tH"]
+        mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_tH"]
       ) {
-        category_3l_tH_ttH_3cat_v5_TF += "rest";
-        output_NN_3l_tH_ttH_3cat_v5 = mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_rest"];
+        category_3l_ttH_tH_3cat_v7_TF += "rest";
+        output_NN_3l_ttH_tH_3cat_v7 = mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_rest"];
         }
     } else {
-      category_3l_tH_ttH_3cat_v5_TF += "no_cat";
-      output_NN_3l_tH_ttH_3cat_v5 = mvaOutput_3l_tH_ttH_3cat_v5_TF["predictions_ttH"];
+      category_3l_ttH_tH_3cat_v7_TF += "no_cat";
+      output_NN_3l_ttH_tH_3cat_v7 = mvaOutput_3l_ttH_tH_3cat_v7_TF["predictions_ttH"];
     }
 
-    std::string category_3l_tH_ttH_3cat_v4_TF = "output_NN_3l_tH_ttH_3cat_v4_";
-    double output_NN_3l_tH_ttH_3cat_v4 = -10.0;
-    //mvaOutput_3l_tH_ttH_3cat_v4_TF
-    // "predictions_ttH", "predictions_ttZ", "predictions_rest", "predictions_tH"
+    std::string category_3l_ttH_tH_3cat_v8_TF = "output_NN_3l_ttH_tH_3cat_v8_";
+    double output_NN_3l_ttH_tH_3cat_v8 = -10.0;
     if (ttH_like || tH_like) {
 
       if (
-        mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_rest"] &&\
-        mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_ttH"] >= mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_tH"]
+        mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_rest"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_ttH"] >= mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_tH"]
       ) {
-        category_3l_tH_ttH_3cat_v4_TF += "ttH";
-        output_NN_3l_tH_ttH_3cat_v4 = mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_ttH"];
+        category_3l_ttH_tH_3cat_v8_TF += "ttH";
+        output_NN_3l_ttH_tH_3cat_v8 = mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_ttH"];
       }
       if (
-        mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_tH"] >  mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_tH"] >= mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_rest"]
+        mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_tH"] >  mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_tH"] >= mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_rest"]
       ) {
-        category_3l_tH_ttH_3cat_v4_TF += "tH";
-        output_NN_3l_tH_ttH_3cat_v4 = mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_rest"];
+        category_3l_ttH_tH_3cat_v8_TF += "tH";
+        output_NN_3l_ttH_tH_3cat_v8 = mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_tH"];
         }
       if (
-        mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_ttH"] &&\
-        mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_rest"] > mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_tH"]
+        mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_ttH"] &&\
+        mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_rest"] > mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_tH"]
       ) {
-        category_3l_tH_ttH_3cat_v4_TF += "rest";
-        output_NN_3l_tH_ttH_3cat_v4 = mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_rest"];
+        category_3l_ttH_tH_3cat_v8_TF += "rest";
+        output_NN_3l_ttH_tH_3cat_v8 = mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_rest"];
         }
     } else {
-      category_3l_tH_ttH_3cat_v4_TF += "no_cat";
-      output_NN_3l_tH_ttH_3cat_v4 = mvaOutput_3l_tH_ttH_3cat_v4_TF["predictions_ttH"];
+      category_3l_ttH_tH_3cat_v8_TF += "no_cat";
+      output_NN_3l_ttH_tH_3cat_v8 = mvaOutput_3l_ttH_tH_3cat_v8_TF["predictions_ttH"];
     }
-
 
 //--- fill histograms with events passing final selection
     std::string category = "3l_0tau";
@@ -3829,10 +3545,11 @@ selJet != selJets.end(); ++selJet ) {
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       massSameFlavor_OS,
-      mvaOutput_3l_ttV, output_NN_3l_tH_ttH_3cat_v4, mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight);
     EvtHistManager_3l* selHistManager_evt_category = selHistManager->evt_in_categories_[category];
@@ -3841,118 +3558,140 @@ selJet != selJets.end(); ++selJet ) {
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       massSameFlavor_OS,
-      mvaOutput_3l_ttV, output_NN_3l_tH_ttH_3cat_v4, mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight);
     }
 
-    /*EvtHistManager_3l* selHistManager_evt_categoryFat = selHistManager->evt_in_categoriesFat_[categoryFat];
-    if ( selHistManager_evt_categoryFat ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_categoryFat->fillHistograms(
-      selElectrons.size(), selMuons.size(), selHadTaus.size(),
-      selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-      massSameFlavor_OS,
-      mvaOutput_3l_ttV, output_NN_3l_tH_ttH_3cat_v4, mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
-      mva_Updated, mva_oldVar,
-      evtWeight);
-    }*/
-
-    EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_4cat_TF = selHistManager->evt_in_categories_3l_tH_ttH_4cat_v2_TF_[category_3l_tH_ttH_4cat_v2_TF];
+    EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_4cat_TF = selHistManager->evt_in_categories_3l_ttH_tH_4cat_v4_TF_[category_3l_ttH_tH_4cat_v4_TF];
     if ( selHistManager_evt_3l_tH_ttH_4cat_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
       selHistManager_evt_3l_tH_ttH_4cat_TF->fillHistograms(
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       massSameFlavor_OS,
-      mvaOutput_3l_ttV, output_NN_3l_tH_ttH_3cat_v4, mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight);
     }
-    EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_4cat_v3_TF = selHistManager->evt_in_categories_3l_tH_ttH_4cat_v3_TF_[category_3l_tH_ttH_4cat_v3_TF];
-    if ( selHistManager_evt_3l_tH_ttH_4cat_v3_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_tH_ttH_4cat_v3_TF->fillHistograms(
+    EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_4cat_v5_TF = selHistManager->evt_in_categories_3l_ttH_tH_4cat_v5_TF_[category_3l_ttH_tH_4cat_v5_TF];
+    if ( selHistManager_evt_3l_ttH_tH_4cat_v5_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_4cat_v5_TF->fillHistograms(
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       massSameFlavor_OS,
-      mvaOutput_3l_ttV, output_NN_3l_tH_ttH_3cat_v4, mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight);
     }
-    EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_4cat_v4_TF = selHistManager->evt_in_categories_3l_tH_ttH_4cat_v4_TF_[category_3l_tH_ttH_4cat_v4_TF];
-    if ( selHistManager_evt_3l_tH_ttH_4cat_v4_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_tH_ttH_4cat_v4_TF->fillHistograms(
+    EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_4cat_v7_TF = selHistManager->evt_in_categories_3l_ttH_tH_4cat_v7_TF_[category_3l_ttH_tH_4cat_v7_TF];
+    if ( selHistManager_evt_3l_ttH_tH_4cat_v7_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_4cat_v7_TF->fillHistograms(
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       massSameFlavor_OS,
-      mvaOutput_3l_ttV, output_NN_3l_tH_ttH_3cat_v4, mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight);
     }
-    EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_3cat_v4_TF = selHistManager->evt_in_categories_3l_tH_ttH_3cat_v4_TF_[category_3l_tH_ttH_3cat_v4_TF];
-    if ( selHistManager_evt_3l_tH_ttH_3cat_v4_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_tH_ttH_3cat_v4_TF->fillHistograms(
+    EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_3cat_v5_TF = selHistManager->evt_in_categories_3l_ttH_tH_3cat_v5_TF_[category_3l_ttH_tH_3cat_v5_TF];
+    if ( selHistManager_evt_3l_ttH_tH_3cat_v5_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_3cat_v5_TF->fillHistograms(
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       massSameFlavor_OS,
-      mvaOutput_3l_ttV, output_NN_3l_tH_ttH_3cat_v4, mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight);
     }
-    EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_3cat_v5_TF = selHistManager->evt_in_categories_3l_tH_ttH_3cat_v5_TF_[category_3l_tH_ttH_3cat_v5_TF];
-    if ( selHistManager_evt_3l_tH_ttH_3cat_v5_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_tH_ttH_3cat_v5_TF->fillHistograms(
+    EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_3cat_v6_TF = selHistManager->evt_in_categories_3l_ttH_tH_3cat_v6_TF_[category_3l_ttH_tH_3cat_v6_TF];
+    if ( selHistManager_evt_3l_ttH_tH_3cat_v6_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_3cat_v6_TF->fillHistograms(
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       massSameFlavor_OS,
-      mvaOutput_3l_ttV, output_NN_3l_tH_ttH_3cat_v4, mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
+      mva_Updated, mva_oldVar,
+      evtWeight);
+    }
+    EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_3cat_v7_TF = selHistManager->evt_in_categories_3l_ttH_tH_3cat_v7_TF_[category_3l_ttH_tH_3cat_v7_TF];
+    if ( selHistManager_evt_3l_ttH_tH_3cat_v7_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_3cat_v7_TF->fillHistograms(
+      selElectrons.size(), selMuons.size(), selHadTaus.size(),
+      selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+      massSameFlavor_OS,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
+      mva_Updated, mva_oldVar,
+      evtWeight);
+    }
+    EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_3cat_v8_TF = selHistManager->evt_in_categories_3l_ttH_tH_3cat_v8_TF_[category_3l_ttH_tH_3cat_v8_TF];
+    if ( selHistManager_evt_3l_ttH_tH_3cat_v8_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_3cat_v8_TF->fillHistograms(
+      selElectrons.size(), selMuons.size(), selHadTaus.size(),
+      selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+      massSameFlavor_OS,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight);
     }
 
-    EvtHistManager_3l* selHistManager_evt_3l_ttH_3cat_TF = selHistManager->evt_in_categories_3l_ttH_3cat_TF_[category_3l_ttH_3cat_TF];
-    if ( selHistManager_evt_3l_ttH_3cat_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_ttH_3cat_TF->fillHistograms(
+    EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_4cat_v3_TF = selHistManager->evt_in_categories_3l_ttH_tH_4cat_v3_TF_[category_3l_ttH_tH_4cat_v3_TF];
+    if ( selHistManager_evt_3l_ttH_tH_4cat_v3_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_4cat_v3_TF->fillHistograms(
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       massSameFlavor_OS,
-      mvaOutput_3l_ttV, output_NN_3l_tH_ttH_3cat_v4, mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight);
     }
 
-    EvtHistManager_3l* selHistManager_evt_3l_ttH_3cat_v7_TF = selHistManager->evt_in_categories_3l_ttH_3cat_v7_TF_[category_3l_ttH_3cat_v7_TF];
-    if ( selHistManager_evt_3l_ttH_3cat_v7_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_ttH_3cat_v7_TF->fillHistograms(
+    EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_4cat_v2_TF = selHistManager->evt_in_categories_3l_ttH_tH_4cat_v2_TF_[category_3l_ttH_tH_4cat_v2_TF];
+    if ( selHistManager_evt_3l_ttH_tH_4cat_v2_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_4cat_v2_TF->fillHistograms(
       selElectrons.size(), selMuons.size(), selHadTaus.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       massSameFlavor_OS,
-      mvaOutput_3l_ttV, output_NN_3l_tH_ttH_3cat_v4, mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      mvaOutput_3l_ttV, output_NN_3l_ttH_tH_3cat_v5, mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight);
     }
@@ -3971,11 +3710,12 @@ selJet != selJets.end(); ++selJet ) {
           selBJets_medium.size(),
           massSameFlavor_OS,
           mvaOutput_3l_ttV,
-          output_NN_3l_tH_ttH_3cat_v4,
+          output_NN_3l_ttH_tH_3cat_v5,
           mvaDiscr_3l,
-          output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-          output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-          output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+          output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+          output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+          output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+          output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
           mva_Updated, mva_oldVar,
           evtWeight
         );
@@ -3990,37 +3730,18 @@ selJet != selJets.end(); ++selJet ) {
 	    selBJets_medium.size(),
       massSameFlavor_OS,
 	    mvaOutput_3l_ttV,
-	    output_NN_3l_tH_ttH_3cat_v4,
+	    output_NN_3l_ttH_tH_3cat_v5,
 	    mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
 	    evtWeight
 	  );
 	}
-  /*EvtHistManager_3l* selHistManager_evt_categoryFat_and_decayModes_ = selHistManager->evt_in_categoriesFat_and_decayModes_[categoryFat][decayModeStr];
-	if ( selHistManager_evt_categoryFat_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-          selHistManager_evt_categoryFat_and_decayModes_->fillHistograms(
-	    selElectrons.size(),
-            selMuons.size(),
-	    selHadTaus.size(),
-	    selJets.size(),
-	    selBJets_loose.size(),
-	    selBJets_medium.size(),
-      massSameFlavor_OS,
-	    mvaOutput_3l_ttV,
-	    output_NN_3l_tH_ttH_3cat_v4,
-	    mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
-      mva_Updated, mva_oldVar,
-	    evtWeight
-	  );
-	}*/
 
-  EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_4cat_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_tH_ttH_4cat_v2_TF_and_decayModes_[category_3l_tH_ttH_4cat_v2_TF][decayModeStr];
+  EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_4cat_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_4cat_v4_TF_and_decayModes_[category_3l_ttH_tH_4cat_v4_TF][decayModeStr];
 	if ( selHistManager_evt_3l_tH_ttH_4cat_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
       selHistManager_evt_3l_tH_ttH_4cat_TF_and_decayModes_->fillHistograms(
       selElectrons.size(),
@@ -4031,18 +3752,19 @@ selJet != selJets.end(); ++selJet ) {
       selBJets_medium.size(),
       massSameFlavor_OS,
       mvaOutput_3l_ttV,
-      output_NN_3l_tH_ttH_3cat_v4,
+      output_NN_3l_ttH_tH_3cat_v5,
       mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight
 	  );
 	}
-  EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_4cat_v3_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_tH_ttH_4cat_v3_TF_and_decayModes_[category_3l_tH_ttH_4cat_v3_TF][decayModeStr];
-	if ( selHistManager_evt_3l_tH_ttH_4cat_v3_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_tH_ttH_4cat_v3_TF_and_decayModes_->fillHistograms(
+  EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_4cat_v5_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_4cat_v5_TF_and_decayModes_[category_3l_ttH_tH_4cat_v5_TF][decayModeStr];
+	if ( selHistManager_evt_3l_ttH_tH_4cat_v5_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_4cat_v5_TF_and_decayModes_->fillHistograms(
       selElectrons.size(),
       selMuons.size(),
       selHadTaus.size(),
@@ -4051,18 +3773,19 @@ selJet != selJets.end(); ++selJet ) {
       selBJets_medium.size(),
       massSameFlavor_OS,
       mvaOutput_3l_ttV,
-      output_NN_3l_tH_ttH_3cat_v4,
+      output_NN_3l_ttH_tH_3cat_v5,
       mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight
 	  );
 	}
-  EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_4cat_v4_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_tH_ttH_4cat_v4_TF_and_decayModes_[category_3l_tH_ttH_4cat_v4_TF][decayModeStr];
-	if ( selHistManager_evt_3l_tH_ttH_4cat_v4_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_tH_ttH_4cat_v4_TF_and_decayModes_->fillHistograms(
+  EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_4cat_v7_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_4cat_v7_TF_and_decayModes_[category_3l_ttH_tH_4cat_v7_TF][decayModeStr];
+	if ( selHistManager_evt_3l_ttH_tH_4cat_v7_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_4cat_v7_TF_and_decayModes_->fillHistograms(
       selElectrons.size(),
       selMuons.size(),
       selHadTaus.size(),
@@ -4071,18 +3794,19 @@ selJet != selJets.end(); ++selJet ) {
       selBJets_medium.size(),
       massSameFlavor_OS,
       mvaOutput_3l_ttV,
-      output_NN_3l_tH_ttH_3cat_v4,
+      output_NN_3l_ttH_tH_3cat_v5,
       mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight
 	  );
 	}
-  EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_3cat_v4_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_tH_ttH_3cat_v4_TF_and_decayModes_[category_3l_tH_ttH_3cat_v4_TF][decayModeStr];
-	if ( selHistManager_evt_3l_tH_ttH_3cat_v4_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_tH_ttH_3cat_v4_TF_and_decayModes_->fillHistograms(
+  EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_3cat_v5_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_3cat_v5_TF_and_decayModes_[category_3l_ttH_tH_3cat_v5_TF][decayModeStr];
+	if ( selHistManager_evt_3l_ttH_tH_3cat_v5_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_3cat_v5_TF_and_decayModes_->fillHistograms(
       selElectrons.size(),
       selMuons.size(),
       selHadTaus.size(),
@@ -4091,18 +3815,19 @@ selJet != selJets.end(); ++selJet ) {
       selBJets_medium.size(),
       massSameFlavor_OS,
       mvaOutput_3l_ttV,
-      output_NN_3l_tH_ttH_3cat_v4,
+      output_NN_3l_ttH_tH_3cat_v5,
       mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight
 	  );
 	}
-  EvtHistManager_3l* selHistManager_evt_3l_tH_ttH_3cat_v5_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_tH_ttH_3cat_v5_TF_and_decayModes_[category_3l_tH_ttH_3cat_v5_TF][decayModeStr];
-	if ( selHistManager_evt_3l_tH_ttH_3cat_v5_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_tH_ttH_3cat_v5_TF_and_decayModes_->fillHistograms(
+  EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_3cat_v6_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_3cat_v6_TF_and_decayModes_[category_3l_ttH_tH_3cat_v6_TF][decayModeStr];
+	if ( selHistManager_evt_3l_ttH_tH_3cat_v6_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_3cat_v6_TF_and_decayModes_->fillHistograms(
       selElectrons.size(),
       selMuons.size(),
       selHadTaus.size(),
@@ -4111,19 +3836,62 @@ selJet != selJets.end(); ++selJet ) {
       selBJets_medium.size(),
       massSameFlavor_OS,
       mvaOutput_3l_ttV,
-      output_NN_3l_tH_ttH_3cat_v4,
+      output_NN_3l_ttH_tH_3cat_v5,
       mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
+      mva_Updated, mva_oldVar,
+      evtWeight
+	  );
+	}
+  EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_3cat_v7_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_3cat_v7_TF_and_decayModes_[category_3l_ttH_tH_3cat_v7_TF][decayModeStr];
+	if ( selHistManager_evt_3l_ttH_tH_3cat_v7_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_3cat_v7_TF_and_decayModes_->fillHistograms(
+      selElectrons.size(),
+      selMuons.size(),
+      selHadTaus.size(),
+      selJets.size(),
+      selBJets_loose.size(),
+      selBJets_medium.size(),
+      massSameFlavor_OS,
+      mvaOutput_3l_ttV,
+      output_NN_3l_ttH_tH_3cat_v5,
+      mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
+      mva_Updated, mva_oldVar,
+      evtWeight
+	  );
+	}
+  EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_3cat_v8_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_3cat_v8_TF_and_decayModes_[category_3l_ttH_tH_3cat_v8_TF][decayModeStr];
+	if ( selHistManager_evt_3l_ttH_tH_3cat_v8_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_3cat_v8_TF_and_decayModes_->fillHistograms(
+      selElectrons.size(),
+      selMuons.size(),
+      selHadTaus.size(),
+      selJets.size(),
+      selBJets_loose.size(),
+      selBJets_medium.size(),
+      massSameFlavor_OS,
+      mvaOutput_3l_ttV,
+      output_NN_3l_ttH_tH_3cat_v5,
+      mvaDiscr_3l,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight
 	  );
 	}
 
-  EvtHistManager_3l* selHistManager_evt_3l_ttH_3cat_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_3cat_TF_and_decayModes_[category_3l_ttH_3cat_TF][decayModeStr];
-	if ( selHistManager_evt_3l_ttH_3cat_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_ttH_3cat_TF_and_decayModes_->fillHistograms(
+  EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_4cat_v3_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_4cat_v3_TF_and_decayModes_[category_3l_ttH_tH_4cat_v3_TF][decayModeStr];
+	if ( selHistManager_evt_3l_ttH_tH_4cat_v3_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_4cat_v3_TF_and_decayModes_->fillHistograms(
       selElectrons.size(),
       selMuons.size(),
       selHadTaus.size(),
@@ -4132,19 +3900,20 @@ selJet != selJets.end(); ++selJet ) {
       selBJets_medium.size(),
       massSameFlavor_OS,
       mvaOutput_3l_ttV,
-      output_NN_3l_tH_ttH_3cat_v4,
+      output_NN_3l_ttH_tH_3cat_v5,
       mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight
 	  );
 	}
 
-  EvtHistManager_3l* selHistManager_evt_3l_ttH_3cat_v7_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_3cat_v7_TF_and_decayModes_[category_3l_ttH_3cat_v7_TF][decayModeStr];
-	if ( selHistManager_evt_3l_ttH_3cat_v7_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_3l_ttH_3cat_v7_TF_and_decayModes_->fillHistograms(
+  EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_4cat_v2_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_4cat_v2_TF_and_decayModes_[category_3l_ttH_tH_4cat_v2_TF][decayModeStr];
+	if ( selHistManager_evt_3l_ttH_tH_4cat_v2_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
+      selHistManager_evt_3l_ttH_tH_4cat_v2_TF_and_decayModes_->fillHistograms(
       selElectrons.size(),
       selMuons.size(),
       selHadTaus.size(),
@@ -4153,11 +3922,12 @@ selJet != selJets.end(); ++selJet ) {
       selBJets_medium.size(),
       massSameFlavor_OS,
       mvaOutput_3l_ttV,
-      output_NN_3l_tH_ttH_3cat_v4,
+      output_NN_3l_ttH_tH_3cat_v5,
       mvaDiscr_3l,
-      output_NN_3l_ttH_3cat, output_NN_3l_tH_ttH_4cat_v2,
-      output_NN_3l_ttH_3cat_v7, output_NN_3l_tH_ttH_4cat_v3,
-      output_NN_3l_tH_ttH_4cat_v4, output_NN_3l_tH_ttH_3cat_v5,
+      output_NN_3l_ttH_tH_4cat_v3, output_NN_3l_ttH_tH_4cat_v4,
+      output_NN_3l_ttH_tH_4cat_v2, output_NN_3l_ttH_tH_4cat_v5,
+      output_NN_3l_ttH_tH_4cat_v7, output_NN_3l_ttH_tH_3cat_v6,
+      output_NN_3l_ttH_tH_3cat_v7, output_NN_3l_ttH_tH_3cat_v8,
       mva_Updated, mva_oldVar,
       evtWeight
 	  );
@@ -4237,7 +4007,7 @@ selJet != selJets.end(); ++selJet ) {
           ("lep_min_dr_jet", lep_min_dr_jet)
 
           ("jetForward1_pt", selJetsForward.size() > 0 ? selJetsForward[0]->pt() : 0)
-          ("jetForward1_eta_abs", selJetsForward.size() > 1 ? selJetsForward[0]->absEta() : -1)
+          ("jetForward1_eta_abs", selJetsForward.size() > 0 ? selJetsForward[0]->absEta() : -1)
           ("nJetForward", selJetsForward.size())
 
           ("avg_dr_jet",          avg_dr_jet)
