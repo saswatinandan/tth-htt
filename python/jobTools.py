@@ -4,9 +4,10 @@ import sys
 import math
 import stat
 import time
+import shutil
+import errno
 
 from tthAnalysis.HiggsToTauTau.common import logging
-from tthAnalysis.HiggsToTauTau.hdfs import hdfs
 
 def query_yes_no(question, default = "yes"):
   """Prompts user yes/no
@@ -47,8 +48,13 @@ def create_if_not_exists(dir_fullpath):
     dir_fullpath: full path to the directory
   """
   #print("create_if_not_exists: dir_fullpath = '%s'" % dir_fullpath)
-  if hdfs.mkdirs(dir_fullpath) != 0:
-    raise RuntimeError("Unable to create directory %s" % dir_fullpath)
+  try:
+    os.makedirs(dir_fullpath)
+  except OSError as exc:
+    if exc.errno == errno.EEXIST and os.path.isdir(dir_fullpath):
+      pass
+    else:
+      raise
 
 def generate_file_ids(nof_files, max_files_per_job, blacklist = []):
   """Subsets file ids
@@ -96,10 +102,10 @@ def generate_input_list(job_ids, secondary_files, primary_store, secondary_store
     actual_storedir = secondary_store if job in secondary_files else primary_store
     input_file = os.path.join(actual_storedir, "000" + str(job / 1000), "tree_" + str(job) + ".root")
     #print "checking existence of input_file = '%s'" % input_file
-    if not hdfs.exists(input_file):
+    if not os.path.exists(input_file):
       input_file = os.path.join(actual_storedir, "tree_" + str(job) + ".root")
     #print "checking existence of input_file = '%s'" % input_file
-    if not hdfs.exists(input_file):
+    if not os.path.exists(input_file):
       raise RuntimeError("File %s doesn't exists!" % input_file)
     input_list.append(input_file)
   return input_list
@@ -149,14 +155,14 @@ def get_log_version(list_of_log_files):
   Instead of passing log files one-by-one, the more consistent way of dealing with these things is
   to loop over a set of log files that represents a single joint iteration of the jobs.
   """
-  if all(map(lambda path: not hdfs.exists(path), list_of_log_files)):
+  if all(map(lambda path: not os.path.exists(path), list_of_log_files)):
     # if none of the files exist, then retain the path names
     return list_of_log_files
   # loop over version numbers until none of the paths exist
   version_idx = 1
   while True:
     list_of_log_files_versioned = tuple(map(lambda path: "%s.%i" % (path, version_idx), list_of_log_files))
-    if all(map(lambda path: not hdfs.exists(path), list_of_log_files_versioned)):
+    if all(map(lambda path: not os.path.exists(path), list_of_log_files_versioned)):
       return list_of_log_files_versioned
     else:
       # some log files already exist -> increase the version number
@@ -209,4 +215,4 @@ def record_software_state(txtfile_cfg, txtfile_out, dependencies):
     txtfileptr.write('\n'.join(results))
     txtfileptr.write('\n')
   if txtfile_cfg != txtfile_out:
-    hdfs.copy(txtfile_cfg, txtfile_out)
+    shutil.copy(txtfile_cfg, txtfile_out)
