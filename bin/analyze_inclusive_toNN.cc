@@ -588,7 +588,20 @@ int main(int argc, char* argv[])
       "genTopPt_semi_boosted_fromAK8", "HadTop_pt_semi_boosted_fromAK8",
       "minDR_AK8_lep", "minDR_AK8subjets_lep",
       "weight_fakeRate", "weight_data_to_MC_correction", "weight_data_to_MC_correction_hadTau",
-      "mvaOutput_Hj_tagger"
+      "mvaOutput_Hj_tagger",
+      "mVis_lep1_tau",
+      "mVis_lep2_tau",
+      "mVis_lep_tau_OS",
+      "mVis_lep_tau_OS_2",
+      "dr_lep1_tau",
+      "dr_lep2_tau",
+      "dr_lep_tau_SS",
+      "dr_lep_tau_OS",
+      "Pzeta",
+      "PzetaVis",
+      "PzetaComb",
+      "dr_taus",
+      "dr_leps"
     );
     bdt_filler -> register_variable<int_type>(
       "nJet", "nJetForward", "nBJetLoose", "nBJetMedium", "nElectron", "nLepton", "nTau",
@@ -602,7 +615,7 @@ int main(int argc, char* argv[])
       "isCharge_hadTau_OS", "isCharge_Lepton_OS",
       "sum_lep_charge", "sum_tau_charge",
       //
-      "pass_ttH",
+      "pass_ttH", "pass_tH",
       "pass_2lss_0tau", "pass_3l_0tau", "pass_4l_0tau",
       "pass_ttZctrl", "pass_ttWctrl", "pass_WZctrl", "pass_ZZctrl",
       "pass_1l_2tau",  "pass_2lss_1tau", "pass_2los_1tau", "pass_3l_1tau", "pass_2l_2tau",
@@ -613,7 +626,9 @@ int main(int argc, char* argv[])
       "bWj1Wj2_isGenMatched_CSVsort4rd", "bWj1Wj2_isGenMatched_CSVsort4rd_2",
       "bWj1Wj2_isGenMatched_boosted", "bWj1Wj2_isGenMatched_semi_boosted_fromAK8",
       "resolved_and_semi_AK8", "boosted_and_semi_AK8", "resolved_and_boosted",
-      "failsZbosonMassVeto", "failsLowMassVeto", "failsHtoZZVeto"
+      "failsZbosonMassVeto", "failsLowMassVeto", "failsHtoZZVeto",
+      "sum_Lep_charge",
+      "n_presel_mu", "n_presel_ele", "n_presel_tau"
     );
     bdt_filler -> bookTree(fs);
   }
@@ -668,6 +683,7 @@ int main(int argc, char* argv[])
     bool pass_WZctrl = true;
     bool pass_ZZctrl = true;
     bool pass_ttH = true;
+    bool pass_tH = false;
 
 //--- build collections of generator level particles (before any cuts are applied, to check distributions in unbiased event samples)
     std::vector<GenLepton> genLeptons;
@@ -815,6 +831,7 @@ int main(int argc, char* argv[])
       printCollection("fakeableMuons", fakeableMuons);
       printCollection("tightMuons",    tightMuons);
     }
+    int n_presel_mu = preselMuons.size();
 
     std::vector<RecoElectron> electrons = electronReader->read();
     std::vector<const RecoElectron*> electron_ptrs = convert_to_ptrs(electrons);
@@ -828,6 +845,7 @@ int main(int argc, char* argv[])
       printCollection("fakeableElectrons", fakeableElectrons);
       printCollection("tightElectrons",    tightElectrons);
     }
+    int n_presel_ele = preselElectrons.size();
 
     std::vector<const RecoLepton*> preselLeptonsFull = mergeLeptonCollections(preselElectrons, preselMuons, isHigherConePt);
     std::vector<const RecoLepton*> fakeableLeptonsFull = mergeLeptonCollections(fakeableElectrons, fakeableMuons, isHigherConePt);
@@ -866,6 +884,7 @@ int main(int argc, char* argv[])
     std::vector<const RecoHadTau*> preselHadTausFull = preselHadTauSelector(cleanedHadTaus, isHigherPt);
     std::vector<const RecoHadTau*> fakeableHadTausFull = fakeableHadTauSelector(preselHadTausFull, isHigherPt);
     std::vector<const RecoHadTau*> tightHadTausFull = tightHadTauSelector(fakeableHadTausFull, isHigherPt);
+    int n_presel_tau = preselHadTausFull.size();
 
     std::vector<const RecoHadTau*> preselHadTaus = pickFirstNobjects(preselHadTausFull, 5);
     std::vector<const RecoHadTau*> fakeableHadTaus = pickFirstNobjects(fakeableHadTausFull, 5);
@@ -972,7 +991,7 @@ int main(int argc, char* argv[])
         }
       }
     }
-
+    if (selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size() >= 1)) pass_tH = true;
     // apply requirement on jets (incl. b-tagged jets) on preselection level
     if ( !((int)selJets.size() >= 2) ) {
       pass_2l_2tau = false;
@@ -985,7 +1004,7 @@ int main(int argc, char* argv[])
       pass_WZctrl = false;
       pass_ZZctrl = false;
     }
-    if ( !((int)selJets.size() == 3  || (int)selJets.size() == 2) ) pass_ttWctrl = false;
+    if ( !((int)selJets.size() == 3) ) pass_ttWctrl = false; //|| (int)selJets.size() == 2)
     if ( !((int)selJets.size() >= 3 - 2 ) ) {
       pass_1l_2tau = false;
       pass_2lss_1tau = false;
@@ -1003,7 +1022,7 @@ int main(int argc, char* argv[])
     if (
       !(
         (selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) || \
-        (selJets.size() >= 1 && selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size() >= 1))
+        pass_tH
     )
     ) {
         pass_2los_0tau = false;
@@ -1018,7 +1037,7 @@ int main(int argc, char* argv[])
     if (
       !(
         (selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) || \
-        (selJets.size() >= 1 && selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size() >= 1))
+        pass_tH
     )
     ) {
         pass_4l_0tau = false;
@@ -1031,15 +1050,14 @@ int main(int argc, char* argv[])
         pass_0l_4tau = false;
     }
 
-
     if (
       !((int)selJets.size() >= 4) &&
-      !((selJets.size()+selJetsForward.size()) >= 2 && selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1)
+      !(pass_tH)
       ) pass_2lss_0tau = false; // remove overlap with ttW
 
       if (
         !((int)selJets.size() >= 3) &&
-        !(selJets.size() >= 1 && selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1)
+        !(pass_tH)
         ) {
           pass_1l_2tau = false;
           pass_2lss_1tau = false;
@@ -1049,6 +1067,7 @@ int main(int argc, char* argv[])
 
     if ( !(selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) ) {
     pass_ttWctrl = false; // Xanda: there would be the condition of 0j with |eta| > 2. to pass tH cat to avoid a large fraction of thq will enter the CR...
+    pass_ttH = false;
     }
     if ( !(selBJets_medium.size() == 0 && selBJets_loose.size() < 2) ) {
       pass_WZctrl = false;
@@ -1125,9 +1144,10 @@ int main(int argc, char* argv[])
 
     int lep_match_jet = 0; //selLepton_genMatch.numGenMatchedJets_)
     int lep_match_lep = 0;
+    double dr_leps = 0;
     // require exactly two leptons passing tight selection criteria of final event selection
     //const leptonGenMatchEntry& selLepton_genMatch;
-    int sum_lep_charge = -1;
+    int sum_lep_charge = -10;
     if ( !(selLeptons.size() == 1) ) {
       pass_1l_2tau = false;
       pass_1l_1tau = false;
@@ -1166,6 +1186,7 @@ int main(int argc, char* argv[])
          );
          lep_match_jet = selLepton_genMatch.numGenMatchedJets_;
          lep_match_lep = selLepton_genMatch.numGenMatchedLeptons_;
+         dr_leps = deltaR(selLepton_lead->p4(), selLepton_sublead->p4());
     }
     if ( !(selLeptons.size() == 3) ) {
       pass_3l_0tau = false;
@@ -1242,11 +1263,11 @@ int main(int argc, char* argv[])
     const RecoHadTau* selHadTau_third = nullptr;
     const RecoHadTau* selHadTau_fourth = nullptr;
     bool isCharge_hadTau_OS = false;
-    int sum_tau_charge = -1;
-    double mTauTauVis       = -1000;
-    double cosThetaS_hadTau = -1000;
-    double mTauTauVis2       = -1000;
-    double cosThetaS_hadTau2 = -1000;
+    int sum_tau_charge = -10;
+    double mTauTauVis       = 0;
+    double cosThetaS_hadTau = -1;
+    double mTauTauVis2       = 0;
+    double cosThetaS_hadTau2 = -1;
     int selHadTau_lead_genPdgId = -1000;
     int selHadTau_sublead_genPdgId = -1000;
     int selHadTau_third_genPdgId = -1000;
@@ -1260,8 +1281,8 @@ int main(int argc, char* argv[])
         pass_0l_2tau = false;
         pass_0l_3tau = false;
       }
-      if (selLepton_lead)
-        if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 ) pass_1l_1tau = false; // isCharge_SS
+      //if (selLepton_lead)
+      //  if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 ) pass_1l_1tau = false; // isCharge_SS
       //if (!(selHadTau_lead->absEta() < 2.1)) {
       //  pass_0l_2tau = false;
       //  pass_0l_3tau = false;
@@ -1303,6 +1324,7 @@ int main(int argc, char* argv[])
 
     int tau_match_jet = 0;
     int tau_match_tau = 0;
+    double dr_taus = 0;
     if ( !(selHadTaus.size() == 1) ) {
       pass_3l_1tau = false;
       pass_2lss_1tau = false;
@@ -1330,6 +1352,7 @@ int main(int argc, char* argv[])
       );
       tau_match_jet = selHadTau_genMatch.numGenMatchedJets_;
       tau_match_tau = selHadTau_genMatch.numGenMatchedHadTaus_;
+      dr_taus = deltaR(selHadTau_lead->p4(), selHadTau_sublead->p4());
     }
     if ( !(selHadTaus.size() == 3) ) {
       pass_1l_3tau = false;
@@ -1432,9 +1455,12 @@ int main(int argc, char* argv[])
     }
 
     double met_LD_cut = 0.;
-    if      ( selJets.size() >= 4 ) met_LD_cut = -1.; // MET LD cut not applied
+
+    if (pass_tH && pass_3l_0tau) met_LD_cut = -1.;
+    else if ( selJets.size() >= 4 ) met_LD_cut = -1.; // MET LD cut not applied
     else if ( isSameFlavor_OS && selLeptons.size() > 1 ) met_LD_cut = 45.;
     else                            met_LD_cut = 30.;
+
     if ( met_LD_cut > 0 && met_LD < met_LD_cut ) {
       pass_3l_0tau = false;
       pass_4l_0tau = false;
@@ -1447,10 +1473,11 @@ int main(int argc, char* argv[])
       pass_WZctrl = false;
       pass_ZZctrl = false;
     }
-    if (pass_2lss_0tau || pass_2lss_1tau || pass_ttWctrl) {
+
+     if (pass_2lss_0tau || pass_2lss_1tau || pass_ttWctrl) {
       if ( (selLepton_lead->is_electron() && selLepton_sublead->is_electron()) && met_LD < 30. ) {
       pass_2lss_0tau = false;
-      pass_2lss_1tau = false;
+      if (!(pass_tH)) pass_2lss_1tau = false;
       pass_ttWctrl = false;
     }
     }
@@ -1491,7 +1518,7 @@ int main(int argc, char* argv[])
     ClassicSVfit svFitAlgo;
     svFitAlgo.addLogM_dynamic(false);
     svFitAlgo.addLogM_fixed(true, 4.);
-    if ( pass_0l_2tau || pass_0l_3tau || pass_0l_4tau || pass_1l_3tau || pass_1l_2tau ) {
+    if ( pass_0l_2tau || pass_0l_3tau || pass_0l_4tau ) {
       const RecoHadTau* tau1 = nullptr;
       const RecoHadTau* tau2 = nullptr;
       for ( std::vector<const RecoHadTau*>::const_iterator lepton1 = selHadTaus.begin();
@@ -1586,7 +1613,7 @@ int main(int argc, char* argv[])
 //    the variables used to evaluate the MVA/BDT scores.
 //    Besides, we may want to use the said variables to fill sync Ntuple as well.
 
-    if ( (pass_2los_0tau || pass_2lss_0tau || pass_0l_2tau) && !((int)selJets.size() >= 4 ) ) pass_ttH = false;
+    if ( (pass_2los_0tau || pass_2lss_0tau || pass_0l_2tau || pass_1l_1tau ) && !((int)selJets.size() >= 4 ) ) pass_ttH = false;
     if ( (pass_1l_2tau || pass_2lss_1tau || pass_2los_1tau || pass_0l_3tau) && !((int)selJets.size() >= 3 ) ) pass_ttH = false;
     if ( !((int)selJets.size() == 3) && pass_ttWctrl ) pass_ttH = false;
     if ( !(selBJets_loose.size() >= 2 || selBJets_medium.size() >= 1) && !(pass_WZctrl || pass_ZZctrl)) pass_ttH = false;
@@ -1610,6 +1637,111 @@ int main(int argc, char* argv[])
       pass_0l_2tau || \
       pass_WZctrl || \
       pass_ZZctrl)) continue;
+
+      int sum_Lep_charge = -10;
+      if ( sum_lep_charge != -10 && sum_tau_charge != -10) sum_Lep_charge = sum_lep_charge + sum_tau_charge;
+
+      double mVis_lep1_tau = 0;
+      double mVis_lep2_tau = 0;
+      double mVis_lep_tau_OS = 0;
+      double mVis_lep_tau_OS_2 = 0;
+      double dr_lep1_tau = -1;
+      double dr_lep2_tau = -1;
+      double dr_lep_tau_SS = -1;
+      double dr_lep_tau_OS = -1;
+
+      double Pzeta         = -1000;
+      double PzetaVis      = -1000;
+      double PzetaComb     = -1000;
+      // dr_taus =
+      // dr_leps
+
+      if ( pass_1l_1tau || pass_2lss_1tau || pass_2los_1tau || pass_1l_2tau || pass_3l_1tau || pass_2l_2tau || pass_1l_3tau) {
+        dr_lep1_tau = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+        mVis_lep1_tau = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
+
+        if ( pass_1l_1tau ) {
+          Pzeta         = comp_pZeta(selLepton_lead->p4(), selHadTau_lead->p4(), met.p4().px(), met.p4().py());
+          PzetaVis      = comp_pZetaVis(selLepton_lead->p4(), selHadTau_lead->p4());
+          PzetaComb     = comp_pZetaComb(selLepton_lead->p4(), selHadTau_lead->p4(), met.p4().px(), met.p4().py());
+
+          if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 ) {
+            mVis_lep_tau_OS = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
+            dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+          } else {dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());}
+        }
+
+        if ( pass_2lss_1tau || pass_2los_1tau || pass_3l_1tau) mVis_lep2_tau = (selLepton_sublead->p4() + selHadTau_lead->p4()).mass();
+        if (pass_1l_3tau) mVis_lep2_tau = (selLepton_lead->p4() + selHadTau_sublead->p4()).mass();
+
+        if (pass_2lss_1tau){
+          if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 ) {
+            mVis_lep_tau_OS = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
+            dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+          } else dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+        }
+
+        if (pass_2los_1tau) {
+          if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 ) {
+            mVis_lep_tau_OS = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
+            dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+            dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_sublead->p4());
+          } else {
+            mVis_lep_tau_OS = (selLepton_sublead->p4() + selHadTau_lead->p4()).mass();
+            dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+            dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_sublead->p4());
+          }
+        }
+
+        if (pass_3l_1tau) {
+          if (selLepton_lead->charge()*selHadTau_lead->charge() < 0) {
+            mVis_lep_tau_OS = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
+            dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+            if (selLepton_sublead->charge()*selHadTau_lead->charge() < 0) {
+              mVis_lep_tau_OS_2 = (selLepton_sublead->p4() + selHadTau_lead->p4()).mass();
+              dr_lep_tau_SS = deltaR(selHadTau_third->p4(), selLepton_lead->p4());
+            } else {
+              mVis_lep_tau_OS_2 = (selLepton_third->p4() + selHadTau_lead->p4()).mass();
+              dr_lep_tau_SS = deltaR(selHadTau_sublead->p4(), selLepton_lead->p4());
+            }
+
+          } else {
+            dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+            if (selLepton_sublead->charge()*selHadTau_lead->charge() < 0) {
+              mVis_lep_tau_OS = (selLepton_sublead->p4() + selHadTau_lead->p4()).mass();
+              dr_lep_tau_OS = deltaR(selHadTau_sublead->p4(), selLepton_lead->p4());
+            } else if (selLepton_third->charge()*selHadTau_lead->charge() < 0) {
+              mVis_lep_tau_OS = (selLepton_third->p4() + selHadTau_lead->p4()).mass();
+              dr_lep_tau_OS = deltaR(selHadTau_third->p4(), selLepton_lead->p4());
+            }
+          }
+        }
+
+        if (pass_1l_3tau) {
+          if (selHadTau_lead->charge()*selLepton_lead->charge() < 0) {
+            mVis_lep_tau_OS = (selHadTau_lead->p4() + selLepton_lead->p4()).mass();
+            dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+            if (selHadTau_sublead->charge()*selLepton_lead->charge() < 0) {
+              mVis_lep_tau_OS_2 = (selHadTau_sublead->p4() + selLepton_lead->p4()).mass();
+              dr_lep_tau_SS = deltaR(selHadTau_third->p4(), selLepton_lead->p4());
+            } else {
+              mVis_lep_tau_OS_2 = (selHadTau_third->p4() + selLepton_lead->p4()).mass();
+              dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_sublead->p4());
+            }
+          } else {
+            dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+            if (selHadTau_sublead->charge()*selLepton_lead->charge() < 0) {
+              mVis_lep_tau_OS = (selHadTau_sublead->p4() + selLepton_lead->p4()).mass();
+              dr_lep_tau_OS = deltaR(selHadTau_sublead->p4(), selLepton_lead->p4());
+            } else if (selHadTau_third->charge()*selLepton_lead->charge() < 0) {
+              mVis_lep_tau_OS = (selHadTau_third->p4() + selLepton_lead->p4()).mass();
+              dr_lep_tau_OS = deltaR(selHadTau_third->p4(), selLepton_lead->p4());
+            }
+          }
+        }
+
+
+      }
 
     /* pass_2lss_0tau and pass_ttWctrl may overlap
     if (((pass_2lss_0tau) + \
@@ -2138,6 +2270,7 @@ int main(int argc, char* argv[])
           ("pass_0l_3tau", pass_0l_3tau)
           ("pass_0l_2tau", pass_0l_2tau)
           ("pass_ttH", pass_ttH)
+          ("pass_tH", pass_tH)
           ("isCharge_hadTau_OS", isCharge_hadTau_OS)
           ("isCharge_Lepton_OS", isCharge_Lepton_OS)
           ("jet1_pt",   selJet_lead ? selJet_lead->pt() : -1000)
@@ -2185,6 +2318,8 @@ int main(int argc, char* argv[])
           ("lep4_eta",        selLepton_fourth ? selLepton_fourth->eta() : -1000)
           ("lep4_phi",        selLepton_fourth ? selLepton_fourth->phi() : -1000)
           ("lep4_mass",       selLepton_fourth ? selLepton_fourth->mass() : -1000)
+          ("lep4_mass",       selLepton_fourth ? selLepton_fourth->mass() : -1000)
+          ("massL",           preselLeptons.size() > 1 ? comp_MT_met_lep1(preselLeptons[0]->p4() + preselLeptons[1]->p4(), met.pt(), met.phi())  : 0.)
           //
           ("tau1_min_dr_jet", selHadTau_lead ? comp_mindr_hadTau1_jet(*selHadTau_lead,    selJets) : -1000)
           //("tau1_min_dr_lep", selHadTau_lead ? comp_mindr_hadTau1_jet(*selHadTau_lead,    selLeptons) : -1000)
@@ -2215,6 +2350,9 @@ int main(int argc, char* argv[])
           ("sum_tau_charge", sum_tau_charge)
           ("max_dr_jet",     comp_max_dr_jet(selJets))
           ("met_LD",         met_LD)
+          ("n_presel_mu",  n_presel_mu)
+          ("n_presel_ele", n_presel_ele)
+          ("n_presel_tau", n_presel_tau)
           //
           ("lep_match_jet", lep_match_jet)
           ("lep_match_lep", lep_match_lep)
@@ -2268,6 +2406,21 @@ int main(int argc, char* argv[])
           ("DijetForward_mass", selJetsForward.size() > 1 ? (selJetsForward[0]->p4() + selJetsForward[1]->p4()).mass() : -1000)
 
           ("mvaOutput_Hj_tagger", mvaOutput_Hj_tagger)
+
+          ("sum_Lep_charge", sum_Lep_charge)
+          ("mVis_lep1_tau", mVis_lep1_tau)
+          ("mVis_lep2_tau", mVis_lep2_tau)
+          ("mVis_lep_tau_OS", mVis_lep_tau_OS)
+          ("mVis_lep_tau_OS_2", mVis_lep_tau_OS_2)
+          ("dr_lep1_tau", dr_lep1_tau)
+          ("dr_lep2_tau", dr_lep2_tau)
+          ("dr_lep_tau_SS", dr_lep_tau_SS)
+          ("dr_lep_tau_OS", dr_lep_tau_OS)
+          ("Pzeta", Pzeta)
+          ("PzetaVis", PzetaVis)
+          ("PzetaComb", PzetaComb)
+          ("dr_taus", dr_taus)
+          ("dr_leps", dr_leps)
 
         .fill()
       ;
