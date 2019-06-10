@@ -628,7 +628,16 @@ int main(int argc, char* argv[])
       "resolved_and_semi_AK8", "boosted_and_semi_AK8", "resolved_and_boosted",
       "failsZbosonMassVeto", "failsLowMassVeto", "failsHtoZZVeto",
       "sum_Lep_charge",
-      "n_presel_mu", "n_presel_ele", "n_presel_tau"
+      "n_presel_mu", "n_presel_ele", "n_presel_tau",
+      "passesTight_lepton_lead",
+      "passesTight_lepton_sublead",
+      "passesTight_lepton_third",
+      "passesTight_lepton_fourth",
+      "passesTight_gen_match",
+      "passesTight_hadTau_lead",
+      "passesTight_hadTau_sublead",
+      "passesTight_hadTau_third",
+      "passesTight_hadTau_fourth"
     );
     bdt_filler -> bookTree(fs);
   }
@@ -1897,29 +1906,71 @@ int main(int argc, char* argv[])
     bool passesTight_lepton_sublead = false;
     bool passesTight_lepton_third = false;
     bool passesTight_lepton_fourth = false;
+    bool passesTight_gen_match = true;
     if (selLeptons.size() > 0) {
       if      ( std::abs(selLepton_lead->pdgId()) == 11 ) prob_fake_lepton_lead = leptonFakeRateInterface->getWeight_e(selLepton_lead->cone_pt(), selLepton_lead->absEta());
       else if ( std::abs(selLepton_lead->pdgId()) == 13 ) prob_fake_lepton_lead = leptonFakeRateInterface->getWeight_mu(selLepton_lead->cone_pt(), selLepton_lead->absEta());
       else assert(0);
       passesTight_lepton_lead = isMatched(*selLepton_lead, tightElectrons) || isMatched(*selLepton_lead, tightMuons);
+      if ( !passesTight_lepton_lead ) {
+        if (pass_1l_2tau) passesTight_gen_match = false;
+        if (pass_2l_2tau) passesTight_gen_match = false;
+        if (pass_ttWctrl) passesTight_gen_match = false;
+        if (pass_2lss_0tau) passesTight_gen_match = false;
+        if (pass_2lss_1tau) passesTight_gen_match = false;
+        if (pass_2los_1tau) passesTight_gen_match = false;
+        if (pass_WZctrl) passesTight_gen_match = false;
+        if (pass_ZZctrl) passesTight_gen_match = false;
+        if (pass_ttZctrl) passesTight_gen_match = false;
+        if (pass_3l_0tau) passesTight_gen_match = false;
+        if (pass_3l_1tau) passesTight_gen_match = false;
+        if (pass_4l_0tau) passesTight_gen_match = false;
+        if (pass_1l_1tau) passesTight_gen_match = false;
+        if (pass_1l_3tau) passesTight_gen_match = false;
+      }
     }
     if (selLeptons.size() > 1) {
       if      ( std::abs(selLepton_sublead->pdgId()) == 11 ) prob_fake_lepton_sublead = leptonFakeRateInterface->getWeight_e(selLepton_sublead->cone_pt(), selLepton_sublead->absEta());
     	else if ( std::abs(selLepton_sublead->pdgId()) == 13 ) prob_fake_lepton_sublead = leptonFakeRateInterface->getWeight_mu(selLepton_sublead->cone_pt(), selLepton_sublead->absEta());
     	else assert(0);
       passesTight_lepton_sublead = isMatched(*selLepton_sublead, tightElectrons) || isMatched(*selLepton_sublead, tightMuons);
+      if ( !passesTight_lepton_sublead ) {
+        if (pass_ttWctrl) passesTight_gen_match = false;
+        if (pass_2lss_0tau) passesTight_gen_match = false;
+        if (pass_2lss_1tau) passesTight_gen_match = false;
+        if (pass_2los_1tau) passesTight_gen_match = false;
+        if (pass_2l_2tau) passesTight_gen_match = false;
+        if (pass_WZctrl) passesTight_gen_match = false;
+        if (pass_ZZctrl) passesTight_gen_match = false;
+        if (pass_ttZctrl) passesTight_gen_match = false;
+        if (pass_3l_0tau) passesTight_gen_match = false;
+        if (pass_3l_1tau) passesTight_gen_match = false;
+        if (pass_4l_0tau) passesTight_gen_match = false;
+      }
     }
     if (selLeptons.size() > 2) {
       if      ( std::abs(selLepton_third->pdgId()) == 11 ) prob_fake_lepton_third = leptonFakeRateInterface->getWeight_e(selLepton_third->cone_pt(), selLepton_third->absEta());
       else if ( std::abs(selLepton_third->pdgId()) == 13 ) prob_fake_lepton_third = leptonFakeRateInterface->getWeight_mu(selLepton_third->cone_pt(), selLepton_third->absEta());
       else assert(0);
       passesTight_lepton_third = isMatched(*selLepton_third, tightElectrons) || isMatched(*selLepton_third, tightMuons);
+      if ( !passesTight_lepton_third ) {
+        if (pass_WZctrl) passesTight_gen_match = false;
+        if (pass_ZZctrl) passesTight_gen_match = false;
+        if (pass_ttZctrl) passesTight_gen_match = false;
+        if (pass_3l_0tau) passesTight_gen_match = false;
+        if (pass_3l_1tau) passesTight_gen_match = false;
+        if (pass_4l_0tau) passesTight_gen_match = false;
+      }
     }
     if (selLeptons.size() > 3) {
       if      ( std::abs(selLepton_fourth->pdgId()) == 11 ) prob_fake_lepton_fourth = leptonFakeRateInterface->getWeight_e(selLepton_fourth->cone_pt(), selLepton_fourth->absEta());
       else if ( std::abs(selLepton_fourth->pdgId()) == 13 ) prob_fake_lepton_fourth = leptonFakeRateInterface->getWeight_mu(selLepton_fourth->cone_pt(), selLepton_fourth->absEta());
       else assert(0);
       passesTight_lepton_fourth = isMatched(*selLepton_fourth, tightElectrons) || isMatched(*selLepton_fourth, tightMuons);
+      if ( !passesTight_lepton_fourth ) {
+        if (pass_4l_0tau) passesTight_gen_match = false;
+        if (pass_ZZctrl) passesTight_gen_match = false;
+      }
     }
     /////
     double prob_fake_hadTau_lead = 1.;
@@ -1933,18 +1984,44 @@ int main(int argc, char* argv[])
     if (selHadTaus.size() > 0) {
       prob_fake_hadTau_lead = jetToTauFakeRateInterface->getWeight_lead(selHadTau_lead->pt(), selHadTau_lead->absEta());
       passesTight_hadTau_lead = isMatched(*selHadTau_lead, tightHadTausFull);
+      if ( !passesTight_hadTau_lead ) {
+        if (pass_1l_2tau) passesTight_gen_match = false;
+        if (pass_0l_2tau) passesTight_gen_match = false;
+        if (pass_2l_2tau) passesTight_gen_match = false;
+        if (pass_1l_1tau) passesTight_gen_match = false;
+        if (pass_2los_1tau) passesTight_gen_match = false;
+        if (pass_1l_3tau) passesTight_gen_match = false;
+        if (pass_0l_4tau) passesTight_gen_match = false;
+        if (pass_0l_3tau) passesTight_gen_match = false;
+      }
     }
     if (selHadTaus.size() > 1) {
       prob_fake_hadTau_sublead = jetToTauFakeRateInterface->getWeight_lead(selHadTau_sublead->pt(), selHadTau_sublead->absEta());
       passesTight_hadTau_sublead = isMatched(*selHadTau_sublead, tightHadTausFull);
+      if ( !passesTight_hadTau_sublead ) {
+        if (pass_1l_2tau) passesTight_gen_match = false;
+        if (pass_0l_2tau) passesTight_gen_match = false;
+        if (pass_2l_2tau) passesTight_gen_match = false;
+        if (pass_1l_3tau) passesTight_gen_match = false;
+        if (pass_0l_4tau) passesTight_gen_match = false;
+        if (pass_0l_3tau) passesTight_gen_match = false;
+      }
     }
     if (selHadTaus.size() > 2) {
       prob_fake_hadTau_third = jetToTauFakeRateInterface->getWeight_lead(selHadTau_third->pt(), selHadTau_third->absEta());
-    passesTight_hadTau_third = isMatched(*selHadTau_third, tightHadTausFull);
+      passesTight_hadTau_third = isMatched(*selHadTau_third, tightHadTausFull);
+      if ( !passesTight_hadTau_third ) {
+        if (pass_1l_3tau) passesTight_gen_match = false;
+        if (pass_0l_4tau) passesTight_gen_match = false;
+        if (pass_0l_3tau) passesTight_gen_match = false;
+      }
     }
     if (selHadTaus.size() > 3) {
       prob_fake_hadTau_fourth = jetToTauFakeRateInterface->getWeight_lead(selHadTau_fourth->pt(), selHadTau_fourth->absEta());
       passesTight_hadTau_fourth = isMatched(*selHadTau_fourth, tightHadTausFull);
+      if ( !passesTight_hadTau_fourth ) {
+        if (pass_0l_4tau) passesTight_gen_match = false;
+      }
     }
 
     if (pass_2lss_0tau || pass_2lss_1tau || pass_2los_0tau || pass_ttWctrl) weight_fakeRate = getWeight_2L(
@@ -2421,6 +2498,16 @@ int main(int argc, char* argv[])
           ("PzetaComb", PzetaComb)
           ("dr_taus", dr_taus)
           ("dr_leps", dr_leps)
+
+          ("passesTight_lepton_lead",    passesTight_lepton_lead)
+          ("passesTight_lepton_sublead", passesTight_lepton_sublead)
+          ("passesTight_lepton_third",   passesTight_lepton_third)
+          ("passesTight_lepton_fourth",  passesTight_lepton_fourth)
+          ("passesTight_gen_match",      passesTight_gen_match)
+          ("passesTight_hadTau_lead",    passesTight_hadTau_lead)
+          ("passesTight_hadTau_sublead", passesTight_hadTau_sublead)
+          ("passesTight_hadTau_third",   passesTight_hadTau_third)
+          ("passesTight_hadTau_fourth"   passesTight_hadTau_fourth)
 
         .fill()
       ;
