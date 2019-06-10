@@ -2503,11 +2503,11 @@ int main(int argc, char* argv[])
           ("passesTight_lepton_sublead", passesTight_lepton_sublead)
           ("passesTight_lepton_third",   passesTight_lepton_third)
           ("passesTight_lepton_fourth",  passesTight_lepton_fourth)
-          ("passesTight_gen_match",      passesTight_gen_match)
           ("passesTight_hadTau_lead",    passesTight_hadTau_lead)
           ("passesTight_hadTau_sublead", passesTight_hadTau_sublead)
           ("passesTight_hadTau_third",   passesTight_hadTau_third)
-          ("passesTight_hadTau_fourth"   passesTight_hadTau_fourth)
+          ("passesTight_hadTau_fourth",   passesTight_hadTau_fourth)
+          ("passesTight_gen_match",      passesTight_gen_match)
 
         .fill()
       ;
