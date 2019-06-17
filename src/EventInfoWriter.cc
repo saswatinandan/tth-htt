@@ -20,6 +20,7 @@ EventInfoWriter::EventInfoWriter(bool is_signal,
   branchName_genWeight_         = is_mc     ? Form(pattern.data(), "genWeight")         : "";
   branchName_genWeight_tH_      = is_mc_th  ? Form(pattern.data(), "LHEWeight_rwgt_12") : "";
   branchName_pileupWeight_      = is_mc     ? Form(pattern.data(), "puWeight")          : "";
+
 }
 
 void
@@ -40,6 +41,7 @@ EventInfoWriter::setBranches(TTree * tree)
   }
   if(! branchName_genWeight_tH_.empty())
   {
+    std::cout<< "checking th weight "<<branchName_event_<< " " << eventInfo_.genWeight_tH << "\n";
     bai.setBranch(eventInfo_.genWeight_tH, branchName_genWeight_tH_);
   }
   if(! branchName_pileupWeight_.empty())

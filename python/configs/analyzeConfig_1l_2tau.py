@@ -82,8 +82,58 @@ class analyzeConfig_1l_2tau(analyzeConfig):
       executable_analyze = executable_analyze,
       channel            = "1l_2tau",
       subcategories = ["1l_2tau",
-       "1e_2tau_btight_0J", "1e_2tau_bloose_0J", "1mu_2tau_btight_0J", "1mu_2tau_bloose_0J", "1l_2tau_1Jp",
-       "output_ttH_3cat_ttH", "output_ttH_3cat_tH", "output_ttH_3cat_tH_1jet"
+        "1e_2tau_btight_0J", "1e_2tau_bloose_0J", "1mu_2tau_btight_0J", "1mu_2tau_bloose_0J", "1l_2tau_1Jp",
+        "output_ttH_3cat_ttH", "output_ttH_3cat_tH", "output_ttH_3cat_tH_1jet",
+        #
+        "output_NN_1l_2tau_ttH_tH_3cat_v1_ttH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v1_tH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v1_rest",
+        "output_NN_1l_2tau_ttH_tH_3cat_v1_no_cat",
+        #
+        "output_NN_1l_2tau_ttH_tH_3cat_v2_ttH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v2_tH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v2_rest",
+        "output_NN_1l_2tau_ttH_tH_3cat_v2_no_cat",
+        #
+        "output_NN_1l_2tau_ttH_tH_3cat_v3_ttH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v3_tH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v3_rest",
+        "output_NN_1l_2tau_ttH_tH_3cat_v3_no_cat",
+        #
+        "output_NN_1l_2tau_ttH_tH_3cat_v4_ttH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v4_tH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v4_rest",
+        "output_NN_1l_2tau_ttH_tH_3cat_v4_no_cat",
+        #
+        "output_NN_1l_2tau_ttH_tH_3cat_v5_ttH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v5_tH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v5_rest",
+        "output_NN_1l_2tau_ttH_tH_3cat_v5_no_cat",
+        #
+        "output_NN_1l_2tau_ttH_tH_3cat_v6_ttH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v6_tH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v6_rest",
+        "output_NN_1l_2tau_ttH_tH_3cat_v6_no_cat",
+        #
+        "output_NN_1l_2tau_ttH_tH_3cat_v7_ttH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v7_tH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v7_rest",
+        "output_NN_1l_2tau_ttH_tH_3cat_v7_no_cat",
+        #
+        "output_NN_1l_2tau_ttH_tH_3cat_v8_ttH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v8_tH",
+        "output_NN_1l_2tau_ttH_tH_3cat_v8_rest",
+        "output_NN_1l_2tau_ttH_tH_3cat_v8_no_cat",
+        #
+        "output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v1_ttH",
+        "output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v1_tH",
+        "output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v1_rest",
+        "output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v1_no_cat",
+        #
+        "output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v2_ttH",
+        "output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v2_tH",
+        "output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v2_rest",
+        "output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v2_no_cat"
        ],
       samples            = samples,
       lep_mva_wp         = lep_mva_wp,
@@ -159,10 +209,10 @@ class analyzeConfig_1l_2tau(analyzeConfig):
     self.executable_addBackgrounds = executable_addBackgrounds
     self.executable_addFakes = executable_addBackgroundJetToTauFakes
 
-    self.nonfake_backgrounds = [ "TT", "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW", "VH" ]
+    self.nonfake_backgrounds = [ "TT", "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW", "VH", "HH" ]
 
     self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [ "conversions", "fakes_data", "fakes_mc" ]
-    self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "conversions", "fakes_data" ]
+    self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW", "HH" ] + [ "conversions", "fakes_data" ]
 
     self.cfgFile_analyze = os.path.join(self.template_dir, cfgFile_analyze)
     histogramDir_prep_dcard_local = []

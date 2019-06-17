@@ -36,10 +36,8 @@ class EvtHistManager_2lss
                  double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
                  double mvaDiscr_2lss,
                  double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-                 double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
                  //
                  double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
-                 double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
                  double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
                  double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
                  double mva_Updated,
@@ -74,8 +72,6 @@ class EvtHistManager_2lss
   TH1 * histogram_EventCounter_;
 
   TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_;
-  TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_;
-  TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_;
   TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_;
   TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_;
   TH1 * histogram_output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_;

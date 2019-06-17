@@ -523,19 +523,19 @@ int main(int argc, char* argv[])
 
   /*
   model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v1
-model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v2
-model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v3
 model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v4
 model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v5
 model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v6
 model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
   */
-  std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v1 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v1.pb"; //-- keep for counting
+  std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v1 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_v1.pb"; //-- keep for counting
   // the order of input variables should be the same as during the training
   std::vector<std::string> mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ = {
     "avg_dr_jet", "ptmiss", "mbb_medium",
-    "max_dr_jet", "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt", "max_lep_eta",
-    "lep1_mT", "lep1_conept", "lep1_min_dr_jet", "lep2_mT", "lep2_conept", "lep2_min_dr_jet",
+    //"max_dr_jet",
+    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt", "max_lep_eta",
+    "lep1_mT", "lep1_conept", //"lep1_min_dr_jet",
+    "lep2_mT", "lep2_conept", //"lep2_min_dr_jet",
     "nJetForward", "jetForward1_pt", "jetForward1_eta_abs", "jetForward1_eta_sign",
     "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
     "nJet", "nBJetLoose", "nBJetMedium", "nElectron", "sum_lep_charge", "mvaOutput_Hj_tagger"
@@ -550,65 +550,56 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
   std::map<std::string, double> mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_TF;
   std::cout << "read NN 2" << std::endl;
 
-
-  std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v2.pb";
-  std::vector<std::string> mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2 = {
+  // enter the pb
+  std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v4 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v4.pb";
+  std::vector<std::string> mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v4 = {
     "avg_dr_jet", "ptmiss", "mbb_medium",
     "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt", "max_lep_eta",
-    "lep1_mT", "lep1_conept", "lep1_min_dr_jet", "lep2_mT", "lep2_conept", "lep2_min_dr_jet",
+    "lep1_mT", "lep1_conept", "lep1_min_dr_jet",
+    "lep2_mT", "lep2_conept", "lep2_min_dr_jet",
     "nJetForward", "jetForward1_pt", "jetForward1_eta_abs",
     "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
     "nJet", "nBJetLoose", "nBJetMedium", "nElectron", "sum_lep_charge", "mvaOutput_Hj_tagger"
   };
-  TensorFlowInterface mva_2lss_ttH_tH_4cat_onlyTHQ_v2_TF(
-    mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2,
-    mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2,
-    classes_TensorFlow_2lss_ttH_tH_4cat
-  );
-  std::map<std::string, double> mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF;
-  std::cout << "read NN v6" << std::endl;
-
-  std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v3 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v3.pb";
-  TensorFlowInterface mva_2lss_ttH_tH_4cat_onlyTHQ_v3_TF(
-    mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v3,
-    mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2,
-    classes_TensorFlow_2lss_ttH_tH_4cat
-  );
-  std::cout << "read NN v7" << std::endl;
-
-  // enter the pb
-  std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v4 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v4.pb";
+  std::map<std::string, double> mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF;
   TensorFlowInterface mva_2lss_ttH_tH_4cat_onlyTHQ_v4(
     mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v4,
-    mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2,
+    mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v4,
     classes_TensorFlow_2lss_ttH_tH_4cat
   );
   std::cout << "read NN tH v1" << std::endl;
 
-  std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v5 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v5.pb";
+  std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v5 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_v5.pb";
+  std::vector<std::string> mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v5 = {
+    "avg_dr_jet", "ptmiss", "mbb_medium",
+    //"max_dr_jet",
+    "jet1_pt", "jet2_pt", "jet3_pt", "jet4_pt", "max_lep_eta",
+    "lep1_mT", "lep1_conept", //"lep1_min_dr_jet",
+    "lep2_mT", "lep2_conept", //"lep2_min_dr_jet",
+    "nJetForward", "jetForward1_pt", "jetForward1_eta_abs", //"jetForward1_eta_sign",
+    "res-HTT_CSVsort4rd", "HadTop_pt_CSVsort4rd",
+    "nJet", "nBJetLoose", "nBJetMedium", "nElectron", "sum_lep_charge", "mvaOutput_Hj_tagger"
+  };
   TensorFlowInterface mva_2lss_ttH_tH_4cat_onlyTHQ_v5(
     mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v5,
-    mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2,
+    mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ,
     classes_TensorFlow_2lss_ttH_tH_4cat
   );
+  std::cout << "read NN tH v5" << std::endl;
 
-  std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v6 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v6.pb";
+  std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v6 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_v6.pb";
   TensorFlowInterface mva_2lss_ttH_tH_4cat_onlyTHQ_v6(
     mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v6,
-    mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2,
+    mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ,
     classes_TensorFlow_2lss_ttH_tH_4cat
   );
   std::cout << "read NN tH v2" << std::endl;
-  double tH_in_predictions_ttH = 0.;
-  double tH_in_predictions_ttZ = 0.;
-  double tH_in_predictions_rest = 0.;
-  double tH_in_predictions_tH = 0.;
 
   std::string mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v7 = "tthAnalysis/HiggsToTauTau/data/NN_14Feb2019/test_model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7.pb";
   // the order also matters
   TensorFlowInterface mva_2lss_ttH_tH_4cat_onlyTHQ_v7(
     mvaFileName_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v7,
-    mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2,
+    mvaInputVariables_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v4,
     classes_TensorFlow_2lss_ttH_tH_4cat
   );
   std::cout << "read NN tH v2" << std::endl;
@@ -750,8 +741,6 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
     //MVAInputVarHistManager* mvaInputVariables_2lss_;
 
     /*output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, Xanda
-    output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
-    output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
     output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
     output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
     output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
@@ -761,8 +750,6 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
     /*Xanda
     category
     mva_2lss_ttH_tH_4cat_onlyTHQ_v1_TF -- mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1 -- category_2lss_ttH_tH_4cat_onlyTHQ_v1
-    mva_2lss_ttH_tH_4cat_onlyTHQ_v2_TF -- mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2 -- category_2lss_ttH_tH_4cat_onlyTHQ_v2
-    mva_2lss_ttH_tH_4cat_onlyTHQ_v3_TF -- mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3 -- category_2lss_ttH_tH_4cat_onlyTHQ_v3
     mva_2lss_ttH_tH_4cat_onlyTHQ_v4 -- mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4 -- category_2lss_ttH_tH_4cat_onlyTHQ_v4
     mva_2lss_ttH_tH_4cat_onlyTHQ_v6 -- mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6 -- category_2lss_ttH_tH_4cat_onlyTHQ_v6
     mva_2lss_ttH_tH_4cat_onlyTHQ_v7 -- mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7 -- category_2lss_ttH_tH_4cat_onlyTHQ_v7
@@ -772,20 +759,16 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
     EvtHistManager_2lss* evt_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v1_TF_;
-    std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v2_TF_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v4_TF_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v6_TF_;
-    std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v3_TF_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v7_TF_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v5_TF_;
 
     std::map<std::string, EvtHistManager_2lss*> evt_in_decayModes_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_in_decayModes_; // key = category, decayMode
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v1_TF_and_decayModes_;
-    std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v2_TF_and_decayModes_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v4_TF_and_decayModes_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v6_TF_and_decayModes_;
-    std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v3_TF_and_decayModes_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v7_TF_and_decayModes_;
     std::map<std::string, EvtHistManager_2lss*> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v5_TF_and_decayModes_;
 
@@ -814,64 +797,126 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
 
   //"output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_" + "predictions_ttH", "predictions_rest", "predictions_tH", "no_cat"
   vstring categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v5 = {
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttH",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttW",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_rest",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_tH",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttH_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttH_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttH_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttH_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttH_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttH_mm_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttW_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttW_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttW_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttW_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttW_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_ttW_mm_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_rest_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_rest_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_tH_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_tH_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_tH_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_tH_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_tH_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_tH_mm_bt",
     "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_no_cat"
   };
 
   //"output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_" + "predictions_ttH", "predictions_rest", "predictions_tH", "no_cat"
   vstring categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v7 = {
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttH",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttW",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_rest",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_tH",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttH_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttH_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttH_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttH_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttH_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttH_mm_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttW_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttW_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttW_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttW_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttW_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_ttW_mm_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_rest_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_rest_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_tH_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_tH_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_tH_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_tH_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_tH_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_tH_mm_bt",
     "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_no_cat"
   };
 
   //"output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_" + "predictions_ttH", "predictions_ttW", "predictions_rest", "predictions_tH", "tH_ttW"
   vstring categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v6 = {
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttH",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttW",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_rest",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_tH",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttH_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttH_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttH_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttH_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttH_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttH_mm_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttW_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttW_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttW_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttW_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttW_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_ttW_mm_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_rest_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_rest_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_tH_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_tH_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_tH_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_tH_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_tH_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_tH_mm_bt",
     "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_no_cat"
   };
 
   //"output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_" + "predictions_ttH", "predictions_ttW", "predictions_rest", "predictions_tH", "no_cat"
   vstring categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v4 = {
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttH",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttW",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_rest",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_tH",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttH_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttH_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttH_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttH_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttH_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttH_mm_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttW_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttW_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttW_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttW_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttW_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_ttW_mm_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_rest_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_rest_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_tH_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_tH_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_tH_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_tH_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_tH_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_tH_mm_bt",
     "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_no_cat"
-  };
-
-  //"output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_" + "predictions_ttH", "predictions_ttW", "predictions_rest", "no_cat"
-  vstring categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2 = {
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_ttH",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_ttW",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_rest",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_tH",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_no_cat"
-  };
-
-  // "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_" + "predictions_ttH", "predictions_ttW", "predictions_rest", "tH", "no_cat"
-  vstring categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v3 = {
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_ttH",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_ttW",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_rest",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_tH",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_no_cat"
-  };
+   };
 
   //"output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_" + "predictions_ttH", "predictions_ttW", "predictions_rest", "tH_like_exp", "tH_ttW", "ttWsel"
   vstring categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v1 = {
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttH",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttW",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_rest",
-    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_tH",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttH_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttH_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttH_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttH_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttH_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttH_mm_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttW_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttW_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttW_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttW_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttW_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_ttW_mm_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_rest_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_rest_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_tH_ee_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_tH_ee_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_tH_em_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_tH_em_bt",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_tH_mm_bl",
+    "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_tH_mm_bt",
     "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_no_cat"
   };
 
@@ -1011,15 +1056,6 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
       selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v1_TF_[*category]->bookHistograms(fs);
     }
 
-    for ( vstring::const_iterator category = categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2.begin();
-      category != categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2.end(); ++category ) {
-      TString histogramDir_category = histogramDir.data();
-      histogramDir_category.ReplaceAll("2lss",  category->data());
-      selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v2_TF_[*category] = new EvtHistManager_2lss(makeHistManager_cfg(process_and_genMatch,
-        Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
-      selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v2_TF_[*category]->bookHistograms(fs);
-    }
-
     for ( vstring::const_iterator category = categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v6.begin();
       category != categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v6.end(); ++category ) {
       TString histogramDir_category = histogramDir.data();
@@ -1027,15 +1063,6 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
       selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v6_TF_[*category] = new EvtHistManager_2lss(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
       selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v6_TF_[*category]->bookHistograms(fs);
-    }
-
-    for ( vstring::const_iterator category = categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v3.begin();
-      category != categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v3.end(); ++category ) {
-      TString histogramDir_category = histogramDir.data();
-      histogramDir_category.ReplaceAll("2lss",  category->data());
-      selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v3_TF_[*category] = new EvtHistManager_2lss(makeHistManager_cfg(process_and_genMatch,
-        Form("%s/sel/evt", histogramDir_category.Data()), era_string, central_or_shift));
-      selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v3_TF_[*category]->bookHistograms(fs);
     }
 
     for ( vstring::const_iterator category = categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v7.begin();
@@ -1106,18 +1133,6 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
           ));
           selHistManager -> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v1_TF_and_decayModes_[*category+decayMode_evt] -> bookHistograms(fs);
         }
-        for ( vstring::const_iterator category = categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2.begin();
-        category != categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v2.end(); ++category ) {
-          TString histogramDir_category = histogramDir.data();
-          histogramDir_category.ReplaceAll("2lss",  category->data());
-          selHistManager -> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v2_TF_and_decayModes_[*category+decayMode_evt] = new EvtHistManager_2lss(makeHistManager_cfg(
-            decayMode_and_genMatch,
-            Form("%s/sel/evt", histogramDir_category.Data()),
-            era_string,
-            central_or_shift
-          ));
-          selHistManager -> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v2_TF_and_decayModes_[*category+decayMode_evt] -> bookHistograms(fs);
-        }
         for ( vstring::const_iterator category = categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v6.begin();
         category != categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v6.end(); ++category ) {
           TString histogramDir_category = histogramDir.data();
@@ -1141,18 +1156,6 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
             central_or_shift
           ));
           selHistManager -> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v7_TF_and_decayModes_[*category+decayMode_evt] -> bookHistograms(fs);
-        }
-        for ( vstring::const_iterator category = categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v3.begin();
-        category != categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v3.end(); ++category ) {
-          TString histogramDir_category = histogramDir.data();
-          histogramDir_category.ReplaceAll("2lss",  category->data());
-          selHistManager -> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v3_TF_and_decayModes_[*category+decayMode_evt] = new EvtHistManager_2lss(makeHistManager_cfg(
-            decayMode_and_genMatch,
-            Form("%s/sel/evt", histogramDir_category.Data()),
-            era_string,
-            central_or_shift
-          ));
-          selHistManager -> evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v3_TF_and_decayModes_[*category+decayMode_evt] -> bookHistograms(fs);
         }
         for ( vstring::const_iterator category = categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v5.begin();
         category != categories_TensorFlow_2lss_ttH_tH_4cat_onlyTHQ_v5.end(); ++category ) {
@@ -1333,7 +1336,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
                 << ") file (" << selectedEntries << " Entries selected)\n";
     }
     ++analyzedEntries;
-    //if ( analyzedEntries > 5000 ) break;
+   // if ( analyzedEntries > 5000 ) break;
     histogram_analyzedEntries->Fill(0.);
 
     if (run_lumi_eventSelector && !(*run_lumi_eventSelector)(eventInfo))
@@ -1736,7 +1739,6 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(), 1,
       1.0, // evtWeight is first to be sure of not being loosing counting
       -1., -1., -1.,
-      -1., -1.,
       //
       -1., -1., -1., -1., -1., -1.
     );
@@ -1914,7 +1916,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
     if (
       (selBJets_medium.size() >= 1 && ((selJets.size() - selBJets_loose.size()) + selJetsForward.size()) >= 1)
     ) tH_like_exp = true;
-    if (!(ttW_like || ttH_like )) // || tH_like || tH_like_exp -- xanda categories
+    if (!(ttW_like || ttH_like || tH_like)) //  || tH_like_exp -- xanda categories
     {
       if ( run_lumi_eventSelector ) {
     std::cout << "event " << eventInfo.str() << " FAILS selBJets selection adding tH-like and ttW-like (2)." << std::endl;
@@ -2510,41 +2512,38 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
     mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_TF["sum_lep_charge"] = selLepton_lead->charge() + selLepton_sublead->charge();
     mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_TF["mvaOutput_Hj_tagger"] = mvaOutput_Hj_tagger_fromCSVsort4th;
     std::map<std::string, double> mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1 = mva_2lss_ttH_tH_4cat_onlyTHQ_v1_TF(mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_TF);
-
-
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["avg_dr_jet"] =  comp_avg_dr_jet(selJets);
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["ptmiss"] = met.pt();
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["mbb_medium"] = selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0;
-    //mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["max_dr_jet"] = comp_max_dr_jet(selJets);
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["jet1_pt"] = selJets[0]->pt();
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["jet2_pt"] = selJets.size() > 1 ?  selJets[1]->pt() : 0;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["jet3_pt"] = selJets.size() > 2 ?  selJets[2]->pt() : 0;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["jet4_pt"] = selJets.size() > 3 ?  selJets[3]->pt() : 0;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["max_lep_eta"] = max_lep_eta;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["lep1_mT"] = comp_MT_met_lep1(*selLepton_lead, met.pt(), met.phi());
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["lep1_conept"] = lep1_conePt;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["lep1_min_dr_jet"] = TMath::Min(10., mindr_lep1_jet);
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["lep2_mT"] = comp_MT_met_lep1(*selLepton_sublead, met.pt(), met.phi());
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["lep2_conept"] = lep2_conePt;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["lep2_min_dr_jet"] = TMath::Min(10., mindr_lep2_jet);
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["nJetForward"] = selJetsForward.size();
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["jetForward1_pt"] = selJetsForward.size() > 0 ?  selJetsForward[0]->pt() : 0;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["jetForward1_eta_abs"] = selJetsForward.size() > 0 ?  selJetsForward[0]->absEta() : -1;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["jetForward1_eta_sign"] = selJetsForward.size() > 0 ? ((selJetsForward[0]->eta() > 0) ? 1 : ((selJetsForward[0]->eta() < 0) ? -1 : 0)) : 0;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["nJet"] = selJets.size();
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["nBJetLoose"] = selBJets_loose.size();
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["nBJetMedium"] = selBJets_medium.size();
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["nElectron"] = selElectrons.size();
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["sum_lep_charge"] = selLepton_lead->charge() + selLepton_sublead->charge();
-    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v2_TF["mvaOutput_Hj_tagger"] = mvaOutput_Hj_tagger_fromCSVsort4th;
-    std::map<std::string, double> mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2 = mva_2lss_ttH_tH_4cat_onlyTHQ_v2_TF(mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_TF);
-    std::map<std::string, double> mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3 = mva_2lss_ttH_tH_4cat_onlyTHQ_v3_TF(mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_TF);
-    std::map<std::string, double> mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4 = mva_2lss_ttH_tH_4cat_onlyTHQ_v4(mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_TF);
     std::map<std::string, double> mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5 = mva_2lss_ttH_tH_4cat_onlyTHQ_v5(mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_TF);
     std::map<std::string, double> mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6 = mva_2lss_ttH_tH_4cat_onlyTHQ_v6(mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_TF);
-    std::map<std::string, double> mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7 = mva_2lss_ttH_tH_4cat_onlyTHQ_v7(mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_TF);
+
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["avg_dr_jet"] =  comp_avg_dr_jet(selJets);
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["ptmiss"] = met.pt();
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["mbb_medium"] = selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["max_dr_jet"] = comp_max_dr_jet(selJets);
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["jet1_pt"] = selJets[0]->pt();
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["jet2_pt"] = selJets.size() > 1 ?  selJets[1]->pt() : 0;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["jet3_pt"] = selJets.size() > 2 ?  selJets[2]->pt() : 0;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["jet4_pt"] = selJets.size() > 3 ?  selJets[3]->pt() : 0;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["max_lep_eta"] = max_lep_eta;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["lep1_mT"] = comp_MT_met_lep1(*selLepton_lead, met.pt(), met.phi());
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["lep1_conept"] = lep1_conePt;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["lep1_min_dr_jet"] = TMath::Min(10., mindr_lep1_jet);
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["lep2_mT"] = comp_MT_met_lep1(*selLepton_sublead, met.pt(), met.phi());
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["lep2_conept"] = lep2_conePt;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["lep2_min_dr_jet"] = TMath::Min(10., mindr_lep2_jet);
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["nJetForward"] = selJetsForward.size();
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["jetForward1_pt"] = selJetsForward.size() > 0 ?  selJetsForward[0]->pt() : 0;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["jetForward1_eta_abs"] = selJetsForward.size() > 0 ?  selJetsForward[0]->absEta() : -1;
+    //mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["jetForward1_eta_sign"] = selJetsForward.size() > 0 ? ((selJetsForward[0]->eta() > 0) ? 1 : ((selJetsForward[0]->eta() < 0) ? -1 : 0)) : 0;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["res-HTT_CSVsort4rd"] = max_mvaOutput_HTT_CSVsort4rd;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["HadTop_pt_CSVsort4rd"] = HadTop_pt_CSVsort4rd;
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["nJet"] = selJets.size();
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["nBJetLoose"] = selBJets_loose.size();
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["nBJetMedium"] = selBJets_medium.size();
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["nElectron"] = selElectrons.size();
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["sum_lep_charge"] = selLepton_lead->charge() + selLepton_sublead->charge();
+    mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF["mvaOutput_Hj_tagger"] = mvaOutput_Hj_tagger_fromCSVsort4th;
+    std::map<std::string, double> mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7 = mva_2lss_ttH_tH_4cat_onlyTHQ_v7(mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF);
+    std::map<std::string, double> mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4 = mva_2lss_ttH_tH_4cat_onlyTHQ_v4(mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4_TF);
     if ( isDEBUG_TF ) {
       //for (auto elem : mvaInputs_2lss_ttH_tH_4cat_onlyTHQ_v4) std::cout << elem.first << " " << elem.second << "\n";
       std::cout << "result tH 3cat v3 :";
@@ -2560,15 +2559,9 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
       for(auto elem : mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5) std::cout << elem.first << " " << elem.second<< " ";
       std::cout << "\n";
       std::cout << "result 3cat ttH v6; ";
-      for(auto elem : mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2) std::cout << elem.first << " " << elem.second << " ";
-      std::cout << "\n";
-      std::cout << "result 3cat ttH v7: ";
-      for(auto elem : mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3) std::cout << elem.first << " " << elem.second << " ";
-      std::cout << "\n";
       for(auto elem : mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1) std::cout << elem.first << " " << elem.second << " ";
       std::cout << "\n";
     }
-
 
     double mvaOutput_2lss_ttbar = mva_2lss_ttbar(mvaInputs_2lss);
     int ibin = hTargetBinning->FindBin(mvaOutput_2lss_ttbar , mvaOutput_2lss_ttV);
@@ -2609,81 +2602,71 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
 
     std::string category_2lss_ttH_tH_4cat_onlyTHQ_v1 = "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1_";
     double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = -10;
+    /*
+    em loose
+    mm loose
+    ee loose
+    tight
+    */
+    bool sigExtCat = false;
     // "predictions_ttH", "predictions_ttW", "predictions_rest"
-    if (ttH_like || ttW_like) {
+    if (ttH_like || tH_like || ttW_like) {
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttW"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "ttH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "ttH";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttH"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttW"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_tH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "tH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_tH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "tH";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_tH"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttW"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "ttW"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttW"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "ttW";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttW"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttW"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "rest"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_rest"];}
-    } else {category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "no_cat"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "rest";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_rest"];
+        sigExtCat = false;
+      }
 
-    std::string category_2lss_ttH_tH_4cat_onlyTHQ_v2 = "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2_";
-    double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2 = -10;
-    // "predictions_ttH", "predictions_ttW", "predictions_rest"
-    if (ttH_like || ttW_like) {
-      if (
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_tH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttW"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v2 += "ttH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttH"];}
-      if (
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttW"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_tH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v2 += "tH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_tH"];}
-      if (
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttW"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_tH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v2 += "ttW"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttW"];}
-      if (
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_tH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttW"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v2 += "rest"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_rest"];}
-    } else {category_2lss_ttH_tH_4cat_onlyTHQ_v2 += "no_cat"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v2["predictions_ttH"];}
+      if (sigExtCat)
+      {
+        if  ( ( selLepton_lead_type == kElectron && selLepton_sublead_type == kElectron ) ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "_ee";
+        } else if (  selLepton_lead_type == kMuon     && selLepton_sublead_type == kMuon      ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "_mm";
+        } else if ( (selLepton_lead_type == kElectron && selLepton_sublead_type == kMuon    ) ||
+    		(selLepton_lead_type == kMuon     && selLepton_sublead_type == kElectron) ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "_em";
+        }
+      }
+      if (selBJets_medium.size() >= 2) category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "_bt";
+      else category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "_bl";
 
-    std::string category_2lss_ttH_tH_4cat_onlyTHQ_v3 = "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3_";
-    double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3 = -10;
-    // "predictions_ttH", "predictions_ttW", "predictions_rest"
-    if (ttH_like || ttW_like) {
-      if (
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_tH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttW"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v3 += "ttH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttH"];}
-      if (
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttW"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_tH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v3 += "tH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_tH"];}
-      if (
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttW"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_tH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v3 += "ttW"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttW"];}
-      if (
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_tH"] &&\
-        mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttW"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v3 += "rest"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_rest"];}
-    } else {category_2lss_ttH_tH_4cat_onlyTHQ_v3 += "no_cat"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v3["predictions_ttH"];}
+    } else {
+      category_2lss_ttH_tH_4cat_onlyTHQ_v1 += "no_cat";
+      output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v1["predictions_ttH"];
+      sigExtCat = false;
+    }
 
     std::string category_2lss_ttH_tH_4cat_onlyTHQ_v4 = "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_";
     double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = -10;
@@ -2693,75 +2676,180 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttW"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "ttH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "ttH";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttW"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_tH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "tH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_tH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "tH";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_tH"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttW"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "ttW"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttW"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "ttW";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttW"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttW"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "rest"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"];}
-    } else {category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "no_cat"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "rest";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"];
+        sigExtCat = false;
+      }
+
+      if (sigExtCat)
+      {
+        if  ( ( selLepton_lead_type == kElectron && selLepton_sublead_type == kElectron ) ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "_ee";
+        } else if (  selLepton_lead_type == kMuon     && selLepton_sublead_type == kMuon      ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "_mm";
+        } else if ( (selLepton_lead_type == kElectron && selLepton_sublead_type == kMuon    ) ||
+    		(selLepton_lead_type == kMuon     && selLepton_sublead_type == kElectron) ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "_em";
+        }
+      }
+      if (selBJets_medium.size() >= 2) category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "_bt";
+      else category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "_bl";
+
+    } else {
+      category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "no_cat";
+      output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"];
+      sigExtCat = false;
+    }
 
     std::string category_2lss_ttH_tH_4cat_onlyTHQ_v5 = "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5_";
     double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = -10;
     // "predictions_ttH", "predictions_ttW", "predictions_rest"
-    if (ttH_like || ttW_like) {
+    if (ttH_like || tH_like || ttW_like) {
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttW"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "ttH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "ttH";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttH"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttW"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_tH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "tH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_tH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "tH";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_tH"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttW"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "ttW"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttW"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "ttW";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttW"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttW"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "rest"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_rest"];}
-    } else {category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "no_cat"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "rest";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_rest"];
+        sigExtCat = false;
+      }
+
+      if (sigExtCat)
+      {
+        if  ( ( selLepton_lead_type == kElectron && selLepton_sublead_type == kElectron ) ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "_ee";
+        } else if (  selLepton_lead_type == kMuon     && selLepton_sublead_type == kMuon      ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "_mm";
+        } else if ( (selLepton_lead_type == kElectron && selLepton_sublead_type == kMuon    ) ||
+    		(selLepton_lead_type == kMuon     && selLepton_sublead_type == kElectron) ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "_em";
+        }
+      }
+      if (selBJets_medium.size() >= 2) category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "_bt";
+      else category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "_bl";
+
+    } else {
+      category_2lss_ttH_tH_4cat_onlyTHQ_v5 += "no_cat";
+      output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v5["predictions_ttH"];
+      sigExtCat = false;
+    }
 
     std::string category_2lss_ttH_tH_4cat_onlyTHQ_v6 = "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6_";
     double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = -10;
     // "predictions_ttH", "predictions_ttW", "predictions_rest"
-    if (ttH_like || ttW_like) {
+    if (ttH_like || tH_like || ttW_like) {
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttW"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "ttH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "ttH";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttH"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttW"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_tH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "tH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_tH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "tH";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_tH"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttW"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "ttW"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttW"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "ttW";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttW"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttW"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "rest"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_rest"];}
-    } else {category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "no_cat"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "rest";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_rest"];
+        sigExtCat = false;
+      }
+
+      if (sigExtCat)
+      {
+        if  ( ( selLepton_lead_type == kElectron && selLepton_sublead_type == kElectron ) ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "_ee";
+        } else if (  selLepton_lead_type == kMuon     && selLepton_sublead_type == kMuon      ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "_mm";
+        } else if ( (selLepton_lead_type == kElectron && selLepton_sublead_type == kMuon    ) ||
+    		(selLepton_lead_type == kMuon     && selLepton_sublead_type == kElectron) ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "_em";
+        }
+      }
+      if (selBJets_medium.size() >= 2) category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "_bt";
+      else category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "_bl";
+
+    } else {
+      category_2lss_ttH_tH_4cat_onlyTHQ_v6 += "no_cat";
+      output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v6["predictions_ttH"];
+      sigExtCat = false;
+    }
 
     std::string category_2lss_ttH_tH_4cat_onlyTHQ_v7 = "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7_";
     double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = -10;
@@ -2771,23 +2859,58 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttW"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "ttH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "ttH";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttH"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_tH"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttW"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_tH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "tH"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_tH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "tH";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_tH"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttW"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_rest"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "ttW"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttW"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "ttW";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttW"];
+        sigExtCat = true;
+      }
       if (
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_tH"] &&\
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_rest"] > mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttW"]
-      ) {category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "rest"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_rest"];}
-    } else {category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "no_cat"; output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttH"];}
+      ) {
+        category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "rest";
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_rest"];
+        sigExtCat = false;
+      }
+
+      if (sigExtCat)
+      {
+        if  ( ( selLepton_lead_type == kElectron && selLepton_sublead_type == kElectron ) ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "_ee";
+        } else if (  selLepton_lead_type == kMuon     && selLepton_sublead_type == kMuon      ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "_mm";
+        } else if ( (selLepton_lead_type == kElectron && selLepton_sublead_type == kMuon    ) ||
+    		(selLepton_lead_type == kMuon     && selLepton_sublead_type == kElectron) ) {
+          category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "_em";
+        }
+      }
+      if (selBJets_medium.size() >= 2) category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "_bt";
+      else category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "_bl";
+
+    } else {
+      category_2lss_ttH_tH_4cat_onlyTHQ_v7 += "no_cat";
+      output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v7["predictions_ttH"];
+      sigExtCat = false;
+    }
 
 //--- fill histograms with events passing final selection
     std::string category = "2lss_0tau_";
@@ -2833,33 +2956,6 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
     } else category += "_no_ttH";
     //} else assert(0);
 
-    /*
-    std::string category2lss_ttH_tH_4cat_onlyTHQ_v1 = "2lss_0tau_";
-    if      ( sel_HTTv2.size() > 0 ) category2lss_ttH_tH_4cat_onlyTHQ_v1 += "1pHTTv2";
-    else if  ( jet_ptrsAK8.size() > 0 ) category2lss_ttH_tH_4cat_onlyTHQ_v1 += "1pAK8";
-    else {
-    if        (  selLepton_lead_type == kElectron && selLepton_sublead_type == kElectron  ) {
-      category2lss_ttH_tH_4cat_onlyTHQ_v1 += "ee";
-      if      ( selLepton_lead->charge() < 0 ) category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_neg";
-      else if ( selLepton_lead->charge() > 0 ) category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_pos";
-    } else if (  selLepton_lead_type == kMuon     && selLepton_sublead_type == kMuon      ) {
-      category2lss_ttH_tH_4cat_onlyTHQ_v1 += "mm";
-      if ( selBJets_medium.size() >= 2 ) category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_bt";
-      else category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_bl";
-      if      ( selLepton_lead->charge() < 0  ) category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_neg";
-      else if ( selLepton_lead->charge() > 0  ) category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_pos";
-    } else if ( (selLepton_lead_type == kElectron && selLepton_sublead_type == kMuon    ) ||
-		(selLepton_lead_type == kMuon     && selLepton_sublead_type == kElectron) ) {
-      category2lss_ttH_tH_4cat_onlyTHQ_v1 += "em";
-      if ( selBJets_medium.size() >= 2 ) category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_bt";
-      else category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_bl";
-      if      ( selLepton_lead->charge() < 0 ) category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_neg";
-      else if ( selLepton_lead->charge() > 0 ) category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_pos";
-      }
-      category2lss_ttH_tH_4cat_onlyTHQ_v1 += "_0J";
-    }
-    */
-
     selHistManagerType* selHistManager = selHistManagers[idxSelLepton_genMatch];
     assert(selHistManager != 0);
 
@@ -2887,8 +2983,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
       output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
       mvaDiscr_2lss,
       output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-      output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-      output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+      output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
       output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
       output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
       mva_Updated,
@@ -2911,8 +3006,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
         mvaDiscr_2lss,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
         mva_Updated,
@@ -2935,8 +3029,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
         mvaDiscr_2lss,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
         mva_Updated,
@@ -2959,32 +3052,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
         mvaDiscr_2lss,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
-        mva_Updated,
-        mva_oldVar
-      );
-    }
-    EvtHistManager_2lss* selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v2 = selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v2_TF_[category_2lss_ttH_tH_4cat_onlyTHQ_v2];
-    if ( selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v2 ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v2->fillHistograms(
-        selElectrons.size(),
-        selMuons.size(),
-        selHadTaus.size(),
-        selJets.size(),
-        selBJets_loose.size(),
-        selBJets_medium.size(),
-        sel_HTTv2.size(),
-        evtWeight,
-        //
-        mvaOutput_2lss_ttV,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
-        mvaDiscr_2lss,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
         mva_Updated,
@@ -3008,8 +3076,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
         mvaDiscr_2lss,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
         mva_Updated,
@@ -3032,32 +3099,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
         mvaDiscr_2lss,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
-        mva_Updated,
-        mva_oldVar
-      );
-    }
-    EvtHistManager_2lss* selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v3 = selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v3_TF_[category_2lss_ttH_tH_4cat_onlyTHQ_v3];
-    if ( selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v3 ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-      selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v3->fillHistograms(
-        selElectrons.size(),
-        selMuons.size(),
-        selHadTaus.size(),
-        selJets.size(),
-        selBJets_loose.size(),
-        selBJets_medium.size(),
-        sel_HTTv2.size(),
-        evtWeight,
-        //
-        mvaOutput_2lss_ttV,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
-        mvaDiscr_2lss,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
         mva_Updated,
@@ -3080,8 +3122,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
         mvaDiscr_2lss,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+        output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
         mva_Updated,
@@ -3106,8 +3147,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
           output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
           mvaDiscr_2lss,
           output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-          output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-          output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+          output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
           output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
           output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
           mva_Updated,
@@ -3129,8 +3169,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
           output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
           mvaDiscr_2lss,
           output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-          output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-          output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+          output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
           output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
           output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
           mva_Updated,
@@ -3154,8 +3193,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
             output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
             mvaDiscr_2lss,
             output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-            output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-            output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+            output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
             output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
             output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
             mva_Updated,
@@ -3179,39 +3217,13 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
             output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
             mvaDiscr_2lss,
             output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-            output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-            output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+            output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
             output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
             output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
             mva_Updated,
             mva_oldVar
             );
           }
-
-          EvtHistManager_2lss* selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v2_and_decayModes = selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v2_TF_and_decayModes_[category_2lss_ttH_tH_4cat_onlyTHQ_v2+decayModeStr];
-          if ( selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v2_and_decayModes ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-              selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v2_and_decayModes->fillHistograms(
-              selElectrons.size(),
-              selMuons.size(),
-              selHadTaus.size(),
-              selJets.size(),
-              selBJets_loose.size(),
-              selBJets_medium.size(),
-              sel_HTTv2.size(),
-              evtWeight,
-              //
-              mvaOutput_2lss_ttV,
-              output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
-              mvaDiscr_2lss,
-              output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-              output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-              output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
-              output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
-              output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
-              mva_Updated,
-              mva_oldVar
-              );
-            }
 
           EvtHistManager_2lss* selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v6_and_decayModes = selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v6_TF_and_decayModes_[category_2lss_ttH_tH_4cat_onlyTHQ_v6+decayModeStr];
           if ( selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v6_and_decayModes ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
@@ -3229,8 +3241,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
               output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
               mvaDiscr_2lss,
               output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-              output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-              output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+              output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
               output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
               output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
               mva_Updated,
@@ -3254,39 +3265,13 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
                 output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
                 mvaDiscr_2lss,
                 output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-                output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-                output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+                output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
                 output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
                 output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
                 mva_Updated,
                 mva_oldVar
                 );
               }
-
-              EvtHistManager_2lss* selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v3_and_decayModes = selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v3_TF_and_decayModes_[category_2lss_ttH_tH_4cat_onlyTHQ_v3+decayModeStr];
-              if ( selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v3_and_decayModes ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
-                  selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v3_and_decayModes->fillHistograms(
-                  selElectrons.size(),
-                  selMuons.size(),
-                  selHadTaus.size(),
-                  selJets.size(),
-                  selBJets_loose.size(),
-                  selBJets_medium.size(),
-                  sel_HTTv2.size(),
-                  evtWeight,
-                  //
-                  mvaOutput_2lss_ttV,
-                  output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
-                  mvaDiscr_2lss,
-                  output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-                  output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-                  output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
-                  output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
-                  output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
-                  mva_Updated,
-                  mva_oldVar
-                  );
-                }
 
                 EvtHistManager_2lss* selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v5_and_decayModes = selHistManager->evt_in_categories_2lss_ttH_tH_4cat_onlyTHQ_v5_TF_and_decayModes_[category_2lss_ttH_tH_4cat_onlyTHQ_v5+decayModeStr];
                 if ( selHistManager_evt_category2lss_ttH_tH_4cat_onlyTHQ_v5_and_decayModes ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
@@ -3304,8 +3289,7 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
                     output_NN_2lss_ttH_tH_4cat_onlyTHQ_v5,
                     mvaDiscr_2lss,
                     output_NN_2lss_ttH_tH_4cat_onlyTHQ_v7,
-                    output_NN_2lss_ttH_tH_4cat_onlyTHQ_v3,
-                    output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1, output_NN_2lss_ttH_tH_4cat_onlyTHQ_v2,
+                    output_NN_2lss_ttH_tH_4cat_onlyTHQ_v1,
                     output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4,
                     output_NN_2lss_ttH_tH_4cat_onlyTHQ_v6,
                     mva_Updated,
@@ -3602,11 +3586,6 @@ model_2lss_ttH_tH_4cat_onlyTHQ_notEnrich_v7
             << "cut-flow table" << std::endl;
   cutFlowTable.print(std::cout);
   std::cout << std::endl;
-
-  std::cout << "tH_in_predictions_ttH = " << tH_in_predictions_ttH << "\n"
-  << "tH_in_predictions_ttZ = " << tH_in_predictions_ttZ << "\n"
-  << "tH_in_predictions_rest = " << tH_in_predictions_rest << "\n"
-  << "tH_in_predictions_tH = " << tH_in_predictions_tH << "\n\n";
 
   std::cout << "count_tH_like_ext = "<< count_tH_like_ext << "\n"
   "count_tH_like = "<< count_tH_like << "\n"

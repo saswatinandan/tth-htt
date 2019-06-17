@@ -73,6 +73,7 @@ enum class FloatVariableType
   Hj_tagger,                ///< MVA output of Hj-tagger
 
 //--- Additional event-level MVA output variables
+
   mvaOutput_plainKin_ttV,   ///< 2l+2tau (BDT1), 3l+1tau (BDT1)
   mvaOutput_plainKin_tt,    ///< 1l+2tau (BDT1), 2l+2tau (BDT2), 3l+1tau (BDT2)
 

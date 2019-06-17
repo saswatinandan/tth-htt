@@ -569,6 +569,7 @@ int main(int argc, char* argv[])
       "lep2_conept", "lep2_mT", "lep2_min_dr_jet", "lep2_pt", "lep2_eta", "lep2_phi", "lep2_mass",
       "lep3_conept", "lep3_mT", "lep3_min_dr_jet", "lep3_pt", "lep3_eta", "lep3_phi", "lep3_mass",
       "lep4_conept", "lep4_mT", "lep4_min_dr_jet", "lep4_pt", "lep4_eta", "lep4_phi", "lep4_mass",
+      "massL",
       //
       "tau1_min_dr_jet", "tau1_pt",  "tau1_eta", "tau1_phi", "tau1_mass",
       "tau2_min_dr_jet", "tau2_pt",  "tau2_eta", "tau2_phi", "tau2_mass",
@@ -657,7 +658,7 @@ int main(int argc, char* argv[])
                 << ") file (" << selectedEntries << " Entries selected)\n";
     }
     ++analyzedEntries;
-    //if ( analyzedEntries > 100000 ) break;
+    //if ( analyzedEntries > 1000 ) break;
     histogram_analyzedEntries->Fill(0.);
 
     if ( isDEBUG ) {
@@ -743,7 +744,10 @@ int main(int argc, char* argv[])
     if(isMC)
     {
       if(apply_genWeight)    evtWeight_inclusive *= boost::math::sign(eventInfo.genWeight);
-      if(isMC_tH)            evtWeight_inclusive *= eventInfo.genWeight_tH;
+      if(isMC_tH)            {
+        //std::cout<<evtWeight_inclusive << " " << eventInfo.genWeight_tH_kt_1p0_kv_1p0 << "\n";
+        evtWeight_inclusive *= eventInfo.genWeight_tH_kt_1p0_kv_1p0;
+      }
       if(apply_DYMCReweighting) evtWeight_inclusive *= dyReweighting->getWeight(genTauLeptons);
       if(eventWeightManager) evtWeight_inclusive *= eventWeightManager->getWeight();
       lheInfoReader->read();
@@ -1662,19 +1666,20 @@ int main(int argc, char* argv[])
       double Pzeta         = -1000;
       double PzetaVis      = -1000;
       double PzetaComb     = -1000;
-      // dr_taus =
-      // dr_leps
 
-      if ( pass_1l_1tau || pass_2lss_1tau || pass_2los_1tau || pass_1l_2tau || pass_3l_1tau || pass_2l_2tau || pass_1l_3tau) {
+      if ( pass_1l_1tau || pass_2lss_1tau || pass_2los_1tau || pass_1l_2tau || pass_3l_1tau || pass_2l_2tau || pass_1l_3tau)
+      {
         dr_lep1_tau = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
         mVis_lep1_tau = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
 
-        if ( pass_1l_1tau ) {
+        if ( pass_1l_1tau )
+        {
           Pzeta         = comp_pZeta(selLepton_lead->p4(), selHadTau_lead->p4(), met.p4().px(), met.p4().py());
           PzetaVis      = comp_pZetaVis(selLepton_lead->p4(), selHadTau_lead->p4());
           PzetaComb     = comp_pZetaComb(selLepton_lead->p4(), selHadTau_lead->p4(), met.p4().px(), met.p4().py());
 
-          if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 ) {
+          if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 )
+          {
             mVis_lep_tau_OS = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
             dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
           } else {dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());}
@@ -1683,66 +1688,89 @@ int main(int argc, char* argv[])
         if ( pass_2lss_1tau || pass_2los_1tau || pass_3l_1tau) mVis_lep2_tau = (selLepton_sublead->p4() + selHadTau_lead->p4()).mass();
         if (pass_1l_3tau) mVis_lep2_tau = (selLepton_lead->p4() + selHadTau_sublead->p4()).mass();
 
-        if (pass_2lss_1tau){
-          if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 ) {
-            mVis_lep_tau_OS = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
-            dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
-          } else dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
-        }
-
-        if (pass_2los_1tau) {
-          if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 ) {
+        if (pass_2lss_1tau)
+        {
+          if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 )
+          {
             mVis_lep_tau_OS = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
             dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
             dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_sublead->p4());
           } else {
+            mVis_lep_tau_OS = (selLepton_sublead->p4() + selHadTau_lead->p4()).mass();
+            dr_lep_tau_OS = deltaR(selHadTau_sublead->p4(), selLepton_lead->p4());
+            dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+          }
+        }
+
+        if (pass_2los_1tau)
+        {
+          if ( selLepton_lead->charge()*selHadTau_lead->charge() < 0 )
+          {
+            mVis_lep_tau_OS = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
+            dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
+            dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_sublead->p4());
+          } else
+          {
             mVis_lep_tau_OS = (selLepton_sublead->p4() + selHadTau_lead->p4()).mass();
             dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
             dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_sublead->p4());
           }
         }
 
-        if (pass_3l_1tau) {
-          if (selLepton_lead->charge()*selHadTau_lead->charge() < 0) {
+        if (pass_3l_1tau)
+        {
+          if (selLepton_lead->charge()*selHadTau_lead->charge() < 0)
+          {
             mVis_lep_tau_OS = (selLepton_lead->p4() + selHadTau_lead->p4()).mass();
             dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
-            if (selLepton_sublead->charge()*selHadTau_lead->charge() < 0) {
+            if (selLepton_sublead->charge()*selHadTau_lead->charge() < 0)
+            {
               mVis_lep_tau_OS_2 = (selLepton_sublead->p4() + selHadTau_lead->p4()).mass();
               dr_lep_tau_SS = deltaR(selHadTau_third->p4(), selLepton_lead->p4());
-            } else {
+            } else
+            {
               mVis_lep_tau_OS_2 = (selLepton_third->p4() + selHadTau_lead->p4()).mass();
               dr_lep_tau_SS = deltaR(selHadTau_sublead->p4(), selLepton_lead->p4());
             }
-
-          } else {
+          } else
+          {
             dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
-            if (selLepton_sublead->charge()*selHadTau_lead->charge() < 0) {
+            if (selLepton_sublead->charge()*selHadTau_lead->charge() < 0)
+            {
               mVis_lep_tau_OS = (selLepton_sublead->p4() + selHadTau_lead->p4()).mass();
               dr_lep_tau_OS = deltaR(selHadTau_sublead->p4(), selLepton_lead->p4());
-            } else if (selLepton_third->charge()*selHadTau_lead->charge() < 0) {
+            } else if (selLepton_third->charge()*selHadTau_lead->charge() < 0)
+            {
               mVis_lep_tau_OS = (selLepton_third->p4() + selHadTau_lead->p4()).mass();
               dr_lep_tau_OS = deltaR(selHadTau_third->p4(), selLepton_lead->p4());
             }
           }
         }
 
-        if (pass_1l_3tau) {
-          if (selHadTau_lead->charge()*selLepton_lead->charge() < 0) {
+        if (pass_1l_3tau)
+        {
+          if (selHadTau_lead->charge()*selLepton_lead->charge() < 0)
+          {
             mVis_lep_tau_OS = (selHadTau_lead->p4() + selLepton_lead->p4()).mass();
             dr_lep_tau_OS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
-            if (selHadTau_sublead->charge()*selLepton_lead->charge() < 0) {
+            if (selHadTau_sublead->charge()*selLepton_lead->charge() < 0)
+            {
               mVis_lep_tau_OS_2 = (selHadTau_sublead->p4() + selLepton_lead->p4()).mass();
               dr_lep_tau_SS = deltaR(selHadTau_third->p4(), selLepton_lead->p4());
-            } else {
+            } else
+            {
               mVis_lep_tau_OS_2 = (selHadTau_third->p4() + selLepton_lead->p4()).mass();
-              dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_sublead->p4());
+              dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
             }
-          } else {
+          } else
+          {
             dr_lep_tau_SS = deltaR(selHadTau_lead->p4(), selLepton_lead->p4());
-            if (selHadTau_sublead->charge()*selLepton_lead->charge() < 0) {
+            if (selHadTau_sublead->charge()*selLepton_lead->charge() < 0)
+            {
               mVis_lep_tau_OS = (selHadTau_sublead->p4() + selLepton_lead->p4()).mass();
               dr_lep_tau_OS = deltaR(selHadTau_sublead->p4(), selLepton_lead->p4());
-            } else if (selHadTau_third->charge()*selLepton_lead->charge() < 0) {
+            } else if (selHadTau_third->charge()*selLepton_lead->charge() < 0)
+            {
               mVis_lep_tau_OS = (selHadTau_third->p4() + selLepton_lead->p4()).mass();
               dr_lep_tau_OS = deltaR(selHadTau_third->p4(), selLepton_lead->p4());
             }

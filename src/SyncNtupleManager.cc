@@ -569,7 +569,8 @@ SyncNtupleManager::read(const std::vector<std::vector<hltPath *>> & hltPaths)
 void
 SyncNtupleManager::read(bool is_genMatched,
                         int n_tags,
-                        int n_tags_loose)
+                        int n_tags_loose
+                      )
 {
   isGenMatched = is_genMatched;
   ntags        = n_tags;

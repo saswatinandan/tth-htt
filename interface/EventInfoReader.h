@@ -41,6 +41,58 @@ public:
   const std::string branchName_genWeight;
   const std::string branchName_puWeight;
   const std::string branchName_lheWeightSM;
+
+  const std::string branchName_lheWeight_kt_m3p0_kv_1p0;
+  const std::string branchName_lheWeight_kt_m2p0_kv_1p0;
+  const std::string branchName_lheWeight_kt_m1p5_kv_1p0;
+  const std::string branchName_lheWeight_kt_m1p25_kv_1p0;
+  const std::string branchName_lheWeight_kt_m0p75_kv_1p0;
+  const std::string branchName_lheWeight_kt_m0p5_kv_1p0;
+  const std::string branchName_lheWeight_kt_m0p25_kv_1p0;
+  const std::string branchName_lheWeight_kt_0p0_kv_1p0;
+  const std::string branchName_lheWeight_kt_0p25_kv_1p0;
+  const std::string branchName_lheWeight_kt_0p5_kv_1p0;
+  const std::string branchName_lheWeight_kt_0p75_kv_1p0;
+  const std::string branchName_lheWeight_kt_1p0_kv_1p0;
+  const std::string branchName_lheWeight_kt_1p25_kv_1p0;
+  const std::string branchName_lheWeight_kt_1p5_kv_1p0;
+  const std::string branchName_lheWeight_kt_2p0_kv_1p0;
+  const std::string branchName_lheWeight_kt_3p0_kv_1p0;
+  //
+  const std::string branchName_lheWeight_kt_m3p0_kv_1p5;
+  const std::string branchName_lheWeight_kt_m2p0_kv_1p5;
+  const std::string branchName_lheWeight_kt_m1p5_kv_1p5;
+  const std::string branchName_lheWeight_kt_m1p25_kv_1p5;
+  const std::string branchName_lheWeight_kt_m0p75_kv_1p5;
+  const std::string branchName_lheWeight_kt_m0p5_kv_1p5;
+  const std::string branchName_lheWeight_kt_m0p25_kv_1p5;
+  const std::string branchName_lheWeight_kt_0p0_kv_1p5;
+  const std::string branchName_lheWeight_kt_0p25_kv_1p5;
+  const std::string branchName_lheWeight_kt_0p5_kv_1p5;
+  const std::string branchName_lheWeight_kt_0p75_kv_1p5;
+  const std::string branchName_lheWeight_kt_1p0_kv_1p5;
+  const std::string branchName_lheWeight_kt_1p25_kv_1p5;
+  const std::string branchName_lheWeight_kt_1p5_kv_1p5;
+  const std::string branchName_lheWeight_kt_2p0_kv_1p5;
+  const std::string branchName_lheWeight_kt_3p0_kv_1p5;
+  //
+  const std::string branchName_lheWeight_kt_m3p0_kv_0p5;
+  const std::string branchName_lheWeight_kt_m2p0_kv_0p5;
+  const std::string branchName_lheWeight_kt_m1p5_kv_0p5;
+  const std::string branchName_lheWeight_kt_m1p25_kv_0p5;
+  const std::string branchName_lheWeight_kt_m0p75_kv_0p5;
+  const std::string branchName_lheWeight_kt_m0p5_kv_0p5;
+  const std::string branchName_lheWeight_kt_m0p25_kv_0p5;
+  const std::string branchName_lheWeight_kt_0p0_kv_0p5;
+  const std::string branchName_lheWeight_kt_0p25_kv_0p5;
+  const std::string branchName_lheWeight_kt_0p5_kv_0p5;
+  const std::string branchName_lheWeight_kt_0p75_kv_0p5;
+  const std::string branchName_lheWeight_kt_1p0_kv_0p5;
+  const std::string branchName_lheWeight_kt_1p25_kv_0p5;
+  const std::string branchName_lheWeight_kt_1p5_kv_0p5;
+  const std::string branchName_lheWeight_kt_2p0_kv_0p5;
+  const std::string branchName_lheWeight_kt_3p0_kv_0p5;
+
 };
 
 #endif // EventInfoReader_H

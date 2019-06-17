@@ -32,11 +32,10 @@ class EvtHistManager_3l
                 int numBJets_medium,
                 double massSameFlavor_OS,
                 double mvaOutput_3l_ttV,
-                double output_NN_3l_ttH_tH_3cat_v5,
                 double mvaDiscr_3l,
-                double output_NN_3l_ttH_tH_4cat_v3, double output_NN_3l_ttH_tH_4cat_v4,
-                double output_NN_3l_ttH_tH_4cat_v2, double output_NN_3l_ttH_tH_4cat_v5,
-                double output_NN_3l_ttH_tH_4cat_v7, double output_NN_3l_ttH_tH_3cat_v6,
+                double output_NN_3l_ttH_tH_4cat_v4,
+                double output_NN_3l_ttH_tH_4cat_v5,
+                double output_NN_3l_ttH_tH_3cat_v6,
                 double output_NN_3l_ttH_tH_3cat_v7, double output_NN_3l_ttH_tH_3cat_v8,
                 double mva_Updated, double mva_oldVar,
                 double evtWeight);
@@ -62,12 +61,8 @@ class EvtHistManager_3l
   TH1 * histogram_mvaOutput_3l_ttV_;
   TH1 * histogram_mvaDiscr_3l_;
 
-  TH1 * histogram_output_NN_3l_ttH_tH_4cat_v3_;
   TH1 * histogram_output_NN_3l_ttH_tH_4cat_v4_;
-  TH1 * histogram_output_NN_3l_ttH_tH_4cat_v2_;
   TH1 * histogram_output_NN_3l_ttH_tH_4cat_v5_;
-  TH1 * histogram_output_NN_3l_ttH_tH_4cat_v7_;
-  TH1 * histogram_output_NN_3l_ttH_tH_3cat_v5_;
   TH1 * histogram_output_NN_3l_ttH_tH_3cat_v6_;
   TH1 * histogram_output_NN_3l_ttH_tH_3cat_v7_;
   TH1 * histogram_output_NN_3l_ttH_tH_3cat_v8_;

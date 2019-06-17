@@ -1,7 +1,7 @@
 #include "tthAnalysis/HiggsToTauTau/interface/EvtHistManager_2l_2tau.h"
 
 #include "tthAnalysis/HiggsToTauTau/interface/histogramAuxFunctions.h" // fillWithOverFlow(), fillWithOverFlow2d()
-
+#include <iostream> // std::cerr, std::fixed
 EvtHistManager_2l_2tau::EvtHistManager_2l_2tau(const edm::ParameterSet& cfg)
   : HistManagerBase(cfg)
 {}
@@ -53,6 +53,7 @@ EvtHistManager_2l_2tau::fillHistograms(int numElectrons,
                                        double mvaOutput_plainKin_1B_VT)
 {
   const double evtWeightErr = 0.;
+  //std::cout<<" histogram_numElectrons_ " << histogram_numElectrons_->GetName() << "\n";
 
   fillWithOverFlow(histogram_numElectrons_,    numElectrons,    evtWeight, evtWeightErr);
   fillWithOverFlow(histogram_numMuons_,        numMuons,        evtWeight, evtWeightErr);

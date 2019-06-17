@@ -311,18 +311,21 @@ if __name__ == '__main__':
       "numJets"                                    : {},
       "mvaOutput_2lss_ttV"                         : {},
       "mvaOutput_2lss_tt"                          : {},
-      "mvaOutput_2lss_1tau_plainKin_tt"            : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT2; quantile in fakes
-      "mvaOutput_2lss_1tau_plainKin_ttV"           : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT1; quantile in fakes
-      "mvaOutput_2lss_1tau_plainKin_1B_M"          : {},
-      "mvaOutput_2lss_1tau_plainKin_SUM_M"         : { 'quantile_rebin' : 11, 'quantile_in_fakes' : True }, # BDT3; quantile in fakes
-      "mvaOutput_2lss_1tau_plainKin_SUM_M_noRebin" : {},
-      "mvaOutput_2lss_1tau_HTT_SUM_M"              : { 'quantile_rebin' : 11, 'quantile_in_fakes' : True }, # BDT4; quantile in fakes
+      #"mvaOutput_2lss_1tau_plainKin_tt"            : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT2; quantile in fakes
+      #"mvaOutput_2lss_1tau_plainKin_ttV"           : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT1; quantile in fakes
+      #"mvaOutput_2lss_1tau_plainKin_1B_M"          : {},
+      #"mvaOutput_2lss_1tau_HTT_SUM_M"              : { 'quantile_rebin' : 11, 'quantile_in_fakes' : True }, # BDT4; quantile in fakes
       "mvaOutput_2lss_1tau_HTT_SUM_M_noRebin"      : {},
-      "mvaOutput_2lss_1tau_HTTMEM_SUM_M"           : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT5; quantile in fakes
-      "mvaOutput_2lss_1tau_HTTMEM_SUM_M_noRebin"   : {},
-      "mTauTauVis1"                                : {},
-      "mTauTauVis2"                                : {},
-      "mTauTauVis"                                 : {},
+      #"mvaOutput_2lss_1tau_HTTMEM_SUM_M"           : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT5; quantile in fakes
+      #"mvaOutput_2lss_1tau_HTTMEM_SUM_M_noRebin"   : {},
+      "output_NN_2lss_1tau_ttH_tH_3cat_v1"   : {},
+      "output_NN_2lss_1tau_ttH_tH_3cat_v2"   : {},
+      "output_NN_2lss_1tau_ttH_tH_3cat_v3"   : {},
+      "output_NN_2lss_1tau_ttH_tH_3cat_v4"   : {},
+      "output_NN_2lss_1tau_ttH_tH_3cat_v5"   : {},
+      #"mTauTauVis1"                                : {},
+      #"mTauTauVis2"                                : {},
+      #"mTauTauVis"                                 : {},
       "memOutput_LR"                               : {},
       "mvaOutput_final"                            : {},
     },

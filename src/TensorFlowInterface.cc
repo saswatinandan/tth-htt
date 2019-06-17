@@ -92,7 +92,7 @@ TensorFlowInterface::operator()(const std::map<std::string, double> & mvaInputs)
       inputs.matrix<float>()(0, i) = (
         float(mvaInputs.at(mvaInputVariables_[i])) - mvaInputVariables_mean_[i]
       )/mvaInputVariables_var_[i];
-      if ( 1 > 0 ) std::cout << mvaInputVariables_[i] // Xanda
+      if ( isDEBUG ) std::cout << mvaInputVariables_[i]
       << " = " << mvaInputs.at(mvaInputVariables_[i])
       << " = " << mvaInputVariables_mean_[i]
       << " = " << mvaInputVariables_var_[i]

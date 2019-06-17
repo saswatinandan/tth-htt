@@ -18,7 +18,7 @@ def get_lepton_and_hadTau_selection_and_frWeight(lepton_and_hadTau_selection, le
 def getHistogramDirList(lepton_selection, hadTau_selection, lepton_and_hadTau_frWeight, lepton_charge_selection, hadTau_charge_selection, chargeSumSelection, subcategories):
   histogramDirListL = []
   for cc, cat in enumerate(subcategories) :
-      histogramDir += "%s_sum%s_%s" % (cat, chargeSumSelection, lepton_selection)
+      histogramDir = "%s_sum%s_%s" % (cat, chargeSumSelection, lepton_selection)
       if lepton_charge_selection != "disabled":
         histogramDir += "_lep%s" % lepton_charge_selection
       if hadTau_charge_selection != "disabled":
@@ -84,7 +84,7 @@ class analyzeConfig_2l_2tau(analyzeConfig):
       outputDir                 = outputDir,
       executable_analyze        = executable_analyze,
       channel                   = "2l_2tau",
-      subcategories             = [],
+      subcategories             = ["2l_2tau"],
       samples                   = samples,
       lep_mva_wp                = lep_mva_wp,
       central_or_shifts         = central_or_shifts,
@@ -231,7 +231,8 @@ class analyzeConfig_2l_2tau(analyzeConfig):
 
     jobOptions['histogramDir'] = getHistogramDirList(
       lepton_and_hadTau_selection, jobOptions['hadTauSelection'], lepton_and_hadTau_frWeight,
-      jobOptions['leptonChargeSelection'], jobOptions['hadTauChargeSelection'], jobOptions['chargeSumSelection']
+      jobOptions['leptonChargeSelection'], jobOptions['hadTauChargeSelection'], jobOptions['chargeSumSelection'],
+      self.subcategories
     )[0]
     if 'mcClosure' in lepton_and_hadTau_selection:
       self.mcClosure_dir['%s_%s_%s' % (lepton_and_hadTau_selection, jobOptions['chargeSumSelection'], jobOptions['hadTauChargeSelection'])] = jobOptions['histogramDir']
@@ -663,7 +664,7 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
                           'outputFile' : outputFile,
                           'logFile' : os.path.join(self.dirs[DKEY_LOGS], os.path.basename(cfgFile_modified).replace("_cfg.py", ".log")),
                           'categories' : getHistogramDirList(lepton_selection, hadTau_selection, lepton_and_hadTau_frWeight,
-                            lepton_charge_selection, hadTau_charge_selection, chargeSumSelection) ,
+                            lepton_charge_selection, hadTau_charge_selection, chargeSumSelection, self.subcategories)[0] ,
                           'processes_input' : processes_input,
                           'process_output' : process_output
                         }
@@ -711,7 +712,7 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
                 'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgrounds_%s_fakes_mc_%s_%s_%s_%s.log" % \
                   (self.channel, lepton_charge_selection, hadTau_charge_selection, lepton_and_hadTau_selection_and_frWeight, chargeSumSelection)),
                 'categories' : getHistogramDirList(lepton_selection, hadTau_selection, lepton_and_hadTau_frWeight,
-                  lepton_charge_selection, hadTau_charge_selection, chargeSumSelection),
+                  lepton_charge_selection, hadTau_charge_selection, chargeSumSelection, self.subcategories)[0],
                 'processes_input' : processes_input,
                 'process_output' : "fakes_mc"
               }
@@ -736,7 +737,7 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
                 'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgrounds_%s_conversions_%s_%s_%s_%s.log" % \
                   (self.channel, lepton_charge_selection, hadTau_charge_selection, lepton_and_hadTau_selection_and_frWeight, chargeSumSelection)),
                 'categories' : [ getHistogramDirList(lepton_selection, hadTau_selection, lepton_and_hadTau_frWeight,
-                  lepton_charge_selection, hadTau_charge_selection, chargeSumSelection) ],
+                  lepton_charge_selection, hadTau_charge_selection, chargeSumSelection, self.subcategories) ],
                 'processes_input' : processes_input,
                 'process_output' : "conversions"
               }
@@ -807,8 +808,8 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
               (self.channel, lepton_charge_selection, hadTau_charge_selection, chargeSumSelection)),
             'logFile' : os.path.join(self.dirs[DKEY_LOGS], "addBackgroundLeptonFakes_%s_%s_%s_%s.log" % \
               (self.channel, lepton_charge_selection, hadTau_charge_selection, chargeSumSelection)),
-            'category_signal' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, chargeSumSelection),
-            'category_sideband' : getHistogramDirList(category_sideband_1, category_sideband_2, "enabled", lepton_charge_selection, hadTau_charge_selection, chargeSumSelection)
+            'category_signal' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, chargeSumSelection, self.subcategories)[0],
+            'category_sideband' : getHistogramDirList(category_sideband_1, category_sideband_2, "enabled", lepton_charge_selection, hadTau_charge_selection, chargeSumSelection, self.subcategories)[0]
           }
           self.createCfg_addFakes(self.jobOptions_addFakes[key_addFakes_job])
           key_hadd_stage2 = getKey(lepton_charge_selection, hadTau_charge_selection, get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), chargeSumSelection)
@@ -848,7 +849,7 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
             'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2],
             'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "prepareDatacards_%s%s_%s_cfg.py" % (self.channel, lepton_and_hadTau_charge_selection, histogramToFit)),
             'datacardFile' : os.path.join(self.dirs[DKEY_DCRD], "prepareDatacards_%s%s_%s.root" % (self.channel, lepton_and_hadTau_charge_selection, histogramToFit)),
-            'histogramDir' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, "OS"),
+            'histogramDir' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, "OS", self.subcategories)[0],
             'histogramToFit' : histogramToFit,
             'category' : self.subcategories,
             'makeSubDir' : makeSubDir,
@@ -863,8 +864,10 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
           'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2],
           'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "prepareDatacards_%s%s_sumSS_%s_cfg.py" % (self.channel, lepton_and_hadTau_charge_selection, histogramToFit)),
           'datacardFile' : os.path.join(self.dirs[DKEY_DCRD], "prepareDatacards_%s%s_sumSS_%s.root" % (self.channel, lepton_and_hadTau_charge_selection, histogramToFit)),
-          'histogramDir' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, "SS"),
+          'histogramDir' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, "SS", self.subcategories)[0],
           'histogramToFit' : histogramToFit,
+          'category' : self.subcategories,
+          'makeSubDir' : makeSubDir,
           'label' : 'SS'
         }
         self.createCfg_prep_dcard(self.jobOptions_prep_dcard[key_prep_dcard_job])
@@ -890,7 +893,7 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
           'histogramToFit' : histogramToFit,
           'plots_outputFileName' : os.path.join(self.dirs[DKEY_PLOT], "addSystFakeRates.png")
         }
-        histogramDir_nominal = getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, chargeSumSelection)
+        histogramDir_nominal = getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, chargeSumSelection, self.subcategories)[0]
         for lepton_and_hadTau_type in [ 'e', 'm', 't' ]:
           lepton_and_hadTau_mcClosure = "Fakeable_mcClosure_%s" % lepton_and_hadTau_type
           if lepton_and_hadTau_mcClosure not in self.lepton_and_hadTau_selections:
@@ -923,7 +926,7 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
           'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2],
           'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s%s_cfg.py" % (self.channel, lepton_and_hadTau_charge_selection)),
           'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s%s.png" % (self.channel, lepton_and_hadTau_charge_selection)),
-          'histogramDir' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, "OS"),
+          'histogramDir' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, "OS", self.subcategories)[0],
           'label' : "2l+2#tau_{h}",
           'make_plots_backgrounds' : self.make_plots_backgrounds
         }
@@ -936,7 +939,7 @@ lepton_and_hadTau_selection_and_frWeight, chargeSumSelection))
             'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2],
             'cfgFile_modified' : os.path.join(self.dirs[DKEY_CFGS], "makePlots_%s%s_sumSS_cfg.py" % (self.channel, lepton_and_hadTau_charge_selection)),
             'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_%s%s_sumSS.png" % (self.channel, lepton_and_hadTau_charge_selection)),
-            'histogramDir' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, "SS"),
+            'histogramDir' : getHistogramDirList("Tight", "Tight", "disabled", lepton_charge_selection, hadTau_charge_selection, "SS", self.subcategories)[0],
             'label' : "2l+2#tau_{h} SS",
             'make_plots_backgrounds' : self.make_plots_backgrounds
           }

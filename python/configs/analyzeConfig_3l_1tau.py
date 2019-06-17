@@ -79,6 +79,7 @@ class analyzeConfig_3l_1tau(analyzeConfig):
       outputDir                 = outputDir,
       executable_analyze        = executable_analyze,
       channel                   = "3l_1tau",
+      subcategories             = ["3l_1tau"],
       samples                   = samples,
       lep_mva_wp                = lep_mva_wp,
       central_or_shifts         = central_or_shifts,
@@ -178,15 +179,27 @@ class analyzeConfig_3l_1tau(analyzeConfig):
     self.executable_addBackgrounds = executable_addBackgrounds
     self.executable_addFakes = executable_addBackgroundJetToTauFakes
 
-    self.nonfake_backgrounds = [ "TT", "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW", "VH" ]
+    self.nonfake_backgrounds = [ "TT", "TTW", "TTZ", "TTWW", "EWK", "Rares", "VH" ]
+    hdecays = ["hww", "hzz", "htt"]
+    thprocs = ["tHW", "tHq"]
+    thcouplings = [
+    "kt_m3p0_kv_1p0" ,  "kt_m2p0_kv_1p0" , "kt_m1p5_kv_1p0" , "kt_m1p25_kv_1p0" , "kt_m0p75_kv_1p0" , "kt_m0p5_kv_1p0" , "kt_m0p25_kv_1p0" , "kt_0p0_kv_1p0" , "kt_0p25_kv_1p0" , "kt_0p5_kv_1p0" , "kt_0p75_kv_1p0" , "kt_1p0_kv_1p0" , "kt_1p25_kv_1p0" , "kt_1p5_kv_1p0" , "kt_2p0_kv_1p0" , "kt_3p0_kv_1p0",
+    #"kt_m3p0_kv_1p5" ,  "kt_m2p0_kv_1p5" , "kt_m1p5_kv_1p5" , "kt_m1p25_kv_1p5" , "kt_m0p75_kv_1p5" , "kt_m0p5_kv_1p5" , "kt_m0p25_kv_1p5" , "kt_0p0_kv_1p5" , "kt_0p25_kv_1p5" , "kt_0p5_kv_1p5" , "kt_0p75_kv_1p5" , "kt_1p0_kv_1p5" , "kt_1p25_kv_1p5" , "kt_1p5_kv_1p5" , "kt_2p0_kv_1p5" , "kt_3p0_kv_1p5" ,
+    #"kt_m3p0_kv_0p5" , "kt_m2p0_kv_0p5" , "kt_m1p5_kv_0p5" ,  "kt_m1p25_kv_0p5" , "kt_m0p75_kv_0p5" , "kt_m0p5_kv_0p5" , "kt_m0p25_kv_0p5" , "kt_0p0_kv_0p5" , "kt_0p25_kv_0p5" , "kt_0p5_kv_0p5" , "kt_0p75_kv_0p5" , "kt_1p0_kv_0p5" , "kt_1p25_kv_0p5" , "kt_1p5_kv_0p5" , "kt_2p0_kv_0p5" ,  "kt_3p0_kv_0p5"
+    ]
+    for thproc in  thprocs :
+      for hdecay in hdecays :
+        for thcoupling in thcouplings :
+            self.nonfake_backgrounds = self.nonfake_backgrounds + [ thproc+"_"+hdecay+"_"+thcoupling ]
+    print self.nonfake_backgrounds
 
     self.cfgFile_analyze = os.path.join(self.template_dir, cfgFile_analyze)
     self.prep_dcard_processesToCopy = [ "data_obs" ] + self.nonfake_backgrounds + [ "conversions", "fakes_data", "fakes_mc" ]
     self.histogramDir_prep_dcard = "3l_1tau_OS_lepTight_tauTight"
     self.histogramDir_prep_dcard_SS = "3l_1tau_SS_lepTight_tauTight"
-    self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "conversions", "fakes_data" ]
-    self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_3l_1tau_cfg.py")
-    self.cfgFile_make_plots_mcClosure = os.path.join(self.template_dir, "makePlots_mcClosure_3l_1tau_cfg.py") #TODO
+    #self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "conversions", "fakes_data" ]
+    #self.cfgFile_make_plots = os.path.join(self.template_dir, "makePlots_3l_1tau_cfg.py")
+    #self.cfgFile_make_plots_mcClosure = os.path.join(self.template_dir, "makePlots_mcClosure_3l_1tau_cfg.py") #TODO
 
     self.select_rle_output = select_rle_output
     self.select_root_output = select_root_output
@@ -512,6 +525,8 @@ class analyzeConfig_3l_1tau(analyzeConfig):
                       processes_input.extend([ "%s%s" % ("ttH_hzz", genMatch) for genMatch in lepton_and_hadTau_genMatches ])
                       processes_input.extend([ "%s%s" % ("ttH_hzg", genMatch) for genMatch in lepton_and_hadTau_genMatches ])
                       processes_input.extend([ "%s%s" % ("ttH_hmm", genMatch) for genMatch in lepton_and_hadTau_genMatches ])
+                    elif "tHq" in sample_category or "tHq" in sample_category :
+                      processes_input = [ "%s_%s" % (sample_category, genMatch) for genMatch in self.lepton_and_hadTau_genMatches_nonfakes ]
                     else:
                       processes_input = [ "%s%s" % (sample_category, genMatch) for genMatch in self.lepton_and_hadTau_genMatches_nonfakes ]
                     process_output = sample_category
@@ -533,6 +548,8 @@ class analyzeConfig_3l_1tau(analyzeConfig):
                       processes_input.extend([ "%s%s" % ("ttH_hzz", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_conversions ])
                       processes_input.extend([ "%s%s" % ("ttH_hzg", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_conversions ])
                       processes_input.extend([ "%s%s" % ("ttH_hmm", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_conversions ])
+                    elif "tHq" in sample_category or "tHq" in sample_category :
+                      processes_input = [ "%s_%s" % (sample_category, genMatch) for genMatch in self.lepton_and_hadTau_genMatches_conversions ]
                     else:
                       processes_input = [ "%s%s" % (sample_category, genMatch) for genMatch in self.lepton_and_hadTau_genMatches_conversions ]
                     process_output = "%s_conversion" % sample_category
@@ -554,6 +571,8 @@ class analyzeConfig_3l_1tau(analyzeConfig):
                       processes_input.extend([ "%s%s" % ("ttH_hzz", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_fakes ])
                       processes_input.extend([ "%s%s" % ("ttH_hzg", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_fakes ])
                       processes_input.extend([ "%s%s" % ("ttH_hmm", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_fakes ])
+                    elif "tHq" in sample_category or "tHq" in sample_category :
+                      processes_input = [ "%s%s" % (sample_category, genMatch) for genMatch in self.lepton_and_hadTau_genMatches_fakes ]
                     else:
                       processes_input = [ "%s%s" % (sample_category, genMatch) for genMatch in self.lepton_and_hadTau_genMatches_fakes ]
                     process_output = "%s_fake" % sample_category
@@ -575,6 +594,8 @@ class analyzeConfig_3l_1tau(analyzeConfig):
                       processes_input.extend([ "%s%s" % ("ttH_hzz", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_gentau ])
                       processes_input.extend([ "%s%s" % ("ttH_hzg", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_gentau ])
                       processes_input.extend([ "%s%s" % ("ttH_hmm", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_gentau ])
+                    elif "tHq" in sample_category or "tHq" in sample_category :
+                      processes_input = [ "%s_%s" % (sample_category, genMatch) for genMatch in self.lepton_and_hadTau_genMatches_gentau ]
                     else:
                       processes_input = [ "%s%s" % (sample_category, genMatch) for genMatch in self.lepton_and_hadTau_genMatches_gentau ]
                     process_output = "%s_gentau" % sample_category
@@ -596,6 +617,8 @@ class analyzeConfig_3l_1tau(analyzeConfig):
                       processes_input.extend([ "%s%s" % ("ttH_hzz", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_faketau ])
                       processes_input.extend([ "%s%s" % ("ttH_hzg", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_faketau ])
                       processes_input.extend([ "%s%s" % ("ttH_hmm", genMatch) for genMatch in self.lepton_and_hadTau_genMatches_faketau ])
+                    elif "tHq" in sample_category or "tHq" in sample_category :
+                       processes_input = [ "%s_%s" % (sample_category, genMatch) for genMatch in self.lepton_and_hadTau_genMatches_faketau ]
                     else:
                       processes_input = [ "%s%s" % (sample_category, genMatch) for genMatch in self.lepton_and_hadTau_genMatches_faketau ]
                     process_output = "%s_faketau" % sample_category
@@ -768,6 +791,9 @@ class analyzeConfig_3l_1tau(analyzeConfig):
         processesToCopy.append("%s_gentau" % process)
         processesToCopy.append("%s_faketau" % process)
       self.prep_dcard_signals = processesToCopy
+
+    if len(self.subcategories) > 1 : makeSubDir = True
+    else : makeSubDir = False
     for histogramToFit in self.histograms_to_fit:
       key_prep_dcard_job = getKey(histogramToFit, "OS")
       key_hadd_stage2 = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS")
@@ -777,6 +803,8 @@ class analyzeConfig_3l_1tau(analyzeConfig):
         'datacardFile' : os.path.join(self.dirs[DKEY_DCRD], "prepareDatacards_%s_%s.root" % (self.channel, histogramToFit)),
         'histogramDir' : self.histogramDir_prep_dcard,
         'histogramToFit' : histogramToFit,
+        'category' : self.subcategories,
+        'makeSubDir' : makeSubDir,
         'label' : None
       }
       self.createCfg_prep_dcard(self.jobOptions_prep_dcard[key_prep_dcard_job])
@@ -790,6 +818,8 @@ class analyzeConfig_3l_1tau(analyzeConfig):
           'datacardFile' : os.path.join(self.dirs[DKEY_DCRD], "prepareDatacards_%s_SS_%s.root" % (self.channel, histogramToFit)),
           'histogramDir' : self.histogramDir_prep_dcard_SS,
           'histogramToFit' : histogramToFit,
+          'category' : self.subcategories,
+          'makeSubDir' : makeSubDir,
           'label' : 'SS'
         }
         self.createCfg_prep_dcard(self.jobOptions_prep_dcard[key_prep_dcard_job])
@@ -839,6 +869,7 @@ class analyzeConfig_3l_1tau(analyzeConfig):
     logging.info("Creating configuration files to run 'makePlots'")
     key_makePlots_job = getKey("OS")
     key_hadd_stage2 = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS")
+    """
     self.jobOptions_make_plots[key_makePlots_job] = {
       'executable' : self.executable_make_plots,
       'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2],
@@ -872,6 +903,7 @@ class analyzeConfig_3l_1tau(analyzeConfig):
         'outputFile' : os.path.join(self.dirs[DKEY_PLOT], "makePlots_mcClosure_%s.png" % self.channel)
       }
       self.createCfg_makePlots_mcClosure(self.jobOptions_make_plots[key_makePlots_job])
+    """
 
     if self.is_sbatch:
       logging.info("Creating script for submitting '%s' jobs to batch system" % self.executable_analyze)
@@ -894,7 +926,7 @@ class analyzeConfig_3l_1tau(analyzeConfig):
     self.addToMakefile_hadd_stage2(lines_makefile)
     self.addToMakefile_prep_dcard(lines_makefile)
     self.addToMakefile_add_syst_fakerate(lines_makefile)
-    self.addToMakefile_make_plots(lines_makefile)
+    #self.addToMakefile_make_plots(lines_makefile)
     self.createMakefile(lines_makefile)
 
     logging.info("Done")

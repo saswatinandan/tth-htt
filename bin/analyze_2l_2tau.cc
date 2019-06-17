@@ -498,7 +498,7 @@ int main(int argc, char* argv[])
   };
   TMVAInterface mva_plainKin_tt(mvaFileName_plainKin_tt, mvaInputVariables_plainKin_ttSort);
   mva_plainKin_tt.enableBDTTransform();
-  
+
   std::string mvaFileName_plainKin_SUM_VT ="tthAnalysis/HiggsToTauTau/data/evtLevel_2018March/2l_2tau_XGB_plainKin_evtLevelSUM_TTH_VT_13Var.xml";
   std::vector<std::string> mvaInputVariables_plainKin_SUMSort = {
     "mTauTauVis", "cosThetaS_hadTau", "tau1_pt", "tau2_pt",
@@ -561,15 +561,28 @@ int main(int argc, char* argv[])
   };
   typedef std::map<int, selHistManagerType*> int_to_selHistManagerMap;
   std::map<int, int_to_selHistManagerMap> selHistManagers;
+  std::vector<std::string> param;
+  if (isMC_tH)
+  {
+    param = {
+      "_teste1_", "_teste2_"
+      //"_kt_m3p0_kv_1p0_" ,  "_kt_m2p0_kv_1p0_" , "_kt_m1p5_kv_1p0_" , "_kt_m1p25_kv_1p0_" , "_kt_m0p75_kv_1p0_" , "_kt_m0p5_kv_1p0_" , "_kt_m0p25_kv_1p0_" , "_kt_0p0_kv_1p0_" , "_kt_0p25_kv_1p0_" , "_kt_0p5_kv_1p0_" , "_kt_0p75_kv_1p0_" , "_kt_1p0_kv_1p0_" , "_kt_1p25_kv_1p0_" , "_kt_1p5_kv_1p0_" , "_kt_2p0_kv_1p0_" , "_kt_3p0_kv_1p0_"
+      //"_kt_m3p0_kv_1p5_" ,  "_kt_m2p0_kv_1p5_" , "_kt_m1p5_kv_1p5_" , "_kt_m1p25_kv_1p5_" , "_kt_m0p75_kv_1p5_" , "_kt_m0p5_kv_1p5_" , "_kt_m0p25_kv_1p5_" , "_kt_0p0_kv_1p5_" , "_kt_0p25_kv_1p5_" , "_kt_0p5_kv_1p5_" , "_kt_0p75_kv_1p5_" , "_kt_1p0_kv_1p5_" , "_kt_1p25_kv_1p5_" , "_kt_1p5_kv_1p5_" , "_kt_2p0_kv_1p5_" , "_kt_3p0_kv_1p5_" ,
+      //"_kt_m3p0_kv_0p5_" , "_kt_m2p0_kv_0p5_" , "_kt_m1p5_kv_0p5_" ,  "_kt_m1p25_kv_0p5_" , "_kt_m0p75_kv_0p5_" , "_kt_m0p5_kv_0p5_" , "_kt_m0p25_kv_0p5_" , "_kt_0p0_kv_0p5_" , "_kt_0p25_kv_0p5_" , "_kt_0p5_kv_0p5_" , "_kt_0p75_kv_0p5_" , "_kt_1p0_kv_0p5_" , "_kt_1p25_kv_0p5_" , "_kt_1p5_kv_0p5_" , "_kt_2p0_kv_0p5_" ,  "_kt_3p0_kv_0p5_"
+    };
+  } else param = {""};
+  for ( std::string parametersTH : param ) {
   for ( std::vector<leptonGenMatchEntry>::const_iterator leptonGenMatch_definition = leptonGenMatch_definitions.begin();
 	leptonGenMatch_definition != leptonGenMatch_definitions.end(); ++leptonGenMatch_definition ) {
     for ( std::vector<hadTauGenMatchEntry>::const_iterator hadTauGenMatch_definition = hadTauGenMatch_definitions.begin();
 	  hadTauGenMatch_definition != hadTauGenMatch_definitions.end(); ++hadTauGenMatch_definition ) {
 
       std::string process_and_genMatch = process_string;
+      process_and_genMatch += parametersTH;
       if ( apply_leptonGenMatching ) process_and_genMatch += leptonGenMatch_definition->name_;
       if ( apply_leptonGenMatching && apply_hadTauGenMatching ) process_and_genMatch += "&";
       if ( apply_hadTauGenMatching ) process_and_genMatch += hadTauGenMatch_definition->name_;
+      std::cout << " process_and_genMatch = "<< process_and_genMatch<< "\n";
       int idxLepton = leptonGenMatch_definition->idx_;
       int idxHadTau = hadTauGenMatch_definition->idx_;
       preselHistManagerType* preselHistManager = new preselHistManagerType();
@@ -600,12 +613,12 @@ int main(int argc, char* argv[])
       preselHistManager->evt_ = new EvtHistManager_2l_2tau(makeHistManager_cfg(process_and_genMatch,
         Form("%s/presel/evt", histogramDir.data()), era_string, central_or_shift));
       preselHistManager->evt_->bookHistograms(fs);
-      edm::ParameterSet cfg_EvtYieldHistManager_presel = makeHistManager_cfg(process_and_genMatch, 
+      edm::ParameterSet cfg_EvtYieldHistManager_presel = makeHistManager_cfg(process_and_genMatch,
         Form("%s/presel/evtYield", histogramDir.data()), era_string, central_or_shift);
       cfg_EvtYieldHistManager_presel.addParameter<edm::ParameterSet>("runPeriods", cfg_EvtYieldHistManager);
       cfg_EvtYieldHistManager_presel.addParameter<bool>("isMC", isMC);
       preselHistManager->evtYield_ = new EvtYieldHistManager(cfg_EvtYieldHistManager_presel);
-      preselHistManager->evtYield_->bookHistograms(fs);  
+      preselHistManager->evtYield_->bookHistograms(fs);
       preselHistManagers[idxLepton][idxHadTau] = preselHistManager;
 
       selHistManagerType* selHistManager = new selHistManagerType();
@@ -672,6 +685,7 @@ int main(int argc, char* argv[])
       const vstring decayModes_evt = eventInfo.getDecayModes();
       if(isSignal)
       {
+
         for(const std::string & decayMode_evt: decayModes_evt)
         {
           std::string decayMode_and_genMatch = decayMode_evt;
@@ -688,17 +702,18 @@ int main(int argc, char* argv[])
           selHistManager -> evt_in_decayModes_[decayMode_evt] -> bookHistograms(fs);
         }
       }
-      edm::ParameterSet cfg_EvtYieldHistManager_sel = makeHistManager_cfg(process_and_genMatch, 
+      edm::ParameterSet cfg_EvtYieldHistManager_sel = makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/evtYield", histogramDir.data()), central_or_shift);
       cfg_EvtYieldHistManager_sel.addParameter<edm::ParameterSet>("runPeriods", cfg_EvtYieldHistManager);
       cfg_EvtYieldHistManager_sel.addParameter<bool>("isMC", isMC);
       selHistManager->evtYield_ = new EvtYieldHistManager(cfg_EvtYieldHistManager_sel);
-      selHistManager->evtYield_->bookHistograms(fs);  
+      selHistManager->evtYield_->bookHistograms(fs);
       selHistManager->weights_ = new WeightHistManager(makeHistManager_cfg(process_and_genMatch,
         Form("%s/sel/weights", histogramDir.data()), central_or_shift));
       selHistManager->weights_->bookHistograms(fs, { "genWeight", "pileupWeight", "triggerWeight", "data_to_MC_correction", "fakeRate" });
       selHistManagers[idxLepton][idxHadTau] = selHistManager;
     }
+  }
   }
 
   GenEvtHistManager* genEvtHistManager_beforeCuts = 0;
@@ -813,6 +828,7 @@ int main(int argc, char* argv[])
                 << ") file (" << selectedEntries << " Entries selected)\n";
     }
     ++analyzedEntries;
+    if ( analyzedEntries > 500000 ) break;
     histogram_analyzedEntries->Fill(0.);
 
     if ( isDEBUG ) {
@@ -865,10 +881,67 @@ int main(int argc, char* argv[])
     }
 
     double evtWeight_inclusive = 1.;
+    std::map<std::string, double> genWeight_tHs;
     if(isMC)
     {
       if(apply_genWeight)    evtWeight_inclusive *= boost::math::sign(eventInfo.genWeight);
-      if(isMC_tH)            evtWeight_inclusive *= eventInfo.genWeight_tH;
+      if(isMC_tH){
+        evtWeight_inclusive *= eventInfo.genWeight_tH_kt_1p0_kv_1p0;
+
+        genWeight_tHs = {
+          { "_kt_m3p0_kv_1p0_" , eventInfo.genWeight_tH_kt_m3p0_kv_1p0},
+          { "_kt_m2p0_kv_1p0_" , eventInfo.genWeight_tH_kt_m2p0_kv_1p0},
+          { "_kt_m1p5_kv_1p0_" , eventInfo.genWeight_tH_kt_m1p5_kv_1p0},
+          { "_kt_m1p25_kv_1p0_" , eventInfo.genWeight_tH_kt_m1p25_kv_1p0},
+          { "_kt_m0p75_kv_1p0_" , eventInfo.genWeight_tH_kt_m0p75_kv_1p0},
+          { "_kt_m0p5_kv_1p0_" , eventInfo.genWeight_tH_kt_m0p5_kv_1p0},
+          { "_kt_m0p25_kv_1p0_" , eventInfo.genWeight_tH_kt_m0p25_kv_1p0},
+          { "_kt_0p0_kv_1p0_" , eventInfo.genWeight_tH_kt_0p0_kv_1p0},
+          { "_kt_0p25_kv_1p0_" , eventInfo.genWeight_tH_kt_0p25_kv_1p0},
+          { "_kt_0p5_kv_1p0_" , eventInfo.genWeight_tH_kt_0p5_kv_1p0},
+          { "_kt_0p75_kv_1p0_" , eventInfo.genWeight_tH_kt_0p75_kv_1p0},
+          { "_kt_1p0_kv_1p0_" , eventInfo.genWeight_tH_kt_1p0_kv_1p0},
+          { "_kt_1p25_kv_1p0_" , eventInfo.genWeight_tH_kt_1p25_kv_1p0},
+          { "_kt_1p5_kv_1p0_" , eventInfo.genWeight_tH_kt_1p5_kv_1p0},
+          { "_kt_2p0_kv_1p0_" , eventInfo.genWeight_tH_kt_2p0_kv_1p0},
+          { "_kt_3p0_kv_1p0_" , eventInfo.genWeight_tH_kt_3p0_kv_1p0}
+          /*
+          { "_kt_m3p0_kv_1p5_" , eventInfo.genWeight_tH_kt_m3p0_kv_1p5},
+          { "_kt_m2p0_kv_1p5_" , eventInfo.genWeight_tH_kt_m2p0_kv_1p5},
+          { "_kt_m1p5_kv_1p5_" , eventInfo.genWeight_tH_kt_m1p5_kv_1p5},
+          { "_kt_m1p25_kv_1p5_" , eventInfo.genWeight_tH_kt_m1p25_kv_1p5},
+          { "_kt_m0p75_kv_1p5_" , eventInfo.genWeight_tH_kt_m0p75_kv_1p5},
+          { "_kt_m0p5_kv_1p5_" , eventInfo.genWeight_tH_kt_m0p5_kv_1p5},
+          { "_kt_m0p25_kv_1p5_" , eventInfo.genWeight_tH_kt_m0p25_kv_1p5},
+          { "_kt_0p0_kv_1p5_" , eventInfo.genWeight_tH_kt_0p0_kv_1p5},
+          { "_kt_0p25_kv_1p5_" , eventInfo.genWeight_tH_kt_0p25_kv_1p5},
+          { "_kt_0p5_kv_1p5_" , eventInfo.genWeight_tH_kt_0p5_kv_1p5},
+          { "_kt_0p75_kv_1p5_" , eventInfo.genWeight_tH_kt_0p75_kv_1p5},
+          { "_kt_1p0_kv_1p5_" , eventInfo.genWeight_tH_kt_1p0_kv_1p5},
+          { "_kt_1p25_kv_1p5_" , eventInfo.genWeight_tH_kt_1p25_kv_1p5},
+          { "_kt_1p5_kv_1p5_" , eventInfo.genWeight_tH_kt_1p5_kv_1p5},
+          { "_kt_2p0_kv_1p5_" , eventInfo.genWeight_tH_kt_2p0_kv_1p5},
+          { "_kt_3p0_kv_1p5_" , eventInfo.genWeight_tH_kt_3p0_kv_1p5},
+          { "_kt_m3p0_kv_0p5_" , eventInfo.genWeight_tH_kt_m3p0_kv_0p5},
+          { "_kt_m2p0_kv_0p5_" , eventInfo.genWeight_tH_kt_m2p0_kv_0p5},
+          { "_kt_m1p5_kv_0p5_" , eventInfo.genWeight_tH_kt_m1p5_kv_0p5},
+          { "_kt_m1p25_kv_0p5_" , eventInfo.genWeight_tH_kt_m1p25_kv_0p5},
+          { "_kt_m0p75_kv_0p5_" , eventInfo.genWeight_tH_kt_m0p75_kv_0p5},
+          { "_kt_m0p5_kv_0p5_" , eventInfo.genWeight_tH_kt_m0p5_kv_0p5},
+          { "_kt_m0p25_kv_0p5_" , eventInfo.genWeight_tH_kt_m0p25_kv_0p5},
+          { "_kt_0p0_kv_0p5_" , eventInfo.genWeight_tH_kt_0p0_kv_0p5},
+          { "_kt_0p25_kv_0p5_" , eventInfo.genWeight_tH_kt_0p25_kv_0p5},
+          { "_kt_0p5_kv_0p5_" , eventInfo.genWeight_tH_kt_0p5_kv_0p5},
+          { "_kt_0p75_kv_0p5_" , eventInfo.genWeight_tH_kt_0p75_kv_0p5},
+          { "_kt_1p0_kv_0p5_" , eventInfo.genWeight_tH_kt_1p0_kv_0p5},
+          { "_kt_1p25_kv_0p5_" , eventInfo.genWeight_tH_kt_1p25_kv_0p5},
+          { "_kt_1p5_kv_0p5_" , eventInfo.genWeight_tH_kt_1p5_kv_0p5},
+          { "_kt_2p0_kv_0p5_" , eventInfo.genWeight_tH_kt_2p0_kv_0p5},
+          { "_kt_3p0_kv_0p5_" , eventInfo.genWeight_tH_kt_3p0_kv_0p5}
+          */
+        };
+
+      }
       if(eventWeightManager) evtWeight_inclusive *= eventWeightManager->getWeight();
       lheInfoReader->read();
       evtWeight_inclusive *= lheInfoReader->getWeight_scale(lheScale_option);
@@ -880,6 +953,7 @@ int main(int argc, char* argv[])
         genEvtHistManager_beforeCuts->fillHistograms(eventWeightManager, evtWeight_inclusive);
       }
     }
+    //for (auto elem : genWeight_tHs ) std::cout << elem.first << " " << elem.second << " \n";
 
     bool isTriggered_1e = hltPaths_isTriggered(triggers_1e);
     bool isTriggered_2e = hltPaths_isTriggered(triggers_2e);
@@ -1698,6 +1772,7 @@ int main(int argc, char* argv[])
     const double mvaOutput_plainKin_1B_VT = mva_plainKin_1B_VT(mvaInputVariables_plainKin_1B);
 
 //--- fill histograms with events passing final selection
+    std::cout <<  " evtWeight_inclusive " << evtWeight_inclusive << " " << evtWeight << " \n";
     selHistManagerType* selHistManager = selHistManagers[idxSelLepton_genMatch][idxSelHadTau_genMatch];
     assert(selHistManager != 0);
     selHistManager->electrons_->fillHistograms(selElectrons, evtWeight);
@@ -1985,12 +2060,14 @@ int main(int argc, char* argv[])
   std::cout << std::endl;
 
   std::cout << "sel. Entries by gen. matching:" << std::endl;
+  for ( std::string parametersTH : param ) {
   for ( std::vector<leptonGenMatchEntry>::const_iterator leptonGenMatch_definition = leptonGenMatch_definitions.begin();
 	leptonGenMatch_definition != leptonGenMatch_definitions.end(); ++leptonGenMatch_definition ) {
     for ( std::vector<hadTauGenMatchEntry>::const_iterator hadTauGenMatch_definition = hadTauGenMatch_definitions.begin();
 	  hadTauGenMatch_definition != hadTauGenMatch_definitions.end(); ++hadTauGenMatch_definition ) {
 
       std::string process_and_genMatch = process_string;
+      process_and_genMatch += parametersTH;
       if ( apply_leptonGenMatching ) process_and_genMatch += leptonGenMatch_definition->name_;
       if ( apply_leptonGenMatching && apply_hadTauGenMatching ) process_and_genMatch += "&";
       if ( apply_hadTauGenMatching ) process_and_genMatch += hadTauGenMatch_definition->name_;
@@ -1999,8 +2076,9 @@ int main(int argc, char* argv[])
       int idxHadTau = hadTauGenMatch_definition->idx_;
 
       const TH1* histogram_EventCounter = selHistManagers[idxLepton][idxHadTau]->evt_->getHistogram_EventCounter();
-      std::cout << " " << process_and_genMatch << " = " << histogram_EventCounter->GetEntries() << " (weighted = " << histogram_EventCounter->Integral() << ")" << std::endl;
+      std::cout << process_and_genMatch << " = " << histogram_EventCounter->GetEntries() << " (weighted = " << histogram_EventCounter->Integral() << ")" << std::endl;
     }
+  }
   }
   std::cout << std::endl;
 

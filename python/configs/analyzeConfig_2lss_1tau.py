@@ -85,13 +85,39 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
       outputDir                 = outputDir,
       executable_analyze        = executable_analyze,
       channel                   = "2lss_1tau",
-      subcategories             = ["2lss_1tau",
-      "2ess_1tau_btight_0J", "2ess_1tau_bloose_0J",
-      "2muss_1tau_btight_0J", "2muss_1tau_bloose_0J",
-      "1mu1ess_1tau_btight_0J", "1mu1ess_1tau_bloose_0J",
-      "2lss_1tau_1Jp",
-      "output_NN_2lss_ttH_3cat_ttH_1tau", "output_NN_2lss_ttH_3cat_ttW_1tau", "output_NN_2lss_ttH_3cat_rest_1tau",
-      "output_NN_2lss_ttH_3cat_tH_1tau", "output_NN_2lss_ttH_3cat_tH_1jet_1tau"],
+      subcategories             = [
+        "2lss_1tau",
+        #"2ess_1tau_btight_0J", "2ess_1tau_bloose_0J",
+        #"2muss_1tau_btight_0J", "2muss_1tau_bloose_0J",
+        #"1mu1ess_1tau_btight_0J", "1mu1ess_1tau_bloose_0J",
+        #"2lss_1tau_1Jp",
+        "2lss_1tau_only_ttHsel",
+        #
+        "output_NN_2lss_1tau_ttH_tH_3cat_v1_ttH_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v1_tH_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v1_rest_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v1_no_cat_1tau",
+        #
+        "output_NN_2lss_1tau_ttH_tH_3cat_v2_ttH_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v2_tH_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v2_rest_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v2_no_cat_1tau",
+        #
+        "output_NN_2lss_1tau_ttH_tH_3cat_v3_ttH_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v3_tH_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v3_rest_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v3_no_cat_1tau",
+        #
+        "output_NN_2lss_1tau_ttH_tH_3cat_v4_ttH_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v4_tH_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v4_rest_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v4_no_cat_1tau",
+        #
+        "output_NN_2lss_1tau_ttH_tH_3cat_v5_ttH_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v5_tH_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v5_rest_1tau",
+        "output_NN_2lss_1tau_ttH_tH_3cat_v5_no_cat_1tau"
+      ],
       samples                   = samples,
       lep_mva_wp                = lep_mva_wp,
       central_or_shifts         = central_or_shifts,
@@ -745,7 +771,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
             key_hadd_stage1_5 = getKey(lepton_and_hadTau_selection_and_frWeight, lepton_charge_selection, chargeSumSelection)
             sample_categories = []
             sample_categories.extend(self.nonfake_backgrounds)
-            sample_categories.extend([ "signal" ])
+            sample_categories.extend(self.prep_dcard_signals)
             processes_input = []
             for sample_category in sample_categories:
               processes_input.append("%s_fake" % sample_category)
@@ -769,7 +795,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
             key_addBackgrounds_job_conversions = getKey(lepton_and_hadTau_selection_and_frWeight, lepton_charge_selection, chargeSumSelection, "conversions")
             sample_categories = []
             sample_categories.extend(self.nonfake_backgrounds)
-            sample_categories.extend([ "signal" ])
+            sample_categories.extend(self.prep_dcard_signals)
             processes_input = []
             for sample_category in sample_categories:
               processes_input.append("%s_conversion" % sample_category)

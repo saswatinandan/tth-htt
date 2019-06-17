@@ -37,6 +37,16 @@ public:
                  double mvaOutput_HTT_SUM_VT,
                  double mvaOutput_plainKin_SUM_VT,
                  double mTauTauVis,
+                 double output_NN_1l_2tau_ttH_tH_3cat_v1,
+                 double output_NN_1l_2tau_ttH_tH_3cat_v2,
+                 double output_NN_1l_2tau_ttH_tH_3cat_v3,
+                 double output_NN_1l_2tau_ttH_tH_3cat_v4,
+                 double output_NN_1l_2tau_ttH_tH_3cat_v5,
+                 double output_NN_1l_2tau_ttH_tH_3cat_v6,
+                 double output_NN_1l_2tau_ttH_tH_3cat_v7,
+                 double output_NN_1l_2tau_ttH_tH_3cat_v8,
+                 double output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v1,
+                 double output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v2,
                  double evtWeight);
 
   const TH1 *
@@ -65,6 +75,17 @@ public:
   TH1 * histogram_mvaOutput_plainKin_SUM_VT_;
   TH1 * histogram_mvaOutput_plainKin_SUM_VT_noRebin_;
   TH1 * histogram_final_;
+
+  TH1 * histogram_output_NN_1l_2tau_ttH_tH_3cat_v1_;
+  TH1 * histogram_output_NN_1l_2tau_ttH_tH_3cat_v2_;
+  TH1 * histogram_output_NN_1l_2tau_ttH_tH_3cat_v3_;
+  TH1 * histogram_output_NN_1l_2tau_ttH_tH_3cat_v4_;
+  TH1 * histogram_output_NN_1l_2tau_ttH_tH_3cat_v5_;
+  TH1 * histogram_output_NN_1l_2tau_ttH_tH_3cat_v6_;
+  TH1 * histogram_output_NN_1l_2tau_ttH_tH_3cat_v7_;
+  TH1 * histogram_output_NN_1l_2tau_ttH_tH_3cat_v8_;
+  TH1 * histogram_output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v1_;
+  TH1 * histogram_output_NN_1l_2tau_ttH_tH_THQenrich_3cat_v2_;
 
   TH1 * histogram_mTauTauVis_;
   TH1 * histogram_EventCounter_;
