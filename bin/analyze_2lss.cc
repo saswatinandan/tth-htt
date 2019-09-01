@@ -102,6 +102,8 @@
 #include <boost/math/special_functions/sign.hpp> // boost::math::sign()
 #include "tthAnalysis/HiggsToTauTau/interface/weightAuxFunctions.h" // get_tH_weight_str()
 
+#include "tthAnalysis/HiggsToTauTau/interface/mT2_2particle.h" // mT2_2particle::comp_mT
+#include "tthAnalysis/HiggsToTauTau/interface/mT2_3particle.h" // mT2_3particle::comp_mT
 #include <boost/algorithm/string/replace.hpp> // boost::replace_all_copy()
 
 #include <iostream> // std::cerr, std::fixed
@@ -121,7 +123,7 @@ enum { kFR_disabled, kFR_2lepton };
 //const int hadTauSelection_antiMuon = 1; // Loose
 const int hadTauSelection_antiElectron = -1; // not applied
 const int hadTauSelection_antiMuon = -1; // not applied
-
+const double wBosonMass = 80.379;
 /**
  * @brief Produce datacard and control plots for 2lss categories.
  */
@@ -835,7 +837,7 @@ int main(int argc, char* argv[])
   typedef std::remove_pointer<decltype(bdt_filler)>::type::float_type float_type;
   typedef std::remove_pointer<decltype(bdt_filler)>::type::int_type int_type;
 
-  if ( selectBDT ) {
+  if (  1 > 0 ) { // selectBDT
     bdt_filler = new std::remove_pointer<decltype(bdt_filler)>::type(
       makeHistManager_cfg(process_string, Form("%s/sel/evtntuple", histogramDir.data()), era_string, central_or_shift)
     );
@@ -860,14 +862,19 @@ int main(int argc, char* argv[])
       "jet3_pt", "jet3_eta", "jet3_phi", "jet3_E",
       "jet4_pt", "jet4_eta", "jet4_phi", "jet4_E",
       "mostFwdJet_eta", "mostFwdJet_pt", "mostFwdJet_phi", "mostFwdJet_E",
-      "leadFwdJet_eta", "leadFwdJet_pt", "leadFwdJet_phi", "leadFwdJet_E"
+      "leadFwdJet_eta", "leadFwdJet_pt", "leadFwdJet_phi", "leadFwdJet_E",
+      "mT2_W", "mT2_top_2particle", "mT2_top_3particle",
+      "mvaOutput_2lss_ttV",
+      "mvaOutput_2lss_ttbar",
+      "mvaDiscr_2lss",
+      "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4"
     );
     for(const std::string & evt_cat_str: evt_cat_strs)
     {
       bdt_filler->register_variable<float_type>(evt_cat_str);
     }
     bdt_filler->register_variable<int_type>(
-      "nJet", "nBJetLoose", "nBJetMedium", "nLep", "nJetForward",
+      "nJet", "nBJetLoose", "nBJetMedium", "nLep", "nJetForward", "cat_NN",
       "lep1_isTight", "lep2_isTight", "failsTightChargeCut",
       "nElectron", "sum_Lep_charge",
       "hadtruth", "bWj1Wj2_isGenMatched_CSVsort4rd"
@@ -922,6 +929,7 @@ int main(int argc, char* argv[])
     ++analyzedEntries;
     histogram_analyzedEntries->Fill(0.);
     //if (!( eventInfo.event == 626693 )) continue;
+    //if (analyzedEntries > 100000) break;
 
     if (run_lumi_eventSelector && !(*run_lumi_eventSelector)(eventInfo))
     {
@@ -1685,6 +1693,58 @@ int main(int argc, char* argv[])
       min_Deta_leadfwdJet_jet = min_Deta_fwdJet_jet(leadFwdJet, selJets);
     }
 
+    double mT2_top_3particle = -1.;
+    double mT2_top_2particle = -1.;
+    double mT2_W = -1.;
+    const Particle::LorentzVector& selLeptonP4_lead = selLepton_lead->p4();
+    const Particle::LorentzVector& selLeptonP4_sublead = selLepton_sublead->p4();
+    //const RecoJetBase* selJet1_Hbb = selJets[0];
+    //const RecoJetBase* selJet2_Hbb = selJets[1];
+    const Particle::LorentzVector& selJetP4_Hbb_lead = selJets[0]->p4();
+    const Particle::LorentzVector& selJetP4_Hbb_sublead = selJets[1]->p4();
+  mT2_2particle mT2Algo_2particle;
+  const Particle::LorentzVector& metP4 = met.p4();
+  mT2Algo_2particle(
+    selLeptonP4_lead.px(), selLeptonP4_lead.py(), selLeptonP4_lead.mass(),
+    selLeptonP4_sublead.px(), selLeptonP4_sublead.py(), selLeptonP4_sublead.mass(),
+    metP4.px(), metP4.py(), 0.);
+  mT2_W = mT2Algo_2particle.get_min_mT2();
+    if ( selJets.size() >= 2 ) {
+
+    double cSumPx = selLeptonP4_lead.px() + selLeptonP4_sublead.px() + metP4.px();
+    double cSumPy = selLeptonP4_lead.py() + selLeptonP4_sublead.py() + metP4.py();
+    mT2Algo_2particle(
+      selJetP4_Hbb_lead.px(), selJetP4_Hbb_lead.py(), selJetP4_Hbb_lead.mass(),
+      selJetP4_Hbb_sublead.px(), selJetP4_Hbb_sublead.py(), selJetP4_Hbb_sublead.mass(),
+      cSumPx, cSumPy, wBosonMass);
+    mT2_top_2particle = mT2Algo_2particle.get_min_mT2();
+    mT2_3particle mT2Algo_3particle;
+    mT2Algo_3particle(
+      selJetP4_Hbb_lead.px(), selJetP4_Hbb_lead.py(), selJetP4_Hbb_lead.mass(),
+      selJetP4_Hbb_sublead.px(), selJetP4_Hbb_sublead.py(), selJetP4_Hbb_sublead.mass(),
+      selLeptonP4_lead.px(), selLeptonP4_lead.py(), selLeptonP4_lead.mass(),
+      selLeptonP4_sublead.px(), selLeptonP4_sublead.py(), selLeptonP4_sublead.mass(),
+      metP4.px(), metP4.py(), 0.);
+    double mT2_top_3particle_permutation1 = mT2Algo_3particle.get_min_mT2();
+    mT2Algo_3particle(
+      selJetP4_Hbb_lead.px(), selJetP4_Hbb_lead.py(), selJetP4_Hbb_lead.mass(),
+      selJetP4_Hbb_sublead.px(), selJetP4_Hbb_sublead.py(), selJetP4_Hbb_sublead.mass(),
+      selLeptonP4_sublead.px(), selLeptonP4_sublead.py(), selLeptonP4_sublead.mass(),
+      selLeptonP4_lead.px(), selLeptonP4_lead.py(), selLeptonP4_lead.mass(),
+      metP4.px(), metP4.py(), 0.);
+    double mT2_top_3particle_permutation2 = mT2Algo_3particle.get_min_mT2();
+
+    if ( mT2_top_3particle_permutation1 <= mT2_top_3particle_permutation2 ) {
+      mT2_top_3particle = mT2_top_3particle_permutation1;
+    } else {
+      mT2_top_3particle = mT2_top_3particle_permutation2;
+    }
+    }
+    //std::cout << "mT2_top_3particle:"
+    //	        << " permutation1 = " << mT2_top_3particle_permutation1 << " (found @ step #" << mT2_top_3particle_permutation1_step << "),"
+    //	        << " permutation2 = " << mT2_top_3particle_permutation2 << " (found @ step #" << mT2_top_3particle_permutation2_step << "),"
+    //	        << " min = " << mT2_top_3particle << " (found @ step #" << mT2_top_3particle_step << ")" << std::endl;
+
 //--- compute output of BDTs used to discriminate ttH vs. ttV and ttH vs. ttbar
 //    in 2lss category of ttH multilepton analysis
     mvaInputs_2lss["max(abs(LepGood_eta[iF_Recl[0]]),abs(LepGood_eta[iF_Recl[1]]))"] = std::max(std::fabs(selLepton_lead->eta()), std::fabs(selLepton_sublead->eta()));
@@ -1812,6 +1872,7 @@ int main(int argc, char* argv[])
 
 //--- do NN categories
     bool sigExtCat = false;
+    int cat_NN = -1;
     std::string category_2lss_ttH_tH_4cat_onlyTHQ_v4 = "output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4_";
     double output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = -10;
     if (ttH_like || ttW_like) {
@@ -1821,6 +1882,7 @@ int main(int argc, char* argv[])
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"]
       ) {
         category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "ttH";
+        cat_NN = 0;
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttH"];
         sigExtCat = true;
       }
@@ -1830,6 +1892,7 @@ int main(int argc, char* argv[])
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_tH"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"]
       ) {
         category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "tH";
+        cat_NN = 1;
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_tH"];
         sigExtCat = true;
       }
@@ -1839,6 +1902,7 @@ int main(int argc, char* argv[])
         mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttW"] >= mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"]
       ) {
         category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "ttW";
+        cat_NN = 2;
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_ttW"];
         sigExtCat = true;
       }
@@ -1850,6 +1914,7 @@ int main(int argc, char* argv[])
         category_2lss_ttH_tH_4cat_onlyTHQ_v4 += "rest";
         output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4 = mvaOutput_2lss_ttH_tH_4cat_onlyTHQ_v4["predictions_rest"];
         sigExtCat = false;
+        cat_NN = 3;
       }
 
       if (sigExtCat)
@@ -2160,6 +2225,14 @@ deltaR(selLepton_lead -> p4(), selLepton_sublead -> p4())*/
           ("leadFwdJet_phi",      selJetsForward.size() > 0 ? selJetsForward[0] -> phi() : -1000)
           ("leadFwdJet_E",        selJetsForward.size() > 0 ? selJetsForward[0] -> p4().energy() : -1000)
           ("nJetForward",         selJetsForward.size())
+          ("mT2_W",                         mT2_W)
+          ("mT2_top_2particle",             mT2_top_2particle)
+          ("mT2_top_3particle",             mT2_top_3particle)
+          ("mvaOutput_2lss_ttV",            mvaOutput_2lss_ttV)
+          ("mvaOutput_2lss_ttbar",          mvaOutput_2lss_ttbar)
+          ("mvaDiscr_2lss",                 mvaDiscr_2lss)
+          ("output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4", output_NN_2lss_ttH_tH_4cat_onlyTHQ_v4)
+          ("cat_NN",                        cat_NN)
           (tH_weight_map)
         .fill()
       ;
