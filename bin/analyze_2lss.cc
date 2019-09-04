@@ -1700,16 +1700,17 @@ int main(int argc, char* argv[])
     const Particle::LorentzVector& selLeptonP4_sublead = selLepton_sublead->p4();
     //const RecoJetBase* selJet1_Hbb = selJets[0];
     //const RecoJetBase* selJet2_Hbb = selJets[1];
+
+    if ( selJets.size() >= 2 ) {
     const Particle::LorentzVector& selJetP4_Hbb_lead = selJets[0]->p4();
     const Particle::LorentzVector& selJetP4_Hbb_sublead = selJets[1]->p4();
-  mT2_2particle mT2Algo_2particle;
-  const Particle::LorentzVector& metP4 = met.p4();
-  mT2Algo_2particle(
-    selLeptonP4_lead.px(), selLeptonP4_lead.py(), selLeptonP4_lead.mass(),
-    selLeptonP4_sublead.px(), selLeptonP4_sublead.py(), selLeptonP4_sublead.mass(),
-    metP4.px(), metP4.py(), 0.);
-  mT2_W = mT2Algo_2particle.get_min_mT2();
-    if ( selJets.size() >= 2 ) {
+    mT2_2particle mT2Algo_2particle;
+    const Particle::LorentzVector& metP4 = met.p4();
+    mT2Algo_2particle(
+      selLeptonP4_lead.px(), selLeptonP4_lead.py(), selLeptonP4_lead.mass(),
+      selLeptonP4_sublead.px(), selLeptonP4_sublead.py(), selLeptonP4_sublead.mass(),
+      metP4.px(), metP4.py(), 0.);
+    mT2_W = mT2Algo_2particle.get_min_mT2();
 
     double cSumPx = selLeptonP4_lead.px() + selLeptonP4_sublead.px() + metP4.px();
     double cSumPy = selLeptonP4_lead.py() + selLeptonP4_sublead.py() + metP4.py();
