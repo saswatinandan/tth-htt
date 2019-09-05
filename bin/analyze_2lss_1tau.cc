@@ -883,7 +883,7 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
       "mbb_loose", "mbb_medium",
       "dr_Lep_lss", "dr_Lep_los1", "dr_Lep_los2", "eta_LepLep_los1", "eta_LepLep_los2", "eta_LepLep_los",
       "res_HTT", "HadTop_pt", "genTopPt_CSVsort4rd",
-      "massL", "min_Deta_mostfwdJet_jet", "min_Deta_leadfwdJet_jet",
+      "massL", "massL3", "massLT", "min_Deta_mostfwdJet_jet", "min_Deta_leadfwdJet_jet",
       "met_LD", "jet1_pt", "jet1_eta",
       "jet1_pt", "jet1_eta", "jet1_phi", "jet1_E",
       "jet2_pt", "jet2_eta", "jet2_phi", "jet2_E",
@@ -893,7 +893,7 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
       "leadFwdJet_eta", "leadFwdJet_pt", "leadFwdJet_phi", "leadFwdJet_E"
     );
     bdt_filler->register_variable<int_type>(
-      "nJet", "nBJetLoose", "nBJetMedium", "nLep","nTau",
+      "nJet", "nBJetLoose", "nBJetMedium", "nLep","nTau", "nJetForward",
       "lep1_isTight", "lep2_isTight", "tau_isTight", "failsTightChargeCut",
       "nElectron", "sum_Lep_charge",
       "hadtruth", "bWj1Wj2_isGenMatched_CSVsort4rd"
@@ -2283,9 +2283,7 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
           ("lep1_isTight",                   static_cast<int>(selLepton_lead->isTight()))
           ("lep2_isTight",                   static_cast<int>(selLepton_sublead->isTight()))
           ("tau_isTight",                    static_cast<int>(tightHadTauFilter(*selHadTau)))
-          ("min(met_pt,400)",                minMET400)
           ("hadtruth",                       hadtruth)
-          ("ptbb",                           selBJets_medium.size() > 1 ? (selBJets_medium[0]->p4() + selBJets_medium[1]->p4()).pt() : -1000)
           ("mbb_loose",                      selBJets_loose.size()  > 1 ? (selBJets_loose[0]->p4() + selBJets_loose[1]->p4()).mass() : -1000)
           ("failsTightChargeCut",            failsTightChargeCut)
 
@@ -2298,7 +2296,9 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
           ("mbb_medium",     selBJets_medium.size()>1 ?  (selBJets_medium[0]->p4()+selBJets_medium[1]->p4()).mass() : 0 )
           ("nElectron",      selElectrons.size())
           ("sum_Lep_charge", selLepton_lead -> charge() + selLepton_sublead -> charge() + selHadTau->charge())
-          ("massL",          selLeptons.size() > 1 ? comp_MT_met_lep1(selLeptons[0]->p4() + selLeptons[1]->p4(), met.pt(), met.phi())  : 0.)
+          ("massLT",          selLeptons.size() > 1 ? comp_MT_met_lep1(selLeptons[0]->p4() + selLeptons[1]->p4(), met.pt(), met.phi())  : 0.)
+          ("massL3",          selLeptons.size() > 2 ? comp_MT_met_lep1(selLeptons[0]->p4() + selLeptons[1]->p4() + selHadTau->p4(), met.pt(), met.phi())  : 0.)
+          ("massL",           massL(fakeableLeptons))
           ("min_Deta_mostfwdJet_jet", min_Deta_mostfwdJet_jet)
           ("min_Deta_leadfwdJet_jet", min_Deta_leadfwdJet_jet)
           ("met_LD",    met_LD)
@@ -2326,6 +2326,7 @@ TMVAInterface mva_Hjj_tagger(mvaFileName_Hjj_tagger, mvaInputVariables_Hjj_tagge
           ("leadFwdJet_pt",       selJetsForward.size() > 0 ? selJetsForward[0] -> pt() : -1000)
           ("leadFwdJet_phi",      selJetsForward.size() > 0 ? selJetsForward[0] -> phi() : -1000)
           ("leadFwdJet_E",        selJetsForward.size() > 0 ? selJetsForward[0] -> p4().energy() : -1000)
+          ("nJetForward",          selJetsForward.size())
 
         .fill()
       ;

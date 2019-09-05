@@ -288,7 +288,7 @@ int main(int argc, char* argv[])
 
   edm::ParameterSet cfg_dataToMCcorrectionInterface;
   cfg_dataToMCcorrectionInterface.addParameter<std::string>("era", era_string);
-  cfg_dataToMCcorrectionInterface.addParameter<std::string>("hadTauSelection", hadTauSelection_part2);
+  cfg_dataToMCcorrectionInterface.addParameter<std::string>("hadTauSelection", "dR03mvaMedium"); // hadTauSelection_part2 Xanda: FIXME when SF for deeptau
   cfg_dataToMCcorrectionInterface.addParameter<int>("hadTauSelection_antiElectron", hadTauSelection_antiElectron);
   cfg_dataToMCcorrectionInterface.addParameter<int>("hadTauSelection_antiMuon", hadTauSelection_antiMuon);
   cfg_dataToMCcorrectionInterface.addParameter<std::string>("central_or_shift", central_or_shift);
@@ -820,6 +820,7 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
       "mostFwdJet_eta", "mostFwdJet_pt", "mostFwdJet_phi", "mostFwdJet_E",
       "leadFwdJet_eta", "leadFwdJet_pt", "leadFwdJet_phi", "leadFwdJet_E",
       "min_dr_Lep", "max_dr_Lep",
+      "res-HTT", "HadTop_pt", 
       "jet1_pt", "jet1_eta", "jet1_phi", "jet1_E",
       "jet2_pt", "jet2_eta", "jet2_phi", "jet2_E",
       "jet3_pt", "jet3_eta", "jet3_phi", "jet3_E",
@@ -827,8 +828,13 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
       "sum_Lep_charge", "HadTop_pt", "res_HTT", "max_Lep_eta",
       "massL", "massL3", "massLT", "min_Deta_mostfwdJet_jet", "min_Deta_leadfwdJet_jet"
     );
+    for(const std::string & evt_cat_str: evt_cat_strs)
+    {
+      bdt_filler->register_variable<float_type>(evt_cat_str);
+    }
     bdt_filler -> register_variable<int_type>(
-      "nJet", "nBJetLoose", "nBJetMedium", "lep1_isTight", "lep2_isTight", "lep3_isTight", "hadtruth",
+      "nJet", "nBJetLoose", "nBJetMedium", "nJetForward",
+      "lep1_isTight", "lep2_isTight", "lep3_isTight", "hadtruth",
       "nElectron", "has_SFOS"
     );
     bdt_filler -> bookTree(fs);
@@ -1682,11 +1688,10 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
 
     //--- compute output of hadronic top tagger BDT
     // it returns the gen-triplets organized in top/anti-top
-    bool calculate_matching = isMC && selectBDT && !applyAdditionalEvtWeight; // DY has not matching info
+    bool calculate_matching = false;//isMC && selectBDT && !applyAdditionalEvtWeight; // DY has not matching info
     std::map<int, Particle::LorentzVector> genVar;
     std::map<int, Particle::LorentzVector> genVarAnti;
-    /*
-    if (calculate_matching) {
+    /*if (calculate_matching) {
       genVar = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genQuarkFromTop, kGenTop);
       genVarAnti = isGenMatchedJetTripletVar(genTopQuarks, genBJets, genWBosons, genQuarkFromTop, kGenAntiTop);
     }*/
@@ -2113,11 +2118,15 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
           ("max_Lep_eta",    max_lep_eta)
           ("massLT",          selLeptons.size() > 1 ? comp_MT_met_lep1(selLeptons[0]->p4() + selLeptons[1]->p4(), met.pt(), met.phi())  : 0.)
           ("massL3",          selLeptons.size() > 2 ? comp_MT_met_lep1(selLeptons[0]->p4() + selLeptons[1]->p4() + selLeptons[2]->p4(), met.pt(), met.phi())  : 0.)
-          ("massL",           massL(fakeableLeptons))
+          ("massL",           massL(fakeableLeptonsFull))
           ("has_SFOS",       hasSFOS)
           ("min_Deta_mostfwdJet_jet", min_Deta_mostfwdJet_jet)
           ("min_Deta_leadfwdJet_jet", min_Deta_leadfwdJet_jet)
           ("nElectron",                      selElectrons.size())
+          ("nJetForward",          selJetsForward.size())
+          ("res-HTT",   max_mvaOutput_HTT_CSVsort4rd)
+          ("HadTop_pt", HadTop_pt_CSVsort4rd)
+          (tH_weight_map)
 
         .fill()
       ;

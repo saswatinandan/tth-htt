@@ -302,7 +302,7 @@ int main(int argc, char* argv[])
 
   edm::ParameterSet cfg_dataToMCcorrectionInterface;
   cfg_dataToMCcorrectionInterface.addParameter<std::string>("era", era_string);
-  cfg_dataToMCcorrectionInterface.addParameter<std::string>("hadTauSelection", hadTauSelection_part2);
+  cfg_dataToMCcorrectionInterface.addParameter<std::string>("hadTauSelection", "dR03mvaMedium"); // hadTauSelection_part2 Xanda: FIXME when SF for deeptau
   cfg_dataToMCcorrectionInterface.addParameter<int>("hadTauSelection_antiElectron_lead", hadTauSelection_antiElectron);
   cfg_dataToMCcorrectionInterface.addParameter<int>("hadTauSelection_antiMuon_lead", hadTauSelection_antiMuon);
   cfg_dataToMCcorrectionInterface.addParameter<int>("hadTauSelection_antiElectron_sublead", hadTauSelection_antiElectron);
@@ -338,7 +338,7 @@ int main(int argc, char* argv[])
   }
 
   JetToTauFakeRateInterface* jetToTauFakeRateInterface = 0;
-  if ( applyFakeRateWeights == kFR_3L || applyFakeRateWeights == kFR_2tau ) {
+  if ( 0 > 1 && (applyFakeRateWeights == kFR_3L || applyFakeRateWeights == kFR_2tau) ) {
     edm::ParameterSet cfg_hadTauFakeRateWeight = cfg_analyze.getParameter<edm::ParameterSet>("hadTauFakeRateWeight");
     cfg_hadTauFakeRateWeight.addParameter<std::string>("hadTauSelection", hadTauSelection_part2);
     jetToTauFakeRateInterface = new JetToTauFakeRateInterface(cfg_hadTauFakeRateWeight, jetToTauFakeRate_option);
@@ -490,6 +490,12 @@ int main(int argc, char* argv[])
   tightHadTauSelector.set(hadTauSelection_part2);
   tightHadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
   tightHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
+
+  RecoHadTauCollectionSelectorTight tightHadTauSelectorMVAMedium(era, -1, isDEBUG);
+  tightHadTauSelector.set("dR03mvaMedium");
+  tightHadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
+  tightHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
+
   switch(hadTauSelection)
   {
     case kLoose:    tauLevel = std::min(tauLevel, get_tau_id_wp_int(preselHadTauSelector.getSelector().get()));   break;
@@ -858,7 +864,7 @@ int main(int argc, char* argv[])
   typedef std::remove_pointer<decltype(bdt_filler)>::type::float_type float_type;
   typedef std::remove_pointer<decltype(bdt_filler)>::type::int_type   int_type;
 
-  if ( isBDTtraining ) {
+  if ( 1 > 0 ) { // isBDTtraining
     bdt_filler = new std::remove_pointer<decltype(bdt_filler)>::type(
       makeHistManager_cfg(process_string, Form("%s/sel/evtntuple", histogramDir.data()), era_string, central_or_shift)
     );
@@ -874,8 +880,13 @@ int main(int argc, char* argv[])
       "genWeight", "evtWeight",
       "prob_fake_lepton", "tau_fake_prob_lead", "tau_fake_prob_sublead"
     );
+    for(const std::string & evt_cat_str: evt_cat_strs)
+    {
+      bdt_filler->register_variable<float_type>(evt_cat_str);
+    }
     bdt_filler -> register_variable<int_type>(
-      "nJet", "nBJetLoose", "nBJetMedium", "bWj1Wj2_isGenMatched_CSVsort4rd"
+      "nJet", "nBJetLoose", "nBJetMedium", "nMVAMedium_hadtau",
+      "hadtruth", "bWj1Wj2_isGenMatched_CSVsort4rd"
     );
     bdt_filler -> bookTree(fs);
   }
@@ -928,6 +939,7 @@ int main(int argc, char* argv[])
     ++analyzedEntries;
     //if (!( eventInfo.event == 126270 )) continue;
     histogram_analyzedEntries->Fill(0.);
+    //if (analyzedEntries > 100) break;
 
     if (run_lumi_eventSelector && !(*run_lumi_eventSelector)(eventInfo))
     {
@@ -1155,13 +1167,14 @@ int main(int argc, char* argv[])
     std::vector<RecoHadTau> hadTaus = hadTauReader->read();
     std::vector<const RecoHadTau*> hadTau_ptrs = convert_to_ptrs(hadTaus);
     std::vector<const RecoHadTau*> cleanedHadTaus = hadTauCleaner(hadTau_ptrs, preselMuons, preselElectrons);
-    std::vector<const RecoHadTau*> preselHadTausFull = preselHadTauSelector(cleanedHadTaus, isHigherPt);
-    std::vector<const RecoHadTau*> fakeableHadTausFull = fakeableHadTauSelector(preselHadTausFull, isHigherPt);
-    std::vector<const RecoHadTau*> tightHadTausFull = tightHadTauSelector(fakeableHadTausFull, isHigherPt);
+    std::vector<const RecoHadTau*> preselHadTausFull = preselHadTauSelector(cleanedHadTaus, isHigherTauID);
+    std::vector<const RecoHadTau*> fakeableHadTausFull = fakeableHadTauSelector(preselHadTausFull, isHigherTauID);
+    std::vector<const RecoHadTau*> tightHadTausFull = tightHadTauSelector(fakeableHadTausFull, isHigherTauID);
+    std::vector<const RecoHadTau*> tightHadTausFullMVAMedium = tightHadTauSelectorMVAMedium(cleanedHadTaus, isHigherTauID);
 
     std::vector<const RecoHadTau*> preselHadTaus = pickFirstNobjects(preselHadTausFull, 2);
     std::vector<const RecoHadTau*> fakeableHadTaus = pickFirstNobjects(fakeableHadTausFull, 2);
-    std::vector<const RecoHadTau*> tightHadTaus = getIntersection(fakeableHadTaus, tightHadTausFull, isHigherPt);
+    std::vector<const RecoHadTau*> tightHadTaus = getIntersection(fakeableHadTaus, tightHadTausFull, isHigherTauID);
     std::vector<const RecoHadTau*> selHadTaus = selectObjects(hadTauSelection, preselHadTaus, fakeableHadTaus, tightHadTaus);
     if(isDEBUG || run_lumi_eventSelector)
     {
@@ -1457,9 +1470,9 @@ int main(int argc, char* argv[])
         else assert(0);
 
         bool passesTight_lepton = isMatched(*selLepton, tightElectrons) || isMatched(*selLepton, tightMuons);
-        prob_fake_hadTau_lead = jetToTauFakeRateInterface->getWeight_lead(selHadTau_lead->pt(), selHadTau_lead->absEta());
+        prob_fake_hadTau_lead = 1.0; // Xanda jetToTauFakeRateInterface->getWeight_lead(selHadTau_lead->pt(), selHadTau_lead->absEta());
         bool passesTight_hadTau_lead = isMatched(*selHadTau_lead, tightHadTausFull);
-        prob_fake_hadTau_sublead = jetToTauFakeRateInterface->getWeight_sublead(selHadTau_sublead->pt(), selHadTau_sublead->absEta());
+        prob_fake_hadTau_sublead = 1.0; // Xanda jetToTauFakeRateInterface->getWeight_sublead(selHadTau_sublead->pt(), selHadTau_sublead->absEta());
         bool passesTight_hadTau_sublead = isMatched(*selHadTau_sublead, tightHadTausFull);
 
         weight_fakeRate = getWeight_3L(
@@ -1473,9 +1486,9 @@ int main(int argc, char* argv[])
         }
         evtWeight *= weight_fakeRate;
       } else if ( applyFakeRateWeights == kFR_2tau) {
-        prob_fake_hadTau_lead = jetToTauFakeRateInterface->getWeight_lead(selHadTau_lead->pt(), selHadTau_lead->absEta());
+        prob_fake_hadTau_lead = 1.0; // xanda jetToTauFakeRateInterface->getWeight_lead(selHadTau_lead->pt(), selHadTau_lead->absEta());
         bool passesTight_hadTau_lead = isMatched(*selHadTau_lead, tightHadTausFull);
-        prob_fake_hadTau_sublead = jetToTauFakeRateInterface->getWeight_sublead(selHadTau_sublead->pt(), selHadTau_sublead->absEta());
+        prob_fake_hadTau_sublead = 1.0; // xanda jetToTauFakeRateInterface->getWeight_sublead(selHadTau_sublead->pt(), selHadTau_sublead->absEta());
         bool passesTight_hadTau_sublead = isMatched(*selHadTau_sublead, tightHadTausFull);
 
         weight_fakeRate = getWeight_2L(
@@ -1490,7 +1503,7 @@ int main(int argc, char* argv[])
       }
 
       // CV: apply data/MC ratio for jet->tau fake-rates in case data-driven "fake" background estimation is applied to leptons only
-      if ( isMC && apply_hadTauFakeRateSF && hadTauSelection == kTight ) {
+      if ( isMC && apply_hadTauFakeRateSF && hadTauSelection == kTight && 0 > 1 ) { // Xanda
         double weight_data_to_MC_correction_hadTau_lead = 1.;
         if ( !(selHadTau_lead->genHadTau() || selHadTau_lead->genLepton()) ) {
           weight_data_to_MC_correction_hadTau_lead = jetToTauFakeRateInterface->getSF_lead(selHadTau_lead->pt(), selHadTau_lead->absEta());
@@ -1815,6 +1828,7 @@ int main(int argc, char* argv[])
         selElectrons.size(),
         selMuons.size(),
         selHadTaus.size(),
+        tightHadTausFullMVAMedium.size(),
         selJets.size(),
         selBJets_loose.size(),
         selBJets_medium.size(),
@@ -1832,6 +1846,7 @@ int main(int argc, char* argv[])
             selElectrons.size(),
             selMuons.size(),
             selHadTaus.size(),
+            tightHadTausFullMVAMedium.size(),
             selJets.size(),
             selBJets_loose.size(),
             selBJets_medium.size(),
@@ -1868,6 +1883,7 @@ int main(int argc, char* argv[])
     }
     selHistManager->evt_in_categories_[category]->fillHistograms(
       preselElectrons.size(), preselMuons.size(), selHadTaus.size(),
+      tightHadTausFullMVAMedium.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       mvaOutput_HTT_SUM_VT,
       mTauTauVis,
@@ -1931,6 +1947,8 @@ int main(int argc, char* argv[])
           ("prob_fake_lepton",               (selLepton->genLepton() != 0) ? 1.0 : prob_fake_lepton)
           ("tau_fake_prob_lead",             (selHadTau_lead->genHadTau() != 0) ? 1.0 : prob_fake_hadTau_lead)
           ("tau_fake_prob_sublead",          (selHadTau_sublead->genHadTau() != 0) ? 1.0 : prob_fake_hadTau_sublead)
+          ("nMVAMedium_hadtau",              tightHadTausFullMVAMedium.size())
+          (tH_weight_map)
         .fill();
     }
 

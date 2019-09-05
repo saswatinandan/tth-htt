@@ -665,10 +665,17 @@ int main(int argc, char* argv[])
       "lumiScale", "genWeight", "evtWeight",
       "lep1_genLepPt", "lep2_genLepPt", "lep3_genLepPt", "lep4_genLepPt",
       "lep1_fake_prob", "lep2_fake_prob", "lep3_fake_prob", "lep4_fake_prob",
-      "lep1_frWeight", "lep2_frWeight", "lep3_frWeight", "lep4_frWeight"
+      "lep1_frWeight", "lep2_frWeight", "lep3_frWeight", "lep4_frWeight",
+      "massL", "massL4", "massLT", "met_LD",
+      "mindr_lep_jet",
+      "max_Lep_eta", "mbb_loose", "mbb_medium",
+      "jet1_pt", "jet1_eta", "jet1_phi", "jet1_E",
+      "jet2_pt", "jet2_eta", "jet2_phi", "jet2_E"
     );
     bdt_filler -> register_variable<int_type>(
-      "nJet", "nBJetLoose", "nBJetMedium", "lep1_isTight", "lep2_isTight", "lep3_isTight", "lep4_isTight"
+      "nJet", "nBJetLoose", "nBJetMedium", "nJetForward",
+      "sum_Lep_charge", "nElectron", "has_SFOS",
+      "lep1_isTight", "lep2_isTight", "lep3_isTight", "lep4_isTight"
     );
     bdt_filler -> bookTree(fs);
   }
@@ -1527,6 +1534,8 @@ int main(int argc, char* argv[])
       if      ( std::abs(selLepton_fourth->pdgId()) == 11 ) prob_fake_lepton_fourth = leptonFakeRateInterface->getWeight_e(selLepton_fourth->cone_pt(), selLepton_fourth->absEta());
       else if ( std::abs(selLepton_fourth->pdgId()) == 13 ) prob_fake_lepton_fourth = leptonFakeRateInterface->getWeight_mu(selLepton_fourth->cone_pt(), selLepton_fourth->absEta());
 
+      int sumcharge = selLepton_lead->charge() + selLepton_sublead->charge() + selLepton_third->charge() + selLepton_fourth->charge();
+
       bdt_filler -> operator()({ eventInfo.run, eventInfo.lumi, eventInfo.event })
           ("lep1_pt",             selLepton_lead -> pt())
           ("lep1_conePt",         comp_lep1_conePt(*selLepton_lead))
@@ -1555,6 +1564,7 @@ int main(int argc, char* argv[])
           ("avg_dr_jet",          comp_avg_dr_jet(selJets))
           ("ptmiss",              met.pt())
           ("htmiss",              mht_p4.pt())
+          ("met_LD",              met_LD)
           ("dr_leps",             deltaR(selLepton_lead -> p4(), selLepton_sublead -> p4()))
           ("lep1_genLepPt",       (selLepton_lead->genLepton() != 0) ? selLepton_lead->genLepton()->pt() : 0.)
           ("lep2_genLepPt",       (selLepton_sublead->genLepton() != 0) ? selLepton_sublead->genLepton() ->pt() : 0.)
@@ -1580,6 +1590,33 @@ int main(int argc, char* argv[])
           ("lep2_isTight",        int(selLepton_sublead -> isTight()))
           ("lep3_isTight",        int(selLepton_third -> isTight()))
           ("lep4_isTight",        int(selLepton_fourth -> isTight()))
+          ("jet1_pt",             selJets[0]->pt())
+          ("jet1_eta",            selJets[0]->eta())
+          ("jet1_phi",            selJets[0]->phi())
+          ("jet1_E",              selJets[0]->p4().energy())
+          ("jet2_pt",             selJets[1]->pt())
+          ("jet2_eta",            selJets[1]->eta())
+          ("jet2_phi",            selJets[1]->phi())
+          ("jet2_E",              selJets[1]->p4().energy())
+          ("massLT",              comp_MT_met_lep1(selLeptons[0]->p4() + selLeptons[1]->p4(), met.pt(), met.phi()))
+          ("massL4",              comp_MT_met_lep1(selLeptons[0]->p4() + selLeptons[1]->p4() + selLeptons[2]->p4() + selLeptons[4]->p4(), met.pt(), met.phi()))
+          ("massL",           massL(fakeableLeptons))
+          ("mindr_lep_jet",   std::min(comp_mindr_lep1_jet(*selLepton_lead, selJets), std::min(comp_mindr_lep2_jet(*selLepton_sublead, selJets), std::min(comp_mindr_lep3_jet(*selLepton_third, selJets), std::min(comp_mindr_lep3_jet(*selLepton_fourth, selJets), 400.)))))
+          ("max_Lep_eta",     std::max(
+                                selLepton_lead -> eta(),
+                                std::max(
+                                  selLepton_sublead -> eta(),
+                                  std::max(
+                                    selLepton_third -> eta(),
+                                    std::max(selLepton_fourth -> eta(), 0.)
+                                  )
+                                )
+                              )
+                            )
+          ("sum_Lep_charge",  sumcharge)
+          ("nElectron",                      selElectrons.size())
+          ("has_SFOS",       isSFOS(selLeptons))
+          ("nJetForward",    selJetsForward.size())
         .fill()
       ;
     }
