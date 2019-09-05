@@ -855,7 +855,7 @@ int main(int argc, char* argv[])
       "lumiScale", "genWeight", "evtWeight", "min(met_pt,400)",
       "mbb_loose", "mbb_medium",
       "res_HTT", "HadTop_pt", "genTopPt_CSVsort4rd",
-      "massLT", "massL", "min_Deta_mostfwdJet_jet", "min_Deta_leadfwdJet_jet",
+      "massLT", "massL_FO", "massL_preselect", "min_Deta_mostfwdJet_jet", "min_Deta_leadfwdJet_jet",
       "met_LD", "jet1_pt", "jet1_eta",
       "jet1_pt", "jet1_eta", "jet1_phi", "jet1_E",
       "jet2_pt", "jet2_eta", "jet2_phi", "jet2_E",
@@ -2197,7 +2197,8 @@ deltaR(selLepton_lead -> p4(), selLepton_sublead -> p4())*/
           ("nElectron",                      selElectrons.size())
           ("sum_Lep_charge", selLepton_lead -> charge() + selLepton_sublead -> charge())
           ("massLT",          selLeptons.size() > 1 ? comp_MT_met_lep1(selLeptons[0]->p4() + selLeptons[1]->p4(), met.pt(), met.phi())  : 0.)
-          ("massL",           massL(fakeableLeptons))
+          ("massL_FO",           massL(fakeableLeptonsFull))
+          ("massL_preselect",    massL(preselLeptonsFull))
           ("min_Deta_mostfwdJet_jet", min_Deta_mostfwdJet_jet)
           ("min_Deta_leadfwdJet_jet", min_Deta_leadfwdJet_jet)
           ("met_LD",              met_LD)
