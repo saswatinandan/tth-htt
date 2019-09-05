@@ -355,20 +355,21 @@ RecoHadTauSelectorBase::operator()(const RecoHadTau & hadTau) const
     }
     return false;
   }
-
-  if(hadTau.antiElectron() < min_antiElectron_)
+  //   TauID::DeepTau2017v2VSe ||
+  // tauId == TauID::DeepTau2017v2VSmu
+  if(hadTau.id_mva(TauID::DeepTau2017v2VSe) < 1 )
   {
     if(debug_)
     {
-      std::cout << "FAILS antiElectron = " << hadTau.antiElectron() << " >= " << min_antiElectron_ << " cut\n";
+      std::cout << "FAILS antiElectron = " << hadTau.id_mva(TauID::DeepTau2017v2VSe) << " >= " << min_antiElectron_ << " cut\n";
     }
     return false;
   }
-  if(hadTau.antiMuon() < min_antiMuon_)
+  if(hadTau.id_mva(TauID::DeepTau2017v2VSmu) < 1 )
   {
     if(debug_)
     {
-      std::cout << "FAILS antiMuon = " << hadTau.antiMuon() << " >= " << min_antiMuon_ << "cut\n";
+      std::cout << "FAILS antiMuon = " << hadTau.id_mva(TauID::DeepTau2017v2VSmu) << " >= " << min_antiMuon_ << "cut\n";
     }
     return false;
   }
