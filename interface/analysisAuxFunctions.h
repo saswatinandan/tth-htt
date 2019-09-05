@@ -260,6 +260,9 @@ bool
 isHigherPt(const Particle * particle1,
            const Particle * particle2);
 
+bool
+isHigherTauID(const RecoHadTau * particle1,
+          const RecoHadTau * particle2);
 /**
  * @brief Auxiliary function used for sorting leptons by decreasing cone pT
  * @param Given pair of leptons

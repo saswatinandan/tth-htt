@@ -59,6 +59,15 @@ isHigherPt(const Particle * particle1,
 }
 
 bool
+isHigherTauID(const RecoHadTau * particle1,
+           const RecoHadTau * particle2)
+{
+  const RecoHadTau * const hadtau1 = particle1;
+  const RecoHadTau * const hadtau2 = particle2;
+  return hadtau1-> raw_mva(TauID::DeepTau2017v2VSjet) > hadtau2-> raw_mva(TauID::DeepTau2017v2VSjet);
+}
+
+bool
 isHigherConePt(const RecoLepton * particle1,
                const RecoLepton * particle2)
 {
