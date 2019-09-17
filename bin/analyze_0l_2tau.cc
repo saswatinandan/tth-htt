@@ -2105,7 +2105,7 @@ int main(int argc, char* argv[])
           ("selHadTau_sublead_antiMuon", selHadTau_sublead-> antiMuon())
           ("selHadTau_sublead_antiElectron", selHadTau_sublead-> antiElectron())
 
-          ("nMVAMedium_hadtau",              tightHadTausFullMVAMedium.size())
+          ("nMVAMedium_hadtau",              1.0) //tightHadTausFullMVAMedium.size())
           ("selHadTau_lead_decayMode", selHadTau_lead ->  decayMode())
           ("selHadTau_lead_idDecayMode", selHadTau_lead ->  idDecayMode())
           ("selHadTau_sublead_decayMode", selHadTau_sublead ->  decayMode())

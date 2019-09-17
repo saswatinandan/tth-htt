@@ -1820,7 +1820,7 @@ int main(int argc, char* argv[])
         selElectrons.size(),
         selMuons.size(),
         selHadTaus.size(),
-        tightHadTausFullMVAMedium.size(),
+        1.0, //tightHadTausFullMVAMedium.size(),
         selJets.size(),
         selBJets_loose.size(),
         selBJets_medium.size(),
@@ -1838,7 +1838,7 @@ int main(int argc, char* argv[])
             selElectrons.size(),
             selMuons.size(),
             selHadTaus.size(),
-            tightHadTausFullMVAMedium.size(),
+            1.0, //tightHadTausFullMVAMedium.size(),
             selJets.size(),
             selBJets_loose.size(),
             selBJets_medium.size(),
@@ -1875,7 +1875,7 @@ int main(int argc, char* argv[])
     }
     selHistManager->evt_in_categories_[category]->fillHistograms(
       preselElectrons.size(), preselMuons.size(), selHadTaus.size(),
-      tightHadTausFullMVAMedium.size(),
+      1.0, //tightHadTausFullMVAMedium.size(),
       selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
       mvaOutput_HTT_SUM_VT,
       mTauTauVis,
@@ -1939,7 +1939,7 @@ int main(int argc, char* argv[])
           ("prob_fake_lepton",               (selLepton->genLepton() != 0) ? 1.0 : prob_fake_lepton)
           ("tau_fake_prob_lead",             (selHadTau_lead->genHadTau() != 0) ? 1.0 : prob_fake_hadTau_lead)
           ("tau_fake_prob_sublead",          (selHadTau_sublead->genHadTau() != 0) ? 1.0 : prob_fake_hadTau_sublead)
-          ("nMVAMedium_hadtau",              tightHadTausFullMVAMedium.size())
+          ("nMVAMedium_hadtau",              1.0) //tightHadTausFullMVAMedium.size())
           ("selHadTau_lead_deepTauIDe", selHadTau_lead -> id_mva(TauID::DeepTau2017v2VSe))
           ("selHadTau_lead_deepTauIDmu", selHadTau_lead -> id_mva(TauID::DeepTau2017v2VSmu))
           ("selHadTau_lead_deepTauIDjet", selHadTau_lead -> id_mva(TauID::DeepTau2017v2VSjet))
