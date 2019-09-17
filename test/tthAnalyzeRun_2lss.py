@@ -12,11 +12,7 @@ import getpass
 
 # E.g. to run: ./test/tthAnalyzeRun_2lss.py -v 2017Dec13 -m default -e 2017
 
-<<<<<<< HEAD
-mode_choices     = [ 'default', 'forBDTtraining', 'sync', 'sync_wMEM', "test" ]
-=======
-mode_choices     = [ 'default', 'forBDTtraining', 'sync' ]
->>>>>>> 727d85742a21fbf117b6fbb57b15d3b5e6be065d
+mode_choices     = [ 'default', 'forBDTtraining', 'sync', "test" ]
 sys_choices      = [ 'full' ] + systematics.an_extended_opts
 systematics.full = systematics.an_extended
 
@@ -100,7 +96,6 @@ elif mode == "forBDTtraining":
     ]:
       sample_info["use_it"] = False"""
   lepton_charge_selections = [ "SS" ]
-<<<<<<< HEAD
 elif mode == "test":
   samples = load_samples(era)
   for sample_name, sample_info in samples.items():
@@ -119,8 +114,6 @@ elif mode == "test":
       sample_info["use_it"] = False
 elif mode == "sync_wMEM":
   samples = load_samples(era, suffix = "addMEM_sync")
-=======
->>>>>>> 727d85742a21fbf117b6fbb57b15d3b5e6be065d
 elif mode == "sync":
   sample_suffix = "sync" if use_nonnominal else "sync_nom"
   if use_preselected:
