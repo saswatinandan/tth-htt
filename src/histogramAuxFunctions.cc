@@ -306,15 +306,18 @@ addHistograms(const std::string & newHistogramName,
       sumBinError2  += square(histogramToAdd->GetBinError(iBin));
     }
 
-    if(verbosity)
+    if(1 > 0)
     {
-      std::cout << "bin #" << iBin << " (x =  " << newHistogram->GetBinCenter(iBin) << "): "
+      std::cout << newHistogramName.data() << "\n" <<
+                   "bin #" << iBin << " (x =  " << newHistogram->GetBinCenter(iBin) << "): "
                    "sumBinContent = "           << sumBinContent << ", "
                    "sumBinError2 = "            << sumBinError2 << '\n';
     }
     newHistogram->SetBinContent(iBin, sumBinContent);
-    assert(sumBinError2 >= 0.);
-    newHistogram->SetBinError(iBin, std::sqrt(sumBinError2));
+    //assert(sumBinError2 >= 0.);
+    if (!(sumBinError2 >= 0.)) newHistogram->SetBinError(iBin, std::sqrt(sumBinError2));
+    else newHistogram->SetBinError(iBin, 0.);
+
   }
   return newHistogram;
 }
@@ -799,8 +802,8 @@ getRebinnedHistogram2d(const TH1 * histoOriginal,
   return histoRebinned;
 }
 
-TArrayD 
-getRebinnedBinning(TH1 * histogram, 
+TArrayD
+getRebinnedBinning(TH1 * histogram,
                    double minEvents)
 {
   std::cout << __func__ << ":\n";
@@ -857,20 +860,20 @@ compRatioHistogram(const std::string & ratioHistogramName,
                    const TH1 * denominator)
 {
   TH1 * histogramRatio = nullptr;
-  
+
   if(numerator->GetDimension() == denominator->GetDimension() &&
      numerator->GetNbinsX() == denominator->GetNbinsX()        )
   {
     histogramRatio = static_cast<TH1 *>(numerator->Clone(ratioHistogramName.data()));
     histogramRatio->Divide(denominator);
-    
+
     const int nBins = histogramRatio->GetNbinsX();
     for(int iBin = 1; iBin <= nBins; ++iBin)
     {
       const double binContent = histogramRatio->GetBinContent(iBin);
       histogramRatio->SetBinContent(iBin, binContent - 1.);
     }
-    
+
     histogramRatio->SetLineColor(numerator->GetLineColor());
     histogramRatio->SetLineWidth(numerator->GetLineWidth());
     histogramRatio->SetMarkerColor(numerator->GetMarkerColor());
