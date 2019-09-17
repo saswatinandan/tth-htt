@@ -178,16 +178,16 @@ RecoHadTauSelectorBase::set_if_looser(const std::string & cut)
     {
       const std::string wp_new  = cut_part.substr(7);
       const int wp_int_new = get_tau_id_wp_int(tauId_new, wp_new);
-      if(wp_int_new < wp_int_old)
-      {
+      //if(wp_int_new < wp_int_old)
+      //{
         cut_part_new = mva_old + wp_new;
         std::cout << "Relaxing old cut for '" << mva_new << "' from '" << wp_old << "' to '" << wp_new << "'\n";
-      }
-      else
+      //}
+      /*else
       {
         cut_part_new = mva_old + wp_old;
         std::cout << "Keeping old cut for '" << mva_new << "' at '" << wp_old << "'\n";
-      }
+      }*/
     }
 
     if(! cut_new.empty())
@@ -197,14 +197,14 @@ RecoHadTauSelectorBase::set_if_looser(const std::string & cut)
     cut_new += cut_part_new;
   }
 
-  if(cut_ != cut_new)
-  {
+  //if(cut_ != cut_new)
+  //{
     std::cout << "Changed tau ID WP from '" << cut_ << "' to '" << cut_new << "'\n";
     set(cut_new);
     return true;
-  }
+  /*}
 
-  return false;
+  return false;*/
 }
 
 bool
@@ -357,7 +357,7 @@ RecoHadTauSelectorBase::operator()(const RecoHadTau & hadTau) const
   }
   //   TauID::DeepTau2017v2VSe ||
   // tauId == TauID::DeepTau2017v2VSmu
-  if(hadTau.id_mva(TauID::DeepTau2017v2VSe) < 1 )
+  if( hadTau.id_mva(TauID::DeepTau2017v2VSe) < 0 ) // 3 Loose 1
   {
     if(debug_)
     {
@@ -365,7 +365,7 @@ RecoHadTauSelectorBase::operator()(const RecoHadTau & hadTau) const
     }
     return false;
   }
-  if(hadTau.id_mva(TauID::DeepTau2017v2VSmu) < 1 )
+  if( hadTau.id_mva(TauID::DeepTau2017v2VSmu) < 0 ) // 4 Medium 1
   {
     if(debug_)
     {
