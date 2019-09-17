@@ -492,9 +492,9 @@ int main(int argc, char* argv[])
   tightHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
 
   RecoHadTauCollectionSelectorTight tightHadTauSelectorMVAMedium(era, -1, isDEBUG);
-  tightHadTauSelector.set("dR03mvaMedium");
-  tightHadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
-  tightHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
+  tightHadTauSelectorMVAMedium.set("dR03mvaMedium");
+  tightHadTauSelectorMVAMedium.set_min_antiElectron(hadTauSelection_antiElectron);
+  tightHadTauSelectorMVAMedium.set_min_antiMuon(hadTauSelection_antiMuon);
 
   switch(hadTauSelection)
   {
@@ -864,7 +864,7 @@ int main(int argc, char* argv[])
   typedef std::remove_pointer<decltype(bdt_filler)>::type::float_type float_type;
   typedef std::remove_pointer<decltype(bdt_filler)>::type::int_type   int_type;
 
-  if ( 1 > 0 ) { // isBDTtraining
+  if ( isBDTtraining ) { // 
     bdt_filler = new std::remove_pointer<decltype(bdt_filler)>::type(
       makeHistManager_cfg(process_string, Form("%s/sel/evtntuple", histogramDir.data()), era_string, central_or_shift)
     );
@@ -878,7 +878,11 @@ int main(int argc, char* argv[])
 
       "costS_tau", "mTauTauVis",
       "genWeight", "evtWeight",
-      "prob_fake_lepton", "tau_fake_prob_lead", "tau_fake_prob_sublead"
+      "prob_fake_lepton", "tau_fake_prob_lead", "tau_fake_prob_sublead",
+      "selHadTau_lead_deepTauIDe",  "selHadTau_lead_deepTauIDmu", "selHadTau_lead_deepTauIDjet",
+      "selHadTau_sublead_deepTauIDe", "selHadTau_sublead_deepTauIDmu", "selHadTau_sublead_deepTauIDjet",
+      "selHadTau_lead_deepTauRawe", "selHadTau_lead_deepTauRawmu", "selHadTau_lead_deepTauRawjet",
+      "selHadTau_sublead_deepTauRawe", "selHadTau_sublead_deepTauRawmu", "selHadTau_sublead_deepTauRawjet"
     );
     for(const std::string & evt_cat_str: evt_cat_strs)
     {
@@ -886,7 +890,13 @@ int main(int argc, char* argv[])
     }
     bdt_filler -> register_variable<int_type>(
       "nJet", "nBJetLoose", "nBJetMedium", "nMVAMedium_hadtau",
-      "hadtruth", "bWj1Wj2_isGenMatched_CSVsort4rd"
+      "hadtruth", "bWj1Wj2_isGenMatched_CSVsort4rd",
+      "selHadTau_lead_genHadTau", "selHadTau_sublead_genHadTau",
+      "selHadTau_lead_genLepton", "selHadTau_sublead_genLepton",
+      "selHadTau_lead_antiMuon", "selHadTau_lead_antiElectron",
+      "selHadTau_sublead_antiMuon", "selHadTau_sublead_antiElectron",
+      "selHadTau_lead_decayMode", "selHadTau_lead_idDecayMode",
+      "selHadTau_sublead_decayMode", "selHadTau_sublead_idDecayMode"
     );
     bdt_filler -> bookTree(fs);
   }
@@ -1167,14 +1177,14 @@ int main(int argc, char* argv[])
     std::vector<RecoHadTau> hadTaus = hadTauReader->read();
     std::vector<const RecoHadTau*> hadTau_ptrs = convert_to_ptrs(hadTaus);
     std::vector<const RecoHadTau*> cleanedHadTaus = hadTauCleaner(hadTau_ptrs, preselMuons, preselElectrons);
-    std::vector<const RecoHadTau*> preselHadTausFull = preselHadTauSelector(cleanedHadTaus, isHigherTauID);
-    std::vector<const RecoHadTau*> fakeableHadTausFull = fakeableHadTauSelector(preselHadTausFull, isHigherTauID);
-    std::vector<const RecoHadTau*> tightHadTausFull = tightHadTauSelector(fakeableHadTausFull, isHigherTauID);
-    std::vector<const RecoHadTau*> tightHadTausFullMVAMedium = tightHadTauSelectorMVAMedium(cleanedHadTaus, isHigherTauID);
+    std::vector<const RecoHadTau*> preselHadTausFull = preselHadTauSelector(cleanedHadTaus, isHigherPt); //isHigherTauID
+    std::vector<const RecoHadTau*> fakeableHadTausFull = fakeableHadTauSelector(preselHadTausFull, isHigherPt);
+    std::vector<const RecoHadTau*> tightHadTausFull = tightHadTauSelector(fakeableHadTausFull, isHigherPt);
+    std::vector<const RecoHadTau*> tightHadTausFullMVAMedium = tightHadTauSelectorMVAMedium(cleanedHadTaus, isHigherPt);
 
     std::vector<const RecoHadTau*> preselHadTaus = pickFirstNobjects(preselHadTausFull, 2);
     std::vector<const RecoHadTau*> fakeableHadTaus = pickFirstNobjects(fakeableHadTausFull, 2);
-    std::vector<const RecoHadTau*> tightHadTaus = getIntersection(fakeableHadTaus, tightHadTausFull, isHigherTauID);
+    std::vector<const RecoHadTau*> tightHadTaus = getIntersection(fakeableHadTaus, tightHadTausFull, isHigherPt);
     std::vector<const RecoHadTau*> selHadTaus = selectObjects(hadTauSelection, preselHadTaus, fakeableHadTaus, tightHadTaus);
     if(isDEBUG || run_lumi_eventSelector)
     {
@@ -1919,8 +1929,8 @@ int main(int argc, char* argv[])
           ("ptmiss",                         ptmiss)
           ("mT_lep",                         mT_lep)
           ("htmiss",                         mht_p4.pt())
-          ("tau1_mva",                       selHadTau_lead->raw_mva())
-          ("tau2_mva",                       selHadTau_sublead->raw_mva())
+          ("tau1_mva",                       selHadTau_lead->raw_mva(TauID::MVAoldDMdR032017v2))
+          ("tau2_mva",                       selHadTau_sublead->raw_mva(TauID::MVAoldDMdR032017v2))
           ("tau1_pt",                        selHadTau_lead->pt())
           ("tau2_pt",                        selHadTau_sublead->pt())
           ("tau1_eta",                       selHadTau_lead->absEta())
@@ -1948,6 +1958,31 @@ int main(int argc, char* argv[])
           ("tau_fake_prob_lead",             (selHadTau_lead->genHadTau() != 0) ? 1.0 : prob_fake_hadTau_lead)
           ("tau_fake_prob_sublead",          (selHadTau_sublead->genHadTau() != 0) ? 1.0 : prob_fake_hadTau_sublead)
           ("nMVAMedium_hadtau",              tightHadTausFullMVAMedium.size())
+          ("selHadTau_lead_deepTauIDe", selHadTau_lead -> id_mva(TauID::DeepTau2017v2VSe))
+          ("selHadTau_lead_deepTauIDmu", selHadTau_lead -> id_mva(TauID::DeepTau2017v2VSmu))
+          ("selHadTau_lead_deepTauIDjet", selHadTau_lead -> id_mva(TauID::DeepTau2017v2VSjet))
+          ("selHadTau_sublead_deepTauIDe", selHadTau_sublead -> id_mva(TauID::DeepTau2017v2VSe))
+          ("selHadTau_sublead_deepTauIDmu", selHadTau_sublead -> id_mva(TauID::DeepTau2017v2VSmu))
+          ("selHadTau_sublead_deepTauIDjet", selHadTau_sublead ->  id_mva(TauID::DeepTau2017v2VSjet))
+
+          ("selHadTau_lead_deepTauRawe", selHadTau_lead -> raw_mva(TauID::DeepTau2017v2VSe))
+          ("selHadTau_lead_deepTauRawmu", selHadTau_lead -> raw_mva(TauID::DeepTau2017v2VSmu))
+          ("selHadTau_lead_deepTauRawjet", selHadTau_lead -> raw_mva(TauID::DeepTau2017v2VSjet))
+          ("selHadTau_sublead_deepTauRawe", selHadTau_sublead -> raw_mva(TauID::DeepTau2017v2VSe))
+          ("selHadTau_sublead_deepTauRawmu", selHadTau_sublead -> raw_mva(TauID::DeepTau2017v2VSmu))
+          ("selHadTau_sublead_deepTauRawjet", selHadTau_sublead -> raw_mva(TauID::DeepTau2017v2VSjet))
+          ("selHadTau_lead_genHadTau", selHadTau_lead->genHadTau() ? 1 : 0)
+          ("selHadTau_sublead_genHadTau", selHadTau_sublead->genHadTau() ? 1 : 0)
+          ("selHadTau_lead_genLepton", selHadTau_lead->genLepton() ? 1 : 0)
+          ("selHadTau_sublead_genLepton", selHadTau_sublead->genLepton() ? 1 : 0)
+          ("selHadTau_lead_antiMuon", selHadTau_lead-> antiMuon())
+          ("selHadTau_lead_antiElectron", selHadTau_lead-> antiElectron())
+          ("selHadTau_sublead_antiMuon", selHadTau_sublead-> antiMuon())
+          ("selHadTau_sublead_antiElectron", selHadTau_sublead-> antiElectron())
+          ("selHadTau_lead_decayMode", selHadTau_lead ->  decayMode())
+          ("selHadTau_lead_idDecayMode", selHadTau_lead ->  idDecayMode())
+          ("selHadTau_sublead_decayMode", selHadTau_sublead ->  decayMode())
+          ("selHadTau_sublead_idDecayMode", selHadTau_sublead ->  idDecayMode())
           (tH_weight_map)
         .fill();
     }

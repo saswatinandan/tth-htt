@@ -346,7 +346,7 @@ int main(int argc, char* argv[])
   }
 
   JetToTauFakeRateInterface* jetToTauFakeRateInterface = 0;
-  if ( applyFakeRateWeights == kFR_4L || applyFakeRateWeights == kFR_2tau ) {
+  if ( (applyFakeRateWeights == kFR_4L || applyFakeRateWeights == kFR_2tau) && 0 > 1 ) {
     edm::ParameterSet cfg_hadTauFakeRateWeight = cfg_analyze.getParameter<edm::ParameterSet>("hadTauFakeRateWeight");
     cfg_hadTauFakeRateWeight.addParameter<std::string>("hadTauSelection", hadTauSelection_part2);
     jetToTauFakeRateInterface = new JetToTauFakeRateInterface(cfg_hadTauFakeRateWeight, jetToTauFakeRate_option);
@@ -794,11 +794,27 @@ int main(int argc, char* argv[])
       "lep1_fake_prob", "lep2_fake_prob", "tau1_fake_prob", "tau2_fake_prob",
       "tau1_fake_test", "tau2_fake_test", "weight_fakeRate", "weights_dataToMC",
       "hadTau1Charge","hadTau2Charge",
-      "mbb_loose","mbb_medium"
+      "mbb_loose","mbb_medium",
+      "selHadTau_lead_deepTauIDe",  "selHadTau_lead_deepTauIDmu", "selHadTau_lead_deepTauIDjet",
+      "selHadTau_sublead_deepTauIDe", "selHadTau_sublead_deepTauIDmu", "selHadTau_sublead_deepTauIDjet",
+      "selHadTau_lead_deepTauRawe", "selHadTau_lead_deepTauRawmu", "selHadTau_lead_deepTauRawjet",
+      "selHadTau_sublead_deepTauRawe", "selHadTau_sublead_deepTauRawmu", "selHadTau_sublead_deepTauRawjet"
       //"mvaOutput_2l_ttV", "mvaOutput_2l_ttbar", "mvaDiscr_2l"
     );
     bdt_filler -> register_variable<int_type>(
-      "nJet", "nBJetLoose", "nBJetMedium", "is_OS" //, "lep1_isTight", "lep2_isTight", "tau1_isTight", "tau2_isTight"
+      "nJet", "nBJetLoose", "nBJetMedium", "is_OS", //, "lep1_isTight", "lep2_isTight", "tau1_isTight", "tau2_isTight"
+      "selHadTau_lead_genHadTau", "selHadTau_sublead_genHadTau",
+      "selHadTau_lead_genLepton", "selHadTau_sublead_genLepton",
+      "selHadTau_lead_antiMuon", "selHadTau_lead_antiElectron",
+      "selHadTau_sublead_antiMuon", "selHadTau_sublead_antiElectron",
+      "selHadTau_lead_decayMode", "selHadTau_lead_idDecayMode",
+      "selHadTau_sublead_decayMode", "selHadTau_sublead_idDecayMode",
+      "tau1_mva_id", "tau2_mva_id",
+      "selHadTau_lead_genLepton_status", "selHadTau_sublead_genLepton_status",
+      "selHadTau_lead_genHadTau_status", "selHadTau_sublead_genHadTau_status",
+      "selHadTau_lead_genJet", "selHadTau_sublead_genJet",
+      "selHadTau_lead_genAny", "selHadTau_sublead_genAny",
+      "selHadTau_lead_genPartFlav", "selHadTau_sublead_genPartFlav"
     );
     bdt_filler -> bookTree(fs);
   }
@@ -1874,8 +1890,10 @@ int main(int argc, char* argv[])
           ("avg_dr_jet",           avg_dr_jet)
           ("ptmiss",               met.pt())
           ("htmiss",               mht_p4.pt())
-          ("tau1_mva",             selHadTau_lead->raw_mva())
-          ("tau2_mva",             selHadTau_sublead->raw_mva())
+          ("tau1_mva",                        selHadTau_lead->raw_mva(TauID::MVAoldDMdR032017v2))
+          ("tau1_mva_id",                     selHadTau_lead->id_mva(TauID::MVAoldDMdR032017v2))
+          ("tau2_mva",                        selHadTau_sublead->raw_mva(TauID::MVAoldDMdR032017v2))
+          ("tau2_mva_id",                     selHadTau_sublead->id_mva(TauID::MVAoldDMdR032017v2))
           ("tau1_pt",              selHadTau_lead->pt())
           ("tau2_pt",              selHadTau_sublead->pt())
           ("tau1_eta",             selHadTau_lead->eta())
@@ -1912,6 +1930,47 @@ int main(int argc, char* argv[])
           ("nBJetLoose",           nBJetLoose)
           ("nBJetMedium",          nBJetMedium)
           ("is_OS",                is_OS)
+          ("selHadTau_lead_deepTauIDe", selHadTau_lead -> id_mva(TauID::DeepTau2017v2VSe))
+          ("selHadTau_lead_deepTauIDmu", selHadTau_lead -> id_mva(TauID::DeepTau2017v2VSmu))
+          ("selHadTau_lead_deepTauIDjet", selHadTau_lead -> id_mva(TauID::DeepTau2017v2VSjet))
+          ("selHadTau_sublead_deepTauIDe", selHadTau_sublead -> id_mva(TauID::DeepTau2017v2VSe))
+          ("selHadTau_sublead_deepTauIDmu", selHadTau_sublead -> id_mva(TauID::DeepTau2017v2VSmu))
+          ("selHadTau_sublead_deepTauIDjet", selHadTau_sublead ->  id_mva(TauID::DeepTau2017v2VSjet))
+
+          ("selHadTau_lead_deepTauRawe", selHadTau_lead -> raw_mva(TauID::DeepTau2017v2VSe))
+          ("selHadTau_lead_deepTauRawmu", selHadTau_lead -> raw_mva(TauID::DeepTau2017v2VSmu))
+          ("selHadTau_lead_deepTauRawjet", selHadTau_lead -> raw_mva(TauID::DeepTau2017v2VSjet))
+          ("selHadTau_sublead_deepTauRawe", selHadTau_sublead -> raw_mva(TauID::DeepTau2017v2VSe))
+          ("selHadTau_sublead_deepTauRawmu", selHadTau_sublead -> raw_mva(TauID::DeepTau2017v2VSmu))
+          ("selHadTau_sublead_deepTauRawjet", selHadTau_sublead -> raw_mva(TauID::DeepTau2017v2VSjet))
+          ("selHadTau_lead_genHadTau", selHadTau_lead->genHadTau() ? 1 : 0 )
+          ("selHadTau_sublead_genHadTau", selHadTau_sublead->genHadTau() ? 1 : 0)
+          ("selHadTau_lead_genLepton", selHadTau_lead->genLepton() ? 1 : 0)
+          ("selHadTau_sublead_genLepton", selHadTau_sublead->genLepton() ? 1 : 0)
+          ("selHadTau_lead_antiMuon", selHadTau_lead-> antiMuon())
+          ("selHadTau_lead_antiElectron", selHadTau_lead-> antiElectron())
+          ("selHadTau_sublead_antiMuon", selHadTau_sublead-> antiMuon())
+          ("selHadTau_sublead_antiElectron", selHadTau_sublead-> antiElectron())
+          ("selHadTau_lead_decayMode", selHadTau_lead ->  decayMode())
+          ("selHadTau_lead_idDecayMode", selHadTau_lead ->  idDecayMode())
+          ("selHadTau_sublead_decayMode", selHadTau_sublead ->  decayMode())
+          ("selHadTau_sublead_idDecayMode", selHadTau_sublead ->  idDecayMode())
+
+          ("selHadTau_lead_genHadTau_status", selHadTau_lead->genHadTau() ? selHadTau_lead->genHadTau()->status()  : 0 )
+          ("selHadTau_sublead_genHadTau_status", selHadTau_sublead->genHadTau() ? selHadTau_sublead->genHadTau()->status()  : 0)
+
+          ("selHadTau_lead_genLepton_status", selHadTau_lead->genLepton() ? selHadTau_lead->genLepton()->status()  : 0)
+          ("selHadTau_sublead_genLepton_status", selHadTau_sublead->genLepton() ? selHadTau_sublead->genLepton()->status()  : 0)
+
+          ("selHadTau_lead_genJet", selHadTau_lead->genJet() ? selHadTau_lead->genJet()->pdgId() : -1)
+          ("selHadTau_sublead_genJet", selHadTau_sublead->genJet() ? selHadTau_sublead->genJet()->pdgId() : -1)
+
+          ("selHadTau_lead_genAny", selHadTau_lead->hasAnyGenMatch() ? 1 : 0)
+          ("selHadTau_sublead_genAny", selHadTau_sublead->hasAnyGenMatch() ? 1 : 0)
+
+          ("selHadTau_lead_genPartFlav", selHadTau_lead->genPartFlav())
+          ("selHadTau_sublead_genPartFlav", selHadTau_sublead->genPartFlav())
+
         .fill()
       ;
     }
