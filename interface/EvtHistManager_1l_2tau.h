@@ -27,6 +27,7 @@ public:
   fillHistograms(int numElectrons,
                  int numMuons,
                  int numHadTaus,
+                 int numHadTausMVA_medium,
                  int numJets,
                  int numBJets_loose,
                  int numBJets_medium,
@@ -41,6 +42,7 @@ public:
   TH1 * histogram_numElectrons_;
   TH1 * histogram_numMuons_;
   TH1 * histogram_numHadTaus_;
+  TH1 * histogram_numHadTausMVA_medium_;
   TH1 * histogram_numJets_;
   TH1 * histogram_numBJets_loose_;
   TH1 * histogram_numBJets_medium_;
