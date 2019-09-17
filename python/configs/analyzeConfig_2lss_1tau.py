@@ -211,8 +211,8 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
               samples_categories_MC.append("%s_%s" % (sample_category, decayMode))
             else:
               samples_categories_MC.append("%s_%s_%s" % (sample_category, coupling, decayMode))
-    self.prep_dcard_processesToCopy = [ "data_obs" ] + samples_categories_MC + [ "Convs", "data_fakes", "fakes_mc", "data_flips", "flips_mc" ]
-    self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "Convs", "data_fakes", "data_flips" ]
+    self.prep_dcard_processesToCopy = samples_categories_MC + [ "Convs",  "fakes_mc",  "flips_mc" ] # [ "data_obs" ] + "data_flips", "data_fakes",
+    self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "Convs" ] # , "data_fakes", "data_flips"
 
     self.cfgFile_analyze = os.path.join(self.template_dir, cfgFile_analyze)
     self.inputFiles_hadd_stage1_6 = {}
@@ -620,7 +620,8 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
                             # If there is coupling, there is decayMode
                             processes_input.extend([ "%s_%s_%s%s" % (sample_category, coupling, decayMode, genMatch) for genMatch in copy_genMatches ])
                             process_output = "%s_%s_%s" % (sample_category, coupling, decayMode)
-                          if genMatch_category in ["Convs", "fake", "flip", "gentau", "faketau" ] : process_output += "_" + genMatch_category
+                          if genMatch_category in ["Convs", "fake", "flip", "gentau", "faketau" ] :
+                              process_output += "_" + genMatch_category
                           addBackgrounds_job_tuple = (process_name, process_output, lepton_and_hadTau_selection_and_frWeight, lepton_charge_selection, chargeSumSelection)
                           if processes_input:
                               logging.info(" ...for genMatch option = '%s'" % genMatch_category)
@@ -674,7 +675,6 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
               decays = [""]
               if sample_category in self.procsWithDecayModes : decays += self.decayModes
               couplings = [""]
-              if sample_category in ["tHq", "tHW"] : couplings += self.thcouplings
               for decayMode in decays :
                 for coupling in couplings :
                   if sample_category not in self.ttHProcs and decayMode in ["hmm", "hzg"] : continue
@@ -698,7 +698,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
             sample_categories.extend(self.signalProcs)
             processes_input = []
             for process_input_base in processes_input_base:
-              processes_input.append("%s_fake" % processes_input_base)
+              processes_input.append("%s_fake" % process_input_base)
             self.jobOptions_addBackgrounds_sum[key_addBackgrounds_job_fakes] = {
               'inputFile' : self.outputFile_hadd_stage1_5[key_hadd_stage1_5_job],
               'cfgFile_modified' : os.path.join(self.dirs[key_addBackgrounds_dir][DKEY_CFGS], "addBackgrounds_%s_%s_lep%s_sum%s_cfg.py" % addBackgrounds_job_fakes_tuple),
@@ -720,7 +720,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
             sample_categories.extend(self.signalProcs)
             processes_input = []
             for process_input_base in processes_input_base:
-              processes_input.append("%s_flip" % processes_input_base)
+              processes_input.append("%s_flip" % process_input_base)
             self.jobOptions_addBackgrounds_sum[key_addBackgrounds_job_flips] = {
               'inputFile' : self.outputFile_hadd_stage1_5[key_hadd_stage1_5_job],
               'cfgFile_modified' : os.path.join(self.dirs[key_addBackgrounds_dir][DKEY_CFGS], "addBackgrounds_%s_%s_lep%s_sum%s_cfg.py" % addBackgrounds_job_flips_tuple),
@@ -742,7 +742,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
             sample_categories.extend(self.signalProcs)
             processes_input = []
             for process_input_base in processes_input_base:
-              processes_input.append("%s_Convs" % processes_input_base)
+              processes_input.append("%s_Convs" % process_input_base)
             self.jobOptions_addBackgrounds_sum[key_addBackgrounds_job_Convs] = {
               'inputFile' : self.outputFile_hadd_stage1_5[key_hadd_stage1_5_job],
               'cfgFile_modified' : os.path.join(self.dirs[key_addBackgrounds_dir][DKEY_CFGS], "addBackgrounds_%s_%s_lep%s_sum%s_cfg.py" % addBackgrounds_job_Convs_tuple),

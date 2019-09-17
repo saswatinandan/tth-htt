@@ -174,7 +174,7 @@ class analyzeConfig_1l_2tau(analyzeConfig):
               samples_categories_MC.append("%s_%s" % (sample_category, decayMode))
             else:
               samples_categories_MC.append("%s_%s_%s" % (sample_category, coupling, decayMode))
-    self.prep_dcard_processesToCopy = [ "data_obs" ] + samples_categories_MC + [ "Convs", "data_fakes", "fakes_mc", "data_obs" ]
+    self.prep_dcard_processesToCopy = samples_categories_MC + [ "Convs", "data_fakes", "fakes_mc" ] # [ "data_obs" ] +
     self.make_plots_backgrounds = [ "TTW", "TTZ", "TTWW", "EWK", "Rares", "tHq", "tHW" ] + [ "Convs", "data_fakes" ]
 
     self.cfgFile_analyze = os.path.join(self.template_dir, cfgFile_analyze)
@@ -352,6 +352,8 @@ class analyzeConfig_1l_2tau(analyzeConfig):
 
       if lepton_and_hadTau_selection == "forBDTtraining":
         lepton_selection = "Tight"
+        electron_selection = "Tight"
+        muon_selection = "Tight"
         hadTau_selection = "Tight|%s" % self.hadTau_selection_relaxed
       elif lepton_and_hadTau_selection == "Fakeable_mcClosure_e":
         electron_selection = "Fakeable"
@@ -595,7 +597,6 @@ class analyzeConfig_1l_2tau(analyzeConfig):
             decays = [""]
             if sample_category in self.procsWithDecayModes : decays += self.decayModes
             couplings = [""]
-            if sample_category in ["tHq", "tHW"] : couplings += self.thcouplings
             for decayMode in decays :
               for coupling in couplings :
                 if sample_category not in self.ttHProcs and decayMode in ["hmm", "hzg"] : continue

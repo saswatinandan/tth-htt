@@ -532,7 +532,6 @@ class analyzeConfig_1l_1tau(analyzeConfig):
                 decays = [""]
                 if sample_category in self.procsWithDecayModes : decays += self.decayModes
                 couplings = [""]
-                if sample_category in ["tHq", "tHW"] : couplings += self.thcouplings
                 # sum non-fake and fake contributions for each MC sample separately
                 genMatch_categories = [ "nonfake", "flips", "Convs", "fake" ]
                 for decayMode in decays :
