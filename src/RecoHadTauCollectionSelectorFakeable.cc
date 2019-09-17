@@ -13,7 +13,7 @@ RecoHadTauSelectorFakeable::RecoHadTauSelectorFakeable(int era,
   {
     case kEra_2016:
     case kEra_2018:
-    case kEra_2017: set("dR03mvaVLoose"); break;
+    case kEra_2017: set("deepVSjVVVLoose"); break;
     default: throw cmsException(this) << "Invalid era = " << era;
   }
 }
