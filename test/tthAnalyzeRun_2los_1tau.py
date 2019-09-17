@@ -67,6 +67,12 @@ hadTau_selection = "dR03mvaLoose"
 
 if mode == "default":
   samples = load_samples(era, suffix = "preselected" if use_preselected else "")
+  for sample_name, sample_info in samples.items():
+    if sample_name == 'sum_events': continue
+    if sample_info["sample_category"] in [
+      "data_obs"
+    ]:
+      sample_info["use_it"] = False
 elif mode == "test":
   samples = load_samples(era, suffix = "preselected" if use_preselected else "")
   for sample_name, sample_info in samples.items():

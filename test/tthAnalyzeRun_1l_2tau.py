@@ -50,7 +50,7 @@ use_preselected   = args.use_preselected
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
-files_per_job     = args.files_per_job
+files_per_job     = 10 #args.files_per_job
 use_home          = args.use_home
 jet_cleaning      = args.jet_cleaning
 gen_matching      = args.gen_matching
@@ -66,18 +66,45 @@ lumi = get_lumi(era)
 jet_cleaning_by_index = (jet_cleaning == 'by_index')
 gen_matching_by_index = (gen_matching == 'by_index')
 
-hadTau_charge_selections = [ "OS", "SS" ]
-hadTau_selection = "dR03mvaMedium"
+hadTau_charge_selections = [ "OS"] # , "SS"
+hadTau_selection = "deepVSjMedium"# "deepVSjLoose" #" deepVSjTight" # "dR03mvaMedium" #
 
 if mode == "default":
   samples = load_samples(era, suffix = "preselected" if use_preselected else "")
+  for sample_name, sample_info in samples.items():
+    if sample_name == 'sum_events': continue
+    if sample_info["sample_category"] in [
+      "data_obs"
+    ]:
+      sample_info["use_it"] = False
+    """if sample_info["process_name_specific"] not in [
+      "ttHJetToNonbb_M125_amcatnlo",
+      "TTJets_DiLept",
+      "TTJets_SingleLeptFromT",
+      "TTJets_SingleLeptFromTbar",
+      "TTJets_madgraphMLM"
+    ]:
+      sample_info["use_it"] = False"""
 elif mode == "forBDTtraining":
   if use_preselected:
     raise ValueError("Makes no sense to use preselected samples w/ BDT training mode")
 
-  samples = load_samples(era, suffix = "BDT")
-  hadTau_selection         = "dR03mvaLoose"
-  hadTau_selection_relaxed = "dR03mvaVLoose"
+  #samples = load_samples(era, suffix = "BDT")
+  #hadTau_selection         = "dR03mvaLoose"
+  #hadTau_selection_relaxed = "dR03mvaVLoose"
+  samples = load_samples(era)
+  for sample_name, sample_info in samples.items():
+      if sample_name == 'sum_events': continue
+      if sample_info["process_name_specific"] not in [
+        "ttHJetToNonbb_M125_amcatnlo",
+        "TTJets_DiLept",
+        "TTJets_SingleLeptFromT",
+        "TTJets_SingleLeptFromTbar",
+        "TTJets_madgraphMLM"
+      ]:
+        sample_info["use_it"] = False
+  hadTau_selection = "deepVSjVVLoose" #"dR03mvaLoose"
+  hadTau_selection_relaxed = "deepVSjVVLoose" #"dR03mvaVLoose"
   hadTau_charge_selections = [ "OS" ]
 elif mode == "sync":
   if use_preselected:
@@ -126,6 +153,7 @@ if __name__ == '__main__':
     histograms_to_fit                     = {
       "EventCounter"                      : {},
       "numJets"                           : {},
+      "numHadTausMVA_medium"              : {},
       "mTauTauVis"                        : {},
       "mvaOutput_final"                   : {},
     },

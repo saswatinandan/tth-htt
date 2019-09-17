@@ -63,8 +63,8 @@ lumi = get_lumi(era)
 jet_cleaning_by_index = (jet_cleaning == 'by_index')
 gen_matching_by_index = (gen_matching == 'by_index')
 
-hadTau_charge_selections = [ "OS", "SS" ]
-hadTau_selection = "dR03mvaMedium"
+hadTau_charge_selections = [ "OS" ] # , "SS"
+hadTau_selection = "deepVSjMedium"#"deepVSjLoose" #"deepVSjMedium" #  "dR03mvaMedium" #
 
 if mode == "default":
   samples = load_samples(era)
@@ -72,10 +72,31 @@ if mode == "default":
     if sample_name == 'sum_events': continue
     if sample_info["process_name_specific"].startswith("DYBBJetsToLL_M-50"):
       sample_info["use_it"] = True
+    for sample_name, sample_info in samples.items():
+      if sample_name == 'sum_events': continue
+      if sample_info["sample_category"] in [
+        "data_obs"
+      ]:
+        sample_info["use_it"] = False
 elif mode == "forBDTtraining":
-  samples = load_samples(era, suffix = "BDT_DY")
-  hadTau_selection = "dR03mvaLoose"
-  hadTau_selection_relaxed = "dR03mvaVLoose"
+  #samples = load_samples(era, suffix = "BDT_DY")
+  samples = load_samples(era)
+  for sample_name, sample_info in samples.items():
+      if sample_name == 'sum_events': continue
+      if sample_info["process_name_specific"] not in [
+        "ttHJetToNonbb_M125_amcatnlo",
+        "TTJets_DiLept",
+        "TTJets_SingleLeptFromT",
+        "TTJets_SingleLeptFromTbar",
+        "TTJets_madgraphMLM"
+      ]:
+        sample_info["use_it"] = False
+  """for sample_name, sample_info in samples.items():
+    if sample_name == 'sum_events': continue
+    if sample_info["process_name_specific"].startswith("DYBBJetsToLL_M-50"):
+      sample_info["use_it"] = True"""
+  hadTau_selection = "deepVSjVVVLoose" #"dR03mvaLoose"
+  hadTau_selection_relaxed = "deepVSjVVVLoose" #"dR03mvaVLoose"
   hadTau_charge_selections = [ "OS" ]
 
 elif mode == "sync":
@@ -87,10 +108,11 @@ for sample_name, sample_info in samples.items():
   if sample_name == 'sum_events': continue
   if sample_info["type"] == "mc":
     sample_info["triggers"] = [ "2tau" ]
-  if sample_info["type"] == "data":
-    sample_info["use_it"] = sample_name.startswith("/Tau/") and mode == "default"
-  if sample_name.startswith("/DY"):
+  if sample_info["type"] == "data" and mode == "default":
+    sample_info["use_it"] = sample_name.startswith("/Tau/")
+  """if sample_name.startswith("/DY"):
     sample_info["sample_category"] = "DY"
+    sample_info["use_it"] = True"""
 
 if __name__ == '__main__':
   logging.info(

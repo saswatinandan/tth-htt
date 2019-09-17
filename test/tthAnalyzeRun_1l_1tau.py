@@ -66,6 +66,12 @@ hadTau_selection = "dR03mvaMedium"
 
 if mode == "default":
   samples = load_samples(era)
+  for sample_name, sample_info in samples.items():
+    if sample_name == 'sum_events': continue
+    if sample_info["sample_category"] in [
+      "data_obs"
+    ]:
+      sample_info["use_it"] = False
 elif mode == "test":
   samples = load_samples(era)
   for sample_name, sample_info in samples.items():

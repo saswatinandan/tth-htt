@@ -70,10 +70,16 @@ gen_matching_by_index = (gen_matching == 'by_index')
 MEMbranch                = ''
 lepton_charge_selections = [ "SS" ] if mode.find("forBDTtraining") != -1 else [ "OS", "SS" ]
 chargeSumSelections      = [ "OS" ] if mode.find("forBDTtraining") != -1 else [ "OS", "SS" ]
-hadTau_selection         = "dR03mvaLoose"
+hadTau_selection         = "deepVSjMedium" #"dR03mvaLoose"
 
 if mode == "default":
   samples = load_samples(era, suffix = "preselected" if use_preselected else "")
+  for sample_name, sample_info in samples.items():
+    if sample_name == 'sum_events': continue
+    if sample_info["sample_category"] in [
+      "data_obs"
+    ]:
+      sample_info["use_it"] = False
 elif mode == "test":
   samples = load_samples(era, suffix = "preselected" if use_preselected else "")
   for sample_name, sample_info in samples.items():
@@ -98,9 +104,22 @@ elif mode == "forBDTtraining_beforeAddMEM":
   if use_preselected:
     raise ValueError("Makes no sense to use preselected samples w/ BDT training mode")
 
-  samples = load_samples(era, suffix = "BDT")
-  hadTau_selection         = "dR03mvaLoose"
-  hadTau_selection_relaxed = "dR03mvaLoose"
+  #samples = load_samples(era, suffix = "BDT")
+  #hadTau_selection         = "dR03mvaLoose"
+  #hadTau_selection_relaxed = "dR03mvaLoose"
+  samples = load_samples(era)
+  for sample_name, sample_info in samples.items():
+      if sample_name == 'sum_events': continue
+      if sample_info["process_name_specific"] not in [
+        "ttHJetToNonbb_M125_amcatnlo",
+        "TTJets_DiLept",
+        "TTJets_SingleLeptFromT",
+        "TTJets_SingleLeptFromTbar",
+        "TTJets_madgraphMLM"
+      ]:
+        sample_info["use_it"] = False
+  hadTau_selection = "deepVSjVVVLoose" #"dR03mvaLoose"
+  hadTau_selection_relaxed = "deepVSjVVVLoose" #"dR03mvaVLoose"
 
 elif mode == "forBDTtraining_afterAddMEM":
   if use_preselected:
@@ -178,21 +197,21 @@ if __name__ == '__main__':
     histograms_to_fit         = {
       "EventCounter"                               : {},
       "numJets"                                    : {},
-      "mvaOutput_2lss_ttV"                         : {},
-      "mvaOutput_2lss_tt"                          : {},
-      "mvaOutput_2lss_1tau_plainKin_tt"            : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT2; quantile in fakes
-      "mvaOutput_2lss_1tau_plainKin_ttV"           : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT1; quantile in fakes
-      "mvaOutput_2lss_1tau_plainKin_1B_M"          : {},
-      "mvaOutput_2lss_1tau_plainKin_SUM_M"         : { 'quantile_rebin' : 11, 'quantile_in_fakes' : True }, # BDT3; quantile in fakes
-      "mvaOutput_2lss_1tau_plainKin_SUM_M_noRebin" : {},
-      "mvaOutput_2lss_1tau_HTT_SUM_M"              : { 'quantile_rebin' : 11, 'quantile_in_fakes' : True }, # BDT4; quantile in fakes
-      "mvaOutput_2lss_1tau_HTT_SUM_M_noRebin"      : {},
-      "mvaOutput_2lss_1tau_HTTMEM_SUM_M"           : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT5; quantile in fakes
-      "mvaOutput_2lss_1tau_HTTMEM_SUM_M_noRebin"   : {},
+      #"mvaOutput_2lss_ttV"                         : {},
+      #"mvaOutput_2lss_tt"                          : {},
+      #"mvaOutput_2lss_1tau_plainKin_tt"            : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT2; quantile in fakes
+      #"mvaOutput_2lss_1tau_plainKin_ttV"           : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT1; quantile in fakes
+      #"mvaOutput_2lss_1tau_plainKin_1B_M"          : {},
+      #"mvaOutput_2lss_1tau_plainKin_SUM_M"         : { 'quantile_rebin' : 11, 'quantile_in_fakes' : True }, # BDT3; quantile in fakes
+      #"mvaOutput_2lss_1tau_plainKin_SUM_M_noRebin" : {},
+      #"mvaOutput_2lss_1tau_HTT_SUM_M"              : { 'quantile_rebin' : 11, 'quantile_in_fakes' : True }, # BDT4; quantile in fakes
+      #"mvaOutput_2lss_1tau_HTT_SUM_M_noRebin"      : {},
+      #"mvaOutput_2lss_1tau_HTTMEM_SUM_M"           : { 'quantile_rebin' : 15, 'quantile_in_fakes' : True }, # BDT5; quantile in fakes
+      #"mvaOutput_2lss_1tau_HTTMEM_SUM_M_noRebin"   : {},
       "mTauTauVis1"                                : {},
       "mTauTauVis2"                                : {},
       "mTauTauVis"                                 : {},
-      "memOutput_LR"                               : {},
+      #"memOutput_LR"                               : {},
       "mvaOutput_final"                            : {},
     },
     select_rle_output         = True,

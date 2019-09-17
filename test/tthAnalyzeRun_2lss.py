@@ -12,7 +12,7 @@ import getpass
 
 # E.g. to run: ./test/tthAnalyzeRun_2lss.py -v 2017Dec13 -m default -e 2017
 
-mode_choices     = [ 'default', 'forBDTtraining', 'sync', 'sync_wMEM' ]
+mode_choices     = [ 'default', 'forBDTtraining', 'sync', 'sync_wMEM', "test" ]
 sys_choices      = [ 'full' ] + systematics.an_extended_opts
 systematics.full = systematics.an_extended
 
@@ -68,7 +68,38 @@ if mode == "default":
   samples = load_samples(era)
 elif mode == "forBDTtraining":
   samples = load_samples(era, suffix = "BDT")
+  """samples = load_samples(era)
+  for sample_name, sample_info in samples.items():
+    if sample_name == 'sum_events': continue
+    if not sample_info["sample_category"] in [
+      "signal",
+      "TTWH",
+      "TTZH",
+      "HH",
+      "ggH",
+      "qqH",
+      "VH",
+      "tHq",
+      "tHW"
+    ]:
+      sample_info["use_it"] = False"""
   lepton_charge_selections = [ "SS" ]
+elif mode == "test":
+  samples = load_samples(era)
+  for sample_name, sample_info in samples.items():
+    if sample_name == 'sum_events': continue
+    if not sample_info["sample_category"] in [
+      "signal",
+      "TTWH",
+      "TTZH",
+      "HH",
+      "ggH",
+      "qqH",
+      "VH",
+      "tHq",
+      "tHW"
+    ]:
+      sample_info["use_it"] = False
 elif mode == "sync_wMEM":
   samples = load_samples(era, suffix = "addMEM_sync")
 elif mode == "sync":
