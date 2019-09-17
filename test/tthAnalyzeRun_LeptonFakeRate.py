@@ -4,7 +4,7 @@ from tthAnalysis.HiggsToTauTau.configs.analyzeConfig_LeptonFakeRate import analy
 from tthAnalysis.HiggsToTauTau.jobTools import query_yes_no
 from tthAnalysis.HiggsToTauTau.analysisSettings import systematics, get_lumi
 from tthAnalysis.HiggsToTauTau.runConfig import tthAnalyzeParser, filter_samples
-from tthAnalysis.HiggsToTauTau.common import logging, load_samples
+from tthAnalysis.HiggsToTauTau.common import logging, load_samples, load_samples_stitched
 
 import os
 import sys
@@ -28,6 +28,7 @@ parser.add_files_per_job()
 parser.add_use_home()
 parser.add_jet_cleaning()
 parser.add_gen_matching()
+parser.add_stitched(use_dy = True, use_wj = True)
 args = parser.parse_args()
 
 # Common arguments
@@ -50,6 +51,7 @@ files_per_job     = args.files_per_job
 use_home          = args.use_home
 jet_cleaning      = args.jet_cleaning
 gen_matching      = args.gen_matching
+use_stitched      = args.use_stitched
 
 # Use the arguments
 central_or_shifts = []
@@ -68,6 +70,7 @@ elif mode == 'sync':
 else:
   raise ValueError('Invalid mode: %s' % mode)
 
+samples = load_samples_stitched(samples, era, load_dy = 'dy' in use_stitched, load_wjets = 'wjets' in use_stitched)
 for sample_name, sample_info in samples.items():
   if sample_name == 'sum_events': continue
 
@@ -87,16 +90,16 @@ for sample_name, sample_info in samples.items():
   if era == "2016":
     if sample_name.startswith('/SingleElectron'):
       # SingleElectron excluded since no 1e triggers used
+      #TODO verify claim
       sample_info["use_it"] = False
   elif era == "2017":
     if sample_name.startswith(('/DoubleEG/Run', '/SingleElectron/Run2017B')):
       # DoubleEG excluded since no 2e triggers used
       # SingleElectron B run excluded since no useful triggers present in that dataset
       sample_info["use_it"] = False
-  elif era == "2018":
-    if sample_name.startswith('/DoubleEG/Run'):
-      # DoubleEG excluded since no 2e triggers used
-      sample_info["use_it"] = False
+
+  if sample_info["sample_category"] == "HH":
+    sample_info["use_it"] = False
 
 if __name__ == '__main__':
   logging.info(

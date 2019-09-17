@@ -24,8 +24,10 @@ mode_choices = {
 parser = tthAnalyzeParser(isAddMEM = True)
 parser.add_modes(mode_choices.keys())
 parser.add_sys(sys_choices)
+parser.add_preselect()
 parser.add_nonnominal()
 parser.add_tau_id_wp()
+parser.add_tau_id()
 parser.add_use_home(False)
 parser.add_jet_cleaning()
 parser.add_argument('-i', '--integration-points',
@@ -56,9 +58,11 @@ running_method     = args.running_method
 # Additional arguments
 mode              = args.mode
 systematics_label = args.systematics
+use_preselected   = args.use_preselected
 use_nonnominal    = args.original_central
 use_home          = args.use_home
 jet_cleaning      = args.jet_cleaning
+tau_id            = args.tau_id
 
 # Custom arguments
 integration_points   = args.integration_points
@@ -77,21 +81,37 @@ version            = "%s_%s_%s_%s" % (
 )
 jet_cleaning_by_index = (jet_cleaning == 'by_index')
 
+hadTauSelection = "Tight"
+
 if mode == 'default':
-  samples = load_samples(era)
+  samples = load_samples(era, suffix = "preselected" if use_preselected else "")
   leptonSelection = "Fakeable"
-  hadTauSelection = "Tight"
-  hadTauWP = "dR03mvaLoose"
+  hadTauWP_map = {
+    'dR03mva' : 'Loose',
+    'deepVSj' : 'Loose',
+  }
+  hadTauWP = tau_id + hadTauWP_map[tau_id]
 elif mode == 'bdt':
+  if use_preselected:
+    raise ValueError("Makes no sense to use preselected samples w/ BDT training mode")
   samples = load_samples(era, suffix = "BDT")
   leptonSelection = "Loose"
-  hadTauSelection = "Tight"
-  hadTauWP = "dR03mvaVVLoose"
+  hadTauWP_map = {
+    'dR03mva' : 'VVLoose',
+    'deepVSj' : 'VVVLoose',
+  }
+  hadTauWP = tau_id + hadTauWP_map[tau_id]
 elif mode == 'sync':
-  samples = load_samples(era, suffix = "sync" if use_nonnominal else "sync_nom")
+  sample_suffix = "sync" if use_nonnominal else "sync_nom"
+  if use_preselected:
+    sample_suffix = "preselected_{}".format(sample_suffix)
+  samples = load_samples(era, suffix = sample_suffix)
   leptonSelection = "Fakeable"
-  hadTauSelection = "Tight"
-  hadTauWP = "dR03mvaLoose"
+  hadTauWP_map = {
+    'dR03mva' : 'Loose',
+    'deepVSj' : 'Loose',
+  }
+  hadTauWP = tau_id + hadTauWP_map[tau_id]
 else:
   raise ValueError("Invalid mode: %s" % mode)
 

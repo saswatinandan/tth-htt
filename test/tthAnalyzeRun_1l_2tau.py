@@ -24,11 +24,13 @@ parser.add_preselect()
 parser.add_rle_select()
 parser.add_nonnominal()
 parser.add_tau_id_wp()
+parser.add_tau_id()
 parser.add_hlt_filter()
 parser.add_files_per_job()
 parser.add_use_home()
 parser.add_jet_cleaning()
 parser.add_gen_matching()
+parser.add_sideband()
 args = parser.parse_args()
 
 # Common arguments
@@ -54,6 +56,8 @@ files_per_job     = 10 #args.files_per_job
 use_home          = args.use_home
 jet_cleaning      = args.jet_cleaning
 gen_matching      = args.gen_matching
+sideband          = args.sideband
+tau_id            = args.tau_id
 
 # Use the arguments
 central_or_shifts = []
@@ -66,8 +70,20 @@ lumi = get_lumi(era)
 jet_cleaning_by_index = (jet_cleaning == 'by_index')
 gen_matching_by_index = (gen_matching == 'by_index')
 
-hadTau_charge_selections = [ "OS"] # , "SS"
-hadTau_selection = "deepVSjMedium"# "deepVSjLoose" #" deepVSjTight" # "dR03mvaMedium" #
+hadTauWP_map = {
+  'dR03mva' : 'Medium',
+  'deepVSj' : 'Medium',
+}
+hadTau_selection = tau_id + hadTauWP_map[tau_id]
+
+if sideband == 'disabled':
+  hadTau_charge_selections = [ "OS" ]
+elif sideband == 'enabled':
+  hadTau_charge_selections = [ "OS", "SS" ]
+elif sideband == 'only':
+  hadTau_charge_selections = [ "SS" ]
+else:
+  raise ValueError("Invalid choice for the sideband: %s" % sideband)
 
 if mode == "default":
   samples = load_samples(era, suffix = "preselected" if use_preselected else "")
@@ -88,10 +104,16 @@ if mode == "default":
 elif mode == "forBDTtraining":
   if use_preselected:
     raise ValueError("Makes no sense to use preselected samples w/ BDT training mode")
-
   #samples = load_samples(era, suffix = "BDT")
-  #hadTau_selection         = "dR03mvaLoose"
-  #hadTau_selection_relaxed = "dR03mvaVLoose"
+  """
+  hadTauWP_map_relaxed = {
+    'dR03mva' : 'VLoose',
+    'deepVSj' : 'VLoose',
+  }
+  if args.tau_id_wp:
+    tau_id = args.tau_id[:7]
+  hadTau_selection_relaxed = tau_id + hadTauWP_map_relaxed[tau_id]
+  """
   samples = load_samples(era)
   for sample_name, sample_info in samples.items():
       if sample_name == 'sum_events': continue
@@ -107,9 +129,10 @@ elif mode == "forBDTtraining":
   hadTau_selection_relaxed = "deepVSjVVLoose" #"dR03mvaVLoose"
   hadTau_charge_selections = [ "OS" ]
 elif mode == "sync":
+  sample_suffix = "sync" if use_nonnominal else "sync_nom"
   if use_preselected:
-    raise ValueError("Makes no sense to use preselected samples in sync")
-  samples = load_samples(era, suffix = "sync" if use_nonnominal else "sync_nom")
+    sample_suffix = "preselected_{}".format(sample_suffix)
+  samples = load_samples(era, suffix = sample_suffix)
 else:
   raise ValueError("Invalid mode: %s" % mode)
 

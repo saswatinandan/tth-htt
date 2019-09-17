@@ -1,6 +1,6 @@
 from tthAnalysis.HiggsToTauTau.configs.analyzeConfig import *
 from tthAnalysis.HiggsToTauTau.jobTools import create_if_not_exists
-from tthAnalysis.HiggsToTauTau.analysisTools import initDict, getKey, create_cfg, createFile, generateInputFileList, is_dymc_reweighting
+from tthAnalysis.HiggsToTauTau.analysisTools import initDict, getKey, create_cfg, createFile, generateInputFileList
 from tthAnalysis.HiggsToTauTau.common import logging
 
 import re
@@ -107,13 +107,6 @@ class analyzeConfig_3l(analyzeConfig):
     self.hadTauVeto_selection_part2 = hadTauVeto_selection
     self.applyFakeRateWeights = applyFakeRateWeights
     run_mcClosure = 'central' not in self.central_or_shifts or len(central_or_shifts) > 1 or self.do_sync
-    if self.era not in [ '2016', '2017', '2018' ]:
-      logging.warning('mcClosure for lepton FR not possible for era %s' % self.era)
-      run_mcClosure = False
-    if run_mcClosure:
-      # Run MC closure jobs only if the analysis is run w/ (at least some) systematic uncertainties
-      # self.lepton_and_hadTau_selections.extend([ "Fakeable_mcClosure_all" ]) #TODO
-      pass
 
     self.lepton_genMatches = [ "3l0g0j", "2l1g0j", "2l0g1j", "1l2g0j", "1l1g1j", "1l0g2j", "0l3g0j", "0l2g1j", "0l1g2j", "0l0g3j" ]
 
@@ -132,8 +125,10 @@ class analyzeConfig_3l(analyzeConfig):
           self.lepton_genMatches_fakes.append(lepton_genMatch)
       if run_mcClosure:
         self.lepton_selections.extend([ "Fakeable_mcClosure_e", "Fakeable_mcClosure_m" ])
+      self.central_or_shifts_fr = systematics.FRe_shape + systematics.FRm_shape
     else:
       raise ValueError("Invalid Configuration parameter 'applyFakeRateWeights' = %s !!" % applyFakeRateWeights)
+    self.pruneSystematics()
 
     self.chargeSumSelections = chargeSumSelections
 
@@ -307,9 +302,11 @@ class analyzeConfig_3l(analyzeConfig):
                 if central_or_shift_or_dummy in [ "hadd", "addBackgrounds" ] and process_name_or_dummy in [ "hadd" ]:
                   continue
                 if central_or_shift_or_dummy != "central" and central_or_shift_or_dummy not in central_or_shift_extensions:
-                  isFR_shape_shift = (central_or_shift_or_dummy in systematics.FR_all)
+                  isFR_shape_shift = (central_or_shift_or_dummy in self.central_or_shifts_fr)
                   if not ((lepton_selection == "Fakeable" and chargeSumSelection == "OS" and isFR_shape_shift) or
                           (lepton_selection == "Tight"    and chargeSumSelection == "OS")):
+                    continue
+                  if isFR_shape_shift and lepton_selection == "Tight":
                     continue
                   if not is_mc and not isFR_shape_shift:
                     continue
@@ -365,7 +362,7 @@ class analyzeConfig_3l(analyzeConfig):
 
     inputFileLists = {}
     for sample_name, sample_info in self.samples.items():
-      if not sample_info["use_it"] or sample_info["sample_category"] in [ "additional_signal_overlap", "background_data_estimate" ]:
+      if not sample_info["use_it"]:
         continue
       logging.info("Checking input files for sample %s" % sample_info["process_name_specific"])
       inputFileLists[sample_name] = generateInputFileList(sample_info, self.max_files_per_job)
@@ -406,14 +403,15 @@ class analyzeConfig_3l(analyzeConfig):
 
             sample_category = sample_info["sample_category"]
             is_mc = (sample_info["type"] == "mc")
-            is_signal = sample_category in self.signalProcs
 
             for central_or_shift in self.central_or_shifts:
 
               if central_or_shift != "central":
-                isFR_shape_shift = (central_or_shift in systematics.FR_all)
+                isFR_shape_shift = (central_or_shift in self.central_or_shifts_fr)
                 if not ((lepton_selection == "Fakeable" and chargeSumSelection == "OS" and isFR_shape_shift) or
                         (lepton_selection == "Tight"    and chargeSumSelection == "OS")):
+                  continue
+                if isFR_shape_shift and lepton_selection == "Tight":
                   continue
                 if not is_mc and not isFR_shape_shift:
                   continue
@@ -623,7 +621,6 @@ class analyzeConfig_3l(analyzeConfig):
             decays = []
             if sample_category in self.procsWithDecayModes : decays += self.decayModes
             couplings = [""]
-            #if sample_category in ["tHq", "tHW"] : couplings += self.thcouplings # xanda -- need to do couplings in subcategories
             for decayMode in decays :
               for coupling in couplings :
                 if sample_category not in self.ttHProcs and decayMode in ["hmm", "hzg"] : continue
@@ -815,19 +812,20 @@ class analyzeConfig_3l(analyzeConfig):
             self.createCfg_add_syst_fakerate(self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job])
 
     logging.info("Creating configuration files to run 'makePlots'")
-    key_hadd_stage2_job = getKey(get_lepton_selection_and_frWeight("Tight", "disabled"), "OS")
     key_makePlots_dir = getKey("makePlots")
-    key_makePlots_job = getKey("OS")
-    self.jobOptions_make_plots[key_makePlots_job] = {
-      'executable' : self.executable_make_plots,
-      'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2_job],
-      'cfgFile_modified' : os.path.join(self.dirs[key_makePlots_dir][DKEY_CFGS], "makePlots_%s_cfg.py" % self.channel),
-      'outputFile' : os.path.join(self.dirs[key_makePlots_dir][DKEY_PLOT], "makePlots_%s.png" % self.channel),
-      'histogramDir' : self.histogramDir_prep_dcard,
-      'label' : "3l",
-      'make_plots_backgrounds' : self.make_plots_backgrounds
-    }
-    self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])
+    if "OS" in self.chargeSumSelections:
+      key_hadd_stage2_job = getKey(get_lepton_selection_and_frWeight("Tight", "disabled"), "OS")
+      key_makePlots_job = getKey("OS")
+      self.jobOptions_make_plots[key_makePlots_job] = {
+        'executable' : self.executable_make_plots,
+        'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2_job],
+        'cfgFile_modified' : os.path.join(self.dirs[key_makePlots_dir][DKEY_CFGS], "makePlots_%s_cfg.py" % self.channel),
+        'outputFile' : os.path.join(self.dirs[key_makePlots_dir][DKEY_PLOT], "makePlots_%s.png" % self.channel),
+        'histogramDir' : self.histogramDir_prep_dcard,
+        'label' : "3l",
+        'make_plots_backgrounds' : self.make_plots_backgrounds
+      }
+      self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])
     if "SS" in self.chargeSumSelections:
       key_hadd_stage2_job = getKey(get_lepton_selection_and_frWeight("Tight", "disabled"), "SS")
       key_makePlots_job = getKey("SS")

@@ -1,6 +1,6 @@
 from tthAnalysis.HiggsToTauTau.configs.analyzeConfig import *
 from tthAnalysis.HiggsToTauTau.jobTools import create_if_not_exists
-from tthAnalysis.HiggsToTauTau.analysisTools import initDict, getKey, create_cfg, createFile, generateInputFileList, is_dymc_reweighting
+from tthAnalysis.HiggsToTauTau.analysisTools import initDict, getKey, create_cfg, createFile, generateInputFileList
 from tthAnalysis.HiggsToTauTau.common import logging
 
 import os.path
@@ -106,13 +106,6 @@ class analyzeConfig_0l_2tau(analyzeConfig):
     self.hadTau_charge_selections = hadTau_charge_selections
     self.applyFakeRateWeights = applyFakeRateWeights
     run_mcClosure = 'central' not in self.central_or_shifts or len(central_or_shifts) > 1 or self.do_sync
-    if self.era not in [ '2016', '2017', '2018' ]:
-      logging.warning('mcClosure for lepton FR not possible for era %s' % self.era)
-      run_mcClosure = False
-    if run_mcClosure:
-      # Run MC closure jobs only if the analysis is run w/ (at least some) systematic uncertainties
-      #self.lepton_and_hadTau_selections.extend([ "Fakeable_mcClosure_all" ]) #TODO
-      pass
 
     self.hadTau_genMatches = [ "2t0e0m0j", "1t1e0m0j", "1t0e1m0j", "1t0e0m1j", "0t2e0m0j", "0t1e1m0j", "0t1e0m1j", "0t0e2m0j", "0t0e1m1j", "0t0e0m2j" ]
 
@@ -129,8 +122,10 @@ class analyzeConfig_0l_2tau(analyzeConfig):
           self.hadTau_genMatches_fakes.append(hadTau_genMatch)
       if run_mcClosure:
         self.hadTau_selections.extend([ "Fakeable_mcClosure_t" ])
+      self.central_or_shifts_fr = systematics.FR_t
     else:
       raise ValueError("Invalid Configuration parameter 'applyFakeRateWeights' = %s !!" % applyFakeRateWeights)
+    self.pruneSystematics()
 
     self.executable_addBackgrounds = executable_addBackgrounds
     self.executable_addFakes = executable_addBackgroundJetToTauFakes
@@ -259,9 +254,11 @@ class analyzeConfig_0l_2tau(analyzeConfig):
                 if central_or_shift_or_dummy in [ "hadd", "addBackgrounds" ] and process_name_or_dummy in [ "hadd" ]:
                   continue
                 if central_or_shift_or_dummy != "central" and central_or_shift_or_dummy not in central_or_shift_extensions:
-                  isFR_shape_shift = (central_or_shift_or_dummy in systematics.FakeRate_t().jt)
+                  isFR_shape_shift = (central_or_shift_or_dummy in self.central_or_shifts_fr)
                   if not ((hadTau_selection == "Fakeable" and hadTau_charge_selection == "OS" and isFR_shape_shift) or
                           (hadTau_selection == "Tight"    and hadTau_charge_selection == "OS")):
+                    continue
+                  if isFR_shape_shift and hadTau_selection == "Tight":
                     continue
                   if not is_mc and not isFR_shape_shift:
                     continue
@@ -317,7 +314,7 @@ class analyzeConfig_0l_2tau(analyzeConfig):
 
     inputFileLists = {}
     for sample_name, sample_info in self.samples.items():
-      if not sample_info["use_it"] or sample_info["sample_category"] in [ "additional_signal_overlap", "background_data_estimate" ]:
+      if not sample_info["use_it"]:
         continue
       logging.info("Checking input files for sample %s" % sample_info["process_name_specific"])
       inputFileLists[sample_name] = generateInputFileList(sample_info, self.max_files_per_job)
@@ -350,14 +347,15 @@ class analyzeConfig_0l_2tau(analyzeConfig):
 
             sample_category = sample_info["sample_category"]
             is_mc = (sample_info["type"] == "mc")
-            is_signal = sample_category in self.signalProcs
 
             for central_or_shift in self.central_or_shifts:
 
               if central_or_shift != "central":
-                isFR_shape_shift = (central_or_shift in systematics.FakeRate_t().jt)
+                isFR_shape_shift = (central_or_shift in self.central_or_shifts_fr)
                 if not ((hadTau_selection == "Fakeable" and hadTau_charge_selection == "OS" and isFR_shape_shift) or
                         (hadTau_selection == "Tight"    and hadTau_charge_selection == "OS")):
+                  continue
+                if isFR_shape_shift and hadTau_selection == "Tight":
                   continue
                 if not is_mc and not isFR_shape_shift:
                   continue
@@ -649,23 +647,23 @@ class analyzeConfig_0l_2tau(analyzeConfig):
     logging.info("Creating configuration files to run 'prepareDatacards'")
     for category in self.categories:
       for histogramToFit in self.histograms_to_fit:
-        key_hadd_stage2_job = getKey(get_hadTau_selection_and_frWeight("Tight", "disabled"), "OS")
         key_prep_dcard_dir = getKey("prepareDatacards")
-        prep_dcard_job_tuple = (self.channel, category, histogramToFit)
-        key_prep_dcard_job = getKey(category, histogramToFit, "OS")
-        self.jobOptions_prep_dcard[key_prep_dcard_job] = {
-          'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2_job],
-          'cfgFile_modified' : os.path.join(self.dirs[key_prep_dcard_dir][DKEY_CFGS], "prepareDatacards_%s_%s_%s_cfg.py" % prep_dcard_job_tuple),
-          'datacardFile' : os.path.join(self.dirs[key_prep_dcard_dir][DKEY_DCRD], "prepareDatacards_%s_%s_%s.root" % prep_dcard_job_tuple),
-          'histogramDir' : getHistogramDir(category, "Tight", "disabled", "OS"),
-          'histogramToFit' : histogramToFit,
-          'label' : None
-        }
-        self.createCfg_prep_dcard(self.jobOptions_prep_dcard[key_prep_dcard_job])
+        if "OS" in self.hadTau_charge_selections:
+          key_hadd_stage2_job = getKey(get_hadTau_selection_and_frWeight("Tight", "disabled"), "OS")
+          prep_dcard_job_tuple = (self.channel, category, histogramToFit)
+          key_prep_dcard_job = getKey(category, histogramToFit, "OS")
+          self.jobOptions_prep_dcard[key_prep_dcard_job] = {
+            'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2_job],
+            'cfgFile_modified' : os.path.join(self.dirs[key_prep_dcard_dir][DKEY_CFGS], "prepareDatacards_%s_%s_%s_cfg.py" % prep_dcard_job_tuple),
+            'datacardFile' : os.path.join(self.dirs[key_prep_dcard_dir][DKEY_DCRD], "prepareDatacards_%s_%s_%s.root" % prep_dcard_job_tuple),
+            'histogramDir' : getHistogramDir(category, "Tight", "disabled", "OS"),
+            'histogramToFit' : histogramToFit,
+            'label' : None
+          }
+          self.createCfg_prep_dcard(self.jobOptions_prep_dcard[key_prep_dcard_job])
 
         if "SS" in self.hadTau_charge_selections:
           key_hadd_stage2_job = getKey(get_hadTau_selection_and_frWeight("Tight", "disabled"), "SS")
-          key_prep_dcard_dir = getKey("prepareDatacards")
           prep_dcard_job_tuple = (self.channel, category, histogramToFit)
           key_prep_dcard_job = getKey(category, histogramToFit, "SS")
           self.jobOptions_prep_dcard[key_prep_dcard_job] = {
@@ -719,19 +717,20 @@ class analyzeConfig_0l_2tau(analyzeConfig):
             self.createCfg_add_syst_fakerate(self.jobOptions_add_syst_fakerate[key_add_syst_fakerate_job])
 
     logging.info("Creating configuration files to run 'makePlots'")
-    key_hadd_stage2_job = getKey(get_hadTau_selection_and_frWeight("Tight", "disabled"), "OS")
     key_makePlots_dir = getKey("makePlots")
-    key_makePlots_job = getKey("OS")
-    self.jobOptions_make_plots[key_makePlots_job] = {
-      'executable' : self.executable_make_plots,
-      'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2_job],
-      'cfgFile_modified' : os.path.join(self.dirs[key_makePlots_dir][DKEY_CFGS], "makePlots_%s_cfg.py" % self.channel),
-      'outputFile' : os.path.join(self.dirs[key_makePlots_dir][DKEY_PLOT], "makePlots_%s.png" % self.channel),
-      'histogramDir' : getHistogramDir(self.category_inclusive, "Tight", "disabled", "OS"),
-      'label' : "0l+2#tau_{h}",
-      'make_plots_backgrounds' : self.make_plots_backgrounds
-    }
-    self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])
+    if "OS" in self.hadTau_charge_selections:
+      key_hadd_stage2_job = getKey(get_hadTau_selection_and_frWeight("Tight", "disabled"), "OS")
+      key_makePlots_job = getKey("OS")
+      self.jobOptions_make_plots[key_makePlots_job] = {
+        'executable' : self.executable_make_plots,
+        'inputFile' : self.outputFile_hadd_stage2[key_hadd_stage2_job],
+        'cfgFile_modified' : os.path.join(self.dirs[key_makePlots_dir][DKEY_CFGS], "makePlots_%s_cfg.py" % self.channel),
+        'outputFile' : os.path.join(self.dirs[key_makePlots_dir][DKEY_PLOT], "makePlots_%s.png" % self.channel),
+        'histogramDir' : getHistogramDir(self.category_inclusive, "Tight", "disabled", "OS"),
+        'label' : "0l+2#tau_{h}",
+        'make_plots_backgrounds' : self.make_plots_backgrounds
+      }
+      self.createCfg_makePlots(self.jobOptions_make_plots[key_makePlots_job])
     if "SS" in self.hadTau_charge_selections:
       key_hadd_stage2_job = getKey(get_hadTau_selection_and_frWeight("Tight", "disabled"), "SS")
       key_makePlots_job = getKey("SS")

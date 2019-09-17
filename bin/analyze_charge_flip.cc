@@ -44,9 +44,6 @@
 #include "tthAnalysis/HiggsToTauTau/interface/RecoMuonCollectionSelectorLoose.h" // RecoMuonCollectionSelectorLoose
 #include "tthAnalysis/HiggsToTauTau/interface/RecoMuonCollectionSelectorFakeable.h" // RecoMuonCollectionSelectorFakeable
 #include "tthAnalysis/HiggsToTauTau/interface/RecoMuonCollectionSelectorTight.h" // RecoMuonCollectionSelectorTight
-#include "tthAnalysis/HiggsToTauTau/interface/RecoHadTauCollectionSelectorLoose.h" // RecoHadTauCollectionSelectorLoose
-#include "tthAnalysis/HiggsToTauTau/interface/RecoHadTauCollectionSelectorFakeable.h" // RecoHadTauCollectionSelectorFakeable
-#include "tthAnalysis/HiggsToTauTau/interface/RecoHadTauCollectionSelectorTight.h" // RecoHadTauCollectionSelectorTight
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelector.h" // RecoJetCollectionSelector
 #include "tthAnalysis/HiggsToTauTau/interface/RecoJetCollectionSelectorBtag.h" // RecoJetCollectionSelectorBtagLoose, RecoJetCollectionSelectorBtagMedium
 #include "tthAnalysis/HiggsToTauTau/interface/RunLumiEventSelector.h" // RunLumiEventSelector
@@ -87,8 +84,6 @@ typedef math::PtEtaPhiMLorentzVector LV;
 typedef std::vector<std::string> vstring;
 
 enum { kFR_disabled, kFR_2lepton };
-
-const std::string hadTauSelection = "dR03mvaMedium"; // CV: dummy value that has no effect, but is required by Data_to_MC_CorrectionInterface
 
 int getBinIdx_pT_and_absEta(double pT, double absEta)
 {
@@ -201,7 +196,7 @@ int main(int argc, char* argv[])
 
   edm::ParameterSet cfg_dataToMCcorrectionInterface;
   cfg_dataToMCcorrectionInterface.addParameter<std::string>("era", era_string);
-  cfg_dataToMCcorrectionInterface.addParameter<std::string>("hadTauSelection", hadTauSelection); 
+  cfg_dataToMCcorrectionInterface.addParameter<std::string>("hadTauSelection", "disabled");
   cfg_dataToMCcorrectionInterface.addParameter<std::string>("central_or_shift", central_or_shift);
   Data_to_MC_CorrectionInterface_Base * dataToMCcorrectionInterface = nullptr;
   switch(era)
@@ -309,7 +304,7 @@ int main(int argc, char* argv[])
 
   RecoElectronReader* electronReader = new RecoElectronReader(era, branchName_electrons, isMC, readGenObjects);
   inputTree->registerReader(electronReader);
-  RecoElectronCollectionGenMatcher electronGenMatcher;
+  RecoElectronCollectionGenMatcher electronGenMatcher(isDEBUG);
   RecoElectronCollectionCleaner electronCleaner(0.3);
   RecoElectronCollectionSelectorLoose preselElectronSelector(era);
   RecoElectronCollectionSelectorFakeable fakeableElectronSelector(era);
@@ -462,6 +457,7 @@ int main(int argc, char* argv[])
   );
   const std::vector<std::string> cuts = {
     "run:ls:event selection",
+    "object multiplicity",
     "trigger",
     "= 2 presel electrons",
     "presel electron trigger match",
@@ -495,6 +491,8 @@ int main(int argc, char* argv[])
     if ( run_lumi_eventSelector && !(*run_lumi_eventSelector)(eventInfo) ) {
       continue;
     }
+    cutFlowTable.update("run:ls:event selection");
+    cutFlowHistManager->fillHistograms("run:ls:event selection", lumiScale);
 
     if(useObjectMultiplicity)
     {
@@ -507,6 +505,8 @@ int main(int argc, char* argv[])
         continue;
       }
     }
+    cutFlowTable.update("object multiplicity");
+    cutFlowHistManager->fillHistograms("object multiplicity", lumiScale);
 
 //--- build collections of generator level particles (before any cuts are applied, to check distributions in unbiased event samples)
     std::vector<GenLepton> genLeptons;
@@ -579,7 +579,7 @@ int main(int argc, char* argv[])
 //    the ranking of the triggers is as follows: 2mu, 1e1mu, 2e, 1mu, 1e
 // CV: this logic is necessary to avoid that the same event is selected multiple times when processing different primary datasets
     if ( !isMC ) {
-      if ( selTrigger_1e && isTriggered_2e ) {
+      if ( selTrigger_1e && isTriggered_2e && era != kEra_2018 ) {
 	if ( run_lumi_eventSelector ) {
 	  std::cout << "event FAILS trigger selection." << std::endl; 
 	  std::cout << " (selTrigger_1e = " << selTrigger_1e 
@@ -602,34 +602,34 @@ int main(int argc, char* argv[])
     
 //--- build collections of electrons, muons and hadronic taus;
 //    resolve overlaps in order of priority: muon, electron,
-    std::vector<RecoMuon> muons = muonReader->read();
-    std::vector<const RecoMuon*> muon_ptrs = convert_to_ptrs(muons);
-    std::vector<const RecoMuon*> cleanedMuons = muon_ptrs; // CV: no cleaning needed for muons, as they have the highest priority in the overlap removal
-    std::vector<const RecoMuon*> preselMuons = preselMuonSelector(cleanedMuons);
-    std::vector<const RecoMuon*> fakeableMuons = fakeableMuonSelector(preselMuons);
-    std::vector<const RecoMuon*> tightMuons = tightMuonSelector(preselMuons);
-    std::vector<const RecoMuon*> selMuons = selectObjects(
+    const std::vector<RecoMuon> muons = muonReader->read();
+    const std::vector<const RecoMuon*> muon_ptrs = convert_to_ptrs(muons);
+    const std::vector<const RecoMuon*> cleanedMuons = muon_ptrs; // CV: no cleaning needed for muons, as they have the highest priority in the overlap removal
+    const std::vector<const RecoMuon*> preselMuons = preselMuonSelector(cleanedMuons);
+    const std::vector<const RecoMuon*> fakeableMuons = fakeableMuonSelector(preselMuons);
+    const std::vector<const RecoMuon*> tightMuons = tightMuonSelector(preselMuons);
+    const std::vector<const RecoMuon*> selMuons = selectObjects(
       leptonSelection, preselMuons, fakeableMuons, tightMuons
     );
 
-    std::vector<RecoElectron> electrons = electronReader->read();
-    std::vector<const RecoElectron*> electron_ptrs = convert_to_ptrs(electrons);
-    std::vector<const RecoElectron*> cleanedElectrons = electronCleaner(electron_ptrs, preselMuons);
-    std::vector<const RecoElectron*> preselElectrons = preselElectronSelector(cleanedElectrons);
-    std::vector<const RecoElectron*> fakeableElectrons = fakeableElectronSelector(preselElectrons);
-    std::vector<const RecoElectron*> tightElectrons = tightElectronSelector(preselElectrons);
-    std::vector<const RecoElectron*> selElectrons = selectObjects(
+    const std::vector<RecoElectron> electrons = electronReader->read();
+    const std::vector<const RecoElectron*> electron_ptrs = convert_to_ptrs(electrons);
+    const std::vector<const RecoElectron*> cleanedElectrons = electronCleaner(electron_ptrs, preselMuons);
+    const std::vector<const RecoElectron*> preselElectrons = preselElectronSelector(cleanedElectrons);
+    const std::vector<const RecoElectron*> fakeableElectrons = fakeableElectronSelector(preselElectrons);
+    const std::vector<const RecoElectron*> tightElectrons = tightElectronSelector(preselElectrons);
+    const std::vector<const RecoElectron*> selElectrons = selectObjects(
       leptonSelection, preselElectrons, fakeableElectrons, tightElectrons
     );
 
 //--- build collections of jets and select subset of jets passing b-tagging criteria
-    std::vector<RecoJet> jets = jetReader->read();
-    std::vector<const RecoJet*> jet_ptrs = convert_to_ptrs(jets);
-    std::vector<const RecoJet*> cleanedJets = jetCleaningByIndex ?
+    const std::vector<RecoJet> jets = jetReader->read();
+    const std::vector<const RecoJet*> jet_ptrs = convert_to_ptrs(jets);
+    const std::vector<const RecoJet*> cleanedJets = jetCleaningByIndex ?
       jetCleanerByIndex(jet_ptrs, fakeableMuons, fakeableElectrons) :
       jetCleaner       (jet_ptrs, fakeableMuons, fakeableElectrons)
     ;
-    std::vector<const RecoJet*> selJets = jetSelector(cleanedJets);
+    const std::vector<const RecoJet*> selJets = jetSelector(cleanedJets);
 
 //--- build collections of generator level particles (after some cuts are applied, to safe computing time)
     if(isMC && redoGenMatching && ! fillGenEvtHistograms)
@@ -676,7 +676,15 @@ int main(int argc, char* argv[])
         muonGenMatcher.addGenHadTauMatch(preselMuons, genHadTaus);
         muonGenMatcher.addGenJetMatch   (preselMuons, genJets);
 
-        electronGenMatcher.addGenLeptonMatch(preselElectrons, genElectrons);
+        // Some of the electron pT may be carried away by bremsstrahlung photon at the generator level. Altough
+        // the bremsstrahlung photon is included in the reconstruction of the electron, the generator level
+        // electrons that are considered in the gen matching are final state electrons which have already undergone
+        // bremsstrahlung. This is not accounted for in NanoAOD and has to be corrected for the purpose of this
+        // analysis. The solution here is to redo the gen matching between reconstructed and gen electrons by allowing
+        // the pT of reconstructed electrons to be four times as high as the pT of gen electrons for them to be gen-matched.
+        // This matches with the previous implementation of our gen-matching, where we required the ratio of gen pT
+        // to reco pT be greater than 0.25.
+        electronGenMatcher.addGenLeptonMatch(preselElectrons, genElectrons, 0.3, -0.5, 3.00);
         electronGenMatcher.addGenPhotonMatch(preselElectrons, genPhotons);
         electronGenMatcher.addGenHadTauMatch(preselElectrons, genHadTaus);
         electronGenMatcher.addGenJetMatch   (preselElectrons, genJets);
@@ -997,7 +1005,8 @@ int main(int argc, char* argv[])
             << inputTree -> getFileCount() << ")\n"
             << " analyzed = " << analyzedEntries << '\n'
             << " selected = " << selectedEntries << " (weighted = " << selectedEntries_weighted << ")\n\n";
-
+  cutFlowTable.print(std::cout);
+  std::cout << std::endl;
   delete dataToMCcorrectionInterface;
 
   delete run_lumi_eventSelector;

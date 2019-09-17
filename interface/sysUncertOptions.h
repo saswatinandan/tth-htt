@@ -95,6 +95,7 @@ enum
 
 enum
 {
+  kHadTauPt_uncorrected,
   kHadTauPt_central,
   kHadTauPt_shiftUp, kHadTauPt_shiftDown,
 };
@@ -113,6 +114,12 @@ enum class FRet
 };
 
 enum class FRmt
+{
+  central,
+  shiftUp, shiftDown,
+};
+
+enum class TauIDSFsys
 {
   central,
   shiftUp, shiftDown,
@@ -213,6 +220,9 @@ getEToTauFR_option(const std::string & central_or_shift);
 
 FRmt
 getMuToTauFR_option(const std::string & central_or_shift);
+
+TauIDSFsys
+getTauIDSFsys_option(const std::string & central_or_shift);
 
 TriggerSFsys
 getTriggerSF_option(const std::string & central_or_shift);

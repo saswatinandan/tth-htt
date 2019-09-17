@@ -17,9 +17,11 @@ XGBInterface::XGBInterface(const std::string & mvaFileName,
   , pkldata_(nullptr)
   , moduleMainString_(nullptr)
   , moduleMain_(nullptr)
+  , mvaFileName_odd_("")
   , pkldata_odd_(nullptr)
   , moduleMainString_odd_(nullptr)
   , moduleMain_odd_(nullptr)
+  , mvaFileName_even_("")
   , pkldata_even_(nullptr)
   , moduleMainString_even_(nullptr)
   , moduleMain_even_(nullptr)
@@ -67,6 +69,7 @@ XGBInterface::XGBInterface(const std::string & mvaFileName_odd,
                            const std::string & mvaFileName_even,
                            const std::vector<std::string> & mvaInputVariables)
   : mode_(Mode::k_odd_even)
+  , mvaFileName_("")
   , pkldata_(nullptr)
   , moduleMainString_(nullptr)
   , moduleMain_(nullptr)
@@ -148,9 +151,11 @@ XGBInterface::XGBInterface(const std::string & mvaFileName,
   , pkldata_(nullptr)
   , moduleMainString_(nullptr)
   , moduleMain_(nullptr)
+  , mvaFileName_odd_("")
   , pkldata_odd_(nullptr)
   , moduleMainString_odd_(nullptr)
   , moduleMain_odd_(nullptr)
+  , mvaFileName_even_("")
   , pkldata_even_(nullptr)
   , moduleMainString_even_(nullptr)
   , moduleMain_even_(nullptr)
@@ -200,6 +205,7 @@ XGBInterface::XGBInterface(const std::string & mvaFileName_odd,
                            const std::string & fitFunctionFileName,
                            const std::vector<std::string> & mvaInputVariables)
   : mode_(Mode::k_odd_even)
+  , mvaFileName_("")
   , pkldata_(nullptr)
   , moduleMainString_(nullptr)
   , moduleMain_(nullptr)
@@ -385,6 +391,7 @@ XGBInterface::operator()(const std::map<std::string, double> & mvaInputs) const
   Py_XDECREF(args);
   Py_XDECREF(result);
 
+  std::cout << "XGB: mvaOutput " << mvaOutput << '\n';
   return mvaOutput;
 }
 

@@ -7,7 +7,7 @@ from tthAnalysis.HiggsToTauTau.analysisSettings import Triggers, systematics
 from tthAnalysis.HiggsToTauTau.common import logging
 from tthAnalysis.HiggsToTauTau.samples.stitch import get_branch_type
 
-from tthAnalysis.NanoAODTools.tHweights_cfi import tHweights, thIdxs, find_tHweight
+from tthAnalysis.NanoAODTools.tHweights_cfi import tHweights, thIdxsNoCP, find_tHweight
 
 import FWCore.ParameterSet.Config as cms
 
@@ -190,6 +190,7 @@ class analyzeConfig(object):
         if len(self.central_or_shifts) > 1:
             self.central_or_shifts.remove('central')
             self.central_or_shifts = [ 'central' ] + self.central_or_shifts
+        self.central_or_shifts_fr = []
         #------------------------------------------------------------------------
         self.era = era
         self.do_l1prefiring = self.era != "2018"
@@ -198,7 +199,7 @@ class analyzeConfig(object):
           for central_or_shift in systematics.L1PreFiring:
             self.central_or_shifts.remove(central_or_shift)
         # ------------------------------------------------------------------------
-        self.do_dymc_sys = self.channel == "0l_2tau" and era != "2018"
+        self.do_dymc_sys = self.channel == "0l_2tau"
         for dymc_sys in [ systematics.DYMCReweighting, systematics.DYMCNormScaleFactors ]:
           if (set(dymc_sys) & set(self.central_or_shifts)) == set(dymc_sys) and not self.do_dymc_sys:
             logging.warning('Removing systematics from {} era: {}'.format(self.era, ', '.join(dymc_sys)))
@@ -384,7 +385,7 @@ class analyzeConfig(object):
         self.dirs = {}
 
         tH_SM_str = get_tH_SM_str()
-        self.thIdxs = thIdxs
+        self.thIdxs = thIdxsNoCP
         self.thcouplings = list(filter(
           lambda tH_str: tH_str != tH_SM_str,
           map(
@@ -533,7 +534,7 @@ class analyzeConfig(object):
         self.hadTau_selection_relaxed = hadTau_selection_relaxed
         if self.hadTau_selection_relaxed == "dR03mvaVLoose":
             pass
-        if self.hadTau_selection_relaxed == "dR03mvaVVLoose":
+        elif self.hadTau_selection_relaxed == "dR03mvaVVLoose":
             self.hadTauFakeRateWeight_inputFile = "tthAnalysis/HiggsToTauTau/data/FR_tau_2017_v2.root"
         self.isBDTtraining = True
 
@@ -550,6 +551,7 @@ class analyzeConfig(object):
       if central_or_shift in systematics.LHE().ttZ            and sample_category != "TTZ":                 return False
       if central_or_shift in systematics.DYMCReweighting      and not is_dymc_reweighting(sample_name):     return False
       if central_or_shift in systematics.DYMCNormScaleFactors and not is_dymc_reweighting(sample_name):     return False
+      if central_or_shift in systematics.tauIDSF              and 'tau' not in self.channel.lower():        return False
       return True
 
     def createCfg_analyze(self, jobOptions, sample_info, additionalJobOptions = [], isLeptonFR = False, isHTT = False):
@@ -734,34 +736,19 @@ class analyzeConfig(object):
         jobOptions_keys = jobOptions_local + additionalJobOptions
         max_option_len = max(map(len, [ key for key in jobOptions_keys if key in jobOptions ]))
 
-        if not isHTT and not self.do_sync : lines = [
-            "# Filled in %s" % current_function_name,
-            "process.fwliteInput.fileNames = cms.vstring(%s)"  % jobOptions['ntupleFiles'],
-            "process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['histogramFile']),
-            "{}.{:<{len}} = cms.string('{}')".format        (process_string, 'era',                    self.era,     len = max_option_len),
-            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'redoGenMatching',       'False',       len = max_option_len),
-            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'isDEBUG',                self.isDebug, len = max_option_len),
-            "{}.{:<{len}} = EvtYieldHistManager_{}".format  (process_string, 'cfgEvtYieldHistManager', self.era,     len = max_option_len),
-            "{}.{:<{len}} = recommendedMEtFilters_{}".format(process_string, 'cfgMEtFilter',           self.era,     len = max_option_len),
+        lines = [
+          "# Filled in %s" % current_function_name,
+          "process.fwliteInput.fileNames = cms.vstring(%s)" % jobOptions['ntupleFiles'],
+          "process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['histogramFile']),
+          "{}.{:<{len}} = cms.string('{}')".format(process_string, 'era',             self.era,                       len = max_option_len),
+          "{}.{:<{len}} = cms.bool({})".format    (process_string, 'redoGenMatching', not self.gen_matching_by_index, len = max_option_len),
+          "{}.{:<{len}} = cms.bool({})".format    (process_string, 'isDEBUG',         self.isDebug,                   len = max_option_len),
         ]
-        elif self.do_sync : lines = [
-            "# Filled in %s" % current_function_name,
-            "process.fwliteInput.fileNames = cms.vstring(%s)"  % jobOptions['ntupleFiles'],
-            "process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['histogramFile']),
-            "{}.{:<{len}} = cms.string('{}')".format        (process_string, 'era',                    self.era,     len = max_option_len),
-            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'redoGenMatching',       'False',       len = max_option_len),
-            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'isDEBUG',                self.isDebug, len = max_option_len),
-            "{}.{:<{len}} = EvtYieldHistManager_{}".format  (process_string, 'cfgEvtYieldHistManager', self.era,     len = max_option_len),
-            "{}.{:<{len}} = recommendedMEtFilters_{}".format(process_string, 'cfgMEtFilter',           self.era,     len = max_option_len),
-        ]
-        else : lines = [
-            "# Filled in %s" % current_function_name,
-            "process.fwliteInput.fileNames = cms.vstring(%s)"  % jobOptions['ntupleFiles'],
-            "process.fwliteOutput.fileName = cms.string('%s')" % os.path.basename(jobOptions['histogramFile']),
-            "{}.{:<{len}} = cms.string('{}')".format        (process_string, 'era',                    self.era,     len = max_option_len),
-            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'redoGenMatching',       'False',       len = max_option_len),
-            "{}.{:<{len}} = cms.bool({})".format            (process_string, 'isDEBUG',                self.isDebug, len = max_option_len),
-        ]
+        if (not isHTT and not self.do_sync) or self.do_sync:
+          lines.extend([
+            "{}.{:<{len}} = EvtYieldHistManager_{}".format  (process_string, 'cfgEvtYieldHistManager', self.era, len = max_option_len),
+            "{}.{:<{len}} = recommendedMEtFilters_{}".format(process_string, 'cfgMEtFilter',           self.era, len = max_option_len),
+          ])
         lines += ["{}.{:<{len}} = cms.bool({})".format            (process_string, 'FullSyst',   'False' if len(self.central_or_shifts) == 1 else 'True', len = max_option_len),]
         for jobOptions_key in jobOptions_keys:
             if jobOptions_key not in jobOptions: continue # temporary?
@@ -855,6 +842,17 @@ class analyzeConfig(object):
           ])
 
         return lines
+
+    def pruneSystematics(self):
+        assert(self.central_or_shifts_fr)
+        central_or_shifts_fr_remove = [
+            central_or_shift for central_or_shift in systematics.FR_all if central_or_shift not in self.central_or_shifts_fr
+        ]
+        if central_or_shifts_fr_remove:
+            logging.warning("Disabling the following systematics: {}".format(', '.join(central_or_shifts_fr_remove)))
+            self.central_or_shifts = [
+               central_or_shift for central_or_shift in self.central_or_shifts if central_or_shift not in central_or_shifts_fr_remove
+            ]
 
     def createCfg_copyHistograms(self, jobOptions):
         """Create python configuration file for the copyHistograms executable (split the ROOT files produced by hadd_stage1 into separate ROOT files, one for each event category)

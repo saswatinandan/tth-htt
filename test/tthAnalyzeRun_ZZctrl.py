@@ -12,13 +12,14 @@ import getpass
 
 # E.g.: ./test/tthAnalyzeRun_ZZctrl.py -v 2017Dec13 -m default -e 2017
 
-mode_choices     = [ 'default', 'forBDTtraining', 'sync' ]
+mode_choices     = [ 'default', 'sync' ]
 sys_choices      = [ 'full' ] + systematics.an_extended_opts
 systematics.full = systematics.an_extended
 
 parser = tthAnalyzeParser()
 parser.add_modes(mode_choices)
 parser.add_sys(sys_choices)
+parser.add_preselect()
 parser.add_rle_select()
 parser.add_nonnominal()
 parser.add_hlt_filter()
@@ -26,6 +27,8 @@ parser.add_files_per_job()
 parser.add_use_home()
 parser.add_jet_cleaning()
 parser.add_gen_matching()
+parser.add_sideband()
+parser.add_tau_id()
 args = parser.parse_args()
 
 # Common arguments
@@ -43,6 +46,7 @@ running_method     = args.running_method
 # Additional arguments
 mode              = args.mode
 systematics_label = args.systematics
+use_preselected   = args.use_preselected
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
@@ -50,6 +54,8 @@ files_per_job     = args.files_per_job
 use_home          = args.use_home
 jet_cleaning      = args.jet_cleaning
 gen_matching      = args.gen_matching
+sideband          = args.sideband
+tau_id            = args.tau_id
 
 # Use the arguments
 central_or_shifts = []
@@ -62,15 +68,28 @@ lumi = get_lumi(era)
 jet_cleaning_by_index = (jet_cleaning == 'by_index')
 gen_matching_by_index = (gen_matching == 'by_index')
 
-chargeSumSelections = [ "OS", "SS" ]
+hadTauWP_veto_map = {
+  'dR03mva' : 'Loose',
+  'deepVSj' : 'Loose',
+}
+hadTau_selection_veto = tau_id + hadTauWP_veto_map[tau_id]
+
+if sideband == 'disabled':
+  chargeSumSelections = [ "OS" ]
+elif sideband == 'enabled':
+  chargeSumSelections = [ "OS", "SS" ]
+elif sideband == 'only':
+  chargeSumSelections = [ "SS" ]
+else:
+  raise ValueError("Invalid choice for the sideband: %s" % sideband)
 
 if mode == "default":
-  samples = load_samples(era)
-elif mode == "forBDTtraining":
-  samples = load_samples(era, suffix = 'BDT')
-  chargeSumSelections = [ "OS" ]
+  samples = load_samples(era, suffix = "preselected" if use_preselected else "")
 elif mode == "sync":
-  samples = load_samples(era, suffix = 'sync' if use_nonnominal else 'sync_nom')
+  sample_suffix = "sync" if use_nonnominal else "sync_nom"
+  if use_preselected:
+    sample_suffix = "preselected_{}".format(sample_suffix)
+  samples = load_samples(era, suffix = sample_suffix)
 else:
   raise ValueError("Invalid mode: %s" % mode)
 
@@ -94,7 +113,7 @@ if __name__ == '__main__':
     executable_analyze                    = "analyze_ZZctrl",
     cfgFile_analyze                       = "analyze_ZZctrl_cfg.py",
     samples                               = samples,
-    hadTauVeto_selection                  = "dR03mvaLoose", # veto events containing taus that pass tau ID WP applied in 3l+1tau channel,
+    hadTauVeto_selection                  = hadTau_selection_veto,
     applyFakeRateWeights                  = "4lepton",
     chargeSumSelections                   = chargeSumSelections,
     jet_cleaning_by_index                 = jet_cleaning_by_index,

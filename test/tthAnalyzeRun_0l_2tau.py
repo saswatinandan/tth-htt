@@ -19,14 +19,17 @@ systematics.full = systematics.an_common
 parser = tthAnalyzeParser()
 parser.add_modes(mode_choices)
 parser.add_sys(sys_choices)
+parser.add_preselect()
 parser.add_rle_select()
 parser.add_nonnominal()
 parser.add_tau_id_wp()
+parser.add_tau_id()
 parser.add_hlt_filter()
 parser.add_files_per_job()
 parser.add_use_home()
 parser.add_jet_cleaning()
 parser.add_gen_matching()
+parser.add_sideband()
 args = parser.parse_args()
 
 # Common arguments
@@ -44,6 +47,7 @@ running_method     = args.running_method
 # Additional arguments
 mode              = args.mode
 systematics_label = args.systematics
+use_preselected   = args.use_preselected
 rle_select        = os.path.expanduser(args.rle_select)
 use_nonnominal    = args.original_central
 hlt_filter        = args.hlt_filter
@@ -51,6 +55,8 @@ files_per_job     = args.files_per_job
 use_home          = args.use_home
 jet_cleaning      = args.jet_cleaning
 gen_matching      = args.gen_matching
+sideband          = args.sideband
+tau_id            = args.tau_id
 
 # Use the arguments
 central_or_shifts = []
@@ -63,11 +69,28 @@ lumi = get_lumi(era)
 jet_cleaning_by_index = (jet_cleaning == 'by_index')
 gen_matching_by_index = (gen_matching == 'by_index')
 
+<<<<<<< HEAD
 hadTau_charge_selections = [ "OS" ] # , "SS"
 hadTau_selection = "deepVSjMedium"#"deepVSjLoose" #"deepVSjMedium" #  "dR03mvaMedium" #
+=======
+hadTauWP_map = {
+  'dR03mva' : 'Medium',
+  'deepVSj' : 'Medium',
+}
+hadTau_selection = tau_id + hadTauWP_map[tau_id]
+
+if sideband == 'disabled':
+  hadTau_charge_selections = [ "OS" ]
+elif sideband == 'enabled':
+  hadTau_charge_selections = [ "OS", "SS" ]
+elif sideband == 'only':
+  hadTau_charge_selections = [ "SS" ]
+else:
+  raise ValueError("Invalid choice for the sideband: %s" % sideband)
+>>>>>>> 727d85742a21fbf117b6fbb57b15d3b5e6be065d
 
 if mode == "default":
-  samples = load_samples(era)
+  samples = load_samples(era, suffix = "preselected" if use_preselected else "")
   for sample_name, sample_info in samples.items():
     if sample_name == 'sum_events': continue
     if sample_info["process_name_specific"].startswith("DYBBJetsToLL_M-50"):
@@ -79,6 +102,7 @@ if mode == "default":
       ]:
         sample_info["use_it"] = False
 elif mode == "forBDTtraining":
+<<<<<<< HEAD
   #samples = load_samples(era, suffix = "BDT_DY")
   samples = load_samples(era)
   for sample_name, sample_info in samples.items():
@@ -99,8 +123,23 @@ elif mode == "forBDTtraining":
   hadTau_selection_relaxed = "deepVSjVVVLoose" #"dR03mvaVLoose"
   hadTau_charge_selections = [ "OS" ]
 
+=======
+  if use_preselected:
+    raise ValueError("Makes no sense to use preselected samples w/ BDT training mode")
+  samples = load_samples(era, suffix = "BDT_DY")
+  hadTauWP_map_relaxed = {
+    'dR03mva' : 'VLoose',
+    'deepVSj' : 'VLoose',
+  }
+  if args.tau_id_wp:
+    tau_id = args.tau_id[:7]
+  hadTau_selection_relaxed = tau_id + hadTauWP_map_relaxed[tau_id]
+>>>>>>> 727d85742a21fbf117b6fbb57b15d3b5e6be065d
 elif mode == "sync":
-  samples = load_samples(era, suffix = "sync" if use_nonnominal else "sync_nom")
+  sample_suffix = "sync" if use_nonnominal else "sync_nom"
+  if use_preselected:
+    sample_suffix = "preselected_{}".format(sample_suffix)
+  samples = load_samples(era, suffix = sample_suffix)
 else:
   raise ValueError("Invalid mode: %s" % mode)
 
@@ -150,18 +189,18 @@ if __name__ == '__main__':
     # CV: use common executable for estimating jet->lepton and jet->tau_h fake background
     executable_addBackgroundJetToTauFakes = "addBackgroundLeptonFakes",
     histograms_to_fit                     = {
-      "EventCounter"             : {},
-      "numJets"                  : {},
-      "mvaOutput_0l_2tau_ttbar"  : {},
-      "mvaOutput_0l_2tau_HTT_tt" : {},
-      "mvaOutput_0l_2tau_HTT_ttv": {},
-      "mvaOutput_0l_2tau_HTT_sum": {},
-      "mvaDiscr_0l_2tau_HTT"     : {},
+      "EventCounter"                 : {},
+      "numJets"                      : {},
+      "mvaOutput_0l_2tau_ttbar"      : {},
+      "mvaOutput_0l_2tau_HTT_tt"     : {},
+      "mvaOutput_0l_2tau_HTT_ttv"    : {},
+      "mvaOutput_0l_2tau_HTT_sum"    : {},
+      "mvaDiscr_0l_2tau_HTT"         : {},
       "mvaOutput_0l_2tau_HTT_sum_dy" : {},
-      "mva_Boosted_AK8"          : {},
-      "mva_Updated"              : {},
-      "mTauTauVis"               : {},
-      "mTauTau"                  : {},
+      "mva_Boosted_AK8"              : {},
+      "mva_Updated"                  : {},
+      "mTauTauVis"                   : {},
+      "mTauTau"                      : {},
     },
     select_rle_output                     = True,
     dry_run                               = dry_run,

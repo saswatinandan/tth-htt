@@ -15,9 +15,13 @@
 
 Data_to_MC_CorrectionInterface_Base::Data_to_MC_CorrectionInterface_Base(const edm::ParameterSet & cfg)
   : hadTauSelection_(-1)
+  , hadTauId_(TauID::MVAoldDMdR032017v2)
+  , tauIDSF_option_(TauIDSFsys::central)
   , eToTauFakeRate_option_(FRet::central)
   , muToTauFakeRate_option_(FRmt::central)
   , triggerSF_option_(TriggerSFsys::central)
+  , tauIdSFs_(nullptr)
+  , applyHadTauSF_(true)
   , numLeptons_(0)
   , lepton_type_(4)
   , lepton_pt_(4)
@@ -34,7 +38,11 @@ Data_to_MC_CorrectionInterface_Base::Data_to_MC_CorrectionInterface_Base(const e
   , hadTau_eta_(4)
 {
   const std::string hadTauSelection_string = cfg.getParameter<std::string>("hadTauSelection");
-  setHadTauSelection(hadTauSelection_string);
+  applyHadTauSF_ = hadTauSelection_string != "disabled";
+  if(applyHadTauSF_)
+  {
+    setHadTauSelection(hadTauSelection_string);
+  }
 
   for(int idxHadTau = 0; idxHadTau < 4; ++idxHadTau)
   {
@@ -72,6 +80,22 @@ Data_to_MC_CorrectionInterface_Base::Data_to_MC_CorrectionInterface_Base(const e
   eToTauFakeRate_option_ = getEToTauFR_option(central_or_shift);
   muToTauFakeRate_option_ = getMuToTauFR_option(central_or_shift);
   triggerSF_option_ = getTriggerSF_option(central_or_shift);
+  tauIDSF_option_ = getTauIDSFsys_option(central_or_shift);
+
+  if(applyHadTauSF_)
+  {
+    if(hadTauId_ == TauID::DeepTau2017v2VSjet ||
+       hadTauId_ == TauID::MVAoldDM2017v2     ||
+       hadTauId_ == TauID::MVAoldDMdR032017v2  )
+    {
+      tauIDSF_str_ = "MVAoldDM2017v2";
+      tauIDSF_level_str_ = TauID_level_strings.at(TauID_levels.at(TauID::MVAoldDM2017v2)).at(std::max(1, hadTauSelection_));
+    }
+    else
+    {
+      throw cmsException(this, __func__, __LINE__) << "Invalid tau ID: " << as_integer(hadTauId_);
+    }
+  }
 }
 
 Data_to_MC_CorrectionInterface_Base::~Data_to_MC_CorrectionInterface_Base()
@@ -92,6 +116,7 @@ void
 Data_to_MC_CorrectionInterface_Base::setHadTauSelection(const std::string & hadTauSelection)
 {
   hadTauSelection_ = get_tau_id_wp_int(hadTauSelection);
+  hadTauId_ = get_tau_id_enum(hadTauSelection);
 }
 
 void

@@ -249,14 +249,14 @@ int main(int argc, char* argv[])
 
   checkOptionValidity(central_or_shift, isMC);
   const int jetToLeptonFakeRate_option        = getJetToLeptonFR_option       (central_or_shift);
-  const int hadTauPt_option                   = getHadTauPt_option            (central_or_shift);
   const int lheScale_option                   = getLHEscale_option            (central_or_shift);
   const int jetBtagSF_option                  = getBTagWeight_option          (central_or_shift);
   const PUsys puSys_option                    = getPUsys_option               (central_or_shift);
   const L1PreFiringWeightSys l1PreFire_option = getL1PreFiringWeightSys_option(central_or_shift);
 
-  const int met_option   = useNonNominal_jetmet ? kJetMET_central_nonNominal : getMET_option(central_or_shift, isMC);
-  const int jetPt_option = useNonNominal_jetmet ? kJetMET_central_nonNominal : getJet_option(central_or_shift, isMC);
+  const int met_option      = useNonNominal_jetmet ? kJetMET_central_nonNominal : getMET_option(central_or_shift, isMC);
+  const int jetPt_option    = useNonNominal_jetmet ? kJetMET_central_nonNominal : getJet_option(central_or_shift, isMC);
+  const int hadTauPt_option = useNonNominal_jetmet ? kHadTauPt_uncorrected      : getHadTauPt_option(central_or_shift);
 
   std::cout
     << "central_or_shift = "               << central_or_shift             << "\n"
@@ -421,7 +421,7 @@ int main(int argc, char* argv[])
   fakeableHadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
   fakeableHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
   RecoHadTauCollectionSelectorTight hadTauSelector(era);
-  if ( hadTauSelection_part2 != "" ) hadTauSelector.set(hadTauSelection_part2);
+  hadTauSelector.set(hadTauSelection_part2);
   hadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
   hadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
 
@@ -824,16 +824,23 @@ int main(int argc, char* argv[])
       bool selTrigger_DoubleEG = selTrigger_2e || selTrigger_3e;
       //bool selTrigger_DoubleMuon = selTrigger_2mu || selTrigger_3mu;
       bool selTrigger_MuonEG = selTrigger_1e1mu || selTrigger_2e1mu || selTrigger_1e2mu;
-      if ( selTrigger_SingleElectron && (isTriggered_DoubleEG || isTriggered_SingleMuon || isTriggered_DoubleMuon || isTriggered_MuonEG) ) {
+      if ( selTrigger_SingleElectron && (isTriggered_SingleMuon || isTriggered_DoubleMuon || isTriggered_MuonEG) ) {
 	if ( run_lumi_eventSelector ) {
-      std::cout << "event " << eventInfo.str() << " FAILS trigger selection." << std::endl;
+          std::cout << "event " << eventInfo.str() << " FAILS trigger selection." << std::endl;
 	  std::cout << " (selTrigger_SingleElectron = " << selTrigger_SingleElectron
-		    << ", isTriggered_DoubleEG = " << isTriggered_DoubleEG
 		    << ", isTriggered_SingleMuon = " << isTriggered_SingleMuon
 		    << ", isTriggered_DoubleMuon = " << isTriggered_DoubleMuon
 		    << ", isTriggered_MuonEG = " << isTriggered_MuonEG << ")" << std::endl;
 	}
 	continue;
+      }
+      if ( selTrigger_SingleElectron && isTriggered_DoubleEG && era != kEra_2018 ) {
+        if ( run_lumi_eventSelector ) {
+          std::cout << "event " << eventInfo.str() << " FAILS trigger selection." << std::endl;
+          std::cout << " (selTrigger_SingleElectron = " << selTrigger_SingleElectron
+                    << ", isTriggered_DoubleEG = " << isTriggered_DoubleEG << ")" << std::endl;
+        }
+        continue;
       }
       if ( selTrigger_DoubleEG && (isTriggered_DoubleMuon || isTriggered_MuonEG) ) {
 	if ( run_lumi_eventSelector ) {
@@ -883,12 +890,12 @@ int main(int argc, char* argv[])
 
 //--- build collections of electrons, muons and hadronic taus;
 //    resolve overlaps in order of priority: muon, electron,
-    std::vector<RecoMuon> muons = muonReader->read();
-    std::vector<const RecoMuon*> muon_ptrs = convert_to_ptrs(muons);
-    std::vector<const RecoMuon*> cleanedMuons = muon_ptrs; // CV: no cleaning needed for muons, as they have the highest priority in the overlap removal
-    std::vector<const RecoMuon*> preselMuons = preselMuonSelector(cleanedMuons, isHigherConePt);
-    std::vector<const RecoMuon*> fakeableMuons = fakeableMuonSelector(preselMuons, isHigherConePt);
-    std::vector<const RecoMuon*> tightMuons = tightMuonSelector(fakeableMuons, isHigherConePt);
+    const std::vector<RecoMuon> muons = muonReader->read();
+    const std::vector<const RecoMuon*> muon_ptrs = convert_to_ptrs(muons);
+    const std::vector<const RecoMuon*> cleanedMuons = muon_ptrs; // CV: no cleaning needed for muons, as they have the highest priority in the overlap removal
+    const std::vector<const RecoMuon*> preselMuons = preselMuonSelector(cleanedMuons, isHigherConePt);
+    const std::vector<const RecoMuon*> fakeableMuons = fakeableMuonSelector(preselMuons, isHigherConePt);
+    const std::vector<const RecoMuon*> tightMuons = tightMuonSelector(fakeableMuons, isHigherConePt);
     if(isDEBUG || run_lumi_eventSelector)
     {
       printCollection("preselMuons",   preselMuons);
@@ -896,13 +903,13 @@ int main(int argc, char* argv[])
       printCollection("tightMuons",    tightMuons);
     }
 
-    std::vector<RecoElectron> electrons = electronReader->read();
-    std::vector<const RecoElectron*> electron_ptrs = convert_to_ptrs(electrons);
-    std::vector<const RecoElectron*> cleanedElectrons = electronCleaner(electron_ptrs, preselMuons);
-    std::vector<const RecoElectron*> preselElectrons = preselElectronSelector(cleanedElectrons, isHigherConePt);
-    std::vector<const RecoElectron*> preselElectronsUncleaned = preselElectronSelector(electron_ptrs, isHigherConePt);
-    std::vector<const RecoElectron*> fakeableElectrons = fakeableElectronSelector(preselElectrons, isHigherConePt);
-    std::vector<const RecoElectron*> tightElectrons = tightElectronSelector(fakeableElectrons, isHigherConePt);
+    const std::vector<RecoElectron> electrons = electronReader->read();
+    const std::vector<const RecoElectron*> electron_ptrs = convert_to_ptrs(electrons);
+    const std::vector<const RecoElectron*> cleanedElectrons = electronCleaner(electron_ptrs, preselMuons);
+    const std::vector<const RecoElectron*> preselElectrons = preselElectronSelector(cleanedElectrons, isHigherConePt);
+    const std::vector<const RecoElectron*> preselElectronsUncleaned = preselElectronSelector(electron_ptrs, isHigherConePt);
+    const std::vector<const RecoElectron*> fakeableElectrons = fakeableElectronSelector(preselElectrons, isHigherConePt);
+    const std::vector<const RecoElectron*> tightElectrons = tightElectronSelector(fakeableElectrons, isHigherConePt);
     if(isDEBUG || run_lumi_eventSelector)
     {
       printCollection("preselElectrons",   preselElectrons);
@@ -911,14 +918,14 @@ int main(int argc, char* argv[])
       printCollection("tightElectrons",    tightElectrons);
     }
 
-    std::vector<const RecoLepton*> preselLeptonsFull = mergeLeptonCollections(preselElectrons, preselMuons, isHigherConePt);
-    std::vector<const RecoLepton*> preselLeptonsFullUncleaned = mergeLeptonCollections(preselElectronsUncleaned, preselMuons, isHigherConePt);
-    std::vector<const RecoLepton*> fakeableLeptonsFull = mergeLeptonCollections(fakeableElectrons, fakeableMuons, isHigherConePt);
-    std::vector<const RecoLepton*> tightLeptonsFull = mergeLeptonCollections(tightElectrons, tightMuons, isHigherConePt);
+    const std::vector<const RecoLepton*> preselLeptonsFull = mergeLeptonCollections(preselElectrons, preselMuons, isHigherConePt);
+    const std::vector<const RecoLepton*> preselLeptonsFullUncleaned = mergeLeptonCollections(preselElectronsUncleaned, preselMuons, isHigherConePt);
+    const std::vector<const RecoLepton*> fakeableLeptonsFull = mergeLeptonCollections(fakeableElectrons, fakeableMuons, isHigherConePt);
+    const std::vector<const RecoLepton*> tightLeptonsFull = mergeLeptonCollections(tightElectrons, tightMuons, isHigherConePt);
 
-    std::vector<const RecoLepton*> preselLeptons = pickFirstNobjects(preselLeptonsFull, 3);
-    std::vector<const RecoLepton*> fakeableLeptons = pickFirstNobjects(fakeableLeptonsFull, 3);
-    std::vector<const RecoLepton*> tightLeptons = getIntersection(fakeableLeptons, tightLeptonsFull, isHigherConePt);
+    const std::vector<const RecoLepton*> preselLeptons = pickFirstNobjects(preselLeptonsFull, 3);
+    const std::vector<const RecoLepton*> fakeableLeptons = pickFirstNobjects(fakeableLeptonsFull, 3);
+    const std::vector<const RecoLepton*> tightLeptons = getIntersection(fakeableLeptons, tightLeptonsFull, isHigherConePt);
 
     std::vector<const RecoLepton*> selLeptons;
     std::vector<const RecoMuon*> selMuons;
@@ -938,15 +945,15 @@ int main(int argc, char* argv[])
       assert(electronSelection != kLoose && muonSelection != kLoose);
       selMuons = selectObjects(muonSelection, preselMuons, fakeableMuons, tightMuons);
       selElectrons = selectObjects(electronSelection, preselElectrons, fakeableElectrons, tightElectrons);
-      std::vector<const RecoLepton*> selLeptons_full = mergeLeptonCollections(selElectrons, selMuons, isHigherConePt);
+      const std::vector<const RecoLepton*> selLeptons_full = mergeLeptonCollections(selElectrons, selMuons, isHigherConePt);
       selLeptons = getIntersection(fakeableLeptons, selLeptons_full, isHigherConePt);
     }
 
-    std::vector<RecoHadTau> hadTaus = hadTauReader->read();
-    std::vector<const RecoHadTau*> hadTau_ptrs = convert_to_ptrs(hadTaus);
-    std::vector<const RecoHadTau*> cleanedHadTaus = hadTauCleaner(hadTau_ptrs, preselMuons, preselElectrons);
-    std::vector<const RecoHadTau*> fakeableHadTaus = fakeableHadTauSelector(cleanedHadTaus, isHigherPt);
-    std::vector<const RecoHadTau*> selHadTaus = hadTauSelector(cleanedHadTaus);
+    const std::vector<RecoHadTau> hadTaus = hadTauReader->read();
+    const std::vector<const RecoHadTau*> hadTau_ptrs = convert_to_ptrs(hadTaus);
+    const std::vector<const RecoHadTau*> cleanedHadTaus = hadTauCleaner(hadTau_ptrs, preselMuons, preselElectrons);
+    const std::vector<const RecoHadTau*> fakeableHadTaus = fakeableHadTauSelector(cleanedHadTaus, isHigherPt);
+    const std::vector<const RecoHadTau*> selHadTaus = hadTauSelector(cleanedHadTaus);
 
     if(isDEBUG || run_lumi_eventSelector)
     {
@@ -957,15 +964,15 @@ int main(int argc, char* argv[])
     }
 
 //--- build collections of jets and select subset of jets passing b-tagging criteria
-    std::vector<RecoJet> jets = jetReader->read();
-    std::vector<const RecoJet*> jet_ptrs = convert_to_ptrs(jets);
-    std::vector<const RecoJet*> cleanedJets = jetCleaningByIndex ?
+    const std::vector<RecoJet> jets = jetReader->read();
+    const std::vector<const RecoJet*> jet_ptrs = convert_to_ptrs(jets);
+    const std::vector<const RecoJet*> cleanedJets = jetCleaningByIndex ?
       jetCleanerByIndex(jet_ptrs, fakeableLeptonsFull, fakeableHadTaus) :
       jetCleaner       (jet_ptrs, fakeableLeptonsFull, fakeableHadTaus)
     ;
-    std::vector<const RecoJet*> selJets = jetSelector(cleanedJets);
-    std::vector<const RecoJet*> selBJets_loose = jetSelectorBtagLoose(cleanedJets);
-    std::vector<const RecoJet*> selBJets_medium = jetSelectorBtagMedium(cleanedJets);
+    const std::vector<const RecoJet*> selJets = jetSelector(cleanedJets);
+    const std::vector<const RecoJet*> selBJets_loose = jetSelectorBtagLoose(cleanedJets);
+    const std::vector<const RecoJet*> selBJets_medium = jetSelectorBtagMedium(cleanedJets);
     const std::vector<const RecoJet *> selJetsForward = jetSelectorForward(cleanedJets, isHigherPt);
 
 //--- build collections of generator level particles (after some cuts are applied, to safe computing time)
@@ -1080,12 +1087,13 @@ int main(int argc, char* argv[])
     // apply requirement on jets (incl. b-tagged jets) on preselection level
     if ( !((int)selJets.size() >= minNumJets) ) {
       if ( run_lumi_eventSelector ) {
-    std::cout << "event " << eventInfo.str() << " FAILS selJets selection." << std::endl;
+        std::cout << "event " << eventInfo.str() << " FAILS selJets selection." << std::endl;
 	printCollection("selJets", selJets);
       }
       continue;
     }
-    cutFlowTable.update(Form(">= %i jets (1)", minNumJets));
+    cutFlowTable.update(">= N jets");
+
     if ( !(selBJets_medium.size() == 0 && selBJets_loose.size() < 2) ) {
       if ( run_lumi_eventSelector ) {
 	std::cout << "event " << eventInfo.str() << " FAILS selBJets selection." << std::endl;
@@ -1095,7 +1103,7 @@ int main(int argc, char* argv[])
       }
       continue;
     }
-    cutFlowTable.update("No medium b-jets (1)");
+    cutFlowTable.update("No medium b-jets");
 
 //--- compute MHT and linear MET discriminant (met_LD)
     const RecoMEt met = metReader->read();
@@ -1265,22 +1273,13 @@ int main(int argc, char* argv[])
     }
     cutFlowTable.update("HLT filter matching", evtWeight);
 
-    // apply requirement on jets (incl. b-tagged jets) and hadronic taus on level of final event selection
-    if ( !((int)selJets.size() >= minNumJets) ) {
-      if ( run_lumi_eventSelector ) {
-    std::cout << "event " << eventInfo.str() << " FAILS selJets selection." << std::endl;
-	printCollection("selJets", selJets);
-      }
-      continue;
-    }
-    cutFlowTable.update(Form(">= %i jets (2)", minNumJets), evtWeight);
     if ( !(selBJets_medium.size() == 0)) {
       if ( run_lumi_eventSelector ) {
 	std::cout << "event " << eventInfo.str() << " FAILS selBJets selection." << std::endl;
       }
       continue;
     }
-    cutFlowTable.update("No medium b-jets (2)", evtWeight);
+    cutFlowTable.update("No medium b-jets", evtWeight);
 
     const bool failsLowMassVeto = isfailsLowMassVeto(preselLeptonsFullUncleaned);
     if ( failsLowMassVeto ) {
