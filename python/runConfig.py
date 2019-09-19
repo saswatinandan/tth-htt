@@ -135,6 +135,13 @@ class tthAnalyzeParser(argparse.ArgumentParser):
       help = 'R|Systematic uncertainties (choices: %s)' % tthAnalyzeParser.cat(sys_choices),
     )
 
+  def add_syshme(self, sys_choices, default_choice = 'central'):
+    self.add_argument('-shme', '--systematics_hme',
+      type = str, nargs = '+', dest = 'systematics_hme', metavar = 'mode', choices = sys_choices, default = [ default_choice ],
+      required = False,
+      help = 'R|Systematic uncertainties for HME method (choices: %s)' % tthAnalyzeParser.cat(sys_choices),
+    )
+
   def add_preselect(self):
     self.add_argument('-p', '--use-preselected',
       dest = 'use_preselected', action = 'store_true', default = False,
