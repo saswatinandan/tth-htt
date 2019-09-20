@@ -26,17 +26,21 @@ class EvtHistManager_3l
   bookHistograms(TFileDirectory & dir) override;
 
   void
-  fillHistograms(int numElectrons,
-                 int numMuons,
-                 int numHadTaus,
-                 int numJets,
-                 int numBJets_loose,
-                 int numBJets_medium,
-                 double mvaOutput_3l_ttV,
-                 double mvaOutput_3l_ttbar,
+  fillHistograms(//int numElectrons,
+                 //int numMuons,
+                 //int numHadTaus,
+                 //int numJets,
+                 //int numBJets_loose,
+                 //int numBJets_medium,
+                 //double mvaOutput_3l_ttV,
+                 //double mvaOutput_3l_ttbar,
                  double mvaDiscr_3l,
                  double output_NN_3l_ttH_tH_3cat_v8,
-		 const MEMOutput_3l * memOutput_3l,
+                 double output_NN_3l_ttH_tH_BKG_2_2_2,
+                 double output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+                 double output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
+                 double output_NN_3l_ttH_tH_BKG_1p5_1_1,
+		 //const MEMOutput_3l * memOutput_3l,
                  double evtWeight);
 
   const TH1 *
@@ -45,30 +49,35 @@ class EvtHistManager_3l
  private:
   int era_;
 
-  TH1 * histogram_numElectrons_;
-  TH1 * histogram_numMuons_;
-  TH1 * histogram_numHadTaus_;
-  TH1 * histogram_numJets_;
-  TH1 * histogram_numBJets_loose_;
-  TH1 * histogram_numBJets_medium_;
+  //TH1 * histogram_numElectrons_;
+  //TH1 * histogram_numMuons_;
+  //TH1 * histogram_numHadTaus_;
+  //TH1 * histogram_numJets_;
+  //TH1 * histogram_numBJets_loose_;
+  //TH1 * histogram_numBJets_medium_;
 
   // CV: used to check loss in signal efficiency in case events with high jet and b-jet multiplicity are vetoed
   // to avoid overlap with ttH, H->bb analysis (alternative: ttH, H->bb analysis adds hadronic tau veto)
-  TH2 * histogram_numBJets_loose_vs_numJets_;
-  TH2 * histogram_numBJets_medium_vs_numJets_;
+  //TH2 * histogram_numBJets_loose_vs_numJets_;
+  //TH2 * histogram_numBJets_medium_vs_numJets_;
 
-  TH1 * histogram_mvaOutput_3l_ttV_;
-  TH1 * histogram_mvaOutput_3l_ttbar_;
+  //TH1 * histogram_mvaOutput_3l_ttV_;
+  //TH1 * histogram_mvaOutput_3l_ttbar_;
   TH1 * histogram_mvaDiscr_3l_;
 
-  TH1 * histogram_memOutput_isValid_;
-  TH1 * histogram_memOutput_errorFlag_;
-  TH1 * histogram_memOutput_logWeight_ttH_;
-  TH1 * histogram_memOutput_logWeight_tt_;
-  TH1 * histogram_memOutput_LR_;
-  TH1 * histogram_mem_logCPUTime_;
-  TH1 * histogram_mem_logRealTime_;
+  //TH1 * histogram_memOutput_isValid_;
+  //TH1 * histogram_memOutput_errorFlag_;
+  //TH1 * histogram_memOutput_logWeight_ttH_;
+  //TH1 * histogram_memOutput_logWeight_tt_;
+  //TH1 * histogram_memOutput_LR_;
+  //TH1 * histogram_mem_logCPUTime_;
+  //TH1 * histogram_mem_logRealTime_;
   TH1 * histogram_output_NN_3l_ttH_tH_3cat_v8_;
+
+  TH1 * histogram_output_NN_3l_ttH_tH_BKG_2_2_2_;
+  TH1 * histogram_output_NN_3l_ttH_tH_BKG_1p5_1_1p5_;
+  TH1 * histogram_output_NN_3l_ttH_tH_BKG_1p5_1p5_1_;
+  TH1 * histogram_output_NN_3l_ttH_tH_BKG_1p5_1_1_;
 
   TH1 * histogram_EventCounter_;
 };
