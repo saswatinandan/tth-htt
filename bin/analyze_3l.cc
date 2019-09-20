@@ -434,7 +434,7 @@ int main(int argc, char* argv[])
   RecoHadTauCollectionGenMatcher hadTauGenMatcher;
   RecoHadTauCollectionCleaner hadTauCleaner(0.3, isDEBUG);
   RecoHadTauCollectionSelectorFakeable fakeableHadTauSelector(era, -1, isDEBUG);
-  fakeableHadTauSelector.set_if_looser(hadTauSelection_part2);
+  //fakeableHadTauSelector.set_if_looser(hadTauSelection_part2);
   fakeableHadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
   fakeableHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
   RecoHadTauCollectionSelectorTight tightHadTauSelector(era, -1, isDEBUG);
@@ -560,12 +560,6 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
   };
   //std::map<std::string, double> mvaInputs_3l_ttH_tH_3cat_v8_TF;
   std::vector<std::string> classes_TensorFlow_3l_ttH_tH_3cat = {"predictions_ttH",  "predictions_rest", "predictions_tH"};
-  /*
-  data/NN_legacy_opt_2017_2018/test_model_3l_0tau_ttH_tH_BKG_1p5_1_1_3jets.pb
-  data/NN_legacy_opt_2017_2018/test_model_3l_0tau_ttH_tH_BKG_1p5_1p5_1_3jets.pb
-  data/NN_legacy_opt_2017_2018/test_model_3l_0tau_ttH_tH_BKG_1p5_1_1p5_3jets.pb
-  data/NN_legacy_opt_2017_2018/test_model_3l_0tau_ttH_tH_BKG_2_2_2_3jets.pb
-  */
   std::string mvaFileName_TensorFlow_3l_ttH_tH_BKG_1p5_1_1_3jets = "tthAnalysis/HiggsToTauTau/data/NN_legacy_opt_2017_2018/test_model_3l_0tau_ttH_tH_BKG_1p5_1_1_3jets.pb";
   TensorFlowInterface mva_3l_ttH_tH_BKG_1p5_1_1_3jets(
     mvaFileName_TensorFlow_3l_ttH_tH_BKG_1p5_1_1_3jets,
@@ -608,7 +602,7 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
     classes_TensorFlow_3l_ttH_tH_3cat
   );
 
-  std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVariables_3l_ttV, mvaInputVariables_3l_ttbar);
+  std::vector<std::string> mvaInputVariables_3l = get_mvaInputVariables(mvaInputVariables_TensorFlow_3l_ttH_tH_BKG_NN_legacy_opt, mvaInputVariables_TensorFlow_3l_ttH_tH_3cat_v8 );
   std::map<std::string, double> mvaInputs_3l;
 
 //--- open output file containing run:lumi:event numbers of events passing final event selection criteria
@@ -983,7 +977,7 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
   NtupleFillerBDT<float, int> * bdt_filler = nullptr;
   typedef std::remove_pointer<decltype(bdt_filler)>::type::float_type float_type;
   typedef std::remove_pointer<decltype(bdt_filler)>::type::int_type   int_type;
-  if ( selectBDT && do_tree) {
+  if ( selectBDT || do_tree) {
     bdt_filler = new std::remove_pointer<decltype(bdt_filler)>::type(
       makeHistManager_cfg(process_string, Form("%s/sel/evtntuple", histogramDir.data()), era_string, central_or_shift)
     );
@@ -1974,12 +1968,6 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
     if (dr_los1 < dr_los2) eta_los = eta_los1;
     else eta_los = eta_los2;
 
-    /*
-    data/NN_legacy_opt_2017_2018/test_model_3l_0tau_ttH_tH_BKG_1p5_1_1_3jets.pb
-    data/NN_legacy_opt_2017_2018/test_model_3l_0tau_ttH_tH_BKG_1p5_1p5_1_3jets.pb
-    data/NN_legacy_opt_2017_2018/test_model_3l_0tau_ttH_tH_BKG_1p5_1_1p5_3jets.pb
-    data/NN_legacy_opt_2017_2018/test_model_3l_0tau_ttH_tH_BKG_2_2_2_3jets.pb
-    */
     std::map<std::string, double> mvaInputVariables_NN = {
       {"lep1_conePt",     lep1_conePt},
       {"lep1_eta",        selLepton_lead -> eta()},
@@ -2282,7 +2270,7 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
     selHistManager->BJets_medium_->fillHistograms(selBJets_medium, evtWeight);
     selHistManager->met_->fillHistograms(met, mht_p4, met_LD, evtWeight);
     selHistManager->metFilters_->fillHistograms(metFilters, evtWeight);
-    selHistManager->mvaInputVariables_3l_->fillHistograms(mvaInputs_3l, evtWeight);
+    selHistManager->mvaInputVariables_3l_->fillHistograms(mvaInputVariables_NN, evtWeight);
 
     std::map<std::string, double> tH_weight_map;
     for(const std::string & evt_cat_str: evt_cat_strs)
@@ -2296,84 +2284,113 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
     for(const auto & kv: tH_weight_map)
     {
       selHistManager->evt_[kv.first]->fillHistograms(
-        selElectrons.size(), selMuons.size(), selHadTaus.size(),
-        selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-        mvaOutput_3l_ttV, mvaOutput_3l_ttbar, mvaDiscr_3l,
+        //selElectrons.size(), selMuons.size(), selHadTaus.size(),
+        //selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+        //mvaOutput_3l_ttV, mvaOutput_3l_ttbar,
+        mvaDiscr_3l,
+        output_NN_3l_ttH_tH_3cat_v8,
+        output_NN_3l_ttH_tH_BKG_2_2_2,
+        output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+        output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
         output_NN_3l_ttH_tH_BKG_1p5_1_1,
-        memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+        //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
         kv.second
       );
     }
     EvtHistManager_3l* selHistManager_evt_category = selHistManager->evt_in_categories_[category];
     if ( selHistManager_evt_category ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
       selHistManager_evt_category->fillHistograms(
-      selElectrons.size(), selMuons.size(), selHadTaus.size(),
-      selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-      mvaOutput_3l_ttV,
-      mvaOutput_3l_ttbar,
+      //selElectrons.size(), selMuons.size(), selHadTaus.size(),
+      //selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+      //mvaOutput_3l_ttV,
+      //mvaOutput_3l_ttbar,
       mvaDiscr_3l,
+      output_NN_3l_ttH_tH_3cat_v8,
+      output_NN_3l_ttH_tH_BKG_2_2_2,
+      output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+      output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
       output_NN_3l_ttH_tH_BKG_1p5_1_1,
-      memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+      //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
       evtWeight);
     }
     EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_3cat_v8_TF = selHistManager->evt_in_categories_3l_ttH_tH_3cat_v8_TF_[category_3l_ttH_tH_3cat_v8_TF];
     if ( selHistManager_evt_3l_ttH_tH_3cat_v8_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
       selHistManager_evt_3l_ttH_tH_3cat_v8_TF->fillHistograms(
-        selElectrons.size(), selMuons.size(), selHadTaus.size(),
-        selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-        mvaOutput_3l_ttV,
-        mvaOutput_3l_ttbar,
+        //selElectrons.size(), selMuons.size(), selHadTaus.size(),
+        //selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+        //mvaOutput_3l_ttV,
+        //mvaOutput_3l_ttbar,
         mvaDiscr_3l,
         output_NN_3l_ttH_tH_3cat_v8,
-        memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+        output_NN_3l_ttH_tH_BKG_2_2_2,
+        output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+        output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
+        output_NN_3l_ttH_tH_BKG_1p5_1_1,
+        //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
         evtWeight);
     }
     EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1_TF = selHistManager->evt_in_categories_3l_ttH_tH_BKG_1p5_1_1_TF_[category_3l_1p5_1_1_3jets_TF];
     if ( selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
       selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1_TF -> fillHistograms(
-        selElectrons.size(), selMuons.size(), selHadTaus.size(),
-        selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-        mvaOutput_3l_ttV,
-        mvaOutput_3l_ttbar,
+        //selElectrons.size(), selMuons.size(), selHadTaus.size(),
+        //selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+        //mvaOutput_3l_ttV,
+        //mvaOutput_3l_ttbar,
         mvaDiscr_3l,
+        output_NN_3l_ttH_tH_3cat_v8,
+        output_NN_3l_ttH_tH_BKG_2_2_2,
+        output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+        output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
         output_NN_3l_ttH_tH_BKG_1p5_1_1,
-        memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+        //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
         evtWeight);
     }
     EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_BKG_1p5_1p5_1_TF = selHistManager->evt_in_categories_3l_ttH_tH_BKG_1p5_1p5_1_TF_[category_3l_1p5_1p5_1_3jets_TF];
     if ( selHistManager_evt_3l_ttH_tH_BKG_1p5_1p5_1_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
       selHistManager_evt_3l_ttH_tH_BKG_1p5_1p5_1_TF -> fillHistograms(
-        selElectrons.size(), selMuons.size(), selHadTaus.size(),
-        selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-        mvaOutput_3l_ttV,
-        mvaOutput_3l_ttbar,
+        //selElectrons.size(), selMuons.size(), selHadTaus.size(),
+        //selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+        //mvaOutput_3l_ttV,
+        //mvaOutput_3l_ttbar,
         mvaDiscr_3l,
+        output_NN_3l_ttH_tH_3cat_v8,
+        output_NN_3l_ttH_tH_BKG_2_2_2,
+        output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
         output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
-        memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+        output_NN_3l_ttH_tH_BKG_1p5_1_1,
+        //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
         evtWeight);
     }
     EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1p5_TF = selHistManager->evt_in_categories_3l_ttH_tH_BKG_1p5_1_1p5_TF_[category_3l_1p5_1_1p5_3jets_TF];
     if ( selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1p5_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
       selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1p5_TF -> fillHistograms(
-        selElectrons.size(), selMuons.size(), selHadTaus.size(),
-        selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-        mvaOutput_3l_ttV,
-        mvaOutput_3l_ttbar,
+        //selElectrons.size(), selMuons.size(), selHadTaus.size(),
+        //selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+        //mvaOutput_3l_ttV,
+        //mvaOutput_3l_ttbar,
         mvaDiscr_3l,
+        output_NN_3l_ttH_tH_3cat_v8,
+        output_NN_3l_ttH_tH_BKG_2_2_2,
         output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
-        memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+        output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
+        output_NN_3l_ttH_tH_BKG_1p5_1_1,
+        //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
         evtWeight);
     }
     EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_BKG_2_2_2_TF = selHistManager->evt_in_categories_3l_ttH_tH_BKG_2_2_2_TF_[category_3l_2_2_2_3jets_TF];
     if ( selHistManager_evt_3l_ttH_tH_BKG_2_2_2_TF ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
       selHistManager_evt_3l_ttH_tH_BKG_2_2_2_TF -> fillHistograms(
-        selElectrons.size(), selMuons.size(), selHadTaus.size(),
-        selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
-        mvaOutput_3l_ttV,
-        mvaOutput_3l_ttbar,
+        //selElectrons.size(), selMuons.size(), selHadTaus.size(),
+        //selJets.size(), selBJets_loose.size(), selBJets_medium.size(),
+        //mvaOutput_3l_ttV,
+        //mvaOutput_3l_ttbar,
         mvaDiscr_3l,
+        output_NN_3l_ttH_tH_3cat_v8,
         output_NN_3l_ttH_tH_BKG_2_2_2,
-        memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+        output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+        output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
+        output_NN_3l_ttH_tH_BKG_1p5_1_1,
+        //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
         evtWeight);
     }
 
@@ -2387,17 +2404,21 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
         for(const auto & kv: tH_weight_map)
         {
           selHistManager -> evt_in_decayModes_[kv.first][decayModeStr] -> fillHistograms(
-            selElectrons.size(),
-            selMuons.size(),
-            selHadTaus.size(),
-            selJets.size(),
-            selBJets_loose.size(),
-            selBJets_medium.size(),
-            mvaOutput_3l_ttV,
-            mvaOutput_3l_ttbar,
+            //selElectrons.size(),
+            //selMuons.size(),
+            //selHadTaus.size(),
+            //selJets.size(),
+            //selBJets_loose.size(),
+            //selBJets_medium.size(),
+            //mvaOutput_3l_ttV,
+            //mvaOutput_3l_ttbar,
             mvaDiscr_3l,
+            output_NN_3l_ttH_tH_3cat_v8,
+            output_NN_3l_ttH_tH_BKG_2_2_2,
+            output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+            output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
             output_NN_3l_ttH_tH_BKG_1p5_1_1,
-            memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+            //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
             kv.second
           );
         }
@@ -2406,17 +2427,21 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
         EvtHistManager_3l* selHistManager_evt_category_decMode = selHistManager->evt_in_categories_and_decayModes_[category][decayMode_and_genMatch];
         if ( selHistManager_evt_category_decMode ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
           selHistManager_evt_category_decMode->fillHistograms(
-            selElectrons.size(),
-            selMuons.size(),
-            selHadTaus.size(),
-            selJets.size(),
-            selBJets_loose.size(),
-            selBJets_medium.size(),
-            mvaOutput_3l_ttV,
-            mvaOutput_3l_ttbar,
+            //selElectrons.size(),
+            //selMuons.size(),
+            //selHadTaus.size(),
+            //selJets.size(),
+            //selBJets_loose.size(),
+            //selBJets_medium.size(),
+            //mvaOutput_3l_ttV,
+            //mvaOutput_3l_ttbar,
             mvaDiscr_3l,
+            output_NN_3l_ttH_tH_3cat_v8,
+            output_NN_3l_ttH_tH_BKG_2_2_2,
+            output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+            output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
             output_NN_3l_ttH_tH_BKG_1p5_1_1,
-            memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+            //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
             evtWeight
           );
         }
@@ -2424,17 +2449,21 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
         EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_3cat_v8_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_3cat_v8_TF_and_decayModes_[category_3l_ttH_tH_3cat_v8_TF][decayModeStr];
         if ( selHistManager_evt_3l_ttH_tH_3cat_v8_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
             selHistManager_evt_3l_ttH_tH_3cat_v8_TF_and_decayModes_->fillHistograms(
-            selElectrons.size(),
-            selMuons.size(),
-            selHadTaus.size(),
-            selJets.size(),
-            selBJets_loose.size(),
-            selBJets_medium.size(),
-            mvaOutput_3l_ttV,
-            mvaOutput_3l_ttbar,
+            //selElectrons.size(),
+            //selMuons.size(),
+            //selHadTaus.size(),
+            //selJets.size(),
+            //selBJets_loose.size(),
+            //selBJets_medium.size(),
+            //mvaOutput_3l_ttV,
+            //mvaOutput_3l_ttbar,
             mvaDiscr_3l,
             output_NN_3l_ttH_tH_3cat_v8,
-            memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+            output_NN_3l_ttH_tH_BKG_2_2_2,
+            output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+            output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
+            output_NN_3l_ttH_tH_BKG_1p5_1_1,
+            //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
             evtWeight
           );
         }
@@ -2442,17 +2471,21 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
         EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_BKG_1p5_1_1_TF_and_decayModes_[category_3l_1p5_1_1_3jets_TF][decayModeStr];
         if ( selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
             selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1_TF_and_decayModes_->fillHistograms(
-            selElectrons.size(),
-            selMuons.size(),
-            selHadTaus.size(),
-            selJets.size(),
-            selBJets_loose.size(),
-            selBJets_medium.size(),
-            mvaOutput_3l_ttV,
-            mvaOutput_3l_ttbar,
+            //selElectrons.size(),
+            //selMuons.size(),
+            //selHadTaus.size(),
+            //selJets.size(),
+            //selBJets_loose.size(),
+            //selBJets_medium.size(),
+            //mvaOutput_3l_ttV,
+            //mvaOutput_3l_ttbar,
             mvaDiscr_3l,
+            output_NN_3l_ttH_tH_3cat_v8,
+            output_NN_3l_ttH_tH_BKG_2_2_2,
+            output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+            output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
             output_NN_3l_ttH_tH_BKG_1p5_1_1,
-            memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+            //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
             evtWeight
           );
         }
@@ -2460,17 +2493,21 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
         EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_BKG_1p5_1p5_1_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_BKG_1p5_1p5_1_TF_and_decayModes_[category_3l_1p5_1p5_1_3jets_TF][decayModeStr];
         if ( selHistManager_evt_3l_ttH_tH_BKG_1p5_1p5_1_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
             selHistManager_evt_3l_ttH_tH_BKG_1p5_1p5_1_TF_and_decayModes_->fillHistograms(
-            selElectrons.size(),
-            selMuons.size(),
-            selHadTaus.size(),
-            selJets.size(),
-            selBJets_loose.size(),
-            selBJets_medium.size(),
-            mvaOutput_3l_ttV,
-            mvaOutput_3l_ttbar,
+            //selElectrons.size(),
+            //selMuons.size(),
+            //selHadTaus.size(),
+            //selJets.size(),
+            //selBJets_loose.size(),
+            //selBJets_medium.size(),
+            //mvaOutput_3l_ttV,
+            //mvaOutput_3l_ttbar,
             mvaDiscr_3l,
+            output_NN_3l_ttH_tH_3cat_v8,
+            output_NN_3l_ttH_tH_BKG_2_2_2,
+            output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
             output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
-            memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+            output_NN_3l_ttH_tH_BKG_1p5_1_1,
+            //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
             evtWeight
           );
         }
@@ -2478,17 +2515,21 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
         EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1p5_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_BKG_1p5_1_1p5_TF_and_decayModes_[category_3l_1p5_1_1p5_3jets_TF][decayModeStr];
         if ( selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1p5_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
             selHistManager_evt_3l_ttH_tH_BKG_1p5_1_1p5_TF_and_decayModes_->fillHistograms(
-            selElectrons.size(),
-            selMuons.size(),
-            selHadTaus.size(),
-            selJets.size(),
-            selBJets_loose.size(),
-            selBJets_medium.size(),
-            mvaOutput_3l_ttV,
-            mvaOutput_3l_ttbar,
+            //selElectrons.size(),
+            //selMuons.size(),
+            //selHadTaus.size(),
+            //selJets.size(),
+            //selBJets_loose.size(),
+            //selBJets_medium.size(),
+            //mvaOutput_3l_ttV,
+            //mvaOutput_3l_ttbar,
             mvaDiscr_3l,
+            output_NN_3l_ttH_tH_3cat_v8,
+            output_NN_3l_ttH_tH_BKG_2_2_2,
             output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
-            memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+            output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
+            output_NN_3l_ttH_tH_BKG_1p5_1_1,
+            //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
             evtWeight
           );
         }
@@ -2496,17 +2537,21 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
         EvtHistManager_3l* selHistManager_evt_3l_ttH_tH_BKG_2_2_2_TF_and_decayModes_ = selHistManager->evt_in_categories_3l_ttH_tH_BKG_2_2_2_TF_and_decayModes_[category_3l_2_2_2_3jets_TF][decayModeStr];
         if ( selHistManager_evt_3l_ttH_tH_BKG_2_2_2_TF_and_decayModes_ ) { // CV: pointer is zero when running on OS control region to estimate "charge_flip" background
             selHistManager_evt_3l_ttH_tH_BKG_2_2_2_TF_and_decayModes_->fillHistograms(
-            selElectrons.size(),
-            selMuons.size(),
-            selHadTaus.size(),
-            selJets.size(),
-            selBJets_loose.size(),
-            selBJets_medium.size(),
-            mvaOutput_3l_ttV,
-            mvaOutput_3l_ttbar,
+            //selElectrons.size(),
+            //selMuons.size(),
+            //selHadTaus.size(),
+            //selJets.size(),
+            //selBJets_loose.size(),
+            //selBJets_medium.size(),
+            //mvaOutput_3l_ttV,
+            //mvaOutput_3l_ttbar,
             mvaDiscr_3l,
+            output_NN_3l_ttH_tH_3cat_v8,
             output_NN_3l_ttH_tH_BKG_2_2_2,
-            memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
+            output_NN_3l_ttH_tH_BKG_1p5_1_1p5,
+            output_NN_3l_ttH_tH_BKG_1p5_1p5_1,
+            output_NN_3l_ttH_tH_BKG_1p5_1_1,
+            //memOutput_3l_matched.is_initialized() ? &memOutput_3l_matched : nullptr,
             evtWeight
           );
         }
@@ -2544,14 +2589,15 @@ HadTopTagger* hadTopTagger = new HadTopTagger();
 
       //FR weights for bdt ntuple
       double prob_fake_lepton_lead = 1.;
-      if      ( std::abs(selLepton_lead->pdgId()) == 11 ) prob_fake_lepton_lead = leptonFakeRateInterface->getWeight_e(selLepton_lead->cone_pt(), selLepton_lead->absEta());
-      else if ( std::abs(selLepton_lead->pdgId()) == 13 ) prob_fake_lepton_lead = leptonFakeRateInterface->getWeight_mu(selLepton_lead->cone_pt(), selLepton_lead->absEta());
+      //if      ( std::abs(selLepton_lead->pdgId()) == 11 ) prob_fake_lepton_lead = leptonFakeRateInterface->getWeight_e(selLepton_lead->cone_pt(), selLepton_lead->absEta());
+      //else if ( std::abs(selLepton_lead->pdgId()) == 13 ) prob_fake_lepton_lead = leptonFakeRateInterface->getWeight_mu(selLepton_lead->cone_pt(), selLepton_lead->absEta());
       double prob_fake_lepton_sublead = 1.;
-      if      ( std::abs(selLepton_sublead->pdgId()) == 11 ) prob_fake_lepton_sublead = leptonFakeRateInterface->getWeight_e(selLepton_sublead->cone_pt(), selLepton_sublead->absEta());
-      else if ( std::abs(selLepton_sublead->pdgId()) == 13 ) prob_fake_lepton_sublead = leptonFakeRateInterface->getWeight_mu(selLepton_sublead->cone_pt(), selLepton_sublead->absEta());
+      //if      ( std::abs(selLepton_sublead->pdgId()) == 11 ) prob_fake_lepton_sublead = leptonFakeRateInterface->getWeight_e(selLepton_sublead->cone_pt(), selLepton_sublead->absEta());
+      //else if ( std::abs(selLepton_sublead->pdgId()) == 13 ) prob_fake_lepton_sublead = leptonFakeRateInterface->getWeight_mu(selLepton_sublead->cone_pt(), selLepton_sublead->absEta());
       double prob_fake_lepton_third = 1.;
-      if      ( std::abs(selLepton_third->pdgId()) == 11 ) prob_fake_lepton_third = leptonFakeRateInterface->getWeight_e(selLepton_third->cone_pt(), selLepton_third->absEta());
-      else if ( std::abs(selLepton_third->pdgId()) == 13 ) prob_fake_lepton_third = leptonFakeRateInterface->getWeight_mu(selLepton_third->cone_pt(), selLepton_third->absEta());
+      //if      ( std::abs(selLepton_third->pdgId()) == 11 ) prob_fake_lepton_third = leptonFakeRateInterface->getWeight_e(selLepton_third->cone_pt(), selLepton_third->absEta());
+      //else if ( std::abs(selLepton_third->pdgId()) == 13 ) prob_fake_lepton_third = leptonFakeRateInterface->getWeight_mu(selLepton_third->cone_pt(), selLepton_third->absEta());
+
 
 
       bdt_filler -> operator()({ eventInfo.run, eventInfo.lumi, eventInfo.event })
