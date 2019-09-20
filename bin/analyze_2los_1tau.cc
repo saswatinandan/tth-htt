@@ -462,7 +462,7 @@ int main(int argc, char* argv[])
   RecoHadTauCollectionGenMatcher hadTauGenMatcher;
   RecoHadTauCollectionCleaner hadTauCleaner(0.3);
   RecoHadTauCollectionSelectorFakeable fakeableHadTauSelector(era);
-  fakeableHadTauSelector.set_if_looser(hadTauSelection_part2);
+  //fakeableHadTauSelector.set_if_looser(hadTauSelection_part2);
   fakeableHadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
   fakeableHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
   RecoHadTauCollectionSelectorTight tightHadTauSelector(era);
@@ -1280,8 +1280,16 @@ int main(int argc, char* argv[])
     const std::vector<const RecoHadTau*> tightHadTausFull = tightHadTauSelector(fakeableHadTausFull, isHigherPt);
 
     const std::vector<const RecoHadTau*> fakeableHadTaus = pickFirstNobjects(fakeableHadTausFull, 1);
-    const std::vector<const RecoHadTau*> tightHadTaus = getIntersection(fakeableHadTaus, tightHadTausFull, isHigherPt);
-    const std::vector<const RecoHadTau*> selHadTaus = selectObjects(hadTauSelection, fakeableHadTaus, tightHadTaus);
+    std::vector<const RecoHadTau*> tightHadTaus;
+    std::vector<const RecoHadTau*> selHadTaus;
+    if (selectBDT) {
+      tightHadTaus = pickFirstNobjects(tightHadTausFull, 2);
+      selHadTaus = tightHadTaus;
+    }
+    else {
+      tightHadTaus = getIntersection(fakeableHadTaus, tightHadTausFull, isHigherPt);
+      selHadTaus = selectObjects(hadTauSelection, fakeableHadTaus, tightHadTaus);
+    }
     if(isDEBUG || run_lumi_eventSelector)
     {
       printCollection("fakeableHadTaus", fakeableHadTaus);

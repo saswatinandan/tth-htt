@@ -221,19 +221,19 @@ RecoHadTauSelectorBase::set_if_looser(const std::string & cut)
 
     if(tauId_new == tauId_old)
     {
-      const std::string wp_new  = cut_part.substr(7);
-      const int wp_int_new = get_tau_id_wp_int(tauId_new, wp_new);
-      //if(wp_int_new < wp_int_old)
-      //{
-        cut_part_new = mva_old + wp_new;
+      // case 2
+      if(wp_int_new < wp_int_old)
+      {
+        // case 2.i
+        cut_new = mva_old + wp_new;
         std::cout << "Relaxing old cut for '" << mva_new << "' from '" << wp_old << "' to '" << wp_new << "'\n";
-      //}
-      /*else
+      }
+      else
       {
         // case 2.ii
         cut_new = mva_old + wp_old;
         std::cout << "Keeping old cut for '" << mva_new << "' at '" << wp_old << "'\n";
-      }*/
+      }
     }
     else
     {
@@ -268,14 +268,14 @@ RecoHadTauSelectorBase::set_if_looser(const std::string & cut)
   }
   assert(! cut_new.empty());
 
-  //if(cut_ != cut_new)
-  //{
+  if(cut_ != cut_new)
+  {
     std::cout << "Changed tau ID WP from '" << cut_ << "' to '" << cut_new << "'\n";
     set(cut_new);
     return true;
-  /*}
+  }
 
-  return false;*/
+  return false;
 }
 
 bool
