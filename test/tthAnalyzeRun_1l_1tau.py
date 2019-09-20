@@ -81,7 +81,7 @@ hadTau_selection_veto = tau_id + hadTauWP_veto_map[tau_id]
 
 if mode == "default":
    samples = load_samples(era, suffix = "preselected" if use_preselected else "")
-  for sample_name, sample_info in samples.items():
+   for sample_name, sample_info in samples.items():
     if sample_name == 'sum_events': continue
     if sample_info["sample_category"] in [
       "data_obs"
@@ -89,7 +89,7 @@ if mode == "default":
       sample_info["use_it"] = False
 elif mode == "test":
    samples = load_samples(era, suffix = "preselected" if use_preselected else "")
-  for sample_name, sample_info in samples.items():
+   for sample_name, sample_info in samples.items():
     if sample_name == 'sum_events': continue
     if not sample_info["sample_category"] in [
       "signal",
@@ -131,7 +131,7 @@ if mode == "default" and len(central_or_shifts) <= 1:
   ]
 else:
   evtCategories = [
-    "1l_1tau", "1l_1tau_OS", "1l_1tau_SS", "1l_1tau_OS_wChargeFlipWeights"
+    "1l_1tau" #, "1l_1tau_OS", "1l_1tau_SS", "1l_1tau_OS_wChargeFlipWeights"
   ]
 
 for sample_name, sample_info in samples.items():
