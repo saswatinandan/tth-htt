@@ -419,7 +419,7 @@ int main(int argc, char* argv[])
   RecoHadTauCollectionGenMatcher hadTauGenMatcher;
   RecoHadTauCollectionCleaner hadTauCleaner(0.3, isDEBUG);
   RecoHadTauCollectionSelectorFakeable fakeableHadTauSelector(era, -1, isDEBUG);
-  fakeableHadTauSelector.set_if_looser(hadTauSelection_part2);
+  //fakeableHadTauSelector.set_if_looser(hadTauSelection_part2);
   fakeableHadTauSelector.set_min_antiElectron(hadTauSelection_antiElectron);
   fakeableHadTauSelector.set_min_antiMuon(hadTauSelection_antiMuon);
 
@@ -666,7 +666,7 @@ int main(int argc, char* argv[])
       "lep1_genLepPt", "lep2_genLepPt", "lep3_genLepPt", "lep4_genLepPt",
       "lep1_fake_prob", "lep2_fake_prob", "lep3_fake_prob", "lep4_fake_prob",
       "lep1_frWeight", "lep2_frWeight", "lep3_frWeight", "lep4_frWeight",
-      "massL", "massL4", "massLT", "met_LD",
+      "massL", "massL_FO", "massL4", "massLT", "met_LD",
       "mindr_lep_jet",
       "max_Lep_eta", "mbb_loose", "mbb_medium",
       "jet1_pt", "jet1_eta", "jet1_phi", "jet1_E",
@@ -1583,7 +1583,8 @@ int main(int argc, char* argv[])
           ("jet2_E",              selJets[1]->p4().energy())
           ("massLT",              comp_MT_met_lep1(selLeptons[0]->p4() + selLeptons[1]->p4(), met.pt(), met.phi()))
           ("massL4",              comp_MT_met_lep1(selLeptons[0]->p4() + selLeptons[1]->p4() + selLeptons[2]->p4() + selLeptons[4]->p4(), met.pt(), met.phi()))
-          ("massL",           massL(fakeableLeptons))
+          ("massL_FO",           massL(fakeableLeptons))
+          ("massL",           massL(selLeptons))
           ("mindr_lep_jet",   std::min(comp_mindr_lep1_jet(*selLepton_lead, selJets), std::min(comp_mindr_lep2_jet(*selLepton_sublead, selJets), std::min(comp_mindr_lep3_jet(*selLepton_third, selJets), std::min(comp_mindr_lep3_jet(*selLepton_fourth, selJets), 400.)))))
           ("max_Lep_eta",     std::max(
                                 selLepton_lead -> eta(),
