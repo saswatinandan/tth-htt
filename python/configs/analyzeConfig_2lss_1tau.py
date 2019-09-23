@@ -194,7 +194,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
       decays = [""]
       if sample_category in self.procsWithDecayModes : decays += self.decayModes
       couplings = [""]
-      if sample_category in ["tHq", "tHW"] : couplings += self.thcouplings
+      #if sample_category in ["tHq", "tHW"] : couplings += self.thcouplings
       for decayMode in decays :
         for coupling in couplings :
             if sample_category not in self.ttHProcs and decayMode in ["hmm", "hzg"] : continue
@@ -569,7 +569,7 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
                     decays = [""]
                     if sample_category in self.procsWithDecayModes : decays += self.decayModes
                     couplings = [""]
-                    if sample_category in ["tHq", "tHW"] : couplings += self.thcouplings
+                    #if sample_category in ["tHq", "tHW"] : couplings += self.thcouplings
                     for decayMode in decays :
                       for coupling in couplings :
                         if sample_category not in self.ttHProcs and decayMode in ["hmm", "hzg"] : continue
@@ -826,37 +826,40 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
     #--------------------------------------------------------------------------
     # CV: add histograms in OS and SS regions,
     #     so that "data_fakes" background can be subtracted from OS control region used to estimate charge flip background
-    for chargeSumSelection in self.chargeSumSelections:
-      key_hadd_stage1_5_job = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS", chargeSumSelection)
-      key_addFakes_job = getKey("data_fakes", "OS", chargeSumSelection)
-      key_hadd_stage1_6_dir = getKey("hadd", get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS", chargeSumSelection)
-      key_hadd_stage1_6_job = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS", chargeSumSelection)
-      if key_hadd_stage1_6_job not in self.inputFiles_hadd_stage1_6:
-        self.inputFiles_hadd_stage1_6[key_hadd_stage1_6_job] = []
-      self.inputFiles_hadd_stage1_6[key_hadd_stage1_6_job].append(self.jobOptions_addFakes[key_addFakes_job]['outputFile'])
-      self.inputFiles_hadd_stage1_6[key_hadd_stage1_6_job].append(self.outputFile_hadd_stage1_5[key_hadd_stage1_5_job])
-      self.outputFile_hadd_stage1_6[key_hadd_stage1_6_job] = os.path.join(self.dirs[key_hadd_stage1_6_dir][DKEY_HIST], "hadd_stage1_6_Tight_lepOS_sum%s.root" % chargeSumSelection)
-    #--------------------------------------------------------------------------
+    if 0 > 1 : # Xanda
+        for chargeSumSelection in self.chargeSumSelections:
+          key_hadd_stage1_5_job = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS", chargeSumSelection)
+          key_addFakes_job = getKey("data_fakes", "OS", chargeSumSelection)
+          key_hadd_stage1_6_dir = getKey("hadd", get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS", chargeSumSelection)
+          key_hadd_stage1_6_job = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS", chargeSumSelection)
+          if key_hadd_stage1_6_job not in self.inputFiles_hadd_stage1_6:
+            self.inputFiles_hadd_stage1_6[key_hadd_stage1_6_job] = []
+          self.inputFiles_hadd_stage1_6[key_hadd_stage1_6_job].append(self.jobOptions_addFakes[key_addFakes_job]['outputFile'])
+          self.inputFiles_hadd_stage1_6[key_hadd_stage1_6_job].append(self.outputFile_hadd_stage1_5[key_hadd_stage1_5_job])
+          self.outputFile_hadd_stage1_6[key_hadd_stage1_6_job] = os.path.join(self.dirs[key_hadd_stage1_6_dir][DKEY_HIST], "hadd_stage1_6_Tight_lepOS_sum%s.root" % chargeSumSelection)
+        #--------------------------------------------------------------------------
 
     logging.info("Creating configuration files to run 'addBackgroundFlips'")
     for chargeSumSelection in self.chargeSumSelections:
-      key_hadd_stage1_6_job = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS", chargeSumSelection)
-      key_addFlips_dir = getKey("addBackgroundLeptonFlips")
-      key_addFlips_job = getKey("data_flips", chargeSumSelection)
-      self.jobOptions_addFlips[key_addFlips_job] = {
-        'inputFile' : self.outputFile_hadd_stage1_6[key_hadd_stage1_6_job],
-        'cfgFile_modified' : os.path.join(self.dirs[key_addFlips_dir][DKEY_CFGS], "addBackgroundLeptonFlips_sum%s_cfg.py" % chargeSumSelection),
-        'outputFile' : os.path.join(self.dirs[key_addFlips_dir][DKEY_HIST], "addBackgroundLeptonFlips_sum%s.root" % chargeSumSelection),
-        'logFile' : os.path.join(self.dirs[key_addFlips_dir][DKEY_LOGS], "addBackgroundLeptonFlips_sum%s.log" % chargeSumSelection),
-        'category_signal' : "2lss_1tau_lepSS_sum%s_Tight" % chargeSumSelection,
-        'category_sideband' : "2lss_1tau_lepOS_sum%s_Tight" % chargeSumSelection
-      }
-      self.createCfg_addFlips(self.jobOptions_addFlips[key_addFlips_job])
-      key_hadd_stage2_job = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "SS", chargeSumSelection)
-      self.inputFiles_hadd_stage2[key_hadd_stage2_job].append(self.jobOptions_addFlips[key_addFlips_job]['outputFile'])
+        if 0 > 1 : # Xanda
+          key_hadd_stage1_6_job = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS", chargeSumSelection)
+          key_addFlips_dir = getKey("addBackgroundLeptonFlips")
+          key_addFlips_job = getKey("data_flips", chargeSumSelection)
+          self.jobOptions_addFlips[key_addFlips_job] = {
+            'inputFile' : self.outputFile_hadd_stage1_6[key_hadd_stage1_6_job],
+            'cfgFile_modified' : os.path.join(self.dirs[key_addFlips_dir][DKEY_CFGS], "addBackgroundLeptonFlips_sum%s_cfg.py" % chargeSumSelection),
+            'outputFile' : os.path.join(self.dirs[key_addFlips_dir][DKEY_HIST], "addBackgroundLeptonFlips_sum%s.root" % chargeSumSelection),
+            'logFile' : os.path.join(self.dirs[key_addFlips_dir][DKEY_LOGS], "addBackgroundLeptonFlips_sum%s.log" % chargeSumSelection),
+            'category_signal' : "2lss_1tau_lepSS_sum%s_Tight" % chargeSumSelection,
+            'category_sideband' : "2lss_1tau_lepOS_sum%s_Tight" % chargeSumSelection
+          }
+          self.createCfg_addFlips(self.jobOptions_addFlips[key_addFlips_job])
+          key_hadd_stage2_job = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "SS", chargeSumSelection)
+          self.inputFiles_hadd_stage2[key_hadd_stage2_job].append(self.jobOptions_addFlips[key_addFlips_job]['outputFile'])
 
     logging.info("Creating configuration files to run 'prepareDatacards'")
     for chargeSumSelection in self.chargeSumSelections:
+      if chargeSumSelection == "SS" : continue
       if self.applyFakeRateWeights == "2lepton":
         processesToCopy = []
         for process in self.prep_dcard_processesToCopy:
