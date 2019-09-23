@@ -116,6 +116,7 @@ MVAInputVarHistManager::MVAInputVarHistManager(const edm::ParameterSet & cfg)
   binningOptions_["mT_tau2"]                    = new binningOptionType("mT_tau2",                    40,  0.,  200.);
   binningOptions_["mbb_loose"]                  = new binningOptionType("mbb_loose",                  40,  0.,  500.);
   binningOptions_["mbb_medium"]                 = new binningOptionType("mbb_medium",                 40,  0.,  500.);
+  binningOptions_["mbb"]                 = new binningOptionType("mbb",                 40,  0.,  500.);
   binningOptions_["mTauTau"]                    = new binningOptionType("mTauTau",                    20,  0.,  200.);
   binningOptions_["mTauTauVis"]                 = new binningOptionType("mTauTauVis",                 20,  0.,  200.);
   binningOptions_["mTauTauVis1"]                = new binningOptionType("mTauTauVis1",                20,  0.,  200.);
