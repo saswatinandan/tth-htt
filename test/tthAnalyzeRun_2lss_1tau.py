@@ -72,11 +72,11 @@ jet_cleaning_by_index = (jet_cleaning == 'by_index')
 gen_matching_by_index = (gen_matching == 'by_index')
 
 MEMbranch                = ''
-lepton_charge_selections = [ "SS" ] if mode.find("forBDTtraining") != -1 else [ "OS", "SS" ]
+lepton_charge_selections = [ "SS" ] #if mode.find("forBDTtraining") != -1 else [ "OS", "SS" ]
 
 hadTauWP_map = {
   'dR03mva' : 'Loose',
-  'deepVSj' : 'Loose',
+  'deepVSj' : 'Tight',
 }
 hadTau_selection = tau_id + hadTauWP_map[tau_id]
 
