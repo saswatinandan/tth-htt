@@ -841,7 +841,8 @@ class analyzeConfig_2lss_1tau(analyzeConfig):
 
     logging.info("Creating configuration files to run 'addBackgroundFlips'")
     for chargeSumSelection in self.chargeSumSelections:
-        if 0 > 1 : # Xanda
+        if chargeSumSelection == "SS" : continue
+        if 1 > 0 : # Xanda
           key_hadd_stage1_6_job = getKey(get_lepton_and_hadTau_selection_and_frWeight("Tight", "disabled"), "OS", chargeSumSelection)
           key_addFlips_dir = getKey("addBackgroundLeptonFlips")
           key_addFlips_job = getKey("data_flips", chargeSumSelection)
